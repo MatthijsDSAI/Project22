@@ -1,25 +1,37 @@
-package GivenCode;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package nl.maastrichtuniversity.dke.explorer;
 
+import java.awt.*;
+import javafx.*;
+
+/**
+ *
+ * @author joel
+ */
 public class Area {
     protected int leftBoundary;
     protected int rightBoundary;
     protected int topBoundary;
     protected int bottomBoundary;
-
+    
     public Area(){
         leftBoundary=0;
         rightBoundary=1;
         topBoundary=0;
         bottomBoundary=1;
     }
-
+    
     public Area(int x1, int y1, int x2, int y2){
         leftBoundary=Math.min(x1,x2);
         rightBoundary=Math.max(x1,x2);
         topBoundary=Math.max(y1,y2);
         bottomBoundary=Math.min(y1,y2);
     }
-
+    
     /*
         Check whether a point is in the target area
     */
@@ -35,4 +47,8 @@ public class Area {
         return false;
     }
 
+    public void draw(Graphics2D g2, Color c){
+        g2.setColor(c);
+        g2.drawRect(leftBoundary, topBoundary, rightBoundary-leftBoundary, bottomBoundary-topBoundary);
+    }
 }
