@@ -1,10 +1,14 @@
 package nl.maastrichtuniversity.dke.explorer;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
-public class MapGui extends JPanel{
+public class MapGui extends Application {
 
     private Scenario scenario;
     private int mapHeight;
@@ -12,7 +16,6 @@ public class MapGui extends JPanel{
     private double scaling;
 
     public MapGui(){
-        setting();
     }
 
     public MapGui(Scenario scenario){
@@ -20,67 +23,70 @@ public class MapGui extends JPanel{
         mapHeight = scenario.mapHeight;
         mapWidth = scenario.mapWidth;
         scaling = scenario.getScaling();
-        setting();
-    }
-
-    public void setting(){
-        JFrame jf = new JFrame("Map");
-        jf.add(this, BorderLayout.CENTER);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf.setLocation(new Point(400, 150));
-        jf.setSize(800, 900);
-        jf.setResizable(false);
-        jf.setVisible(true);
     }
 
     @Override
-    public void paint(Graphics g){
-        super.paint(g);
-        Graphics2D g2 = (Graphics2D) g;
-        drawArea(g2);
-        drawGuards(g2);
-        drawIntruders(g2);
+    public void start(Stage stage) throws Exception {
+        Pane root = createPane();
+        Scene scene = new Scene(root, 600, 600);
+        stage.setTitle("MAP");
+        stage.setScene(scene);
+        stage.show();
     }
 
-    public void drawArea(Graphics2D g2){
-//        Area wall = new Area(50,0,51,20);
-//        wall.drawArea(g2, c);
-        Color c = Color.PINK;
-        ArrayList<Area> walls = scenario.getWalls();
-        for(Area wall : walls){
-            wall.draw(g2, c);
-        }
-//      c = Color.PINK;
-        ArrayList<TelePortal> teleports = scenario.getTeleportals();
-        for(Area teleport : teleports){
-            teleport.draw(g2, c);
-        }
-        //      c = Color.PINK;
-        ArrayList<Area> shaded = scenario.getShaded();
-        for(Area s : shaded){
-            s.draw(g2, c);
+    public Pane createPane(){
+        Pane p = new Pane();
+
+        //Setting wall, teleportal, shaded
+        Rectangle r1 = null;
+        for(Area wall : scenario.getWalls()){
+            r1 = wall.createRec();
+            r1.setFill(Color.WHEAT);
+            p.getChildren().add(r1);
         }
 
-        scenario.spawnAreaGuards.draw(g2, c);
-        scenario.spawnAreaIntruders.draw(g2, c);
-        scenario.getTargetArea().draw(g2, c);
-    }
+        Rectangle r2 = null;
+        for(TelePortal t : scenario.getTeleportals()){
+            r2 = t.createRec();
+            r2.setFill(Color.NAVY);
+            p.getChildren().add(r2);
+        }
 
-    public void drawGuards(Graphics2D g2){
+        Rectangle r3 = null;
+        for(Area s : scenario.getShaded()){
+            r3 = s.createRec();
+            r3.setFill(Color.GREEN);
+            p.getChildren().add(r3);
+        }
+
+        //Setting spawn point and target
+        Rectangle spawnAreaGuards = scenario.spawnAreaGuards.createRec();
+        p.getChildren().add(spawnAreaGuards);
+
+        Rectangle spawnAreaIntruders = scenario.spawnAreaIntruders.createRec();
+        p.getChildren().add(spawnAreaIntruders);
+
+        Rectangle targetArea = scenario.targetArea.createRec();
+        p.getChildren().add(targetArea);
+
+        //Setting Guards
         double[][] spawnGuards = scenario.spawnGuards();
         for(int i=0; i< scenario.getNumGuards(); i++){
-            g2.drawOval((int) spawnGuards[i][0], (int)spawnGuards[i][1], (int) spawnGuards[i][2], (int) spawnGuards[i][2]);
+            Circle c = new Circle((int) spawnGuards[i][0], (int)spawnGuards[i][1], (int) spawnGuards[i][2]);
+            p.getChildren().add(c);
         }
-    }
 
-    public void drawIntruders(Graphics2D g2){
+        //Setting intruders
         double[][] spawnIntruders = scenario.spawnIntruders();
         for(int i=0; i< scenario.numIntruders; i++){
-            g2.drawOval((int) spawnIntruders[i][0], (int)spawnIntruders[i][1], (int) spawnIntruders[i][2], (int) spawnIntruders[i][2]);
+            Circle c = new Circle((int) spawnIntruders[i][0], (int)spawnIntruders[i][1], (int) spawnIntruders[i][2]);
+            p.getChildren().add(c);
         }
+
+        return p;
     }
 
-    public static void main(String[] args){
-        MapGui map = new MapGui();
+    public static void main(String[] args) {
+        launch(args);
     }
 }
