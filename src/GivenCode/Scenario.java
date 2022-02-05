@@ -1,5 +1,6 @@
 package GivenCode;
 
+import GivenCode.Area;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +11,10 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Scenario {
+
+
+
+
 
     protected double baseSpeedIntruder;
     protected double sprintSpeedIntruder;
@@ -24,6 +29,9 @@ public class Scenario {
     protected String gameFile;
     protected int mapHeight;
     protected int mapWidth;
+
+
+
     protected double scaling;
     protected int numIntruders;
     protected int numGuards;
@@ -205,4 +213,25 @@ public class Scenario {
     public double getScaling(){
         return scaling;
     }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public Area getSpawnAreaGuards() {
+        return spawnAreaGuards;
+    }
+
+    public Area getSpawnAreaIntruders() {
+        return spawnAreaIntruders;
+    }
+
+    public int getNumIntruders() {
+        return numIntruders;
+    }
+
 }

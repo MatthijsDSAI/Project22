@@ -1,5 +1,8 @@
-package nl.maastrichtuniversity.dke.explorer;
+package GUI;
 
+import GivenCode.Area;
+import GivenCode.Scenario;
+import GivenCode.TelePortal;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -7,6 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
+import java.awt.*;
 
 public class MapGui extends Application {
 
@@ -20,8 +25,8 @@ public class MapGui extends Application {
 
     public MapGui(Scenario scenario){
         this.scenario = scenario;
-        mapHeight = scenario.mapHeight;
-        mapWidth = scenario.mapWidth;
+        mapHeight = scenario.getMapHeight();
+        mapWidth = scenario.getMapWidth();
         scaling = scenario.getScaling();
     }
 
@@ -60,13 +65,13 @@ public class MapGui extends Application {
         }
 
         //Setting spawn point and target
-        Rectangle spawnAreaGuards = scenario.spawnAreaGuards.createRec();
+        Rectangle spawnAreaGuards = scenario.getSpawnAreaGuards().createRec();
         p.getChildren().add(spawnAreaGuards);
 
-        Rectangle spawnAreaIntruders = scenario.spawnAreaIntruders.createRec();
+        Rectangle spawnAreaIntruders = scenario.getSpawnAreaIntruders().createRec();
         p.getChildren().add(spawnAreaIntruders);
 
-        Rectangle targetArea = scenario.targetArea.createRec();
+        Rectangle targetArea = scenario.getTargetArea().createRec();
         p.getChildren().add(targetArea);
 
         //Setting Guards
@@ -78,7 +83,7 @@ public class MapGui extends Application {
 
         //Setting intruders
         double[][] spawnIntruders = scenario.spawnIntruders();
-        for(int i=0; i< scenario.numIntruders; i++){
+        for(int i=0; i< scenario.getNumIntruders(); i++){
             Circle c = new Circle((int) spawnIntruders[i][0], (int)spawnIntruders[i][1], (int) spawnIntruders[i][2]);
             p.getChildren().add(c);
         }

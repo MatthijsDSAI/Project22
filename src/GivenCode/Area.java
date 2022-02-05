@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.maastrichtuniversity.dke.explorer;
+package GivenCode;
 
 import java.awt.*;
 import javafx.fxml.FXMLLoader;

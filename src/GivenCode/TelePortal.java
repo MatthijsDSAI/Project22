@@ -1,6 +1,6 @@
 package GivenCode;
 
-public class TelePortal extends Area{
+public class TelePortal extends Area {
     protected int yTarget;
     protected int xTarget;
     protected double outOrientation;
