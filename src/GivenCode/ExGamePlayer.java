@@ -1,5 +1,6 @@
 package GivenCode;
 
+import GivenCode.FileWatcher;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
