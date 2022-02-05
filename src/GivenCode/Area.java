@@ -6,7 +6,8 @@
 package nl.maastrichtuniversity.dke.explorer;
 
 import java.awt.*;
-import javafx.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -47,8 +48,7 @@ public class Area {
         return false;
     }
 
-    public void draw(Graphics2D g2, Color c){
-        g2.setColor(c);
-        g2.drawRect(leftBoundary, topBoundary, rightBoundary-leftBoundary, bottomBoundary-topBoundary);
+    public Rectangle createRec(){
+        return new Rectangle(leftBoundary, topBoundary, rightBoundary-leftBoundary, bottomBoundary-topBoundary);
     }
 }
