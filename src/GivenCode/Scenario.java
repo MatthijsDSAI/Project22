@@ -12,10 +12,6 @@ import java.util.ArrayList;
 
 public class Scenario {
 
-
-
-
-
     protected double baseSpeedIntruder;
     protected double sprintSpeedIntruder;
     protected double baseSpeedGuard;

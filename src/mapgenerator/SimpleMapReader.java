@@ -6,6 +6,7 @@ import javax.sound.sampled.Line;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -68,11 +69,13 @@ public class SimpleMapReader {
     //This method is similar to readInConstant, only it is useful for e.g. coordinates, as it gives a list.
     //Please mind indexing
     //As param, pass the exact name that the object has in the txt file
-    public static ArrayList<Double> readInList(String constant){
+    //
+    public static ArrayList<Double> readInList(String constant, String fileName){
         String line;
+
         ArrayList<Double> list = null;
         try{
-            BufferedReader br = new BufferedReader(new FileReader("testmap.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
 
             while((line = br.readLine()) != null){
 
@@ -120,9 +123,9 @@ public class SimpleMapReader {
     }
 
     //Only to be used for wall generation (Uses Line2D objects)
-    public static ArrayList<Line2D> readInCoordinatesOfWall(){
+    public static ArrayList<Rectangle2D> readInCoordinatesOfWall(){
         //Store the coordinates in a Line2D. i am doing this now because I want a very simple GUI to see what the map generation is doing, we can easily change this if needed
-        ArrayList<Line2D> list = new ArrayList<>();
+        ArrayList<Rectangle2D> list = new ArrayList<>();
 
         String line;
 
@@ -135,7 +138,7 @@ public class SimpleMapReader {
                 if(line.startsWith("wall")){
                     //adds a Line2D object to the list
 
-                    list.add(addLine2D(line, "wall"));
+                    list.add(addRectangle2D(line, "wall"));
                 }
             }
         }
@@ -146,7 +149,7 @@ public class SimpleMapReader {
     }
 
     //Only to be used for wall generation (Uses Line2D objects)
-    public static Line2D addLine2D(String s, String object){
+    public static Rectangle2D addRectangle2D(String s, String object){
         //sb that stores the whole line
         StringBuilder sb = new StringBuilder(s);
         //sb that the individual coords will be appended to
@@ -176,6 +179,10 @@ public class SimpleMapReader {
         }
 
         //return line
-        return new Line2D.Double(list.get(0), list.get(1), list.get(2), list.get(3));
+        double x = list.get(0);
+        double y = list.get(3);
+        double w = list.get(1)-x;
+        double h = list.get(2)-y;
+        return new Rectangle2D.Double(x,y,w,h);
     }
 }
