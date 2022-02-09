@@ -1,15 +1,13 @@
 package mapgenerator;
 
-import javax.sound.sampled.Line;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
-public class MapGUI extends JFrame implements MouseListener {
+public class MapDrawer extends JFrame implements MouseListener {
     private int amountOfClicks = 0;
     StringBuilder wall;
     private double[] tempLine;
@@ -19,7 +17,7 @@ public class MapGUI extends JFrame implements MouseListener {
     private static final double frameHeight = 400;
     private final ArrayList<Line2D> walls;
     private final ArrayList<Line2D> borders;
-    public MapGUI(ArrayList<Line2D> walls, ArrayList<Line2D> borders){
+    public MapDrawer(ArrayList<Line2D> walls, ArrayList<Line2D> borders){
         setLayout(new BorderLayout());
         JPanel panel = new JPanel();
         add(panel, BorderLayout.CENTER);
@@ -74,7 +72,7 @@ public class MapGUI extends JFrame implements MouseListener {
         borders.add(new Line2D.Double( (HORIZONTAL_BORDER/2), (VERTICAL_BORDER/2), (HORIZONTAL_BORDER/2),frameHeight+ (VERTICAL_BORDER/2)));
         borders.add(new Line2D.Double(frameWidth+ (HORIZONTAL_BORDER/2), (VERTICAL_BORDER/2),frameWidth+ (HORIZONTAL_BORDER/2),frameHeight+ (VERTICAL_BORDER/2)));
         borders.add(new Line2D.Double( (HORIZONTAL_BORDER/2),frameHeight+ (VERTICAL_BORDER/2),frameWidth+ (HORIZONTAL_BORDER/2),frameHeight+ (VERTICAL_BORDER/2)));
-        MapGUI s = new MapGUI(list, borders);
+        MapDrawer s = new MapDrawer(list, borders);
         s.setVisible(true);
     }
 
