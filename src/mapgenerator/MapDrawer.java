@@ -96,10 +96,7 @@ public class MapDrawer extends JFrame implements MouseListener {
 //        System.out.println("Line: " + amountOfClicks);
 //        System.out.println("x1: " + x);
 //        System.out.println("y1: " + y);
-        wall.append((int)x);
-        wall.append(" ");
-        wall.append((int)y);
-        wall.append(" ");
+
         tempLine[0] = e.getX();
         tempLine[1] = e.getY();
 
@@ -110,19 +107,15 @@ public class MapDrawer extends JFrame implements MouseListener {
         double x = transformX(e.getX());
         double y = transformY(e.getY());
 
-//        System.out.println("x2: " + x);
-//        System.out.println("y2: " + y);
-        wall.append((int)x);
-        wall.append(" ");
-        wall.append((int)y);
-        System.out.println(wall);
-        wall = new StringBuilder();
+
         tempLine[2] = e.getX();
         tempLine[3] = e.getY();
+
         double xRect = Math.min(tempLine[0], tempLine[2]);
         double wRect = Math.max(tempLine[0], tempLine[2]) - xRect;
         double yRect = Math.min(tempLine[1], tempLine[3]);
         double hRect = Math.max(tempLine[1], tempLine[3]) - yRect;
+        System.out.println("wall = " + (int)xRect + " " + (int)Math.max(tempLine[0], tempLine[2]) + " " + (int)Math.max(tempLine[1], tempLine[3]) + " " + (int)yRect);
         walls.add(new Rectangle2D.Double(xRect, yRect, wRect, hRect));
         repaint();
 
