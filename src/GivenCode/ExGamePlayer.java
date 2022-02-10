@@ -1,6 +1,8 @@
 package GivenCode;
 
-import GivenCode.FileWatcher;
+import controller.Area;
+import controller.Scenario;
+
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;

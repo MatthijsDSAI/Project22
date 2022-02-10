@@ -13,7 +13,7 @@ public abstract class FileWatcher {
     public FileWatcher(String watchFile)
     {
         Path filePath = Paths.get(watchFile);
-
+        System.out.println(Paths.get(watchFile) + " ok");
         boolean isRegularFile = Files.isRegularFile(filePath);
 
         if (!isRegularFile)
@@ -26,7 +26,8 @@ public abstract class FileWatcher {
         folderPath = filePath.getParent();
 
         // Keep this relative to the watched folder
-        this.watchFile = watchFile.replace(folderPath.toString() + File.separator, "");
+        //causes trouble beceause we have no parent path to our txt file so  i just commented it out lol
+        //this.watchFile = watchFile.replace(folderPath.toString() + File.separator, "");
     }
 
     public void watchFile() throws Exception
