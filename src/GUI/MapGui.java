@@ -1,8 +1,8 @@
 package GUI;
 
-import GivenCode.Area;
-import GivenCode.Scenario;
-import GivenCode.TelePortal;
+import controller.Area;
+import controller.Scenario;
+import controller.TelePortal;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
