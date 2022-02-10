@@ -1,5 +1,7 @@
 package GivenCode;
 
+import controller.Scenario;
+
 public class Explorer {
     protected String mapDoc;
     protected Scenario scenario;
@@ -8,7 +10,7 @@ public class Explorer {
 
     public static void main(String[] args){
         // the mapscenario should be passed as a parameter
-        String mapD="/Users/joel/surfdrive/Education/Project2-2/2020/GameControllerSample/testmap.txt";
+        String mapD="testmap.txt";
         Explorer game = new Explorer(mapD);
         //game.writeGameFile();
         game.p.start();
@@ -17,6 +19,7 @@ public class Explorer {
     public Explorer(String scn){
         mapDoc=scn;
         scenario = new Scenario(mapDoc);
+        System.out.println("ok: " + scenario.getGameFile());
         p = new ExGamePlayer(scenario);
     }
 }

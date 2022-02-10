@@ -1,11 +1,11 @@
-package GivenCode;
+package controller;
 
-import java.io.IOException;
+import utils.Config;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -24,6 +24,9 @@ public class Scenario {
     protected String gameFile;
     protected int mapHeight;
     protected int mapWidth;
+
+
+
     protected double scaling;
     protected int numIntruders;
     protected int numGuards;
@@ -40,16 +43,16 @@ public class Scenario {
 
         // initialize variables
         walls = new ArrayList<>(); // create list of walls
-        shaded = new ArrayList<>(); // create list of low-visability areas
+        shaded = new ArrayList<>(); // create list of low-visibility areas
         teleports = new ArrayList<>(); // create list of teleports e.g. stairs
 
         // read scenario
         filePath = Paths.get(mapDoc); // get path
-        System.out.println(filePath);
         readMap();
     }
 
     public void readMap(){
+
         try (Scanner scanner =  new Scanner(filePath, ENCODING.name())){
             while (scanner.hasNextLine()){
                 parseLine(scanner.nextLine());
@@ -77,6 +80,7 @@ public class Scenario {
                 // in case multiple parameters
                 String[] items=value.split(" ");
                 Area tmp;
+
                 switch(id)
                 {
                     case "name":
@@ -205,4 +209,25 @@ public class Scenario {
     public double getScaling(){
         return scaling;
     }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public Area getSpawnAreaGuards() {
+        return spawnAreaGuards;
+    }
+
+    public Area getSpawnAreaIntruders() {
+        return spawnAreaIntruders;
+    }
+
+    public int getNumIntruders() {
+        return numIntruders;
+    }
+
 }
