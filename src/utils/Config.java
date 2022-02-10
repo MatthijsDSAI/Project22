@@ -5,7 +5,6 @@ public class Config {
     private double BASESPEEDINTRUDER;
     private double BASESPEEDGUARD;
     private double SPRINTSTEEDINTRUDER;
-    private double SPRINTSPEEDGUARD;
 
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
@@ -43,11 +42,4 @@ public class Config {
         this.SPRINTSTEEDINTRUDER = SPRINTSTEEDINTRUDER;
     }
 
-    public double getSPRINTSPEEDGUARD() {
-        return SPRINTSPEEDGUARD;
-    }
-
-    public void setSPRINTSPEEDGUARD(double SPRINTSPEEDGUARD) {
-        this.SPRINTSPEEDGUARD = SPRINTSPEEDGUARD;
-    }
 }

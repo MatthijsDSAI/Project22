@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class Scenario {
 
+    public static Config config;
     protected double baseSpeedIntruder;
     protected double sprintSpeedIntruder;
     protected double baseSpeedGuard;
@@ -45,7 +46,7 @@ public class Scenario {
         walls = new ArrayList<>(); // create list of walls
         shaded = new ArrayList<>(); // create list of low-visibility areas
         teleports = new ArrayList<>(); // create list of teleports e.g. stairs
-
+        config = new Config();
         // read scenario
         filePath = Paths.get(mapDoc); // get path
         readMap();
@@ -109,12 +110,15 @@ public class Scenario {
                         break;
                     case "baseSpeedIntruder":
                         baseSpeedIntruder = Double.parseDouble(value);
+                        config.setBASESPEEDINTRUDER(baseSpeedIntruder);
                         break;
                     case "sprintSpeedIntruder":
                         sprintSpeedIntruder = Double.parseDouble(value);
+                        config.setSPRINTSTEEDINTRUDER(sprintSpeedIntruder);
                         break;
                     case "baseSpeedGuard":
                         baseSpeedGuard = Double.parseDouble(value);
+                        config.setBASESPEEDGUARD(baseSpeedGuard);
                         break;
                     case "targetArea":
                         targetArea = new Area(Integer.parseInt(items[0]),Integer.parseInt(items[1]),Integer.parseInt(items[2]),Integer.parseInt(items[3]));

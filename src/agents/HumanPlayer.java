@@ -1,9 +1,12 @@
 package agents;
 
+import controller.Area;
 import controller.Scenario;
+import utils.Config;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 
 public class HumanPlayer extends Player implements KeyListener {
@@ -11,7 +14,7 @@ public class HumanPlayer extends Player implements KeyListener {
     private boolean A = false;
     private boolean S = false;
     private boolean D = false;
-
+    private Config config = Scenario.config;
     //idea to have something basic to test with but still have control
     //next step would be to "see", so when something is within it's radius then store that in the empty scenario somehow
     public HumanPlayer(Scenario scenario, int x, int y) {
@@ -19,6 +22,40 @@ public class HumanPlayer extends Player implements KeyListener {
     }
 
 
+
+
+
+
+    public void see(){
+        //see if any of the objects on the map are in it's vision
+    }
+
+    public void move(){
+        if(W){
+            moveUp();
+        }
+        if(A){
+            moveLeft();
+        }
+        if(S){
+            moveDown();
+        }
+        if(D){
+            moveRight();
+        }
+    }
+
+    private void moveRight() {
+    }
+
+    private void moveDown() {
+    }
+
+    private void moveLeft() {
+    }
+
+    private void moveUp() {
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
