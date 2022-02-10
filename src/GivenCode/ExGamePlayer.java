@@ -23,7 +23,7 @@ public class ExGamePlayer extends FileWatcher{
     private final static Charset ENCODING = StandardCharsets.UTF_8;
     private final Path filePath;
 
-    ExGamePlayer(Scenario s){
+    public ExGamePlayer(Scenario s){
         super(s.getGameFile());
         scenario=s;
         time=0;
