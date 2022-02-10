@@ -1,5 +1,4 @@
-package GivenCode;
-
+import GivenCode.ExGamePlayer;
 import controller.Scenario;
 
 public class Explorer {

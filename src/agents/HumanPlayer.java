@@ -1,10 +1,9 @@
-package controller.player;
+package agents;
 
 import controller.Scenario;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 
 
 public class HumanPlayer extends Player implements KeyListener {

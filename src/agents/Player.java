@@ -1,4 +1,4 @@
-package controller.player;
+package agents;
 
 import controller.EmptyScenario;
 import controller.Scenario;
