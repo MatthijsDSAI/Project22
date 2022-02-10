@@ -36,7 +36,6 @@ public class MapDrawer extends JFrame implements MouseListener {
 
     private static void scaleSize(ArrayList<Rectangle2D> walls, double mapWidth, double mapHeight) {
         double widthMultiplier = frameWidth/mapWidth;
-        System.out.println(widthMultiplier);
         double heightMultiplier = frameHeight/mapHeight;
         for (Rectangle2D line : walls) {
             //line.setLine((line.getX1() * widthMultiplier) +  (HORIZONTAL_BORDER/2), (line.getY1() * heightMultiplier) + (VERTICAL_BORDER/2), (line.getX2() * widthMultiplier) +  (HORIZONTAL_BORDER/2), (line.getY2() * heightMultiplier) + (VERTICAL_BORDER/2));
@@ -57,6 +56,7 @@ public class MapDrawer extends JFrame implements MouseListener {
         g.setColor(Color.RED);
         for (Rectangle2D rect : walls) {
             g2.draw(rect);
+            g2.fill(rect);
         }
 
     }

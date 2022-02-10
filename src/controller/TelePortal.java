@@ -1,4 +1,4 @@
-package GivenCode;
+package controller;
 
 public class TelePortal extends Area {
     protected int yTarget;

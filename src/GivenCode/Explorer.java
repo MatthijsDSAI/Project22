@@ -1,5 +1,7 @@
 package GivenCode;
 
+import controller.Scenario;
+
 public class Explorer {
     protected String mapDoc;
     protected Scenario scenario;
@@ -17,6 +19,7 @@ public class Explorer {
     public Explorer(String scn){
         mapDoc=scn;
         scenario = new Scenario(mapDoc);
+        System.out.println("ok: " + scenario.getGameFile());
         p = new ExGamePlayer(scenario);
     }
 }
