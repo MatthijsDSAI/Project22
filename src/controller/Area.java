@@ -49,6 +49,7 @@ public class Area {
     }
 
     public Rectangle createRec(){
-        return new Rectangle(leftBoundary, topBoundary, rightBoundary-leftBoundary, bottomBoundary-topBoundary);
+        return new Rectangle(leftBoundary * 10, bottomBoundary * 10, Math.abs(rightBoundary-leftBoundary) * 10, Math.abs(bottomBoundary-topBoundary) * 10);
+//        return new Rectangle(leftBoundary / scale, bottomBoundary / scale, Math.abs(rightBoundary-leftBoundary) / scale, Math.abs(bottomBoundary-topBoundary) / scale);
     }
 }
