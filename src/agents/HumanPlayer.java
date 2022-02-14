@@ -1,6 +1,7 @@
 package agents;
 
 import controller.Area;
+import controller.EmptyScenario;
 import controller.Scenario;
 import utils.Config;
 
@@ -23,8 +24,11 @@ public class HumanPlayer extends Player implements KeyListener {
 
 
 
+    //idea is to change coordinates based on input
+    //over 1t
+    public void update(){
 
-
+    }
 
     public void see(){
         //see if any of the objects on the map are in it's vision
@@ -87,6 +91,10 @@ public class HumanPlayer extends Player implements KeyListener {
         if(e.getKeyCode() == KeyEvent.VK_D){
             D = false;
         }
+    }
+
+    public EmptyScenario getEmptyScenario(){
+        return ownScenario;
     }
 
     @Override

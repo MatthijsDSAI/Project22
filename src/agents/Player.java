@@ -20,4 +20,8 @@ public abstract class Player {
         this.x = x;
         this.y = y;
     }
+
+    public abstract void update();
+
+    public abstract EmptyScenario getEmptyScenario();
 }

@@ -13,5 +13,8 @@ public class EmptyScenario extends Scenario {
         teleports = new ArrayList<>(); // create list of teleports e.g. stairs
     }
 
-
+    //TODO: define when map is explored
+    public boolean isExplored(){
+        return false;
+    }
 }
