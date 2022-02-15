@@ -22,6 +22,8 @@ public abstract class Player {
     }
 
     public abstract void update();
-
+    public void printPosition(){
+        System.out.println("x: " + x + ", y: " + y);
+    }
     public abstract EmptyScenario getEmptyScenario();
 }

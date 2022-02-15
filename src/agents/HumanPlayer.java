@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-
+//keylistener doesnt work without swing i think so might not have been smart
 public class HumanPlayer extends Player implements KeyListener {
     private boolean W = false;
     private boolean A = false;
@@ -27,7 +27,8 @@ public class HumanPlayer extends Player implements KeyListener {
     //idea is to change coordinates based on input
     //over 1t
     public void update(){
-
+        move();
+        see();
     }
 
     public void see(){
@@ -50,15 +51,19 @@ public class HumanPlayer extends Player implements KeyListener {
     }
 
     private void moveRight() {
+        x+=config.getBASESPEEDINTRUDER();
     }
 
     private void moveDown() {
+        y-=config.getBASESPEEDINTRUDER();
     }
 
     private void moveLeft() {
+        x-=config.getBASESPEEDINTRUDER();
     }
 
     private void moveUp() {
+        y+=config.getBASESPEEDINTRUDER();
     }
 
     @Override

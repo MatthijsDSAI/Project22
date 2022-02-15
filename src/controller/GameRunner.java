@@ -17,7 +17,7 @@ public class GameRunner {
     }
 
     public void init(){
-        players.add(new HumanPlayer(scenario, 10, 10));
+        player = new HumanPlayer(scenario, 10, 10);
         t = 0;
     }
 
@@ -35,7 +35,8 @@ public class GameRunner {
             catch(InterruptedException e){
                 System.out.println("Threading issue");
             }
-            run();
+            step();
+            player.printPosition();
             explored = player.getEmptyScenario().isExplored();
         }
     }

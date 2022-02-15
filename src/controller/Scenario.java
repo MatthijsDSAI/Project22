@@ -50,21 +50,25 @@ public class Scenario {
     public Scenario(String mapFile){
         // set parameters
         mapDoc=mapFile;
-
         // initialize variables
+
         walls = new ArrayList<>(); // create list of walls
         shaded = new ArrayList<>(); // create list of low-visability areas
         teleports = new ArrayList<>(); // create list of teleports e.g. stairs
         players = new ArrayList<>();
         //temporary
-        players.add(new HumanPlayer(this, 1,1));
         config = new Config();
         // read scenario
         filePath = Paths.get(mapDoc); // get path
         System.out.println(filePath);
         readMap();
+
+
     }
 
+    public void initScenario(){
+        players.add(new HumanPlayer(this, 1,1));
+    }
     public void readMap(){
         try (Scanner scanner =  new Scanner(filePath, ENCODING.name())){
             while (scanner.hasNextLine()){
