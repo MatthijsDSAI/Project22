@@ -1,5 +1,7 @@
 package controller;
 
+import agents.HumanPlayer;
+import agents.Player;
 import utils.Config;
 import controller.Area;
 import java.io.IOException;
@@ -43,6 +45,7 @@ public class Scenario {
     protected ArrayList<Area> walls;
     protected ArrayList<TelePortal> teleports;
     protected ArrayList<Area> shaded;
+    protected ArrayList<Player> players;
 
     public Scenario(String mapFile){
         // set parameters
@@ -52,6 +55,9 @@ public class Scenario {
         walls = new ArrayList<>(); // create list of walls
         shaded = new ArrayList<>(); // create list of low-visability areas
         teleports = new ArrayList<>(); // create list of teleports e.g. stairs
+        players = new ArrayList<>();
+        //temporary
+        players.add(new HumanPlayer(this, 1,1));
         config = new Config();
         // read scenario
         filePath = Paths.get(mapDoc); // get path
@@ -179,6 +185,7 @@ public class Scenario {
         return targetArea;
     }
 
+
     public double[][] spawnGuards(){
         double[][] tmp = new double[numGuards][4];
         double dx = spawnAreaGuards.rightBoundary * 10 - spawnAreaGuards.leftBoundary * 10;
@@ -192,6 +199,8 @@ public class Scenario {
         return tmp;
     }
 
+
+
     public double[][] spawnIntruders(){
         double[][] tmp = new double[numIntruders][4];
         double dx=spawnAreaIntruders.rightBoundary * 10 - spawnAreaIntruders.leftBoundary * 10;
@@ -202,6 +211,7 @@ public class Scenario {
             tmp[i][1]=spawnAreaIntruders.bottomBoundary * 10 + Math.random() * dy;
 //            tmp[i][2]=Math.random()*2*Math.PI;
         }
+
         return tmp;
     }
 
