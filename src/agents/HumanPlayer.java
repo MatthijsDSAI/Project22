@@ -23,7 +23,12 @@ public class HumanPlayer extends Player implements KeyListener {
     }
 
 
-
+    public double getX(){
+        return x;
+    }
+    public double getY(){
+        return y;
+    }
     //idea is to change coordinates based on input
     //over 1t
     public void update(){

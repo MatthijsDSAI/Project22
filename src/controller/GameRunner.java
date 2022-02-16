@@ -9,6 +9,11 @@ import java.util.ArrayList;
 public class GameRunner {
     private Scenario scenario;
     private ArrayList<Player> players;
+
+    public HumanPlayer getPlayer() {
+        return player;
+    }
+
     private HumanPlayer player;
     private int t;
     public GameRunner(Scenario scenario) {
