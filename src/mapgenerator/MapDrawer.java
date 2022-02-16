@@ -14,8 +14,8 @@ public class MapDrawer extends JFrame implements MouseListener {
     private double[] tempLine;
     private static final double HORIZONTAL_BORDER = 60;
     private static final double VERTICAL_BORDER = 100;
-    private static final double frameWidth = 600;
-    private static final double frameHeight = 400;
+    private static final double frameWidth = 120;
+    private static final double frameHeight = 80;
     private final ArrayList<Rectangle2D> walls;
     private final ArrayList<Line2D> borders;
     public MapDrawer(ArrayList<Rectangle2D> walls, ArrayList<Line2D> borders){
@@ -62,7 +62,7 @@ public class MapDrawer extends JFrame implements MouseListener {
     }
 
     public static void main(String[] args){
-        ArrayList<Rectangle2D> list = SimpleMapReader.readInCoordinatesOfWall();
+        ArrayList<Rectangle2D> list = new ArrayList<>();//SimpleMapReader.readInCoordinatesOfWall();
         double mapWidth = SimpleMapReader.readInConstant("width");
         double mapHeight = SimpleMapReader.readInConstant("height");
 

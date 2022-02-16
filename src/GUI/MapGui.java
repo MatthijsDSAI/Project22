@@ -40,6 +40,7 @@ public class MapGui extends Application {
         scenario = new Scenario("testmap.txt");
         gr = new GameRunner(scenario);
         player = gr.getPlayer();
+
         mapHeight = 800;
         mapWidth = 1200;
 

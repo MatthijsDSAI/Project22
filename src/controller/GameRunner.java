@@ -41,6 +41,11 @@ public class GameRunner {
                 System.out.println("Threading issue");
             }
             step();
+            for(Area wall : scenario.getWalls()){
+                if(wall.isHit(player.getX(), player.getY())){
+                    System.out.println("Collision");
+                }
+            }
             player.printPosition();
             explored = player.getEmptyScenario().isExplored();
         }

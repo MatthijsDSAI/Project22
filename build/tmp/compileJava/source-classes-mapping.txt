@@ -1,38 +1,38 @@
 controller/Area.java
  controller.Area
-agents/Agent.java
- agents.Agent
-agents/Guard.java
- agents.Guard
 agents/Player.java
  agents.Player
+agents/Guard.java
+ agents.Guard
+agents/Intruder.java
+ agents.Intruder
 mapgenerator/SimpleMapReader.java
  mapgenerator.SimpleMapReader
 controller/EmptyScenario.java
  controller.EmptyScenario
 GivenCode/FileWatcher.java
  GivenCode.FileWatcher
-GUI/MapGui.java
- GUI.MapGui
+exploration/Baseline.java
+ exploration.Baseline
 GivenCode/ExGamePlayer.java
  GivenCode.ExGamePlayer
-mapgenerator/MapDrawer.java
- mapgenerator.MapDrawer
+agents/Agent.java
+ agents.Agent
 utils/Config.java
  utils.Config
 GUI/GoodLuck.java
  GUI.GoodLuck
-Explorer.java
- Explorer
+mapgenerator/MapDrawer.java
+ mapgenerator.MapDrawer
 controller/TelePortal.java
  controller.TelePortal
-agents/Intruder.java
- agents.Intruder
-exploration/Baseline.java
- exploration.Baseline
 controller/Scenario.java
  controller.Scenario
 controller/GameRunner.java
  controller.GameRunner
 agents/HumanPlayer.java
  agents.HumanPlayer
+GUI/MapGui.java
+ GUI.MapGui
+Explorer.java
+ Explorer

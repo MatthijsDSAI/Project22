@@ -56,19 +56,19 @@ public class HumanPlayer extends Player implements KeyListener {
     }
 
     private void moveRight() {
-        x+=config.getBASESPEEDINTRUDER();
+        x+=1;//config.getBASESPEEDINTRUDER();
     }
 
     private void moveDown() {
-        y-=config.getBASESPEEDINTRUDER();
+        y-=1;//config.getBASESPEEDINTRUDER();
     }
 
     private void moveLeft() {
-        x-=config.getBASESPEEDINTRUDER();
+        x-=1;//config.getBASESPEEDINTRUDER();
     }
 
     private void moveUp() {
-        y+=config.getBASESPEEDINTRUDER();
+        y+=1;//config.getBASESPEEDINTRUDER();
     }
 
     @Override
