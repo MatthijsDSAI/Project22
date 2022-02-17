@@ -18,6 +18,8 @@ public class MapDrawer extends JFrame implements MouseListener {
     private static final double frameHeight = 80;
     private final ArrayList<Rectangle2D> walls;
     private final ArrayList<Line2D> borders;
+    private double[] print;
+
     public MapDrawer(ArrayList<Rectangle2D> walls, ArrayList<Line2D> borders){
         setLayout(new BorderLayout());
         JPanel panel = new JPanel();
@@ -62,10 +64,13 @@ public class MapDrawer extends JFrame implements MouseListener {
     }
 
     public static void main(String[] args){
-        ArrayList<Rectangle2D> list = new ArrayList<>();//SimpleMapReader.readInCoordinatesOfWall();
+        ArrayList<Rectangle2D> list = SimpleMapReader.readInCoordinatesOfWall();
         double mapWidth = SimpleMapReader.readInConstant("width");
         double mapHeight = SimpleMapReader.readInConstant("height");
-
+        ArrayList<Rectangle2D> newList = new ArrayList<>();
+        for(Rectangle2D rec : list){
+            newList.add(new Rectangle2D.Double(rec.getX()+HORIZONTAL_BORDER/2, rec.getY() +VERTICAL_BORDER/2, rec.getWidth(), rec.getHeight()));
+        }
         scaleSize(list, mapWidth, mapHeight);
 
         ArrayList<Line2D> borders = new ArrayList<>();
@@ -73,7 +78,7 @@ public class MapDrawer extends JFrame implements MouseListener {
         borders.add(new Line2D.Double( (HORIZONTAL_BORDER/2), (VERTICAL_BORDER/2), (HORIZONTAL_BORDER/2),frameHeight+ (VERTICAL_BORDER/2)));
         borders.add(new Line2D.Double(frameWidth+ (HORIZONTAL_BORDER/2), (VERTICAL_BORDER/2),frameWidth+ (HORIZONTAL_BORDER/2),frameHeight+ (VERTICAL_BORDER/2)));
         borders.add(new Line2D.Double( (HORIZONTAL_BORDER/2),frameHeight+ (VERTICAL_BORDER/2),frameWidth+ (HORIZONTAL_BORDER/2),frameHeight+ (VERTICAL_BORDER/2)));
-        MapDrawer s = new MapDrawer(list, borders);
+        MapDrawer s = new MapDrawer(newList, borders);
         s.setVisible(true);
     }
 
@@ -89,6 +94,7 @@ public class MapDrawer extends JFrame implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         tempLine = new double[4];
+        print = new double[4];
         wall = new StringBuilder("wall = ");
         double x = transformX(e.getX());
         double y = transformY(e.getY());
@@ -96,7 +102,8 @@ public class MapDrawer extends JFrame implements MouseListener {
 //        System.out.println("Line: " + amountOfClicks);
 //        System.out.println("x1: " + x);
 //        System.out.println("y1: " + y);
-
+        print[0] = x;
+        print[1] = y;
         tempLine[0] = e.getX();
         tempLine[1] = e.getY();
 
@@ -107,7 +114,8 @@ public class MapDrawer extends JFrame implements MouseListener {
         double x = transformX(e.getX());
         double y = transformY(e.getY());
 
-
+        print[2] = x;
+        print[3] = y;
         tempLine[2] = e.getX();
         tempLine[3] = e.getY();
 
@@ -115,8 +123,13 @@ public class MapDrawer extends JFrame implements MouseListener {
         double wRect = Math.max(tempLine[0], tempLine[2]) - xRect;
         double yRect = Math.min(tempLine[1], tempLine[3]);
         double hRect = Math.max(tempLine[1], tempLine[3]) - yRect;
-        System.out.println("wall = " + (int)xRect + " " + (int)Math.max(tempLine[0], tempLine[2]) + " " + (int)Math.max(tempLine[1], tempLine[3]) + " " + (int)yRect);
         walls.add(new Rectangle2D.Double(xRect, yRect, wRect, hRect));
+
+        xRect = Math.min(print[0], print[2]);
+        wRect = Math.max(print[0], print[2]) - xRect;
+        yRect = Math.min(print[1], print[3]);
+        hRect = Math.max(print[1], print[3]) - yRect;
+        System.out.println("wall = " + (int)xRect + " " + (int)Math.max(print[0], print[2]) + " " + (int)Math.max(print[1], print[3]) + " " + (int)yRect);
         repaint();
 
     }

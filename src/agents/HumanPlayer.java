@@ -1,13 +1,10 @@
 package agents;
 
-import controller.Area;
-import controller.EmptyScenario;
 import controller.Scenario;
 import utils.Config;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 //keylistener doesnt work without swing i think so might not have been smart
 public class HumanPlayer extends Player implements KeyListener {
@@ -18,8 +15,7 @@ public class HumanPlayer extends Player implements KeyListener {
     private Config config = Scenario.config;
     //idea to have something basic to test with but still have control
     //next step would be to "see", so when something is within it's radius then store that in the empty scenario somehow
-    public HumanPlayer(Scenario scenario, int x, int y) {
-        super(scenario, x, y);
+    public HumanPlayer() {
     }
 
 
@@ -101,10 +97,6 @@ public class HumanPlayer extends Player implements KeyListener {
         if(e.getKeyCode() == KeyEvent.VK_D){
             D = false;
         }
-    }
-
-    public EmptyScenario getEmptyScenario(){
-        return ownScenario;
     }
 
     @Override

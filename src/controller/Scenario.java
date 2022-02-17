@@ -66,9 +66,6 @@ public class Scenario {
 
     }
 
-    public void initScenario(){
-        players.add(new HumanPlayer(this, 1,1));
-    }
     public void readMap(){
         try (Scanner scanner =  new Scanner(filePath, ENCODING.name())){
             while (scanner.hasNextLine()){

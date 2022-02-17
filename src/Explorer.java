@@ -15,7 +15,6 @@ public class Explorer {
         //game.writeGameFile();
         //game.p.start();
         Scenario scenario = new Scenario(mapD);
-        scenario.initScenario();
         GameRunner gr = new GameRunner(scenario);
         gr.run();
     }

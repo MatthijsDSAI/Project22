@@ -3,6 +3,8 @@ package GUI;
 import agents.HumanPlayer;
 import controller.Area;
 import controller.GameRunner;
+import controller.Map.Map;
+import controller.Map.tiles.Tile;
 import controller.Scenario;
 import controller.TelePortal;
 import javafx.application.Application;
@@ -23,6 +25,7 @@ public class MapGui extends Application {
     private double scaling;
     private GameRunner gr;
     private HumanPlayer player;
+    private Tile[][] map;
 
     public MapGui(){
     }
@@ -39,7 +42,7 @@ public class MapGui extends Application {
 
         scenario = new Scenario("testmap.txt");
         gr = new GameRunner(scenario);
-        player = gr.getPlayer();
+        map = gr.getMap().getMap();
 
         mapHeight = 800;
         mapWidth = 1200;

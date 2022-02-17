@@ -14,6 +14,8 @@ import javafx.scene.shape.Rectangle;
  * @author joel
  */
 public class Area {
+
+
     protected int leftBoundary;
     protected int rightBoundary;
     protected int topBoundary;
@@ -26,7 +28,7 @@ public class Area {
         bottomBoundary=1;
     }
     
-    public Area(int x1, int y1, int x2, int y2){
+    public Area(int x1, int x2, int y1, int y2){
         leftBoundary=Math.min(x1,x2);
         rightBoundary=Math.max(x1,x2);
         topBoundary=Math.max(y1,y2);
@@ -51,5 +53,21 @@ public class Area {
     public Rectangle createRec(){
         return new Rectangle(leftBoundary * 10, bottomBoundary * 10, Math.abs(rightBoundary-leftBoundary) * 10, Math.abs(bottomBoundary-topBoundary) * 10);
 //        return new Rectangle(leftBoundary / scale, bottomBoundary / scale, Math.abs(rightBoundary-leftBoundary) / scale, Math.abs(bottomBoundary-topBoundary) / scale);
+    }
+
+    public int getLeftBoundary() {
+        return leftBoundary;
+    }
+
+    public int getRightBoundary() {
+        return rightBoundary;
+    }
+
+    public int getTopBoundary() {
+        return topBoundary;
+    }
+
+    public int getBottomBoundary() {
+        return bottomBoundary;
     }
 }
