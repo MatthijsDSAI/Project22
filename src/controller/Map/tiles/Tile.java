@@ -10,6 +10,10 @@ public class Tile {
     private boolean explored;
     private boolean walkable;
     private boolean seeThrough;
+    private boolean hasPlayer;
+
+
+
     public Tile(TileType type){
         this.type = type;
         walkable = type.isWalkable();
@@ -19,7 +23,9 @@ public class Tile {
     }
 
     public Player getPlayer() {
-        return player;
+        if (hasPlayer)
+            return player;
+        else throw new RuntimeException("There is no player on this tile");
     }
 
     public boolean isExplored() {
@@ -35,11 +41,14 @@ public class Tile {
     }
 
     public String toString(){
-        return type.toString();
+        if(!hasPlayer)
+            return type.toString();
+        return type.toString() + " + p";
     }
 
     public void addPlayer(Player player) {
         this.player = player;
+        hasPlayer = true;
     }
 
     //Boyun,you can use this method to get the type, it will return for example "wall" or "floor"
@@ -49,9 +58,14 @@ public class Tile {
 
     public void removePlayer() {
         this.player = null;
+        hasPlayer = false;
     }
 
     public boolean isExploredByDefault() {
         return type.isExploredByDefault();
+    }
+
+    public boolean hasPlayer() {
+        return hasPlayer;
     }
 }

@@ -7,11 +7,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 //keylistener doesnt work without swing i think so might not have been smart
-public class HumanPlayer extends Player implements KeyListener {
-    private boolean W = false;
-    private boolean A = false;
-    private boolean S = false;
-    private boolean D = false;
+public class HumanPlayer extends Player{
+
     private Config config = Scenario.config;
     //idea to have something basic to test with but still have control
     //next step would be to "see", so when something is within it's radius then store that in the empty scenario somehow
@@ -28,7 +25,7 @@ public class HumanPlayer extends Player implements KeyListener {
     //idea is to change coordinates based on input
     //over 1t
     public void update(){
-        move();
+        move(1,0);
         see();
     }
 
@@ -36,19 +33,9 @@ public class HumanPlayer extends Player implements KeyListener {
         //see if any of the objects on the map are in it's vision
     }
 
-    public void move(){
-        if(W){
-            moveUp();
-        }
-        if(A){
-            moveLeft();
-        }
-        if(S){
-            moveDown();
-        }
-        if(D){
-            moveRight();
-        }
+    public void move(int deltaX, int deltaY){
+        x+= deltaX;
+        y+= deltaY;
     }
 
     private void moveRight() {
@@ -67,43 +54,7 @@ public class HumanPlayer extends Player implements KeyListener {
         y+=1;//config.getBASESPEEDINTRUDER();
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_W){
-            W = true;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_A){
-            A = true;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_S){
-            S = true;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_D){
-            D = true;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_W){
-            W = false;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_A){
-            A = false;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_S){
-            S = false;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_D){
-            D = false;
-        }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
+   
 
 
 

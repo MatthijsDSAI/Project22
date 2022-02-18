@@ -3,6 +3,7 @@ package controller.Map;
 import agents.HumanPlayer;
 import agents.Player;
 import controller.Area;
+import controller.GameRunner;
 import controller.Map.tiles.Floor;
 import controller.Map.tiles.Tile;
 import controller.Map.tiles.Wall;
@@ -15,6 +16,7 @@ public class Map {
     private Tile[][] map;
     private String[][] test;
     public Map(int horizontalSize, int verticalSize){
+
         map = new Tile[horizontalSize][verticalSize];
         test = new String[horizontalSize][verticalSize];
     }
@@ -57,7 +59,7 @@ public class Map {
     private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
         if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && oppIndex <= wall.getTopBoundary() && oppIndex >= wall.getBottomBoundary()) {
             //could do with a factory here
-            map[i][j] = new Tile(new Wall());
+            map[oppIndex][j] = new Tile(new Wall());
         }
     }
 
@@ -73,9 +75,18 @@ public class Map {
     }
 
     public void movePlayer(Player player, int xFrom, int yFrom, int xTo, int yTo){
-        map[yFrom][xFrom].removePlayer();
-        map[yTo][xTo].addPlayer(player);
+        Tile tile = map[xTo][yTo];
+        if(tile.isWalkable()) {
+            map[yFrom][xFrom].removePlayer();
+            map[yTo][xTo].addPlayer(player);
+
+        }
+        else{
+            throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
+        }
     }
+
+
 
     public boolean isExplored() {
         for(Tile[] tiles : map){

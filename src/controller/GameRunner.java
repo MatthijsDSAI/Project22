@@ -14,7 +14,6 @@ public class GameRunner {
     private Map map;
 
     private HumanPlayer player;
-
     private int t;
 
     public GameRunner(Scenario scenario) {
@@ -35,6 +34,7 @@ public class GameRunner {
         int x = 0, y = 0;
         map.addPlayer(player,x,y);
         t = 0;
+        run();
     }
 
 
@@ -42,6 +42,7 @@ public class GameRunner {
     public void step(){
         t++;
         player.update();
+
     }
 
 
@@ -56,8 +57,8 @@ public class GameRunner {
             }
             step();
             explored = map.isExplored();
-            System.out.println(map.explored() + " of map has been explored");
-
+            //System.out.println(map.explored() + " of map has been explored");
+            map.printMap();
         }
     }
 
