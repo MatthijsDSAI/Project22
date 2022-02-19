@@ -23,6 +23,8 @@ public class GameRunner {
     private ArrayList<Area> walls = new ArrayList<>();
     private ArrayList<TelePortal> teleports = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
+//    private ArrayList<Area> shaded; //what is this?
+    //private scaling; // what is this?
 
     public GameRunner () {
 
@@ -57,6 +59,16 @@ public class GameRunner {
     }
 
 
+    public boolean inWall(double x, double y){
+        boolean tmp = false;
+        for(int j=0;j<walls.size();j++){
+            if(walls.get(j).isHit(x,y)){
+                tmp=true;
+            }
+        }
+        return(tmp);
+    }
+
     public void run(){
         boolean explored = false;
         while(!explored){
@@ -77,5 +89,101 @@ public class GameRunner {
 
     public HumanPlayer getPlayer() {
         return player;
+    }
+
+    public Scenario getScenario() {
+        return scenario;
+    }
+
+    public void setScenario(Scenario scenario) {
+        this.scenario = scenario;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public void setPlayer(HumanPlayer player) {
+        this.player = player;
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public int getNumOfSteps() {
+        return numOfSteps;
+    }
+
+    public void setNumOfSteps(int numOfSteps) {
+        this.numOfSteps = numOfSteps;
+    }
+
+    public int getNumIntruders() {
+        return numIntruders;
+    }
+
+    public void setNumIntruders(int numIntruders) {
+        this.numIntruders = numIntruders;
+    }
+
+    public int getNumGuards() {
+        return numGuards;
+    }
+
+    public void setNumGuards(int numGuards) {
+        this.numGuards = numGuards;
+    }
+
+    public Area getSpawnAreaIntruders() {
+        return spawnAreaIntruders;
+    }
+
+    public void setSpawnAreaIntruders(Area spawnAreaIntruders) {
+        this.spawnAreaIntruders = spawnAreaIntruders;
+    }
+
+    public Area getSpawnAreaGuards() {
+        return spawnAreaGuards;
+    }
+
+    public void setSpawnAreaGuards(Area spawnAreaGuards) {
+        this.spawnAreaGuards = spawnAreaGuards;
+    }
+
+    public Area getTargetArea() {
+        return targetArea;
+    }
+
+    public void setTargetArea(Area targetArea) {
+        this.targetArea = targetArea;
+    }
+
+    public ArrayList<Area> getWalls() {
+        return walls;
+    }
+
+    public void setWalls(ArrayList<Area> walls) {
+        this.walls = walls;
+    }
+
+    public ArrayList<TelePortal> getTeleports() {
+        return teleports;
+    }
+
+    public void setTeleports(ArrayList<TelePortal> teleports) {
+        this.teleports = teleports;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
     }
 }
