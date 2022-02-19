@@ -1,31 +1,24 @@
 package controller;
 
-import agents.HumanPlayer;
 import agents.Player;
 import utils.Config;
-import controller.Area;
-import java.io.IOException;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class Scenario {
-
+public class MapReader {
     public static Config config;
 
-
-
-
-//    protected double baseSpeedIntruder;
-//    protected double sprintSpeedIntruder;
-//    protected double baseSpeedGuard;
+    protected double baseSpeedIntruder;
+    protected double sprintSpeedIntruder;
+    protected double baseSpeedGuard;
 
     protected String mapDoc;
-    //protected int gameMode;
+    protected int gameMode;
     private final Path filePath;
     private final static Charset ENCODING = StandardCharsets.UTF_8;
 
@@ -36,7 +29,7 @@ public class Scenario {
 
 
 
-    protected double scaling;
+    protected double scaling; // what is this?
     protected int numIntruders;
     protected int numGuards;
     protected Area spawnAreaIntruders;

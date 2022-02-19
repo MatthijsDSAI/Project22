@@ -12,9 +12,21 @@ import java.util.Arrays;
 public class GameRunner {
     private Scenario scenario;
     private Map map;
-
     private HumanPlayer player;
-    private int t;
+    private GameMode gameMode; // seems like there needs to be gameMode 1, gameMode 2...
+    private int numOfSteps;
+    private int numIntruders;
+    private int numGuards;
+    private Area spawnAreaIntruders;
+    private Area spawnAreaGuards;
+    private Area targetArea;
+    private ArrayList<Area> walls = new ArrayList<>();
+    private ArrayList<TelePortal> teleports = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
+
+    public GameRunner () {
+
+    }
 
     public GameRunner(Scenario scenario) {
         this.scenario = scenario;
@@ -24,7 +36,6 @@ public class GameRunner {
         init();
     }
 
-
     public Map getMap() {
         return map;
     }
@@ -33,14 +44,14 @@ public class GameRunner {
         player = new HumanPlayer();
         int x = 0, y = 0;
         map.addPlayer(player,x,y);
-        t = 0;
+        numOfSteps = 0;
         run();
     }
 
 
     //does nothing yet
     public void step(){
-        t++;
+        numOfSteps++;
         player.update();
 
     }

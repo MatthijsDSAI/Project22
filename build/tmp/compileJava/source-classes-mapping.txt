@@ -1,46 +1,46 @@
+controller/GameRunner.java
+ controller.GameRunner
 controller/Area.java
  controller.Area
-agents/Agent.java
- agents.Agent
 agents/Guard.java
  agents.Guard
-controller/Map/tiles/Wall.java
- controller.Map.tiles.Wall
-controller/Map/tiles/Floor.java
- controller.Map.tiles.Floor
 mapgenerator/SimpleMapReader.java
  mapgenerator.SimpleMapReader
+controller/Map/tiles/Tile.java
+ controller.Map.tiles.Tile
+agents/HumanPlayer.java
+ agents.HumanPlayer
 GivenCode/FileWatcher.java
  GivenCode.FileWatcher
+GUI/MapGui.java
+ GUI.MapGui
 controller/Map/tiles/TileType.java
  controller.Map.tiles.TileType
-exploration/Baseline.java
- exploration.Baseline
 GivenCode/ExGamePlayer.java
  GivenCode.ExGamePlayer
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
-utils/Config.java
- utils.Config
 GUI/GoodLuck.java
  GUI.GoodLuck
+utils/Config.java
+ utils.Config
 controller/Scenario.java
  controller.Scenario
 controller/TelePortal.java
  controller.TelePortal
 agents/Intruder.java
  agents.Intruder
-agents/Player.java
- agents.Player
-controller/GameRunner.java
- controller.GameRunner
-agents/HumanPlayer.java
- agents.HumanPlayer
+exploration/Baseline.java
+ exploration.Baseline
+controller/Map/tiles/Wall.java
+ controller.Map.tiles.Wall
 Explorer.java
  Explorer
-controller/Map/tiles/Tile.java
- controller.Map.tiles.Tile
-GUI/MapGui.java
- GUI.MapGui
+controller/Map/tiles/Floor.java
+ controller.Map.tiles.Floor
 controller/Map/Map.java
  controller.Map.Map
+agents/Player.java
+ agents.Player
+agents/Agent.java
+ agents.Agent

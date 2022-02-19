@@ -2,31 +2,16 @@ package controller.Map.tiles;
 
 public class Floor extends TileType {
 
-
+    private int speed = 5;
     public Floor(){
-        walkable = true;
-        seeThrough = true;
-        exploredByDefault = false;
+        setWalkable(true);
+        setSeeThrough(true);
+        setExplored(false);
+        setSpeed(speed);
     }
-
-    @Override
-    public boolean isWalkable() {
-        return walkable;
-    }
-
-    @Override
-    public boolean isSeeThrough() {
-        return seeThrough;
-    }
-
-
 
     public String toString(){
-        return "floor";
+        return "Floor";
     }
 
-    @Override
-    public boolean isExploredByDefault() {
-        return exploredByDefault;
-    }
 }

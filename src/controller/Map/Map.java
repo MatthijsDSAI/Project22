@@ -16,12 +16,9 @@ public class Map {
     private Tile[][] map;
     private String[][] test;
     public Map(int horizontalSize, int verticalSize){
-
         map = new Tile[horizontalSize][verticalSize];
         test = new String[horizontalSize][verticalSize];
     }
-
-
 
     public void loadMap(Scenario scenario){
 
@@ -37,8 +34,7 @@ public class Map {
     private void initializeEmptyMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                map[i][j] = new Tile(new Floor());
-
+                map[i][j] = new Tile();
             }
         }
     }
@@ -71,15 +67,14 @@ public class Map {
     }
 
     public void addPlayer(Player player, int x, int y) {
-        map[y][x].addPlayer(player);
+        map[y][x].setPlayer(player);
     }
 
     public void movePlayer(Player player, int xFrom, int yFrom, int xTo, int yTo){
         Tile tile = map[xTo][yTo];
         if(tile.isWalkable()) {
             map[yFrom][xFrom].removePlayer();
-            map[yTo][xTo].addPlayer(player);
-
+            map[yTo][xTo].setPlayer(player);
         }
         else{
             throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
@@ -104,7 +99,7 @@ public class Map {
         double explored = 0;
         for(Tile[] tiles : map){
             for(Tile tile : tiles){
-                if(!tile.isExploredByDefault()) {
+                if(!tile.isExplored()) {
                     if (!tile.isExplored()) {
                         notExplored++;
                     }
