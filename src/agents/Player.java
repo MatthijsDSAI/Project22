@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public abstract class Player {
     protected int x;
     protected int y;
-    protected int speedPercentage; // I think tiles should have some default speed, and thus players need percentage instead of speed
+    protected int speed;
 
     protected double[][] guardPositions;
     protected int[] guardStates;

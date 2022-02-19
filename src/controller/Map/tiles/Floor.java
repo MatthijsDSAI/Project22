@@ -2,12 +2,12 @@ package controller.Map.tiles;
 
 public class Floor extends TileType {
 
-    private int speed = 5;
+    private int speedPercentage = 5;
     public Floor(){
         setWalkable(true);
         setSeeThrough(true);
         setExplored(false);
-        setSpeed(speed);
+        setSpeedPercentage(speedPercentage);
     }
 
     public String toString(){

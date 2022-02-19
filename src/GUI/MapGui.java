@@ -3,7 +3,6 @@ package GUI;
 import agents.HumanPlayer;
 import controller.Area;
 import controller.GameRunner;
-import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import controller.TelePortal;
@@ -14,8 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
-import java.awt.*;
 
 public class MapGui extends Application {
 
@@ -95,7 +92,7 @@ public class MapGui extends Application {
         p.getChildren().add(targetArea);
 
         //Setting Guards
-        double[][] spawnGuards = scenario.spawnGuards();
+        double[][] spawnGuards = gr.spawnGuards();
         for(int i=0; i< scenario.getNumGuards(); i++){
             Circle c = new Circle();
             c.setCenterX(spawnGuards[i][0]);
@@ -106,7 +103,7 @@ public class MapGui extends Application {
         }
 
         //Setting intruders
-        double[][] spawnIntruders = scenario.spawnIntruders();
+        double[][] spawnIntruders = gr.spawnIntruders();
         for(int i=0; i< scenario.getNumIntruders(); i++){
             Circle c = new Circle();
             c.setCenterX(spawnIntruders[i][0]);

@@ -10,7 +10,7 @@ public abstract class TileType {
     protected Player player;
     protected boolean hasPlayer;
     protected boolean explored;
-    protected int speed; // just made this up, maybe we can have different tiles where speed is different on it
+    protected int speedPercentage;
     protected boolean muteSound;
 
     public boolean isMuteSound() {return muteSound;}
@@ -22,8 +22,8 @@ public abstract class TileType {
     public boolean isWalkable() {return walkable;}
     public void setWalkable(boolean walkable) {this.walkable = walkable;}
 
-    public int getSpeed() {return speed;}
-    public void setSpeed(int speed) {this.speed = speed;}
+    public int getSpeedPercentage() {return speedPercentage;}
+    public void setSpeedPercentage(int speed) {this.speedPercentage = speed;}
 
     public boolean isSeeThrough() {return seeThrough;}
     public void setSeeThrough(boolean seeThrough) {this.seeThrough = seeThrough;}
@@ -62,7 +62,7 @@ public abstract class TileType {
                 ", player=" + player +
                 ", hasPlayer=" + hasPlayer +
                 ", explored=" + explored +
-                ", speed=" + speed +
+                ", speedPercentage=" + speedPercentage +
                 '}';
     }
 }

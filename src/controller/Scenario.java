@@ -1,69 +1,52 @@
 package controller;
 
-import agents.HumanPlayer;
 import agents.Player;
 import utils.Config;
-import controller.Area;
-import java.io.IOException;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Scenario {
-
     public static Config config;
 
-
-
-
-//    protected double baseSpeedIntruder;
-//    protected double sprintSpeedIntruder;
-//    protected double baseSpeedGuard;
+    protected double baseSpeedIntruder;
+    protected double sprintSpeedIntruder;
+    protected double baseSpeedGuard;
 
     protected String mapDoc;
-    //protected int gameMode;
+    protected int gameMode;
     private final Path filePath;
     private final static Charset ENCODING = StandardCharsets.UTF_8;
 
     protected String name;
     protected String gameFile;
-    protected int mapHeight;
-    protected int mapWidth;
+    private int mapHeight;
+    private int mapWidth;
 
-
-
-    protected double scaling;
-    protected int numIntruders;
-    protected int numGuards;
-    protected Area spawnAreaIntruders;
-    protected Area spawnAreaGuards;
-    protected Area targetArea;
-    protected ArrayList<Area> walls;
-    protected ArrayList<TelePortal> teleports;
-    protected ArrayList<Area> shaded;
-    protected ArrayList<Player> players;
+    private double scaling;
+    private int numIntruders;
+    private int numGuards;
+    private Area spawnAreaIntruders;
+    private Area spawnAreaGuards;
+    private Area targetArea;
+    private ArrayList<Area> walls;
+    private ArrayList<TelePortal> teleports;
+    private ArrayList<Area> shaded;
+    private ArrayList<Player> players;
 
     public Scenario(String mapFile){
         // set parameters
         mapDoc=mapFile;
-        // initialize variables
-
-        walls = new ArrayList<>(); // create list of walls
-        shaded = new ArrayList<>(); // create list of low-visability areas
-        teleports = new ArrayList<>(); // create list of teleports e.g. stairs
-        players = new ArrayList<>();
         //temporary
         config = new Config();
         // read scenario
         filePath = Paths.get(mapDoc); // get path
         System.out.println(filePath);
         readMap();
-
-
     }
 
     public void readMap(){
@@ -72,14 +55,9 @@ public class Scenario {
                 parseLine(scanner.nextLine());
             }
         }
-        catch(Exception e)
-        {
-        }
+        catch(Exception e) {}
     }
 
-    /*
-
-     */
     protected void parseLine(String line){
         //use a second Scanner to parse the content of each line
         try(Scanner scanner = new Scanner(line)){
@@ -164,16 +142,6 @@ public class Scenario {
         return walls;
     }
 
-    public boolean inWall(double x, double y){
-        boolean tmp = false;
-        for(int j=0;j<walls.size();j++){
-            if(walls.get(j).isHit(x,y)){
-                tmp=true;
-            }
-        }
-        return(tmp);
-    }
-
     public ArrayList<Area> getShaded(){
         return shaded;
     }
@@ -187,34 +155,7 @@ public class Scenario {
     }
 
 
-    public double[][] spawnGuards(){
-        double[][] tmp = new double[numGuards][4];
-        double dx = spawnAreaGuards.rightBoundary * 10 - spawnAreaGuards.leftBoundary * 10;
-        double dy = spawnAreaGuards.bottomBoundary * 10 - spawnAreaGuards.topBoundary * 10;
-
-        for(int i=0; i<numGuards; i++){
-            tmp[i][0]=spawnAreaGuards.leftBoundary * 10 + Math.random() * dx;
-            tmp[i][1]=spawnAreaGuards.topBoundary * 10+ Math.random() * dy;
-//            tmp[i][2]=Math.random()*2*Math.PI;
-        }
-        return tmp;
-    }
-
-
-
-    public double[][] spawnIntruders(){
-        double[][] tmp = new double[numIntruders][4];
-        double dx=spawnAreaIntruders.rightBoundary * 10 - spawnAreaIntruders.leftBoundary * 10;
-        double dy=spawnAreaIntruders.bottomBoundary * 10 - spawnAreaIntruders.topBoundary * 10;
-
-        for(int i=0; i<numIntruders; i++){
-            tmp[i][0]=spawnAreaIntruders.leftBoundary * 10 + Math.random() * dx;
-            tmp[i][1]=spawnAreaIntruders.bottomBoundary * 10 + Math.random() * dy;
-//            tmp[i][2]=Math.random()*2*Math.PI;
-        }
-
-        return tmp;
-    }
+    public int getGameMode() {return  gameMode;}
 
     public int getNumGuards(){
         return numGuards;
@@ -251,5 +192,4 @@ public class Scenario {
     public int getNumIntruders() {
         return numIntruders;
     }
-
 }

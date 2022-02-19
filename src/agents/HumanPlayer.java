@@ -3,9 +3,6 @@ package agents;
 import controller.Scenario;
 import utils.Config;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 //keylistener doesnt work without swing i think so might not have been smart
 public class HumanPlayer extends Player{
 

@@ -1,10 +1,7 @@
 package controller.Map;
 
-import agents.HumanPlayer;
 import agents.Player;
 import controller.Area;
-import controller.GameRunner;
-import controller.Map.tiles.Floor;
 import controller.Map.tiles.Tile;
 import controller.Map.tiles.Wall;
 import controller.Scenario;
@@ -67,7 +64,9 @@ public class Map {
     }
 
     public void addPlayer(Player player, int x, int y) {
-        map[y][x].setPlayer(player);
+        if (!map[y][x].getHasPlayer())
+            map[y][x].setPlayer(player);
+        System.out.println("player exists");
     }
 
     public void movePlayer(Player player, int xFrom, int yFrom, int xTo, int yTo){
