@@ -7,6 +7,8 @@ import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import controller.TelePortal;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -14,14 +16,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class MapGui extends Application {
 
     private Scenario scenario;
     private int mapHeight;
     private int mapWidth;
+    private int col;
+    private int row;
     private double scaling;
     private GameRunner gr;
     private HumanPlayer player;
@@ -43,6 +50,8 @@ public class MapGui extends Application {
         scenario = new Scenario("testmap.txt");
         gr = new GameRunner(scenario);
         map = gr.getMap().getMap();
+        row = map.length;
+        col = map[0].length;
 
         mapHeight = 800;
         mapWidth = 1200;
@@ -52,80 +61,80 @@ public class MapGui extends Application {
         stage.setTitle("MAP");
         stage.setScene(scene);
         stage.show();
-
     }
 
     public Pane createPane(){
         Pane p = new Pane();
 
-        //Setting wall, teleportal, shaded
-        Rectangle r1 = null;
-        for(Area wall : scenario.getWalls()){
-            r1 = wall.createRec();
-            r1.setFill(Color.BLACK);
-            p.getChildren().add(r1);
+//        ArrayList<Tile> guardSpawn = new ArrayList<>();
+//        ArrayList<Tile> intruderSpawn = new ArrayList<>();
+
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                Rectangle r = new Rectangle(map[i][j].getX(), map[i][j].getY(), 10, 10);
+                if(map[i][j].getTypeAsString().equals("floor")){
+                    r.setStroke(Color.WHITE);
+                    r.setFill(Color.GREEN);
+                    p.getChildren().add(r);
+                }else if(map[i][j].getTypeAsString().equals("wall")){
+                    r.setStroke(Color.WHITE);
+                    r.setFill(Color.BLACK);
+                    p.getChildren().add(r);
+                }else if(map[i][j].getTypeAsString().equals("shaded")){
+                    r.setFill(Color.GRAY);
+                    p.getChildren().add(r);
+                }else if(map[i][j].getTypeAsString().equals("teleportals")){
+                    r.setFill(Color.YELLOW);
+                    p.getChildren().add(r);
+                }else if(map[i][j].getTypeAsString().equals("spawnAreaGuards")){
+//                    guardSpawn.add(map[i][j]);
+                    r.setFill(Color.BLUE);
+                    p.getChildren().add(r);
+                }else if(map[i][j].getTypeAsString().equals("spawnAreaIntruders")){
+//                    intruderSpawn.add(map[i][j]);
+                    r.setFill(Color.BROWN);
+                    p.getChildren().add(r);
+                }else if(map[i][j].getTypeAsString().equals("targetArea")){
+                    r.setFill(Color.RED);
+                    p.getChildren().add(r);
+                }
+            }
         }
 
-        Rectangle r2 = null;
-        for(TelePortal t : scenario.getTeleportals()){
-            r2 = t.createRec();
-            r2.setFill(Color.YELLOW);
-            p.getChildren().add(r2);
-        }
+//        Random r = new Random();
+//        for(int i=0; i< scenario.getNumGuards(); i++){
+//            Tile t = guardSpawn.get(r.nextInt(guardSpawn.size()));
+////            t.addPlayer();
+//            t.setColor(Color.BLACK);
+//        }
 
-        Rectangle r3 = null;
-        for(Area s : scenario.getShaded()){
-            r3 = s.createRec();
-            r3.setFill(Color.GREY);
-            p.getChildren().add(r3);
-        }
+//        for(int i=0; i< scenario.getNumIntruders(); i++){
+//            Tile t = intruderSpawn.get(r.nextInt(intruderSpawn.size()));
+////            t.addPlayer();
+//            t.setColor(Color.BLACK);
+//        }
 
-        //Setting spawn point and target
-        Rectangle spawnAreaGuards = scenario.getSpawnAreaGuards().createRec();
-        spawnAreaGuards.setFill(Color.BLUE);
-        p.getChildren().add(spawnAreaGuards);
-
-        //The spawn area of intruders have the same location as the guards for testmap
-//        Rectangle spawnAreaIntruders = scenario.getSpawnAreaIntruders().createRec(scaling);
-//        spawnAreaIntruders.setFill(Color.BROWN);
-//        p.getChildren().add(spawnAreaIntruders);
-
-        Rectangle targetArea = scenario.getTargetArea().createRec();
-        targetArea.setFill(Color.RED);
-        p.getChildren().add(targetArea);
-
-        //Setting Guards
-        double[][] spawnGuards = scenario.spawnGuards();
-        for(int i=0; i< scenario.getNumGuards(); i++){
-            Circle c = new Circle();
-            c.setCenterX(spawnGuards[i][0]);
-            c.setCenterY(spawnGuards[i][1]);
-            c.setRadius(5);
-            c.setFill(Color.BLACK);
-            p.getChildren().add(c);
-        }
-
-        //Setting intruders
-        double[][] spawnIntruders = scenario.spawnIntruders();
-        for(int i=0; i< scenario.getNumIntruders(); i++){
-            Circle c = new Circle();
-            c.setCenterX(spawnIntruders[i][0]);
-            c.setCenterY(spawnIntruders[i][1]);
-            c.setRadius(5);
-            c.setFill(Color.GREEN);
-            p.getChildren().add(c);
-        }
-        //the human player
-        //i cant figure out how to repaint when coordinates change
-        Circle c = new Circle();
-        c.setCenterX(player.getX());
-        c.setCenterY(player.getY());
-        c.setRadius(5);
-        c.setFill(Color.YELLOW);
-        p.getChildren().add(c);
         return p;
     }
 
+    //Animation for future
+    public void autoMove(){
+//        ParallelTransition p = new ParallelTransition();
+//        for(Circle c : guards){
+//            TranslateTransition tt = new TranslateTransition(new Duration(10000), c);
+//            tt.setByX(500);
+//            tt.setCycleCount(5);
+//            tt.setAutoReverse(true);
+//            p.getChildren().add(tt);
+//        }
+//        for(Circle c : intruders){
+//            TranslateTransition tt = new TranslateTransition(new Duration(10000), c);
+//            tt.setByX(500);
+//            tt.setAutoReverse(true);
+//            p.getChildren().add(tt);
+//        }
+//        p.play();
+    }
 
     public static void main(String[] args) {
         launch(args);

@@ -15,6 +15,7 @@ public class GameRunner {
     private Map map;
 
     private HumanPlayer player;
+
     private int t;
 
     public GameRunner(Scenario scenario) {
