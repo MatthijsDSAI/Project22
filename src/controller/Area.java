@@ -20,6 +20,7 @@ public class Area {
     protected int rightBoundary;
     protected int topBoundary;
     protected int bottomBoundary;
+    private Rectangle r;
     
     public Area(){
         leftBoundary=0;
@@ -33,6 +34,7 @@ public class Area {
         rightBoundary=Math.max(x1,x2);
         topBoundary=Math.max(y1,y2);
         bottomBoundary=Math.min(y1,y2);
+        r = new Rectangle(leftBoundary * 10, bottomBoundary* 10, Math.abs(rightBoundary-leftBoundary) * 10, Math.abs(bottomBoundary-topBoundary) * 10);
     }
     
     /*
@@ -54,7 +56,9 @@ public class Area {
         return new Rectangle(leftBoundary * 10, bottomBoundary * 10, Math.abs(rightBoundary-leftBoundary) * 10, Math.abs(bottomBoundary-topBoundary) * 10);
 //        return new Rectangle(leftBoundary / scale, bottomBoundary / scale, Math.abs(rightBoundary-leftBoundary) / scale, Math.abs(bottomBoundary-topBoundary) / scale);
     }
-
+    public boolean containP(int x, int y){
+        return r.contains(x, y);
+    }
     public int getLeftBoundary() {
         return leftBoundary;
     }

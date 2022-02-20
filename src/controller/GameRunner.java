@@ -18,8 +18,9 @@ public class GameRunner {
     private int t;
 
     public GameRunner(Scenario scenario) {
-        this.scenario = scenario;
-        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
+        map = new Map(scenario.getMapHeight(), scenario.getMapWidth());
+//        map = new Map(scenario.getMapWidth()+1, scenario.getMapHeight()+1);
+//        map = new Map((int) (scenario.getMapHeight() * 0.1), (int) (scenario.getMapWidth()* 0.1));
         map.loadMap(scenario);
         map.printMap();
         init();
