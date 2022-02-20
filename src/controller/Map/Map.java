@@ -45,7 +45,26 @@ public class Map {
         }
     }
 
+
     public void loadWall(Area wall){
+        for (int i = 0; i < map.length; i++) {
+
+            for (int j = 0; j < map[0].length; j++) {
+                //needed as top left = 0,0
+                int oppIndex = map.length - i - 1;
+                fallsWithinWall(wall, i, j, oppIndex);
+            }
+        }
+    }
+
+    private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
+        if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && oppIndex <= wall.getTopBoundary() && oppIndex >= wall.getBottomBoundary()) {
+            //could do with a factory here
+            map[oppIndex][j] = new Tile(new Wall());
+        }
+    }
+
+    /*public void loadWall(Area wall){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 if(wall.containP(map[i][j].getX(), map[i][j].getY())){
@@ -82,7 +101,7 @@ public class Map {
 //        if(wall.containP(i, j)){
 //            map[i][j] = new Tile(new Wall());
 //        }
-    }
+    }*/
 
     public void printMap(){
         System.out.println(Arrays.deepToString(map).replace("], ", "]\n"));
