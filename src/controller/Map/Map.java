@@ -8,15 +8,20 @@ import controller.Map.tiles.Floor;
 import controller.Map.tiles.Tile;
 import controller.Map.tiles.Wall;
 import controller.Scenario;
+import utils.DirectionEnum;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Map {
     private Tile[][] map;
     private String[][] test;
-    public Map(int horizontalSize, int verticalSize){
-
+    private Player player;
+    private Point2D playerPosition;
+    public Map(int horizontalSize, int verticalSize, Player player){
+        this.player = player;
+        this.playerPosition = new Point2D.Double(0,0);
         map = new Tile[horizontalSize][verticalSize];
         test = new String[horizontalSize][verticalSize];
     }
@@ -74,18 +79,53 @@ public class Map {
         map[y][x].addPlayer(player);
     }
 
-    public void movePlayer(Player player, int xFrom, int yFrom, int xTo, int yTo){
-        Tile tile = map[xTo][yTo];
+    public void movePlayerFromTo(Player player, int xFrom, int yFrom, int xTo, int yTo){
+        Tile tile = map[yTo][xTo];
         if(tile.isWalkable()) {
             map[yFrom][xFrom].removePlayer();
             map[yTo][xTo].addPlayer(player);
-
+            setPlayerPosition(new Point2D.Double(xTo, yTo));
         }
         else{
             throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
         }
     }
 
+    public void movePlayer(Player player, String direction){
+        Point2D playerPosition = getPlayerPosition(player);
+        Point2D toTile = getTileFromDirection(playerPosition, direction);
+        int xFrom = (int) playerPosition.getX();
+        int yFrom = (int) playerPosition.getY();
+        int xTo = (int) toTile.getX();
+        int yTo = (int) toTile.getY();
+        Tile tile = map[yTo][xTo];
+        if(tile.isWalkable()) {
+            map[yFrom][xFrom].removePlayer();
+            map[yTo][xTo].addPlayer(player);
+            setPlayerPosition(toTile);
+        }
+        else{
+            throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
+        }
+    }
+
+    private Point2D getTileFromDirection(Point2D playerPosition, String direction) {
+        int x = (int) playerPosition.getX();
+        int y = (int) playerPosition.getY();
+        if(direction.equals(DirectionEnum.RIGHT.getDirection())){
+            x++;
+        }
+        else if(direction.equals(DirectionEnum.LEFT.getDirection())){
+            x--;
+        }
+        else if(direction.equals(DirectionEnum.UP.getDirection())){
+            y--;
+        }
+        else if(direction.equals(DirectionEnum.DOWN.getDirection())){
+            y++;
+        }
+        return new Point2D.Double(x,y);
+    }
 
 
     public boolean isExplored() {
@@ -121,4 +161,11 @@ public class Map {
         return map;
     }
 
+    public Point2D getPlayerPosition(Player player){
+        return playerPosition;
+    }
+
+    private void setPlayerPosition(Point2D playerPosition) {
+        this.playerPosition = playerPosition;
+    }
 }

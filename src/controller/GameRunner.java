@@ -4,6 +4,7 @@ import agents.Agent;
 import agents.HumanPlayer;
 import agents.Player;
 import controller.Map.Map;
+import utils.DirectionEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,10 +19,8 @@ public class GameRunner {
 
     public GameRunner(Scenario scenario) {
         this.scenario = scenario;
-        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
-        map.loadMap(scenario);
-        map.printMap();
-        init();
+        init(scenario);
+
     }
 
 
@@ -29,8 +28,11 @@ public class GameRunner {
         return map;
     }
 
-    public void init(){
+    public void init(Scenario scenario){
         player = new HumanPlayer();
+        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, player);
+        map.loadMap(scenario);
+        map.printMap();
         int x = 0, y = 0;
         map.addPlayer(player,x,y);
         t = 0;
@@ -42,7 +44,8 @@ public class GameRunner {
     public void step(){
         t++;
         player.update();
-
+        map.movePlayer(player, DirectionEnum.RIGHT.getDirection());
+        System.out.println(map.getPlayerPosition(player));
     }
 
 
@@ -58,7 +61,7 @@ public class GameRunner {
             step();
             explored = map.isExplored();
             //System.out.println(map.explored() + " of map has been explored");
-            map.printMap();
+            //map.printMap();
         }
     }
 
