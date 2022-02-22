@@ -19,9 +19,14 @@ public enum DirectionEnum {
     }
     public int getAngle(){return angle;}
 
+
+    //i think this should work, but might require debugging
     public DirectionEnum getDirection(int angle) {
         if(angle>=360){
             angle-=360;
+        }
+        if(angle<0){
+            angle+=360;
         }
         if(angle==0){
             return DirectionEnum.RIGHT;
