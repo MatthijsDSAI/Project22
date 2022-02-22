@@ -30,7 +30,7 @@ public class GameRunner {
     }
 
     public void init(Scenario scenario){
-        player = new HumanPlayer();
+        player = new HumanPlayer(DirectionEnum.RIGHT);
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, player);
         map.loadMap(scenario);
         map.printMap();

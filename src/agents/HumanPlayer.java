@@ -2,6 +2,7 @@ package agents;
 
 import controller.Scenario;
 import utils.Config;
+import utils.DirectionEnum;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,7 +13,8 @@ public class HumanPlayer extends Player{
     private Config config = Scenario.config;
     //idea to have something basic to test with but still have control
     //next step would be to "see", so when something is within it's radius then store that in the empty scenario somehow
-    public HumanPlayer() {
+    public HumanPlayer(DirectionEnum directionEnum) {
+        super(directionEnum);
     }
 
 

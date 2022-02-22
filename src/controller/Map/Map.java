@@ -20,6 +20,7 @@ public class Map {
     private String[][] test;
     private Player player;
     private Point2D playerPosition;
+
     public Map(int horizontalSize, int verticalSize, Player player){
         this.player = player;
         this.playerPosition = new Point2D.Double(0,0);
