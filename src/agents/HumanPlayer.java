@@ -1,14 +1,12 @@
 package agents;
 
-import controller.Area;
 import controller.Scenario;
 import utils.Config;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
-
+//keylistener doesnt work without swing i think so might not have been smart
 public class HumanPlayer extends Player implements KeyListener {
     private boolean W = false;
     private boolean A = false;
@@ -17,14 +15,22 @@ public class HumanPlayer extends Player implements KeyListener {
     private Config config = Scenario.config;
     //idea to have something basic to test with but still have control
     //next step would be to "see", so when something is within it's radius then store that in the empty scenario somehow
-    public HumanPlayer(Scenario scenario, int x, int y) {
-        super(scenario, x, y);
+    public HumanPlayer() {
     }
 
 
-
-
-
+    public double getX(){
+        return x;
+    }
+    public double getY(){
+        return y;
+    }
+    //idea is to change coordinates based on input
+    //over 1t
+    public void update(){
+        move();
+        see();
+    }
 
     public void see(){
         //see if any of the objects on the map are in it's vision
@@ -46,15 +52,19 @@ public class HumanPlayer extends Player implements KeyListener {
     }
 
     private void moveRight() {
+        x+=1;//config.getBASESPEEDINTRUDER();
     }
 
     private void moveDown() {
+        y-=1;//config.getBASESPEEDINTRUDER();
     }
 
     private void moveLeft() {
+        x-=1;//config.getBASESPEEDINTRUDER();
     }
 
     private void moveUp() {
+        y+=1;//config.getBASESPEEDINTRUDER();
     }
 
     @Override

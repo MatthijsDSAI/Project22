@@ -1,4 +1,5 @@
 import GivenCode.ExGamePlayer;
+import controller.GameRunner;
 import controller.Scenario;
 
 public class Explorer {
@@ -10,9 +11,12 @@ public class Explorer {
     public static void main(String[] args){
         // the mapscenario should be passed as a parameter
         String mapD="testmap.txt";
-        Explorer game = new Explorer(mapD);
+        //Explorer game = new Explorer(mapD);
         //game.writeGameFile();
-        game.p.start();
+        //game.p.start();
+        Scenario scenario = new Scenario(mapD);
+        GameRunner gr = new GameRunner(scenario);
+        gr.run();
     }
 
     public Explorer(String scn){

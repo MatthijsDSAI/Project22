@@ -1,6 +1,10 @@
 package GUI;
 
+import agents.HumanPlayer;
 import controller.Area;
+import controller.GameRunner;
+import controller.Map.Map;
+import controller.Map.tiles.Tile;
 import controller.Scenario;
 import controller.TelePortal;
 import javafx.application.Application;
@@ -15,16 +19,18 @@ import java.awt.*;
 
 public class MapGui extends Application {
 
-    private Scenario scenario = new Scenario("testmap.txt");
+    private Scenario scenario;
     private int mapHeight;
     private int mapWidth;
     private double scaling;
+    private GameRunner gr;
+    private HumanPlayer player;
+    private Tile[][] map;
 
     public MapGui(){
     }
 
     public MapGui(Scenario scenario){
-        this.scenario = scenario;
         mapHeight = scenario.getMapHeight();
         mapWidth = scenario.getMapWidth();
         scaling = scenario.getScaling();
@@ -32,11 +38,21 @@ public class MapGui extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+
+        scenario = new Scenario("testmap.txt");
+        gr = new GameRunner(scenario);
+        map = gr.getMap().getMap();
+
+        mapHeight = 800;
+        mapWidth = 1200;
+
         Pane root = createPane();
-        Scene scene = new Scene(root, 1200, 700);
+        Scene scene = new Scene(root, mapWidth, mapHeight);
         stage.setTitle("MAP");
         stage.setScene(scene);
         stage.show();
+
     }
 
     public Pane createPane(){
@@ -99,9 +115,17 @@ public class MapGui extends Application {
             c.setFill(Color.GREEN);
             p.getChildren().add(c);
         }
-
+        //the human player
+        //i cant figure out how to repaint when coordinates change
+        Circle c = new Circle();
+        c.setCenterX(player.getX());
+        c.setCenterY(player.getY());
+        c.setRadius(5);
+        c.setFill(Color.YELLOW);
+        p.getChildren().add(c);
         return p;
     }
+
 
     public static void main(String[] args) {
         launch(args);
