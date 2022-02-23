@@ -43,9 +43,14 @@ public class GameRunner {
     //does nothing yet
     public void step(){
         t++;
-        player.update();
         map.movePlayer(player, DirectionEnum.RIGHT.getDirection());
         System.out.println(map.getPlayerPosition(player));
+        for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
+            player.update();
+            //if i understand correctly per timestep we can do 15 things, where 15 is the speed
+            //so we can either walk 15 steps, or walk 14 and turn once, etc.
+            //which is decided in player.update()
+        }
     }
 
 
