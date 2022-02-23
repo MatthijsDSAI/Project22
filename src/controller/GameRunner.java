@@ -37,7 +37,6 @@ public class GameRunner {
         int x = 0, y = 0;
         map.addPlayer(player,x,y);
         t = 0;
-        run();
     }
 
 

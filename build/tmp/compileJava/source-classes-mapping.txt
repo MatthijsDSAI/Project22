@@ -1,7 +1,7 @@
 controller/Area.java
  controller.Area
-controller/GameRunner.java
- controller.GameRunner
+agents/Agent.java
+ agents.Agent
 agents/Guard.java
  agents.Guard
 agents/HumanPlayer.java
@@ -14,8 +14,8 @@ GivenCode/FileWatcher.java
  GivenCode.FileWatcher
 controller/Map/tiles/TileType.java
  controller.Map.tiles.TileType
-GUI/MapGui.java
- GUI.MapGui
+controller/Map/Map.java
+ controller.Map.Map
 GivenCode/ExGamePlayer.java
  GivenCode.ExGamePlayer
 mapgenerator/MapDrawer.java
@@ -38,11 +38,11 @@ controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
-Explorer.java
- Explorer
 agents/Player.java
  agents.Player
-controller/Map/Map.java
- controller.Map.Map
-agents/Agent.java
- agents.Agent
+controller/GameRunner.java
+ controller.GameRunner
+GUI/MapGui.java
+ GUI.MapGui
+Explorer.java
+ Explorer

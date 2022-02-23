@@ -1,15 +1,14 @@
 package controller.Map;
 
-import agents.HumanPlayer;
 import agents.Player;
 import controller.Area;
-import controller.GameRunner;
 import controller.Map.tiles.Floor;
+import controller.Map.tiles.TeleportalTile;
 import controller.Map.tiles.Tile;
 import controller.Map.tiles.Wall;
 import controller.Scenario;
-import utils.DirectionEnum;
 import controller.TelePortal;
+import utils.DirectionEnum;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -37,9 +36,13 @@ public class Map {
 
         initializeEmptyMap();
         ArrayList<Area> walls = scenario.getWalls();
+        ArrayList<TelePortal> teleportals = scenario.getTeleportals();
         for (Area wall : walls) {
 //            System.out.println("aaa");
             loadWall(wall);
+        }
+        for(TelePortal telePortal : teleportals){
+            loadTeleportal(telePortal);
         }
         printLayout();
     }
@@ -66,15 +69,15 @@ public class Map {
         }
     }
 
-//    public void loadTeleportal(Area teleportal){
-//        for (int i = 0; i < map.length; i++) {
-//            for (int j = 0; j < map[0].length; j++) {
-//                if(teleportal.containP(map[i][j].getX(), map[i][j].getY())){
-//                    map[i][j].setType(new Wall());
-//                }
-//            }
-//        }
-//    }
+    public void loadTeleportal(Area teleportal){
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if(teleportal.containP(map[i][j].getX(), map[i][j].getY())){
+                    map[i][j].setType(new TeleportalTile());
+                }
+            }
+        }
+    }
 
     private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
         if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && oppIndex <= wall.getTopBoundary() && oppIndex >= wall.getBottomBoundary()) {
