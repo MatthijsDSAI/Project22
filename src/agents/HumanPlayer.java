@@ -29,6 +29,18 @@ public class HumanPlayer extends Player{
     public void update(){
         //SearchAlogrithm.getMove or whatever
     }
+    public double getX(){
+        return x;
+    }
+    public double getY(){
+        return y;
+    }
+    //idea is to change coordinates based on input
+    //over 1t
+    public void update(){
+        move();
+        see();
+    }
 
     public void see(){
         //handle vision
@@ -55,7 +67,7 @@ public class HumanPlayer extends Player{
         y+=1;//config.getBASESPEEDINTRUDER();
     }
 
-   
+
 
 
 
