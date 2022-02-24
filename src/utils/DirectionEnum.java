@@ -2,10 +2,10 @@ package utils;
 
 public enum DirectionEnum {
     //right is 0 degrees, like unit circle
-    LEFT("left", 180),
-    RIGHT("right", 0),
-    UP("up", 90),
-    DOWN("down", 270);
+    LEFT("left", 270),
+    RIGHT("right", 90),
+    UP("up", 0),
+    DOWN("down", 180);
 
 
     private final String direction;
