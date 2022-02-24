@@ -1,20 +1,16 @@
 package controller;
 
 import agents.Agent;
-import agents.HumanPlayer;
-import agents.Player;
+import agents.TestAgent;
 import controller.Map.Map;
 import utils.DirectionEnum;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 //idea is to make this the class where we run store everything and have our main loop
 public class GameRunner {
     private Scenario scenario;
     private Map map;
 
-    private HumanPlayer player;
+    private Agent player;
 
     private int t;
 
@@ -30,7 +26,7 @@ public class GameRunner {
     }
 
     public void init(Scenario scenario){
-        player = new HumanPlayer(DirectionEnum.RIGHT);
+        player = new TestAgent(0,0);
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, player);
         map.loadMap(scenario);
         map.printMap();
@@ -46,7 +42,7 @@ public class GameRunner {
         map.movePlayer(player, DirectionEnum.RIGHT.getDirection());
         System.out.println(map.getPlayerPosition(player));
         for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
-            player.update();
+            //player.update();
             //if i understand correctly per timestep we can do 15 things, where 15 is the speed
             //so we can either walk 15 steps, or walk 14 and turn once, etc.
             //which is decided in player.update()
@@ -72,7 +68,7 @@ public class GameRunner {
 
 
 
-    public HumanPlayer getPlayer() {
+    public Agent getPlayer() {
         return player;
     }
 }

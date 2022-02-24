@@ -1,6 +1,8 @@
 package agents;
 
 import controller.Area;
+import controller.Scenario;
+import utils.Utils;
 
 public abstract class Agent implements AgentI{
     double audiostdeviation;
@@ -13,7 +15,7 @@ public abstract class Agent implements AgentI{
         this.x_position = x_position;
         this.y_position = y_position;
         this.a_name = "Agent";
-        this.baseSpeed = 10.0;
+        this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
         angle=0;
     }
@@ -72,53 +74,63 @@ public abstract class Agent implements AgentI{
         //if object is a wall turnDirection
     }
 
+
+    //Is my logic here valid?
     public void turnNorth()
     {
-        angle=0;
+        rotate(-angle);
     }
 
     public void turnEast()
     {
-        angle=90;
+        rotate(-angle+90);
     }
 
     public void turnSouth()
     {
-        angle=180;
+        rotate(-angle+180);
     }
 
     public void turnWest()
     {
-        angle=270;
+        rotate(-angle-90);
     }
 
-    public void move(int angle)
+
+    //I changed this so that it only actually moves forward by one step. So the angle has to be changed beforehand.
+    //Also not baseSpeed but 1
+    public void move()
     {
         //0  -> north
         if(angle == 0)
         {
-            y_position+=baseSpeed;
+            y_position++;
             //checkarea();
         }
         //90 -> east
         if(angle == 90)
         {
-            x_position+=baseSpeed;
+            x_position++;
             //checkarea();
         }
         //180 -> South
         if(angle == 180)
         {
-            y_position-=baseSpeed;
+            y_position--;
             //checkarea();
         }
         // 270 -> west
         if(angle == 270)
         {
-            x_position-=baseSpeed;
+            x_position--;
             //checkarea();
         }
         //check relationship between speed and position when related to time
+    }
+
+    public void rotate(int angle){
+        angle = this.angle + angle;
+        angle = Utils.TransFormIntoValidAngle(angle);
     }
 
 

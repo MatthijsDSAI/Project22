@@ -1,15 +1,12 @@
 package controller;
 
-import agents.HumanPlayer;
-import agents.Player;
+import agents.Agent;
 import utils.Config;
-import controller.Area;
-import java.io.IOException;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -45,7 +42,7 @@ public class Scenario {
     protected ArrayList<Area> walls;
     protected ArrayList<TelePortal> teleports;
     protected ArrayList<Area> shaded;
-    protected ArrayList<Player> players;
+    protected ArrayList<Agent> players;
 
     public Scenario(String mapFile){
         // set parameters

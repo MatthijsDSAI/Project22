@@ -1,26 +1,14 @@
 package GUI;
 
-import agents.HumanPlayer;
-import controller.Area;
 import controller.GameRunner;
-import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
-import controller.TelePortal;
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class MapGui extends Application {
 
@@ -31,7 +19,6 @@ public class MapGui extends Application {
     private int row;
     private double scaling;
     private GameRunner gr;
-    private HumanPlayer player;
     private Tile[][] map;
 
     public MapGui(){

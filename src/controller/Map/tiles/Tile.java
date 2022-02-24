@@ -1,14 +1,13 @@
 package controller.Map.tiles;
 
-import agents.HumanPlayer;
-import agents.Player;
+import agents.Agent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Tile {
 
     private TileType type;
-    private Player player;
+    private Agent player;
     private boolean explored;
     private boolean walkable;
     private boolean seeThrough;
@@ -39,7 +38,7 @@ public class Tile {
         this.y = y;
     }
 
-    public Player getPlayer() {
+    public Agent getPlayer() {
         if (hasPlayer)
             return player;
         else throw new RuntimeException("There is no player on this tile");
@@ -63,7 +62,7 @@ public class Tile {
         return type.toString() + " + p";
     }
 
-    public void addPlayer(Player player) {
+    public void addPlayer(Agent player) {
         this.player = player;
         hasPlayer = true;
     }

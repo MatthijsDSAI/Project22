@@ -1,6 +1,6 @@
 package controller.Map;
 
-import agents.Player;
+import agents.Agent;
 import controller.Area;
 import controller.Map.tiles.Floor;
 import controller.Map.tiles.TeleportalTile;
@@ -17,10 +17,10 @@ import java.util.Arrays;
 public class Map {
     private Tile[][] map;
     private String[][] test;
-    private Player player;
+    private Agent player;
     private Point2D playerPosition;
 
-    public Map(int horizontalSize, int verticalSize, Player player){
+    public Map(int horizontalSize, int verticalSize, Agent player){
         this.player = player;
         this.playerPosition = new Point2D.Double(0,0);
         map = new Tile[horizontalSize][verticalSize];
@@ -101,11 +101,11 @@ public class Map {
         System.out.println(Arrays.deepToString(test).replace("], ", "]\n"));
     }
 
-    public void addPlayer(Player player, int x, int y) {
+    public void addPlayer(Agent player, int x, int y) {
         map[y][x].addPlayer(player);
     }
 
-    public void movePlayerFromTo(Player player, int xFrom, int yFrom, int xTo, int yTo){
+    public void movePlayerFromTo(Agent player, int xFrom, int yFrom, int xTo, int yTo){
         Tile tile = map[yTo][xTo];
         if(tile.isWalkable()) {
             map[yFrom][xFrom].removePlayer();
@@ -117,7 +117,7 @@ public class Map {
         }
     }
 
-    public void movePlayer(Player player, String direction){
+    public void movePlayer(Agent player, String direction){
         Point2D playerPosition = getPlayerPosition(player);
         Point2D toTile = getTileFromDirection(playerPosition, direction);
         int xFrom = (int) playerPosition.getX();
@@ -187,7 +187,7 @@ public class Map {
         return map;
     }
 
-    public Point2D getPlayerPosition(Player player){
+    public Point2D getPlayerPosition(Agent player){
         return playerPosition;
     }
 
