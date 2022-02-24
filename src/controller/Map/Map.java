@@ -3,9 +3,7 @@ package controller.Map;
 import agents.HumanPlayer;
 import agents.Player;
 import controller.Area;
-import controller.Map.tiles.Floor;
-import controller.Map.tiles.Tile;
-import controller.Map.tiles.Wall;
+import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
 
@@ -31,8 +29,17 @@ public class Map {
         ArrayList<Area> walls = scenario.getWalls();
         for (Area wall : walls) {
 //            System.out.println("aaa");
-            loadWall(wall);
+            loadTile(wall, new Wall());
         }
+//        for (Area shaded : scenario.getShaded()){
+//            loadTile(shaded, new Shaded());
+//        }
+//        for (Area teleportals : scenario.getTeleportals()){
+//            loadTile(teleportals, new TeleportalTile());
+//        }
+        loadTile(scenario.getSpawnAreaGuards(), new SpawnArea());
+//        loadTile(scenario.getSpawnAreaIntruders(), new SpawnArea());
+//        loadTile(scenario.getTargetArea(), new TargetArea());
 
         printLayout();
     }
@@ -46,21 +53,21 @@ public class Map {
     }
 
 
-    public void loadWall(Area wall){
+    public void loadTile(Area wall, TileType t){
         for (int i = 0; i < map.length; i++) {
-
             for (int j = 0; j < map[0].length; j++) {
                 //needed as top left = 0,0
                 int oppIndex = map.length - i - 1;
-                fallsWithinWall(wall, i, j, oppIndex);
+                fallsWithinWall(wall, i, j, oppIndex, t);
             }
         }
     }
 
-    private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
+    private void fallsWithinWall(Area wall, int i, int j, int oppIndex, TileType t) {
         if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && oppIndex <= wall.getTopBoundary() && oppIndex >= wall.getBottomBoundary()) {
             //could do with a factory here
-            map[oppIndex][j] = new Tile(new Wall());
+//            map[oppIndex][j] = new Tile(t);
+            map[oppIndex][j].setType(t);
         }
     }
 

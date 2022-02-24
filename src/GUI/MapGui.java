@@ -66,47 +66,52 @@ public class MapGui extends Application {
     public Pane createPane(){
         Pane p = new Pane();
 
-//        ArrayList<Tile> guardSpawn = new ArrayList<>();
+        ArrayList<Tile> guardSpawn = new ArrayList<>();
 //        ArrayList<Tile> intruderSpawn = new ArrayList<>();
 
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
                 Rectangle r = new Rectangle(map[i][j].getX(), map[i][j].getY(), 10, 10);
+                r.setStroke(Color.WHITE);
                 if(map[i][j].getTypeAsString().equals("floor")){
-                    r.setStroke(Color.WHITE);
                     r.setFill(Color.GREEN);
                     p.getChildren().add(r);
-                }else if(map[i][j].getTypeAsString().equals("wall")){
-                    r.setStroke(Color.WHITE);
+                }
+                else if(map[i][j].getTypeAsString().equals("wall")){
                     r.setFill(Color.BLACK);
                     p.getChildren().add(r);
-                }else if(map[i][j].getTypeAsString().equals("shaded")){
-                    r.setFill(Color.GRAY);
-                    p.getChildren().add(r);
-                }else if(map[i][j].getTypeAsString().equals("teleportals")){
-                    r.setFill(Color.YELLOW);
-                    p.getChildren().add(r);
-                }else if(map[i][j].getTypeAsString().equals("spawnAreaGuards")){
-//                    guardSpawn.add(map[i][j]);
+                }
+//                else if(map[i][j].getTypeAsString().equals("shaded")){
+//                    r.setFill(Color.GRAY);
+//                    p.getChildren().add(r);
+//                }else if(map[i][j].getTypeAsString().equals("teleportal")){
+//                    r.setFill(Color.YELLOW);
+//                    p.getChildren().add(r);
+//                }
+                else if(map[i][j].getTypeAsString().equals("spawnArea")){
+                    guardSpawn.add(map[i][j]);
                     r.setFill(Color.BLUE);
                     p.getChildren().add(r);
-                }else if(map[i][j].getTypeAsString().equals("spawnAreaIntruders")){
-//                    intruderSpawn.add(map[i][j]);
-                    r.setFill(Color.BROWN);
-                    p.getChildren().add(r);
-                }else if(map[i][j].getTypeAsString().equals("targetArea")){
-                    r.setFill(Color.RED);
-                    p.getChildren().add(r);
                 }
+//                else if(map[i][j].getTypeAsString().equals("spawnAreaIntruders")){
+////                    intruderSpawn.add(map[i][j]);
+//                    r.setFill(Color.BROWN);
+//                    p.getChildren().add(r);
+//                }
+//                else if(map[i][j].getTypeAsString().equals("targetArea")){
+//                    r.setFill(Color.RED);
+//                    p.getChildren().add(r);
+//                }
             }
         }
 
-//        Random r = new Random();
-//        for(int i=0; i< scenario.getNumGuards(); i++){
+        Random r = new Random();
+        for(int i=0; i< scenario.getNumGuards(); i++){
 //            Tile t = guardSpawn.get(r.nextInt(guardSpawn.size()));
-////            t.addPlayer();
+//            t.addPlayer();
 //            t.setColor(Color.BLACK);
-//        }
+//            guardSpawn.get(0).setFill(Color.BLACK);
+        }
 
 //        for(int i=0; i< scenario.getNumIntruders(); i++){
 //            Tile t = intruderSpawn.get(r.nextInt(intruderSpawn.size()));
