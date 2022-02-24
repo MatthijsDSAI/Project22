@@ -15,7 +15,6 @@ public class Tile {
     private boolean hasPlayer;
 
 
-
     private Color c;
     private int x;
     private int y;

@@ -29,16 +29,16 @@ public enum DirectionEnum {
             angle+=360;
         }
         if(angle==0){
-            return DirectionEnum.RIGHT;
-        }
-        if(angle==90){
             return DirectionEnum.UP;
         }
+        if(angle==90){
+            return DirectionEnum.RIGHT;
+        }
         if(angle==180){
-            return DirectionEnum.LEFT;
+            return DirectionEnum.DOWN;
         }
         if(angle==270){
-            return DirectionEnum.DOWN;
+            return DirectionEnum.LEFT;
         }
         throw new RuntimeException("Issue with angle passed to enum; invalid value: " + angle + " , must be multiple of 90 or 0.");
     }

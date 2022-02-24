@@ -27,12 +27,11 @@ public class HumanPlayer extends Player{
     //idea is to change coordinates based on input
     //over 1t
     public void update(){
-        move(1,0);
-        see();
+        //SearchAlogrithm.getMove or whatever
     }
 
     public void see(){
-        //see if any of the objects on the map are in it's vision
+        //handle vision
     }
 
     public void move(int deltaX, int deltaY){
