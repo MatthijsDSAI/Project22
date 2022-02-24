@@ -1,4 +1,4 @@
-import GivenCode.ExGamePlayer;
+import GivenCode.ExGameAgent;
 import controller.GameRunner;
 import controller.Scenario;
 
@@ -6,7 +6,7 @@ public class Explorer {
     protected String mapDoc;
     protected Scenario scenario;
 
-    ExGamePlayer p;
+    ExGameAgent p;
 
     public static void main(String[] args){
         // the mapscenario should be passed as a parameter
@@ -23,6 +23,6 @@ public class Explorer {
         mapDoc=scn;
         scenario = new Scenario(mapDoc);
         System.out.println("ok: " + scenario.getGameFile());
-        p = new ExGamePlayer(scenario);
+        p = new ExGameAgent(scenario);
     }
 }

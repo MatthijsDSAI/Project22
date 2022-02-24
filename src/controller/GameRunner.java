@@ -1,7 +1,9 @@
 package controller;
 
+import GUI.MapGui;
 import agents.Agent;
 import agents.TestAgent;
+import controller.Map.GraphicsConnector;
 import controller.Map.Map;
 import utils.DirectionEnum;
 
@@ -10,14 +12,24 @@ public class GameRunner {
     private Scenario scenario;
     private Map map;
 
-    private Agent player;
+    private Agent agent;
 
     private int t;
 
     public GameRunner(Scenario scenario) {
+        MapGui gui = new MapGui();
         this.scenario = scenario;
         init(scenario);
-
+        
+        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
+        if(Scenario.config.GUI){
+            try{
+                gui.launchGUI(graphicsConnector);
+            }
+            catch(RuntimeException e ){
+                System.out.println("There has been an issue with the initialization of the GUI");
+            }
+        }
     }
 
 
@@ -26,12 +38,12 @@ public class GameRunner {
     }
 
     public void init(Scenario scenario){
-        player = new TestAgent(0,0);
-        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, player);
+        agent = new TestAgent(0,0);
+        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
         map.loadMap(scenario);
         map.printMap();
         int x = 0, y = 0;
-        map.addPlayer(player,x,y);
+        map.addAgent(agent,x,y);
         t = 0;
     }
 
@@ -39,13 +51,13 @@ public class GameRunner {
     //does nothing yet
     public void step(){
         t++;
-        map.movePlayer(player, DirectionEnum.RIGHT.getDirection());
-        System.out.println(map.getPlayerPosition(player));
+        map.moveAgent(agent, DirectionEnum.RIGHT.getDirection());
+        System.out.println(map.getAgentPosition(agent));
         for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
-            //player.update();
+            //agent.update();
             //if i understand correctly per timestep we can do 15 things, where 15 is the speed
             //so we can either walk 15 steps, or walk 14 and turn once, etc.
-            //which is decided in player.update()
+            //which is decided in agent.update()
         }
     }
 
@@ -68,7 +80,7 @@ public class GameRunner {
 
 
 
-    public Agent getPlayer() {
-        return player;
+    public Agent getAgent() {
+        return agent;
     }
 }

@@ -42,7 +42,7 @@ public class Scenario {
     protected ArrayList<Area> walls;
     protected ArrayList<TelePortal> teleports;
     protected ArrayList<Area> shaded;
-    protected ArrayList<Agent> players;
+    protected ArrayList<Agent> agents;
 
     public Scenario(String mapFile){
         // set parameters
@@ -52,7 +52,7 @@ public class Scenario {
         walls = new ArrayList<>(); // create list of walls
         shaded = new ArrayList<>(); // create list of low-visability areas
         teleports = new ArrayList<>(); // create list of teleports e.g. stairs
-        players = new ArrayList<>();
+        agents = new ArrayList<>();
         //temporary
         config = new Config();
         // read scenario

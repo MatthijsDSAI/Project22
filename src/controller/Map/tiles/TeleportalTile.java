@@ -1,5 +1,7 @@
 package controller.Map.tiles;
 
+import java.awt.*;
+
 public class TeleportalTile extends TileType {
 
         //maybe store target coordinates in here
@@ -8,6 +10,7 @@ public class TeleportalTile extends TileType {
             walkable = true;
             seeThrough = true;
             exploredByDefault = false;
+            c = Color.MAGENTA;
         }
 
         @Override

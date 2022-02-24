@@ -1,10 +1,13 @@
 package controller.Map.tiles;
 
+import java.awt.*;
+
 public class Wall extends TileType{
     public Wall(){
         walkable = false;
         seeThrough = false;
         exploredByDefault = true;
+        c = Color.BLACK;
     }
 
     @Override

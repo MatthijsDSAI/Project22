@@ -1,6 +1,7 @@
 package GUI;
 
 import controller.GameRunner;
+import controller.Map.GraphicsConnector;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import javafx.application.Application;
@@ -20,7 +21,7 @@ public class MapGui extends Application {
     private double scaling;
     private GameRunner gr;
     private Tile[][] map;
-
+    private static GraphicsConnector graphicsConnector;
     public MapGui(){
     }
 
@@ -36,7 +37,7 @@ public class MapGui extends Application {
 
         scenario = new Scenario("testmap.txt");
         gr = new GameRunner(scenario);
-        map = gr.getMap().getMap();
+        map = gr.getMap().getTiles();
         row = map.length;
         col = map[0].length;
 
@@ -91,13 +92,13 @@ public class MapGui extends Application {
 //        Random r = new Random();
 //        for(int i=0; i< scenario.getNumGuards(); i++){
 //            Tile t = guardSpawn.get(r.nextInt(guardSpawn.size()));
-////            t.addPlayer();
+////            t.addAgent();
 //            t.setColor(Color.BLACK);
 //        }
 
 //        for(int i=0; i< scenario.getNumIntruders(); i++){
 //            Tile t = intruderSpawn.get(r.nextInt(intruderSpawn.size()));
-////            t.addPlayer();
+////            t.addAgent();
 //            t.setColor(Color.BLACK);
 //        }
 
@@ -122,8 +123,14 @@ public class MapGui extends Application {
 //        }
 //        p.play();
     }
-
+    
+    public void launchGUI(GraphicsConnector graphicsConnector){
+        MapGui.graphicsConnector = graphicsConnector;
+        String[] args  = new String[0];
+        launch(args);
+    }
     public static void main(String[] args) {
+        
         launch(args);
     }
 }

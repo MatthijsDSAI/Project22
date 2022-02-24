@@ -1,5 +1,7 @@
 package controller.Map.tiles;
 
+import java.awt.*;
+
 public class Floor extends TileType {
 
 
@@ -7,6 +9,7 @@ public class Floor extends TileType {
         walkable = true;
         seeThrough = true;
         exploredByDefault = false;
+        c = Color.white;
     }
 
     @Override

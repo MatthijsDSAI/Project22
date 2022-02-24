@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ExGamePlayer extends FileWatcher{
+public class ExGameAgent extends FileWatcher{
     protected int time;
     protected Scenario scenario;
 
@@ -23,7 +23,7 @@ public class ExGamePlayer extends FileWatcher{
     private final static Charset ENCODING = StandardCharsets.UTF_8;
     private final Path filePath;
 
-    public ExGamePlayer(Scenario s){
+    public ExGameAgent(Scenario s){
         super(s.getGameFile());
         scenario=s;
         time=0;

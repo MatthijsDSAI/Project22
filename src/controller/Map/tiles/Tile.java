@@ -7,11 +7,11 @@ import javafx.scene.shape.Rectangle;
 public class Tile {
 
     private TileType type;
-    private Agent player;
+    private Agent agent;
     private boolean explored;
     private boolean walkable;
     private boolean seeThrough;
-    private boolean hasPlayer;
+    private boolean hasAgent;
 
 
     private Color c;
@@ -23,7 +23,7 @@ public class Tile {
         walkable = type.isWalkable();
         seeThrough = type.isSeeThrough();
         explored = type.isExploredByDefault();
-        player = null;
+        agent = null;
         c = null;
     }
 
@@ -32,16 +32,16 @@ public class Tile {
         walkable = type.isWalkable();
         seeThrough = type.isSeeThrough();
         explored = type.isExploredByDefault();
-        player = null;
+        agent = null;
         c = null;
         this.x = x;
         this.y = y;
     }
 
-    public Agent getPlayer() {
-        if (hasPlayer)
-            return player;
-        else throw new RuntimeException("There is no player on this tile");
+    public Agent getAgent() {
+        if (hasAgent)
+            return agent;
+        else throw new RuntimeException("There is no agent on this tile");
     }
 
     public boolean isExplored() {
@@ -57,14 +57,14 @@ public class Tile {
     }
 
     public String toString(){
-        if(!hasPlayer)
+        if(!hasAgent)
             return type.toString();
         return type.toString() + " + p";
     }
 
-    public void addPlayer(Agent player) {
-        this.player = player;
-        hasPlayer = true;
+    public void addAgent(Agent agent) {
+        this.agent = agent;
+        hasAgent = true;
     }
 
     //Boyun,you can use this method to get the type, it will return for example "wall" or "floor"
@@ -72,17 +72,17 @@ public class Tile {
         return type.toString();
     }
 
-    public void removePlayer() {
-        this.player = null;
-        hasPlayer = false;
+    public void removeAgent() {
+        this.agent = null;
+        hasAgent = false;
     }
 
     public boolean isExploredByDefault() {
         return type.isExploredByDefault();
     }
 
-    public boolean hasPlayer() {
-        return hasPlayer;
+    public boolean hasAgent() {
+        return hasAgent;
     }
 
     public Rectangle createRec(int x, int y){
