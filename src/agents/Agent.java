@@ -146,4 +146,7 @@ public abstract class Agent implements AgentI{
         return agent2;
     }
 
+    public double getAngle(){
+        return angle;
+    }
 }

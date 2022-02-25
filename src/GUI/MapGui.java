@@ -1,6 +1,7 @@
 package GUI;
 
 import controller.GameRunner;
+import controller.GraphicsConnector;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import controller.TelePortal;
@@ -21,7 +22,7 @@ public class MapGui extends Application {
     private double scaling;
     private GameRunner gr;
     private Tile[][] map;
-    private static TelePortal.GraphicsConnector graphicsConnector;
+    private static GraphicsConnector graphicsConnector;
     public MapGui(){
     }
 
@@ -124,7 +125,7 @@ public class MapGui extends Application {
 //        p.play();
     }
     
-    public void launchGUI(TelePortal.GraphicsConnector graphicsConnector){
+    public void launchGUI(GraphicsConnector graphicsConnector){
         MapGui.graphicsConnector = graphicsConnector;
         String[] args  = new String[0];
         launch(args);

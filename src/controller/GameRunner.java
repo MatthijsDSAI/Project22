@@ -4,23 +4,22 @@ import GUI.MapGui;
 import agents.Agent;
 import agents.TestAgent;
 import controller.Map.Map;
+import utils.Config;
 import utils.DirectionEnum;
 
 //idea is to make this the class where we run store everything and have our main loop
 public class GameRunner {
-    private Scenario scenario;
     private Map map;
-
+    private final Config config = Scenario.config;
     private Agent agent;
 
     private int t;
 
     public GameRunner(Scenario scenario) {
         MapGui gui = new MapGui();
-        this.scenario = scenario;
         init(scenario);
         
-        TelePortal.GraphicsConnector graphicsConnector = new TelePortal.GraphicsConnector(this);
+        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
         if(Scenario.config.GUI){
             try{
                 gui.launchGUI(graphicsConnector);
