@@ -3,7 +3,6 @@ package controller;
 import GUI.MapGui;
 import agents.Agent;
 import agents.TestAgent;
-import controller.Map.GraphicsConnector;
 import controller.Map.Map;
 import utils.DirectionEnum;
 
@@ -21,7 +20,7 @@ public class GameRunner {
         this.scenario = scenario;
         init(scenario);
         
-        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
+        TelePortal.GraphicsConnector graphicsConnector = new TelePortal.GraphicsConnector(this);
         if(Scenario.config.GUI){
             try{
                 gui.launchGUI(graphicsConnector);

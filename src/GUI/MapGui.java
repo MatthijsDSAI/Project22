@@ -1,9 +1,9 @@
 package GUI;
 
 import controller.GameRunner;
-import controller.Map.GraphicsConnector;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
+import controller.TelePortal;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -21,7 +21,7 @@ public class MapGui extends Application {
     private double scaling;
     private GameRunner gr;
     private Tile[][] map;
-    private static GraphicsConnector graphicsConnector;
+    private static TelePortal.GraphicsConnector graphicsConnector;
     public MapGui(){
     }
 
@@ -124,7 +124,7 @@ public class MapGui extends Application {
 //        p.play();
     }
     
-    public void launchGUI(GraphicsConnector graphicsConnector){
+    public void launchGUI(TelePortal.GraphicsConnector graphicsConnector){
         MapGui.graphicsConnector = graphicsConnector;
         String[] args  = new String[0];
         launch(args);
