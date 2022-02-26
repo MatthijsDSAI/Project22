@@ -2,10 +2,7 @@ package controller.Map;
 
 import agents.Agent;
 import controller.Area;
-import controller.Map.tiles.Floor;
-import controller.Map.tiles.TeleportalTile;
-import controller.Map.tiles.Tile;
-import controller.Map.tiles.Wall;
+import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
 import utils.DirectionEnum;
@@ -15,21 +12,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Map {
-    private Tile[][] tiles;
+    private TileType[][] tiles;
     private String[][] test;
     private Agent agent;
     private Point2D agentPosition;
+    private TileType tileVersion;
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
         this.agentPosition = new Point2D.Double(0,0);
-        tiles = new Tile[horizontalSize][verticalSize];
+        tiles = new TileType[horizontalSize][verticalSize];
         test = new String[horizontalSize][verticalSize];
     }
 
 
     public Map(int row, int col){
-        tiles = new Tile[row][col];
+        tiles = new TileType[row][col];
     }
 
     public void loadMap(Scenario scenario){
@@ -50,7 +48,7 @@ public class Map {
     private void initializeEmptyMap() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
-                tiles[i][j] = new Tile(new Floor(), j * 10, i * 10);
+                tiles[i][j] = new Floor(j * 10, i * 10);
             }
         }
     }
@@ -82,7 +80,7 @@ public class Map {
     private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
         if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && oppIndex <= wall.getTopBoundary() && oppIndex >= wall.getBottomBoundary()) {
             //could do with a factory here
-            tiles[oppIndex][j] = new Tile(new Wall());
+            // tiles[oppIndex][j] = new Wall(); //TODO what is tried to do here? Shouldn't be only boolean?
         }
 //        if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && i - 1 <= wall.getTopBoundary() && i-1 >= wall.getBottomBoundary()) {
 //            //could do with a factory here
@@ -106,7 +104,7 @@ public class Map {
     }
 
     public void moveAgentFromTo(Agent agent, int xFrom, int yFrom, int xTo, int yTo){
-        Tile tile = tiles[yTo][xTo];
+        TileType tile = tiles[yTo][xTo];
         if(tile.isWalkable()) {
             tiles[yFrom][xFrom].removeAgent();
             tiles[yTo][xTo].addAgent(agent);
@@ -124,7 +122,7 @@ public class Map {
         int yFrom = (int) agentPosition.getY();
         int xTo = (int) toTile.getX();
         int yTo = (int) toTile.getY();
-        Tile tile = tiles[yTo][xTo];
+        TileType tile = tiles[yTo][xTo];
         if(tile.isWalkable()) {
             tiles[yFrom][xFrom].removeAgent();
             tiles[yTo][xTo].addAgent(agent);
@@ -155,9 +153,9 @@ public class Map {
 
 
     public boolean isExplored() {
-        for(Tile[] tiles : tiles){
-            for(Tile tile : tiles){
-                if(!tile.isExplored()){
+        for(TileType[] tiles : tiles){
+            for(TileType tile : tiles){
+                if(!tile.isExploredByDefault()){
                     return false;
                 }
             }
@@ -168,10 +166,10 @@ public class Map {
     public double explored(){
         double notExplored = 0;
         double explored = 0;
-        for(Tile[] tiles : tiles){
-            for(Tile tile : tiles){
+        for(TileType[] tiles : tiles){
+            for(TileType tile : tiles){
                 if(!tile.isExploredByDefault()) {
-                    if (!tile.isExplored()) {
+                    if (!tile.isExploredByDefault()) {
                         notExplored++;
                     }
                     else{
@@ -183,7 +181,7 @@ public class Map {
         return explored/(notExplored+explored);
     }
 
-    public Tile[][] getTiles() {
+    public TileType[][] getTiles() {
         return tiles;
     }
 

@@ -6,30 +6,25 @@ public class TeleportalTile extends TileType {
 
         //maybe store target coordinates in here
         //and angle
-        public TeleportalTile(){
-            walkable = true;
-            seeThrough = true;
-            exploredByDefault = false;
-            c = Color.MAGENTA;
+        public TeleportalTile() {
+            this.setWalkable(true);
+            this.setSeeThrough(true);
+            this.setExploredByDefault(false);
+            this.setC(Color.MAGENTA);
+        }
+
+        public TeleportalTile(int x, int y){
+            this.setWalkable(true);
+            this.setSeeThrough(true);
+            this.setExploredByDefault(false);
+            this.setC(Color.MAGENTA);
+            this.setX(x);
+            this.setY(y);
         }
 
         @Override
-        public boolean isWalkable() {
-            return walkable;
-        }
-
-        @Override
-        public boolean isSeeThrough() {
-            return seeThrough;
-        }
-
-        @Override
-        public boolean isExploredByDefault() {
-            return exploredByDefault;
-        }
-
         public String toString(){
-            return "wall";
+            return "TelePortal";
         }
 
 

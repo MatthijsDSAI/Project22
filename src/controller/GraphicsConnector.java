@@ -2,21 +2,20 @@ package controller;
 
 import agents.Agent;
 import controller.Map.Map;
-import controller.Map.tiles.Tile;
+import controller.Map.tiles.TileType;
 import javafx.scene.paint.Color;
-import utils.Utils;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GraphicsConnector {
     private Map map;
-    private Tile[][] tiles;
+    private TileType[][] tiles;
     private GameRunner gameRunner;
     private ArrayList<Agent> agents;
     public GraphicsConnector(GameRunner gameRunner) {
@@ -36,7 +35,7 @@ public class GraphicsConnector {
         return mapOfColors;
     }
 
-    public ArrayList<BufferedImage> getAgents() {
+    public ArrayList<BufferedImage> getAgents() throws IOException {
         //TODO: implement difference between guard and intruder
         ArrayList<BufferedImage> list = new ArrayList<>();
         for(Agent agent : agents){

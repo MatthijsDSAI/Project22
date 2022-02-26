@@ -4,32 +4,18 @@ import java.awt.*;
 
 public class Floor extends TileType {
 
-
-    public Floor(){
-        walkable = true;
-        seeThrough = true;
-        exploredByDefault = false;
-        c = Color.white;
+    public Floor(int x, int y){
+        this.setWalkable(true);
+        this.setSeeThrough(true);
+        this.setExploredByDefault(false);
+        this.setC(Color.WHITE);
+        this.setX(x);
+        this.setY(y);
     }
 
     @Override
-    public boolean isWalkable() {
-        return walkable;
-    }
-
-    @Override
-    public boolean isSeeThrough() {
-        return seeThrough;
-    }
-
-
-
     public String toString(){
-        return "floor";
+        return "Floor";
     }
 
-    @Override
-    public boolean isExploredByDefault() {
-        return exploredByDefault;
-    }
 }

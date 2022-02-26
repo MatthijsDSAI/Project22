@@ -1,29 +1,19 @@
 package controller.Map.tiles;
 
+import java.awt.*;
+
 public class Shaded extends TileType{
-    public Shaded() {
-        walkable = true;
-        seeThrough = false;
-        exploredByDefault = false;
-    }
-
-    @Override
-    public boolean isWalkable() {
-        return walkable;
-    }
-
-    @Override
-    public boolean isSeeThrough() {
-        return seeThrough;
-    }
-
-    @Override
-    public boolean isExploredByDefault() {
-        return exploredByDefault;
+    public Shaded(int x, int y) {
+        this.setWalkable(true);
+        this.setSeeThrough(false);
+        this.setExploredByDefault(false);
+        // this.setC(Color.WHITE);
+        this.setX(x);
+        this.setY(y);
     }
 
     @Override
     public String toString() {
-        return "shaded";
+        return "Shaded";
     }
 }

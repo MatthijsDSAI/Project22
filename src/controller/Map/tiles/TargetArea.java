@@ -1,29 +1,19 @@
 package controller.Map.tiles;
 
+import java.awt.*;
+
 public class TargetArea extends TileType{
-    public TargetArea() {
-        walkable = true;
-        seeThrough = true;
-        exploredByDefault = false;
-    }
-
-    @Override
-    public boolean isWalkable() {
-        return walkable;
-    }
-
-    @Override
-    public boolean isSeeThrough() {
-        return seeThrough;
-    }
-
-    @Override
-    public boolean isExploredByDefault() {
-        return exploredByDefault;
+    public TargetArea(int x, int y) {
+        this.setWalkable(true);
+        this.setSeeThrough(true);
+        this.setExploredByDefault(false);
+        // this.setC(Color.WHITE);
+        this.setX(x);
+        this.setY(y);
     }
 
     @Override
     public String toString() {
-        return "targetArea";
+        return "TargetArea";
     }
 }

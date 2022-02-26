@@ -1,12 +1,5 @@
 package controller;
 
-import agents.Agent;
-import controller.Map.Map;
-import controller.Map.tiles.Tile;
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
-
 public class TelePortal extends Area {
     protected int yTarget;
     protected int xTarget;
