@@ -1,19 +1,24 @@
 package controller.Map.tiles;
 
-import java.awt.*;
+import controller.TelePortal;
+import javafx.scene.paint.Color;
 
-public class TeleportalTile extends TileType {
+public class TeleportalTile extends Tile {
 
-        //maybe store target coordinates in here
+    private final TelePortal tp;
+
+    //maybe store target coordinates in here
         //and angle
-        public TeleportalTile() {
+        public TeleportalTile(TelePortal tp) {
+            this.tp = tp;
             this.setWalkable(true);
             this.setSeeThrough(true);
             this.setExploredByDefault(false);
             this.setC(Color.MAGENTA);
         }
 
-        public TeleportalTile(int x, int y){
+        public TeleportalTile(TelePortal tp, int x, int y){
+            this.tp = tp;
             this.setWalkable(true);
             this.setSeeThrough(true);
             this.setExploredByDefault(false);
@@ -27,5 +32,10 @@ public class TeleportalTile extends TileType {
             return "TelePortal";
         }
 
-
+        public int[] teleport(){
+            if(hasAgent()){
+                return tp.getNewLocation();
+            }
+            throw new RuntimeException("There is no agent to teleport on tile: " + getX() + ", " + getY());
+        }
 }

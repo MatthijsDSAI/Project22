@@ -2,7 +2,7 @@ package controller.Map.tiles;
 
 import javafx.scene.paint.Color;
 
-public class Floor extends TileType {
+public class Floor extends Tile {
 
     public Floor(int x, int y){
         this.setWalkable(true);

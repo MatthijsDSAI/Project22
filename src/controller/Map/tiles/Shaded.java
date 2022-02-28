@@ -1,8 +1,6 @@
 package controller.Map.tiles;
 
-import javafx.scene.paint.Color;
-
-public class Shaded extends TileType{
+public class Shaded extends Tile {
     public Shaded(int x, int y) {
         this.setWalkable(true);
         this.setSeeThrough(false);

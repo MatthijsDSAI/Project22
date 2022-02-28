@@ -2,7 +2,7 @@ package controller;
 
 import agents.Agent;
 import controller.Map.Map;
-import controller.Map.tiles.TileType;
+import controller.Map.tiles.Tile;
 import javafx.scene.paint.Color;
 
 import javax.imageio.ImageIO;
@@ -10,12 +10,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class GraphicsConnector {
     private Map map;
-    private TileType[][] tiles;
+    private Tile[][] tiles;
     private GameRunner gameRunner;
     private ArrayList<Agent> agents;
     public GraphicsConnector(GameRunner gameRunner) {

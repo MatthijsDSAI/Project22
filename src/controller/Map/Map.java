@@ -7,28 +7,150 @@ import controller.Scenario;
 import controller.TelePortal;
 import utils.DirectionEnum;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Map {
-    private TileType[][] tiles;
+    private Tile[][] tiles;
     private String[][] test;
     private Agent agent;
-    private Point2D agentPosition;
-    private TileType tileVersion;
+    private Tile agentPosition;
+    private Tile tileVersion;
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
-        this.agentPosition = new Point2D.Double(0,0);
-        tiles = new TileType[horizontalSize][verticalSize];
+
+        tiles = new Tile[horizontalSize][verticalSize];
+        this.agentPosition = tiles[0][0];
         test = new String[horizontalSize][verticalSize];
     }
 
 
     public Map(int row, int col){
-        tiles = new TileType[row][col];
+        tiles = new Tile[row][col];
     }
+
+
+    public void addAgent(Agent agent, int x, int y) {
+        tiles[y][x].addAgent(agent);
+    }
+
+    public void moveAgentFromTo(Agent agent, int xFrom, int yFrom, int xTo, int yTo){
+        Tile tile = tiles[yTo][xTo];
+        if(tile.isWalkable()) {
+            tiles[yFrom][xFrom].removeAgent();
+            tiles[yTo][xTo].addAgent(agent);
+            setAgentPosition(tiles[yTo][xTo]);
+        }
+        else{
+            throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
+        }
+    }
+
+    public void moveAgent(Agent agent, String direction){
+        Tile fromTile = getAgentPosition(agent);
+        Tile toTile = getTileFromDirection(agentPosition, direction);
+
+
+
+        changeTiles(fromTile, toTile);
+
+        checkTeleport(fromTile, toTile);
+
+
+    }
+
+    public void checkTeleport(Tile fromTile, Tile toTile){
+        if(toTile.toString().equals("TelePortal")){
+            TeleportalTile teleportalTile = (TeleportalTile) tiles[toTile.getY()][toTile.getX()];
+            int[] teleportTo = teleportalTile.teleport();
+            fromTile = toTile;
+            toTile = tiles[teleportTo[0]][teleportTo[1]];
+            changeTiles(fromTile, toTile);
+        }
+    }
+    public void changeTiles(Tile fromTile, Tile toTile){
+        if(fromTile.isWalkable()) {
+            tiles[fromTile.getY()][fromTile.getX()].removeAgent();
+            tiles[toTile.getY()][toTile.getX()].addAgent(agent);
+            setAgentPosition(toTile);
+        }
+        else{
+            throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
+        }
+    }
+    private Tile getTileFromDirection(Tile agentPosition, String direction) {
+        int x = agentPosition.getX();
+        int y = agentPosition.getY();
+        if(direction.equals(DirectionEnum.RIGHT.getDirection())){
+            x++;
+        }
+        else if(direction.equals(DirectionEnum.LEFT.getDirection())){
+            x--;
+        }
+        else if(direction.equals(DirectionEnum.UP.getDirection())){
+            y--;
+        }
+        else if(direction.equals(DirectionEnum.DOWN.getDirection())){
+            y++;
+        }
+        return tiles[y][x];
+    }
+
+
+    public boolean isExplored() {
+        for(Tile[] tiles : tiles){
+            for(Tile tile : tiles){
+                if(!tile.isExploredByDefault()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public double explored(){
+        double notExplored = 0;
+        double explored = 0;
+        for(Tile[] tiles : tiles){
+            for(Tile tile : tiles){
+                if(!tile.isExploredByDefault()) {
+                    if (!tile.isExploredByDefault()) {
+                        notExplored++;
+                    }
+                    else{
+                        explored++;
+                    }
+                }
+            }
+        }
+        return explored/(notExplored+explored);
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
+    public Tile getAgentPosition(Agent agent){
+        return agentPosition;
+    }
+
+    private void setAgentPosition(Tile agentPosition) {
+        this.agentPosition = agentPosition;
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////---------INITIALIZATION----------/////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+
 
     public void loadMap(Scenario scenario){
 
@@ -67,11 +189,11 @@ public class Map {
         }
     }
 
-    public void loadTeleportal(Area teleportal){
+    public void loadTeleportal(TelePortal teleportal){
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
                 if(teleportal.containP(tiles[i][j].getX(), tiles[i][j].getY())){
-                    tiles[i][j].setType(new TeleportalTile());
+                    tiles[i][j].setType(new TeleportalTile(teleportal));
                 }
             }
         }
@@ -97,99 +219,5 @@ public class Map {
     }
     public void printLayout(){
         System.out.println(Arrays.deepToString(test).replace("], ", "]\n"));
-    }
-
-    public void addAgent(Agent agent, int x, int y) {
-        tiles[y][x].addAgent(agent);
-    }
-
-    public void moveAgentFromTo(Agent agent, int xFrom, int yFrom, int xTo, int yTo){
-        TileType tile = tiles[yTo][xTo];
-        if(tile.isWalkable()) {
-            tiles[yFrom][xFrom].removeAgent();
-            tiles[yTo][xTo].addAgent(agent);
-            setAgentPosition(new Point2D.Double(xTo, yTo));
-        }
-        else{
-            throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
-        }
-    }
-
-    public void moveAgent(Agent agent, String direction){
-        Point2D agentPosition = getAgentPosition(agent);
-        Point2D toTile = getTileFromDirection(agentPosition, direction);
-        int xFrom = (int) agentPosition.getX();
-        int yFrom = (int) agentPosition.getY();
-        int xTo = (int) toTile.getX();
-        int yTo = (int) toTile.getY();
-        TileType tile = tiles[yTo][xTo];
-        if(tile.isWalkable()) {
-            tiles[yFrom][xFrom].removeAgent();
-            tiles[yTo][xTo].addAgent(agent);
-            setAgentPosition(toTile);
-        }
-        else{
-            throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
-        }
-    }
-
-    private Point2D getTileFromDirection(Point2D agentPosition, String direction) {
-        int x = (int) agentPosition.getX();
-        int y = (int) agentPosition.getY();
-        if(direction.equals(DirectionEnum.RIGHT.getDirection())){
-            x++;
-        }
-        else if(direction.equals(DirectionEnum.LEFT.getDirection())){
-            x--;
-        }
-        else if(direction.equals(DirectionEnum.UP.getDirection())){
-            y--;
-        }
-        else if(direction.equals(DirectionEnum.DOWN.getDirection())){
-            y++;
-        }
-        return new Point2D.Double(x,y);
-    }
-
-
-    public boolean isExplored() {
-        for(TileType[] tiles : tiles){
-            for(TileType tile : tiles){
-                if(!tile.isExploredByDefault()){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public double explored(){
-        double notExplored = 0;
-        double explored = 0;
-        for(TileType[] tiles : tiles){
-            for(TileType tile : tiles){
-                if(!tile.isExploredByDefault()) {
-                    if (!tile.isExploredByDefault()) {
-                        notExplored++;
-                    }
-                    else{
-                        explored++;
-                    }
-                }
-            }
-        }
-        return explored/(notExplored+explored);
-    }
-
-    public TileType[][] getTiles() {
-        return tiles;
-    }
-
-    public Point2D getAgentPosition(Agent agent){
-        return agentPosition;
-    }
-
-    private void setAgentPosition(Point2D agentPosition) {
-        this.agentPosition = agentPosition;
     }
 }

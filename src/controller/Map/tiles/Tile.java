@@ -6,20 +6,20 @@ import javafx.scene.shape.Rectangle;
 
 
 
-public abstract class TileType {
+public abstract class Tile {
 
     private boolean exploredByDefault;
     private boolean walkable;
     private boolean seeThrough;
     private Color c;
-    private TileType type;
+    private Tile type;
     private Agent agent;
     private int x;
     private int y;
 
-    protected TileType(){}
+    protected Tile(){}
 
-    public TileType(boolean exploredByDefault, boolean walkable, boolean seeThrough, Color c, TileType type, Agent agent) {
+    public Tile(boolean exploredByDefault, boolean walkable, boolean seeThrough, Color c, Tile type, Agent agent) {
         this.exploredByDefault = exploredByDefault;
         this.walkable = walkable;
         this.seeThrough = seeThrough;
@@ -44,8 +44,8 @@ public abstract class TileType {
     public Color getC() {return c;}
     public void setC(Color c) {this.c = c;}
 
-    public TileType getType() {return type;}
-    public void setType(TileType type) {this.type = type;}
+    public Tile getType() {return type;}
+    public void setType(Tile type) {this.type = type;}
 
     public int getX() {return this.x;}
     public void setX(int x) {this.x = x;}

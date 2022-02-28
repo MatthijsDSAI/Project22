@@ -2,7 +2,7 @@ package controller.Map.tiles;
 
 import javafx.scene.paint.Color;
 
-public class Wall extends TileType{
+public class Wall extends Tile {
     public Wall(int x, int y){
         this.setWalkable(false);
         this.setSeeThrough(false);

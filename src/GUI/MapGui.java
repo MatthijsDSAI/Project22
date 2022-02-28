@@ -2,7 +2,7 @@ package GUI;
 
 import controller.GameRunner;
 import controller.GraphicsConnector;
-import controller.Map.tiles.TileType;
+import controller.Map.tiles.Tile;
 import controller.Scenario;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -20,7 +20,7 @@ public class MapGui extends Application {
     private int row;
     private double scaling;
     private GameRunner gr;
-    private TileType[][] map;
+    private Tile[][] map;
     private static GraphicsConnector graphicsConnector;
     public MapGui(){
     }
