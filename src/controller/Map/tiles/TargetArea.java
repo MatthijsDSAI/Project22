@@ -1,6 +1,6 @@
 package controller.Map.tiles;
 
-import java.awt.*;
+import javafx.scene.paint.Color;
 
 public class TargetArea extends TileType{
     public TargetArea(int x, int y) {

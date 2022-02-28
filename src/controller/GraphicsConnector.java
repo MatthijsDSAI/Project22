@@ -35,21 +35,24 @@ public class GraphicsConnector {
         return mapOfColors;
     }
 
-    public ArrayList<BufferedImage> getAgents() throws IOException {
+    public ArrayList<BufferedImage> getAgents()  {
         //TODO: implement difference between guard and intruder
         ArrayList<BufferedImage> list = new ArrayList<>();
         for(Agent agent : agents){
-            BufferedImage image = ImageIO.read(new File("guard.png"));
+
             try {
+                BufferedImage image = ImageIO.read(new File("guard.png"));
                 list.add(image);
+                AffineTransform transform = new AffineTransform();
+                transform.rotate(Math.toRadians(agent.getAngle()), image.getWidth()/2, image.getHeight()/2 );
+                AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR );
+                list.add(op.filter(image, null));
+
             }
             catch(Exception e){
                 System.out.println("Invalid image passed");
             }
-            AffineTransform transform = new AffineTransform();
-            transform.rotate(Math.toRadians(agent.getAngle()), image.getWidth()/2, image.getHeight()/2 );
-            AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR );
-            list.add(op.filter(image, null));
+
         }
         return list;
     }

@@ -1,6 +1,6 @@
 package controller.Map.tiles;
 
-import java.awt.*;
+import javafx.scene.paint.Color;
 
 public class Shaded extends TileType{
     public Shaded(int x, int y) {
