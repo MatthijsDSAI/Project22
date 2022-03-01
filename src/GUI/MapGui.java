@@ -1,30 +1,31 @@
 package GUI;
 
-import controller.Area;
+import controller.GameRunner;
+import controller.GraphicsConnector;
+import controller.Map.tiles.Tile;
 import controller.Scenario;
-import controller.TelePortal;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.awt.*;
-
 public class MapGui extends Application {
 
-    private Scenario scenario = new Scenario("testmap.txt");
+    private Scenario scenario;
     private int mapHeight;
     private int mapWidth;
+    private int col;
+    private int row;
     private double scaling;
-
+    private GameRunner gr;
+    private Tile[][] map;
+    private static GraphicsConnector graphicsConnector;
     public MapGui(){
     }
 
     public MapGui(Scenario scenario){
-        this.scenario = scenario;
         mapHeight = scenario.getMapHeight();
         mapWidth = scenario.getMapWidth();
         scaling = scenario.getScaling();
@@ -32,8 +33,19 @@ public class MapGui extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+
+        scenario = new Scenario("testmap.txt");
+        gr = new GameRunner(scenario);
+        map = gr.getMap().getTiles();
+        row = map.length;
+        col = map[0].length;
+
+        mapHeight = 800;
+        mapWidth = 1200;
+
         Pane root = createPane();
-        Scene scene = new Scene(root, 1200, 700);
+        Scene scene = new Scene(root, mapWidth, mapHeight);
         stage.setTitle("MAP");
         stage.setScene(scene);
         stage.show();
@@ -42,68 +54,83 @@ public class MapGui extends Application {
     public Pane createPane(){
         Pane p = new Pane();
 
-        //Setting wall, teleportal, shaded
-        Rectangle r1 = null;
-        for(Area wall : scenario.getWalls()){
-            r1 = wall.createRec();
-            r1.setFill(Color.BLACK);
-            p.getChildren().add(r1);
+//        ArrayList<Tile> guardSpawn = new ArrayList<>();
+//        ArrayList<Tile> intruderSpawn = new ArrayList<>();
+
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                Rectangle r = new Rectangle(map[i][j].getX(), map[i][j].getY(), 10, 10);
+                if(map[i][j].toString().equals("floor")){
+                    r.setStroke(Color.WHITE);
+                    r.setFill(Color.GREEN);
+                    p.getChildren().add(r);
+                }else if(map[i][j].toString().equals("wall")){
+                    r.setStroke(Color.WHITE);
+                    r.setFill(Color.BLACK);
+                    p.getChildren().add(r);
+                }else if(map[i][j].toString().equals("shaded")){
+                    r.setFill(Color.GRAY);
+                    p.getChildren().add(r);
+                }else if(map[i][j].toString().equals("teleportals")){
+                    r.setFill(Color.YELLOW);
+                    p.getChildren().add(r);
+                }else if(map[i][j].toString().equals("spawnAreaGuards")){
+//                    guardSpawn.add(map[i][j]);
+                    r.setFill(Color.BLUE);
+                    p.getChildren().add(r);
+                }else if(map[i][j].toString().equals("spawnAreaIntruders")){
+//                    intruderSpawn.add(map[i][j]);
+                    r.setFill(Color.BROWN);
+                    p.getChildren().add(r);
+                }else if(map[i][j].toString().equals("targetArea")){
+                    r.setFill(Color.RED);
+                    p.getChildren().add(r);
+                }
+            }
         }
 
-        Rectangle r2 = null;
-        for(TelePortal t : scenario.getTeleportals()){
-            r2 = t.createRec();
-            r2.setFill(Color.YELLOW);
-            p.getChildren().add(r2);
-        }
+//        Random r = new Random();
+//        for(int i=0; i< scenario.getNumGuards(); i++){
+//            Tile t = guardSpawn.get(r.nextInt(guardSpawn.size()));
+////            t.addAgent();
+//            t.setColor(Color.BLACK);
+//        }
 
-        Rectangle r3 = null;
-        for(Area s : scenario.getShaded()){
-            r3 = s.createRec();
-            r3.setFill(Color.GREY);
-            p.getChildren().add(r3);
-        }
-
-        //Setting spawn point and target
-        Rectangle spawnAreaGuards = scenario.getSpawnAreaGuards().createRec();
-        spawnAreaGuards.setFill(Color.BLUE);
-        p.getChildren().add(spawnAreaGuards);
-
-        //The spawn area of intruders have the same location as the guards for testmap
-//        Rectangle spawnAreaIntruders = scenario.getSpawnAreaIntruders().createRec(scaling);
-//        spawnAreaIntruders.setFill(Color.BROWN);
-//        p.getChildren().add(spawnAreaIntruders);
-
-        Rectangle targetArea = scenario.getTargetArea().createRec();
-        targetArea.setFill(Color.RED);
-        p.getChildren().add(targetArea);
-
-        //Setting Guards
-        double[][] spawnGuards = scenario.spawnGuards();
-        for(int i=0; i< scenario.getNumGuards(); i++){
-            Circle c = new Circle();
-            c.setCenterX(spawnGuards[i][0]);
-            c.setCenterY(spawnGuards[i][1]);
-            c.setRadius(5);
-            c.setFill(Color.BLACK);
-            p.getChildren().add(c);
-        }
-
-        //Setting intruders
-        double[][] spawnIntruders = scenario.spawnIntruders();
-        for(int i=0; i< scenario.getNumIntruders(); i++){
-            Circle c = new Circle();
-            c.setCenterX(spawnIntruders[i][0]);
-            c.setCenterY(spawnIntruders[i][1]);
-            c.setRadius(5);
-            c.setFill(Color.GREEN);
-            p.getChildren().add(c);
-        }
+//        for(int i=0; i< scenario.getNumIntruders(); i++){
+//            Tile t = intruderSpawn.get(r.nextInt(intruderSpawn.size()));
+////            t.addAgent();
+//            t.setColor(Color.BLACK);
+//        }
 
         return p;
     }
 
+    //Animation for future
+    public void autoMove(){
+//        ParallelTransition p = new ParallelTransition();
+//        for(Circle c : guards){
+//            TranslateTransition tt = new TranslateTransition(new Duration(10000), c);
+//            tt.setByX(500);
+//            tt.setCycleCount(5);
+//            tt.setAutoReverse(true);
+//            p.getChildren().add(tt);
+//        }
+//        for(Circle c : intruders){
+//            TranslateTransition tt = new TranslateTransition(new Duration(10000), c);
+//            tt.setByX(500);
+//            tt.setAutoReverse(true);
+//            p.getChildren().add(tt);
+//        }
+//        p.play();
+    }
+    
+    public void launchGUI(GraphicsConnector graphicsConnector){
+        MapGui.graphicsConnector = graphicsConnector;
+        String[] args  = new String[0];
+        launch(args);
+    }
     public static void main(String[] args) {
+        
         launch(args);
     }
 }

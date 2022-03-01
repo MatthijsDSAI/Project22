@@ -1,13 +1,12 @@
 package controller;
 
+import agents.Agent;
 import utils.Config;
-import controller.Area;
-import java.io.IOException;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -43,20 +42,25 @@ public class Scenario {
     protected ArrayList<Area> walls;
     protected ArrayList<TelePortal> teleports;
     protected ArrayList<Area> shaded;
+    protected ArrayList<Agent> agents;
 
     public Scenario(String mapFile){
         // set parameters
         mapDoc=mapFile;
-
         // initialize variables
+
         walls = new ArrayList<>(); // create list of walls
         shaded = new ArrayList<>(); // create list of low-visability areas
         teleports = new ArrayList<>(); // create list of teleports e.g. stairs
+        agents = new ArrayList<>();
+        //temporary
         config = new Config();
         // read scenario
         filePath = Paths.get(mapDoc); // get path
         System.out.println(filePath);
         readMap();
+
+
     }
 
     public void readMap(){
@@ -179,6 +183,7 @@ public class Scenario {
         return targetArea;
     }
 
+
     public double[][] spawnGuards(){
         double[][] tmp = new double[numGuards][4];
         double dx = spawnAreaGuards.rightBoundary * 10 - spawnAreaGuards.leftBoundary * 10;
@@ -192,6 +197,8 @@ public class Scenario {
         return tmp;
     }
 
+
+
     public double[][] spawnIntruders(){
         double[][] tmp = new double[numIntruders][4];
         double dx=spawnAreaIntruders.rightBoundary * 10 - spawnAreaIntruders.leftBoundary * 10;
@@ -202,6 +209,7 @@ public class Scenario {
             tmp[i][1]=spawnAreaIntruders.bottomBoundary * 10 + Math.random() * dy;
 //            tmp[i][2]=Math.random()*2*Math.PI;
         }
+
         return tmp;
     }
 
