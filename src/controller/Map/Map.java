@@ -32,7 +32,18 @@ public class Map {
         tiles = new Tile[row][col];
     }
 
+    public static Map createEmptyMap(Map map) {
+        int horizontalSize = map.getTiles().length;
+        int verticalSize = map.getTiles().length;
+        return new Map(horizontalSize, verticalSize);
+    }
 
+    public void computeAgentVision(){
+        ArrayList<Tile> visibleTiles = new ArrayList<>();
+        visibleTiles.add(agentPosition);
+        double angle = agent.getAngle();
+
+    }
     public void addAgent(Agent agent, int x, int y) {
         tiles[y][x].addAgent(agent);
     }

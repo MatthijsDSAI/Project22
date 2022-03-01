@@ -10,6 +10,7 @@ public abstract class Agent implements AgentI{
     int x_position,y_position, angle;
     public String a_name;
     double baseSpeed, range, visangle, visibility,restTime,sprintTime, turn_speed, noiseProd;
+    public Map map;
 
     public Agent(int x_position, int y_position)
     {
@@ -152,6 +153,10 @@ public abstract class Agent implements AgentI{
     }
 
     public void initializeEmptyMap(Map map){
+        this.map = Map.createEmptyMap(map);
+    }
+
+    public void computeVisibleTiles(){
 
     }
 }
