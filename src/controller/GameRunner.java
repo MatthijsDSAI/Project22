@@ -42,6 +42,7 @@ public class GameRunner {
         map.printMap();
         int x = 0, y = 0;
         map.addAgent(agent,x,y);
+        agent.initializeEmptyMap(map);
         t = 0;
     }
 

@@ -1,6 +1,7 @@
 package agents;
 
 import controller.Area;
+import controller.Map.Map;
 import controller.Scenario;
 import utils.Utils;
 
@@ -148,5 +149,9 @@ public abstract class Agent implements AgentI{
 
     public double getAngle(){
         return angle;
+    }
+
+    public void initializeEmptyMap(Map map){
+
     }
 }
