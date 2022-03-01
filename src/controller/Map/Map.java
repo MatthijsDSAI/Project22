@@ -23,7 +23,7 @@ public class Map {
         this.agent = agent;
 
         tiles = new Tile[horizontalSize][verticalSize];
-        this.agentPosition = tiles[0][0];
+        this.agentPosition = tiles[10][0];
         test = new String[horizontalSize][verticalSize];
     }
 
