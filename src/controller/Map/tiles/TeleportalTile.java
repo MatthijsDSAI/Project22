@@ -17,7 +17,7 @@ public class TeleportalTile extends Tile {
             this.setC(Color.MAGENTA);
         }
 
-        public TeleportalTile(TelePortal tp, int x, int y){
+        public TeleportalTile(int x, int y, TelePortal tp){
             this.tp = tp;
             this.setWalkable(true);
             this.setSeeThrough(true);

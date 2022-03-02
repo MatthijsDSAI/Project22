@@ -19,15 +19,15 @@ public class GameRunner {
         MapGui gui = new MapGui();
         init(scenario);
         
-        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
-        if(Scenario.config.GUI){
-            try{
-                gui.launchGUI(graphicsConnector);
-            }
-            catch(RuntimeException e ){
-                System.out.println("There has been an issue with the initialization of the GUI");
-            }
-        }
+//        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
+//        if(Scenario.config.GUI){
+//            try{
+//                gui.launchGUI(graphicsConnector);
+//            }
+//            catch(RuntimeException e ){
+//                System.out.println("There has been an issue with the initialization of the GUI");
+//            }
+//        }
     }
 
 

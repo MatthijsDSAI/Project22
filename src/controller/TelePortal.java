@@ -20,7 +20,7 @@ public class TelePortal extends Area {
     }
 
     public int[] getNewLocation(){
-        int[] target = new int[] {yTarget,xTarget};
+        int[] target = new int[] {xTarget,yTarget};
         return target;
     }
 

@@ -15,6 +15,7 @@ public abstract class Agent implements AgentI{
     public String a_name;
     double baseSpeed, range, visangle, visibility,restTime,sprintTime, turn_speed, noiseProd;
     public Map map;
+    private Tile agentPosition;
 
     public Agent(int x_position, int y_position)
     {
@@ -164,5 +165,13 @@ public abstract class Agent implements AgentI{
         double d = Scenario.config.getVISION();
         ArrayList<Tile> visibleTiles = map.computeVisibleTiles(this);
 
+    }
+
+    public void setAgentPosition(Tile tile){
+        agentPosition = tile;
+    }
+
+    public Tile getAgentPosition(){
+        return agentPosition;
     }
 }

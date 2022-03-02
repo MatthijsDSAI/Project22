@@ -14,18 +14,16 @@ import java.util.Arrays;
 
 public class Map {
     private Tile[][] tiles;
-    private String[][] test;
     private Agent agent;
-    private Tile agentPosition;
+
     private Tile tileVersion;
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
-
         tiles = new Tile[horizontalSize][verticalSize];
-        this.agentPosition = tiles[0][0];
-        test = new String[horizontalSize][verticalSize];
+        agent.setAgentPosition(getTile(0,0));
     }
+
 
 
     public Map(int row, int col){
@@ -38,23 +36,17 @@ public class Map {
         return new Map(horizontalSize, verticalSize);
     }
 
-    public void computeAgentVision(){
-        ArrayList<Tile> visibleTiles = new ArrayList<>();
-        visibleTiles.add(agentPosition);
-        double angle = agent.getAngle();
-
-    }
     public void addAgent(Agent agent, int x, int y) {
-        tiles[y][x].addAgent(agent);
+        getTile(x,y).addAgent(agent);
 
     }
 
     public void moveAgentFromTo(Agent agent, int xFrom, int yFrom, int xTo, int yTo){
-        Tile tile = tiles[yTo][xTo];
+        Tile tile = getTile(xTo, yTo);
         if(tile.isWalkable()) {
-            tiles[yFrom][xFrom].removeAgent();
-            tiles[yTo][xTo].addAgent(agent);
-            setAgentPosition(tiles[yTo][xTo]);
+            getTile(xFrom, yFrom).removeAgent();
+            getTile(xTo, yTo).addAgent(agent);
+            agent.setAgentPosition(getTile(xTo, yTo));
         }
         else{
             throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
@@ -62,9 +54,8 @@ public class Map {
     }
 
     public void moveAgent(Agent agent, String direction){
-        Tile fromTile = getAgentPosition(agent);
-        Tile toTile = getTileFromDirection(agentPosition, direction);
-
+        Tile fromTile = agent.getAgentPosition();
+        Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
 
 
         changeTiles(fromTile, toTile);
@@ -79,20 +70,21 @@ public class Map {
             TeleportalTile teleportalTile = (TeleportalTile) tiles[toTile.getY()][toTile.getX()];
             int[] teleportTo = teleportalTile.teleport();
             fromTile = toTile;
-            toTile = tiles[teleportTo[0]][teleportTo[1]];
+            toTile = getTile(teleportTo[0], teleportTo[1]);
             changeTiles(fromTile, toTile);
         }
     }
     public void changeTiles(Tile fromTile, Tile toTile){
         if(fromTile.isWalkable()) {
-            tiles[fromTile.getY()][fromTile.getX()].removeAgent();
-            tiles[toTile.getY()][toTile.getX()].addAgent(agent);
-            setAgentPosition(toTile);
+            getTile(fromTile.getX(),fromTile.getY()).removeAgent();
+            getTile(toTile.getX(),toTile.getY()).addAgent(agent);
+            agent.setAgentPosition(toTile);
         }
         else{
             throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
         }
     }
+
     private Tile getTileFromDirection(Tile agentPosition, String direction) {
         int x = agentPosition.getX();
         int y = agentPosition.getY();
@@ -145,15 +137,6 @@ public class Map {
         return tiles;
     }
 
-    public Tile getAgentPosition(Agent agent){
-        return agentPosition;
-    }
-
-    private void setAgentPosition(Tile agentPosition) {
-        this.agentPosition = agentPosition;
-    }
-
-
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
@@ -177,80 +160,78 @@ public class Map {
         for(TelePortal telePortal : teleportals){
             loadTeleportal(telePortal);
         }
-        printLayout();
     }
 
     private void initializeEmptyMap() {
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[0].length; j++) {
-                tiles[i][j] = new Floor(j * 10, i * 10);
+        for (int i = 0; i < tiles[0].length; i++) {
+            for (int j = 0; j < tiles.length; j++) {
+                setTile(new Floor(i,j));
             }
         }
     }
 
 
     public void loadWall(Area wall){
-        for (int i = 0; i < tiles.length; i++) {
-
-            for (int j = 0; j < tiles[0].length; j++) {
+        for (int i = 0; i < tiles[0].length; i++) {
+            for (int j = 0; j < tiles.length; j++) {
                 //needed as top left = 0,0
                 int oppIndex = tiles.length - i - 1;
                 fallsWithinWall(wall, i, j, oppIndex);
-                test[i][j] = "i: " + i + " j: " + j;
-
-            }
-        }
-    }
-
-    public void loadTeleportal(TelePortal teleportal){
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[0].length; j++) {
-                if(teleportal.containP(tiles[i][j].getX(), tiles[i][j].getY())){
-                    tiles[i][j].setType(new TeleportalTile(teleportal));
-                }
             }
         }
     }
 
     private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
-        if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && oppIndex <= wall.getTopBoundary() && oppIndex >= wall.getBottomBoundary()) {
-            //could do with a factory here
-             tiles[oppIndex][j] = new Wall(i,j); //TODO what is tried to do here? Shouldn't be only boolean?
+        System.out.println(i + ", " + j);
+        if (oppIndex >= wall.getLeftBoundary() && oppIndex <= wall.getRightBoundary() && j <= wall.getTopBoundary() && j >= wall.getBottomBoundary()) {
+            setTile(new Wall(i,j));
         }
-//        if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && i - 1 <= wall.getTopBoundary() && i-1 >= wall.getBottomBoundary()) {
-//            //could do with a factory here
-//            map[i][j] = new Tile(new Wall());
-//            System.out.print(i + ", " + j);
-//        }
-//        if(wall.containP(i, j)){
-//            map[i][j] = new Tile(new Wall());
-//        }
     }
+
+    public void loadTeleportal(TelePortal teleportal){
+        for (int i = 0; i < tiles[0].length; i++) {
+            for (int j = 0; j < tiles.length; j++) {
+                if(teleportal.containP(getTile(i,j).getX(), getTile(i,j).getY())){
+                    setTile(new TeleportalTile(i, j, teleportal));
+                }
+            }
+        }
+    }
+
+
 
     public void printMap(){
         System.out.println(Arrays.deepToString(tiles).replace("], ", "]\n"));
-    }
-    public void printLayout(){
-        System.out.println(Arrays.deepToString(test).replace("], ", "]\n"));
     }
 
     public ArrayList<Tile> computeVisibleTiles(Agent agent) {
         int d = (int)Scenario.config.getVISION();
         double angle = agent.getAngle();
-        int agentX = agentPosition.getX();
-        int agentY = agentPosition.getY();
+        int agentX = agent.getAgentPosition().getX();
+        int agentY = agent.getAgentPosition().getY();
         ArrayList<Tile> visibleTiles = new ArrayList<>();
         if(angle==0){
             int topLimit = Math.max(0, agentY-d);
             int leftLimit = Math.max(0,agentX-1);
             int rightLimit = Math.min(tiles.length-1, agentX+1);
-            for(int i=agentY; i<=topLimit; i++){
-                for(int j=leftLimit; j<=rightLimit; j++){
-                    visibleTiles.add(tiles[i][j]);
-                    tiles[i][j].setType(new SpawnArea(j,i));
+            for(int i=leftLimit; i<=rightLimit; i++){
+                for(int j=agentY; j<=topLimit; j++){
+                    visibleTiles.add(getTile(i,j));
                 }
             }
         }
         return visibleTiles;
+    }
+
+    public Tile getTile(int x, int y){
+        return tiles[y][x];
+    }
+
+    public void setTile(int x, int y, Tile tile){
+        tiles[y][x] = tile;
+    }
+
+    public void setTile(Tile tile){
+        tiles[tile.getY()][tile.getX()] = tile;
     }
 }
