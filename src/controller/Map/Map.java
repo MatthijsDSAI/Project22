@@ -17,6 +17,8 @@ public class Map {
     private Agent agent;
 
     private Tile tileVersion;
+    private ArrayList<Agent> guards = new ArrayList<Agent>(); // TODO change to "Guard", "Intruder" later
+    private ArrayList<Agent> intruders = new ArrayList<>();
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
@@ -148,6 +150,86 @@ public class Map {
     /////////////////////////////////////////////////////////////////////////////////////
 
 
+
+    public void loadMap(Scenario scenario){
+        int left;
+        int right;
+        int up;
+        int down;
+        initializeEmptyMap();
+
+        for (Area area : scenario.getAreas()) {
+            left = area.getLeftBoundary();
+            right = area.getRightBoundary();
+            up = area.getTopBoundary();
+            down = area.getBottomBoundary();
+
+            switch (area.getType()) {
+                case "targetArea":
+                    for (int i = left; i <= right; i++) {
+                        for (int j = down; j <= up; j++) {
+                            tiles[j][i] = new TargetArea(j, i);
+                        }
+                    }
+                    break;
+                case "spawnAreaIntruders":
+                    for (int i = left; i <= right; i++) {
+                        for (int j = down; j <= up; j++) {
+                            tiles[j][i] = new SpawnAreaIntruders(j, i);
+                        }
+                    }
+                    break;
+                case "spawnAreaGuards":
+                    for (int i = left; i <= right; i++) {
+                        for (int j = down; j <= up; j++) {
+                            tiles[j][i] = new SpawnAreaGuards(j, i);
+                        }
+                    }
+                    break;
+                case "wall":
+                    for (int i = left; i <= right; i++) {
+                        for (int j = down; j <= up; j++) {
+                            tiles[j][i] = new Wall(j, i);
+                        }
+                    }
+                    break;
+                case "shaded":
+                    for (int i = left; i <= right; i++) {
+                        for (int j = down; j <= up; j++) {
+                            tiles[j][i] = new Shaded(j, i);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        for(TelePortal telePortal : scenario.getTeleportals()){ // teleportal here because it needs additional parameters
+            left = telePortal.getLeftBoundary();
+            right = telePortal.getRightBoundary();
+            up = telePortal.getTopBoundary();
+            down = telePortal.getBottomBoundary();
+            for (int i = left; i <= right; i++) {
+                for (int j = down; j <= up; j++) {
+                    tiles[j][i] = new TeleportalTile(j, i, telePortal.getxTarget(), telePortal.getyTarget(), telePortal.getOutOrientation());
+                }
+            }
+        }
+
+        if (scenario.getGameMode() == 0) {
+            for (int i = 0; i < scenario.getNumGuards(); i++) {
+                spawnGuard(scenario.getSpawnAreaGuards());
+            }
+        } else if (scenario.getGameMode() == 1) {
+            for (int i = 0; i < scenario.getNumGuards(); i++) {
+                spawnGuard(scenario.getSpawnAreaGuards());
+            }
+            for (int i = 0; i < scenario.getNumIntruders(); i++) {
+                spawnGuard(scenario.getSpawnAreaIntruders());
+            }
+        }
+        printMap();
+        System.out.println();
+    }
 //    public void loadMap(Scenario scenario){
 //
 //        initializeEmptyMap();
