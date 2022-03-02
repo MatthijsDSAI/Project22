@@ -8,6 +8,8 @@
 ### Eclipse ###
 .metadata
 bin/
+**bin
+**lock
 tmp/
 *.tmp
 *.bak
