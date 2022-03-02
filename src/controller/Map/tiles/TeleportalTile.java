@@ -5,41 +5,38 @@ import javafx.scene.paint.Color;
 
 public class TeleportalTile extends Tile {
 
-    private final TelePortal tp;
+    protected int targetX;
+    protected int targetY;
+    protected double angle;
 
-    //maybe store target coordinates in here
-        //and angle
-        public TeleportalTile(TelePortal tp) {
-            this.tp = tp;
-            this.setWalkable(true);
-            this.setSeeThrough(true);
-            this.setExploredByDefault(false);
-            this.setC(Color.MAGENTA);
-        }
-
-        public TeleportalTile(int x, int y, TelePortal tp){
-            this.tp = tp;
-            this.setWalkable(true);
-            this.setSeeThrough(true);
-            this.setExploredByDefault(false);
-            this.setC(Color.MAGENTA);
-            this.setX(x);
-            this.setY(y);
-        }
-
-    public TeleportalTile(int x, int y, int xTarget, int yTarget, double outOrientation) {
-
+    public TeleportalTile(int x, int y, int targetX, int targetY, double angle){
+        this.setWalkable(true);
+        this.setSeeThrough(true);
+        this.setExploredByDefault(false);
+        this.setC(Color.MAGENTA);
+        this.setX(x);
+        this.setY(y);
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.angle = angle;
     }
 
-    @Override
-        public String toString(){
-            return "TelePortal";
-        }
+    public int getTargetX() {return targetX;}
 
-        public int[] teleport(){
-            if(hasAgent()){
-                return tp.getNewLocation();
-            }
-            throw new RuntimeException("There is no agent to teleport on tile: " + getX() + ", " + getY());
-        }
+    public int getTargetY() {return targetY;}
+
+    public double getAngle() {return angle;}
+
+    @Override
+    public String toString(){
+        return "TelePortal";
+    }
+
+//        public int[] teleport(){
+//            if(hasAgent()){
+//                return tp.getNewLocation();
+//            }
+//            throw new RuntimeException("There is no agent to teleport on tile: " + getX() + ", " + getY());
+//        }
+
 }

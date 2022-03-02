@@ -259,13 +259,13 @@ public class Map {
 //        }
 //    }
 //
-//    private void initializeEmptyMap() {
-//        for (int i = 0; i < tiles[0].length; i++) {
-//            for (int j = 0; j < tiles.length; j++) {
-//                setTile(new Floor(i,j));
-//            }
-//        }
-//    }
+    private void initializeEmptyMap() {
+        for (int i = 0; i < tiles[0].length; i++) {
+            for (int j = 0; j < tiles.length; j++) {
+                setTile(new Floor(i,j));
+            }
+        }
+    }
 //
 //
 //    public void loadWall(Area wall){
