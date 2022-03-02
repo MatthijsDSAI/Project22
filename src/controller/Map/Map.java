@@ -1,6 +1,7 @@
 package controller.Map;
 
 import agents.Agent;
+import agents.TestAgent;
 import controller.Area;
 import controller.Map.tiles.*;
 import controller.Scenario;
@@ -229,6 +230,20 @@ public class Map {
         }
         printMap();
         System.out.println();
+    }
+
+    public void spawnGuard(Area givenArea){
+        int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
+        int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
+        Agent tempAgent = new TestAgent(rand1, rand2);
+        guards.add(tempAgent);
+        tiles[rand1][rand2].addAgent(tempAgent); // TODO replace with Guard agent later
+    }
+
+    public void spawnIntruder(Area givenArea){
+        int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
+        int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
+        // tiles[rand1][rand2].addAgent(new Intruder(rand1, rand2));
     }
 //    public void loadMap(Scenario scenario){
 //

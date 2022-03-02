@@ -249,4 +249,7 @@ public class Scenario {
         return numIntruders;
     }
 
+    public int getGameMode() {
+        return gameMode;
+    }
 }

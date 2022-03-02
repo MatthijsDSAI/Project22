@@ -28,5 +28,15 @@ public class TelePortal extends Area {
         return outOrientation;
     }
 
+    public int getyTarget() {
+        return yTarget;
+    }
 
+    public int getxTarget() {
+        return xTarget;
+    }
+
+    public double getOutOrientation() {
+        return outOrientation;
+    }
 }

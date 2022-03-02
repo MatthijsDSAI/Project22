@@ -27,7 +27,11 @@ public class TeleportalTile extends Tile {
             this.setY(y);
         }
 
-        @Override
+    public TeleportalTile(int x, int y, int xTarget, int yTarget, double outOrientation) {
+
+    }
+
+    @Override
         public String toString(){
             return "TelePortal";
         }
