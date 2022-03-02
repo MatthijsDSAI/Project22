@@ -40,7 +40,7 @@ public class GameRunner {
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
         map.loadMap(scenario);
         map.printMap();
-        int x = 0, y = 0;
+        int x = 0, y = 15;
         map.addAgent(agent,x,y);
         agent.initializeEmptyMap(map);
         t = 0;
@@ -50,8 +50,8 @@ public class GameRunner {
     //does nothing yet
     public void step(){
         t++;
-        map.moveAgent(agent, DirectionEnum.RIGHT.getDirection());
-        System.out.println(map.getAgentPosition(agent));
+        //map.moveAgent(agent, DirectionEnum.RIGHT.getDirection());
+        //System.out.println(map.getAgentPosition(agent));
         for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
             //agent.update();
             //if i understand correctly per timestep we can do 15 things, where 15 is the speed

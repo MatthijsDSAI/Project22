@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import utils.Utils;
 
 public class MapGui extends Application {
 
@@ -38,6 +39,7 @@ public class MapGui extends Application {
         scenario = new Scenario("testmap.txt");
         gr = new GameRunner(scenario);
         map = gr.getMap().getTiles();
+        map = Utils.transpose(map);
         row = map.length;
         col = map[0].length;
 
@@ -60,29 +62,33 @@ public class MapGui extends Application {
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
                 Rectangle r = new Rectangle(map[i][j].getX(), map[i][j].getY(), 10, 10);
-                if(map[i][j].toString().equals("floor")){
+                if(map[i][j].hasAgent()) {
+                    r.setStroke(Color.WHITE);
+                    r.setFill(Color.RED);
+                    p.getChildren().add(r);
+                }else if(map[i][j].toString().equals("Floor")){
                     r.setStroke(Color.WHITE);
                     r.setFill(Color.GREEN);
                     p.getChildren().add(r);
-                }else if(map[i][j].toString().equals("wall")){
+                }else if(map[i][j].toString().equals("Wall")){
                     r.setStroke(Color.WHITE);
                     r.setFill(Color.BLACK);
                     p.getChildren().add(r);
-                }else if(map[i][j].toString().equals("shaded")){
+                }else if(map[i][j].toString().equals("Shaded")){
                     r.setFill(Color.GRAY);
                     p.getChildren().add(r);
-                }else if(map[i][j].toString().equals("teleportals")){
+                }else if(map[i][j].toString().equals("Teleportals")){
                     r.setFill(Color.YELLOW);
                     p.getChildren().add(r);
-                }else if(map[i][j].toString().equals("spawnAreaGuards")){
+                }else if(map[i][j].toString().equals("SpawnAreaGuards")){
 //                    guardSpawn.add(map[i][j]);
                     r.setFill(Color.BLUE);
                     p.getChildren().add(r);
-                }else if(map[i][j].toString().equals("spawnAreaIntruders")){
+                }else if(map[i][j].toString().equals("SpawnAreaIntruders")){
 //                    intruderSpawn.add(map[i][j]);
                     r.setFill(Color.BROWN);
                     p.getChildren().add(r);
-                }else if(map[i][j].toString().equals("targetArea")){
+                }else if(map[i][j].toString().equals("TargetArea")){
                     r.setFill(Color.RED);
                     p.getChildren().add(r);
                 }
@@ -123,14 +129,13 @@ public class MapGui extends Application {
 //        }
 //        p.play();
     }
-    
+
     public void launchGUI(GraphicsConnector graphicsConnector){
         MapGui.graphicsConnector = graphicsConnector;
         String[] args  = new String[0];
         launch(args);
     }
     public static void main(String[] args) {
-        
         launch(args);
     }
 }

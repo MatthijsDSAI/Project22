@@ -23,7 +23,7 @@ public class Map {
         this.agent = agent;
 
         tiles = new Tile[horizontalSize][verticalSize];
-        this.agentPosition = tiles[10][0];
+        this.agentPosition = tiles[0][0];
         test = new String[horizontalSize][verticalSize];
     }
 
@@ -46,6 +46,7 @@ public class Map {
     }
     public void addAgent(Agent agent, int x, int y) {
         tiles[y][x].addAgent(agent);
+
     }
 
     public void moveAgentFromTo(Agent agent, int xFrom, int yFrom, int xTo, int yTo){
@@ -195,7 +196,7 @@ public class Map {
                 //needed as top left = 0,0
                 int oppIndex = tiles.length - i - 1;
                 fallsWithinWall(wall, i, j, oppIndex);
-                test[i][j] = "i: " + oppIndex + " j: " + j;
+                test[i][j] = "i: " + i + " j: " + j;
 
             }
         }
@@ -214,7 +215,7 @@ public class Map {
     private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
         if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && oppIndex <= wall.getTopBoundary() && oppIndex >= wall.getBottomBoundary()) {
             //could do with a factory here
-            // tiles[oppIndex][j] = new Wall(); //TODO what is tried to do here? Shouldn't be only boolean?
+             tiles[oppIndex][j] = new Wall(i,j); //TODO what is tried to do here? Shouldn't be only boolean?
         }
 //        if (j >= wall.getLeftBoundary() && j <= wall.getRightBoundary() && i - 1 <= wall.getTopBoundary() && i-1 >= wall.getBottomBoundary()) {
 //            //could do with a factory here
@@ -231,5 +232,24 @@ public class Map {
     }
     public void printLayout(){
         System.out.println(Arrays.deepToString(test).replace("], ", "]\n"));
+    }
+
+    public ArrayList<Tile> computeVisibleTiles(Agent agent) {
+        int d = (int)Scenario.config.getVISION();
+        double angle = agent.getAngle();
+        int agentX = agentPosition.getX();
+        int agentY = agentPosition.getY();
+        ArrayList<Tile> visibleTiles = new ArrayList<>();
+        if(angle==0){
+            int topLimit = Math.max(0, agentY-d);
+            int leftLimit = Math.max(0,agentX-1);
+            int rightLimit = Math.min(tiles.length-1, agentX+1);
+            for(int i=agentY; i<=topLimit; i++){
+                for(int j=leftLimit; j<=rightLimit; j++){
+                    visibleTiles.add(tiles[i][j]);
+                }
+            }
+        }
+        return visibleTiles;
     }
 }

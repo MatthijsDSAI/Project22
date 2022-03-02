@@ -5,7 +5,7 @@ public class Config {
     private double BASESPEEDINTRUDER;
     private double BASESPEEDGUARD;
     private double SPRINTSTEEDINTRUDER;
-    public boolean GUI;
+    public boolean GUI = true;
 
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place

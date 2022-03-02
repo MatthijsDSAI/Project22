@@ -2,8 +2,12 @@ package agents;
 
 import controller.Area;
 import controller.Map.Map;
+import controller.Map.tiles.Tile;
 import controller.Scenario;
 import utils.Utils;
+
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 public abstract class Agent implements AgentI{
     double audiostdeviation;
@@ -156,7 +160,9 @@ public abstract class Agent implements AgentI{
         this.map = Map.createEmptyMap(map);
     }
 
-    public void computeVisibleTiles(){
+    public void computeVisibleTiles(Map map){
+        double d = Scenario.config.getVISION();
+        ArrayList<Tile> visibleTiles = map.computeVisibleTiles(this);
 
     }
 }

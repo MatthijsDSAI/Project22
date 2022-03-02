@@ -4,6 +4,7 @@ import agents.Agent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.awt.*;
 
 
 public abstract class Tile {
@@ -61,7 +62,10 @@ public abstract class Tile {
             return agent;
         else throw new RuntimeException("There is no agent on this tile");
     }
-    public void addAgent(Agent agent) {this.agent = agent;}
+    public void addAgent(Agent agent) {
+        this.agent = agent;
+    }
+
     public void removeAgent() {this.agent = null;}
     public boolean hasAgent() {return (agent != null);}
 
