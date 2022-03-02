@@ -1,7 +1,9 @@
 package controller.Map.tiles;
 
-public class SpawnAreaGuards extends Tile {
-    public SpawnAreaGuards(int x, int y) {
+import controller.Map.tiles.Tile;
+
+public class SpawnAreaIntruders extends Tile {
+    public SpawnAreaIntruders(int x, int y) {
         this.setWalkable(true);
         this.setSeeThrough(true);
         this.setExploredByDefault(true);
@@ -12,6 +14,6 @@ public class SpawnAreaGuards extends Tile {
 
     @Override
     public String toString() {
-        return "SpawnAreaGuards";
+        return "SpawnAreaIntruders";
     }
 }

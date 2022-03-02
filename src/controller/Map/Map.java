@@ -63,20 +63,20 @@ public class Map {
 
         changeTiles(fromTile, toTile);
 
-        checkTeleport(fromTile, toTile);
+        //checkTeleport(fromTile, toTile);
 
 
     }
 
-    public void checkTeleport(Tile fromTile, Tile toTile){
-        if(toTile.toString().equals("TelePortal")){
-            TeleportalTile teleportalTile = (TeleportalTile) tiles[toTile.getY()][toTile.getX()];
-            int[] teleportTo = teleportalTile.teleport();
-            fromTile = toTile;
-            toTile = getTile(teleportTo[0], teleportTo[1]);
-            changeTiles(fromTile, toTile);
-        }
-    }
+//    public void checkTeleport(Tile fromTile, Tile toTile){
+//        if(toTile.toString().equals("TelePortal")){
+//            TeleportalTile teleportalTile = (TeleportalTile) tiles[toTile.getY()][toTile.getX()];
+//            int[] teleportTo = teleportalTile.teleport();
+//            fromTile = toTile;
+//            toTile = getTile(teleportTo[0], teleportTo[1]);
+//            changeTiles(fromTile, toTile);
+//        }
+//    }
     public void changeTiles(Tile fromTile, Tile toTile){
         if(fromTile.isWalkable()) {
             getTile(fromTile.getX(),fromTile.getY()).removeAgent();
