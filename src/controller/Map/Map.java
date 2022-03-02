@@ -247,6 +247,7 @@ public class Map {
             for(int i=agentY; i<=topLimit; i++){
                 for(int j=leftLimit; j<=rightLimit; j++){
                     visibleTiles.add(tiles[i][j]);
+                    tiles[i][j].setType(new SpawnArea(j,i));
                 }
             }
         }
