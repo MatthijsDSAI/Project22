@@ -148,55 +148,55 @@ public class Map {
     /////////////////////////////////////////////////////////////////////////////////////
 
 
-    public void loadMap(Scenario scenario){
-
-        initializeEmptyMap();
-        ArrayList<Area> walls = scenario.getWalls();
-        ArrayList<TelePortal> teleportals = scenario.getTeleportals();
-        for (Area wall : walls) {
-//            System.out.println("aaa");
-            loadWall(wall);
-        }
-        for(TelePortal telePortal : teleportals){
-            loadTeleportal(telePortal);
-        }
-    }
-
-    private void initializeEmptyMap() {
-        for (int i = 0; i < tiles[0].length; i++) {
-            for (int j = 0; j < tiles.length; j++) {
-                setTile(new Floor(i,j));
-            }
-        }
-    }
-
-
-    public void loadWall(Area wall){
-        for (int i = 0; i < tiles[0].length; i++) {
-            for (int j = 0; j < tiles.length; j++) {
-                //needed as top left = 0,0
-                int oppIndex = tiles.length - i - 1;
-                fallsWithinWall(wall, i, j, oppIndex);
-            }
-        }
-    }
-
-    private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
-        System.out.println(i + ", " + j);
-        if (oppIndex >= wall.getLeftBoundary() && oppIndex <= wall.getRightBoundary() && j <= wall.getTopBoundary() && j >= wall.getBottomBoundary()) {
-            setTile(new Wall(i,j));
-        }
-    }
-
-    public void loadTeleportal(TelePortal teleportal){
-        for (int i = 0; i < tiles[0].length; i++) {
-            for (int j = 0; j < tiles.length; j++) {
-                if(teleportal.containP(getTile(i,j).getX(), getTile(i,j).getY())){
-                    setTile(new TeleportalTile(i, j, teleportal));
-                }
-            }
-        }
-    }
+//    public void loadMap(Scenario scenario){
+//
+//        initializeEmptyMap();
+//        ArrayList<Area> walls = scenario.getWalls();
+//        ArrayList<TelePortal> teleportals = scenario.getTeleportals();
+//        for (Area wall : walls) {
+////            System.out.println("aaa");
+//            loadWall(wall);
+//        }
+//        for(TelePortal telePortal : teleportals){
+//            loadTeleportal(telePortal);
+//        }
+//    }
+//
+//    private void initializeEmptyMap() {
+//        for (int i = 0; i < tiles[0].length; i++) {
+//            for (int j = 0; j < tiles.length; j++) {
+//                setTile(new Floor(i,j));
+//            }
+//        }
+//    }
+//
+//
+//    public void loadWall(Area wall){
+//        for (int i = 0; i < tiles[0].length; i++) {
+//            for (int j = 0; j < tiles.length; j++) {
+//                //needed as top left = 0,0
+//                int oppIndex = tiles.length - i - 1;
+//                fallsWithinWall(wall, i, j, oppIndex);
+//            }
+//        }
+//    }
+//
+//    private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
+//        System.out.println(i + ", " + j);
+//        if (oppIndex >= wall.getLeftBoundary() && oppIndex <= wall.getRightBoundary() && j <= wall.getTopBoundary() && j >= wall.getBottomBoundary()) {
+//            setTile(new Wall(i,j));
+//        }
+//    }
+//
+//    public void loadTeleportal(TelePortal teleportal){
+//        for (int i = 0; i < tiles[0].length; i++) {
+//            for (int j = 0; j < tiles.length; j++) {
+//                if(teleportal.containP(getTile(i,j).getX(), getTile(i,j).getY())){
+//                    setTile(new TeleportalTile(i, j, teleportal));
+//                }
+//            }
+//        }
+//    }
 
 
 

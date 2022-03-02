@@ -6,8 +6,8 @@ GivenCode/FileWatcher.java
  GivenCode.FileWatcher
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
-utils/Utils.java
- utils.Utils
+agents/AgentI.java
+ agents.AgentI
 exploration/Baseline.java
  exploration.Baseline
 utils/DirectionEnum.java
@@ -32,14 +32,14 @@ agents/Guard.java
  agents.Guard
 controller/Area.java
  controller.Area
-agents/AgentI.java
- agents.AgentI
-controller/GameRunner.java
- controller.GameRunner
+agents/Agent.java
+ agents.Agent
 controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
-GUI/MapGui.java
- GUI.MapGui
+controller/Map/Map.java
+ controller.Map.Map
+utils/Utils.java
+ utils.Utils
 controller/GraphicsConnector.java
  controller.GraphicsConnector
 controller/Map/tiles/SpawnArea.java
@@ -56,7 +56,7 @@ controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
-controller/Map/Map.java
- controller.Map.Map
-agents/Agent.java
- agents.Agent
+controller/GameRunner.java
+ controller.GameRunner
+GUI/MapGui.java
+ GUI.MapGui
