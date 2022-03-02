@@ -20,23 +20,23 @@ public class Area {
     protected int rightBoundary;
     protected int topBoundary;
     protected int bottomBoundary;
-    private Rectangle r;
-    
+    private String type;
+
     public Area(){
         leftBoundary=0;
         rightBoundary=1;
         topBoundary=0;
         bottomBoundary=1;
     }
-    
-    public Area(int x1, int x2, int y1, int y2){
+
+    public Area(int x1, int x2, int y1, int y2, String type){
+        this.type = type;
         leftBoundary=Math.min(x1,x2);
         rightBoundary=Math.max(x1,x2);
         topBoundary=Math.max(y1,y2);
         bottomBoundary=Math.min(y1,y2);
-        r = new Rectangle(leftBoundary * 10, bottomBoundary* 10, Math.abs(rightBoundary-leftBoundary) * 10, Math.abs(bottomBoundary-topBoundary) * 10);
     }
-    
+
     /*
         Check whether a point is in the target area
     */
@@ -52,13 +52,7 @@ public class Area {
         return false;
     }
 
-    public Rectangle createRec(){
-        return new Rectangle(leftBoundary * 10, bottomBoundary * 10, Math.abs(rightBoundary-leftBoundary) * 10, Math.abs(bottomBoundary-topBoundary) * 10);
-//        return new Rectangle(leftBoundary / scale, bottomBoundary / scale, Math.abs(rightBoundary-leftBoundary) / scale, Math.abs(bottomBoundary-topBoundary) / scale);
-    }
-    public boolean containP(int x, int y){
-        return r.contains(x, y);
-    }
+    // public boolean containP(int x, int y){return r.contains(x, y);}
     public int getLeftBoundary() {
         return leftBoundary;
     }
@@ -74,4 +68,6 @@ public class Area {
     public int getBottomBoundary() {
         return bottomBoundary;
     }
+
+    public String getType() {return type;}
 }
