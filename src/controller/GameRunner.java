@@ -39,9 +39,11 @@ public class GameRunner {
         agent = new TestAgent(0,0);
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
         map.loadMap(scenario);
-        int x = 0, y = 15;
+        int x = 50, y = 50;
         map.addAgent(agent,x,y);
+        agent.setAgentPosition(map.getTile(x,y));
         agent.initializeEmptyMap(map);
+        agent.computeVisibleTiles(map);
         t = 0;
     }
 

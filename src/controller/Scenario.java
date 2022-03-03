@@ -40,6 +40,7 @@ public class Scenario {
     protected ArrayList<TelePortal> teleports;
     protected ArrayList<Area> areas;
     protected ArrayList<Agent> agents;
+    private int distanceViewing;
 
     public Scenario(String mapFile){
         // set parameters
@@ -106,6 +107,9 @@ public class Scenario {
                     case "numIntruders":
                         numIntruders = Integer.parseInt(value);
                         break;
+                    case "distanceViewing":
+                        distanceViewing = Integer.parseInt(value);
+                        config.setDistanceViewing(distanceViewing);
                     case "baseSpeedIntruder":
                         baseSpeedIntruder = Double.parseDouble(value);
                         config.setBASESPEEDINTRUDER(baseSpeedIntruder);

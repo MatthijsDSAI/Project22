@@ -29,13 +29,11 @@ public class GraphicsConnector {
 
     public Color[][] getMapOfColors(){
         Color[][] mapOfColors = new Color[map.getTiles().length][map.getTiles()[0].length];
-        System.out.println(Arrays.deepToString(tiles).replace("], ", "]\n"));
         for(int i=0; i<tiles.length; i++){
             for(int j=0; j<tiles[0].length; j++){
                 mapOfColors[i][j] = tiles[i][j].getColor();
             }
         }
-        System.out.println(Arrays.deepToString(mapOfColors).replace("], ", "]\n"));
         return mapOfColors;
     }
 

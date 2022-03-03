@@ -7,6 +7,7 @@ import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
 import javafx.scene.paint.Color;
+import org.w3c.dom.ls.LSOutput;
 import utils.DirectionEnum;
 
 
@@ -25,7 +26,6 @@ public class Map {
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
         tiles = new Tile[horizontalSize][verticalSize];
-        agent.setAgentPosition(getTile(0,0));
     }
 
 
@@ -64,20 +64,21 @@ public class Map {
 
         changeTiles(fromTile, toTile);
 
-        //checkTeleport(fromTile, toTile);
+        checkTeleport(fromTile, toTile);
 
 
     }
 
-//    public void checkTeleport(Tile fromTile, Tile toTile){
-//        if(toTile.toString().equals("TelePortal")){
-//            TeleportalTile teleportalTile = (TeleportalTile) tiles[toTile.getY()][toTile.getX()];
-//            int[] teleportTo = teleportalTile.teleport();
-//            fromTile = toTile;
-//            toTile = getTile(teleportTo[0], teleportTo[1]);
-//            changeTiles(fromTile, toTile);
-//        }
-//    }
+    public void checkTeleport(Tile fromTile, Tile toTile){
+        if(toTile.toString().equals("TelePortal")){
+            TeleportalTile teleportalTile = (TeleportalTile) getTile(toTile.getX(), toTile.getY());
+            int x = teleportalTile.getX();
+            int y = teleportalTile.getY();
+            fromTile = toTile;
+            toTile = getTile(x, y);
+            changeTiles(fromTile, toTile);
+        }
+    }
     public void changeTiles(Tile fromTile, Tile toTile){
         if(fromTile.isWalkable()) {
             getTile(fromTile.getX(),fromTile.getY()).removeAgent();
@@ -104,7 +105,7 @@ public class Map {
         else if(direction.equals(DirectionEnum.DOWN.getDirection())){
             y++;
         }
-        return tiles[y][x];
+        return getTile(x,y);
     }
 
 
@@ -170,35 +171,35 @@ public class Map {
                 case "targetArea":
                     for (int i = left; i <= right; i++) {
                         for (int j = down; j <= up; j++) {
-                            tiles[j][i] = new TargetArea(j, i);
+                            setTile(new TargetArea(i,j));
                         }
                     }
                     break;
                 case "spawnAreaIntruders":
                     for (int i = left; i <= right; i++) {
                         for (int j = down; j <= up; j++) {
-                            tiles[j][i] = new SpawnAreaIntruders(j, i);
+                            setTile(new SpawnAreaIntruders(i,j));
                         }
                     }
                     break;
                 case "spawnAreaGuards":
                     for (int i = left; i <= right; i++) {
                         for (int j = down; j <= up; j++) {
-                            tiles[j][i] = new SpawnAreaGuards(j, i);
+                            setTile(new SpawnAreaGuards(i,j));
                         }
                     }
                     break;
                 case "wall":
                     for (int i = left; i <= right; i++) {
                         for (int j = down; j <= up; j++) {
-                            tiles[j][i] = new Wall(j, i);
+                            setTile(new Wall(i,j));
                         }
                     }
                     break;
                 case "shaded":
                     for (int i = left; i <= right; i++) {
                         for (int j = down; j <= up; j++) {
-                            tiles[j][i] = new Shaded(j, i);
+                            setTile(new Shaded(i,j));
                         }
                     }
                     break;
@@ -212,7 +213,7 @@ public class Map {
             down = telePortal.getBottomBoundary();
             for (int i = left; i <= right; i++) {
                 for (int j = down; j <= up; j++) {
-                    tiles[j][i] = new TeleportalTile(j, i, telePortal.getxTarget(), telePortal.getyTarget(), telePortal.getOutOrientation());
+                    setTile(new TeleportalTile(i, j, telePortal.getxTarget(), telePortal.getyTarget(), telePortal.getOutOrientation()));
                 }
             }
         }
@@ -236,7 +237,7 @@ public class Map {
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
         Agent tempAgent = new TestAgent(rand1, rand2);
         guards.add(tempAgent);
-        tiles[rand1][rand2].addAgent(tempAgent); // TODO replace with Guard agent later
+        getTile(rand1, rand2).addAgent(tempAgent); // TODO replace with Guard agent later
     }
 
     public void spawnIntruder(Area givenArea){
@@ -244,20 +245,7 @@ public class Map {
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
         // tiles[rand1][rand2].addAgent(new Intruder(rand1, rand2));
     }
-//    public void loadMap(Scenario scenario){
-//
-//        initializeEmptyMap();
-//        ArrayList<Area> walls = scenario.getWalls();
-//        ArrayList<TelePortal> teleportals = scenario.getTeleportals();
-//        for (Area wall : walls) {
-////            System.out.println("aaa");
-//            loadWall(wall);
-//        }
-//        for(TelePortal telePortal : teleportals){
-//            loadTeleportal(telePortal);
-//        }
-//    }
-//
+
     private void initializeEmptyMap() {
         for (int i = 0; i < tiles[0].length; i++) {
             for (int j = 0; j < tiles.length; j++) {
@@ -265,35 +253,6 @@ public class Map {
             }
         }
     }
-//
-//
-//    public void loadWall(Area wall){
-//        for (int i = 0; i < tiles[0].length; i++) {
-//            for (int j = 0; j < tiles.length; j++) {
-//                //needed as top left = 0,0
-//                int oppIndex = tiles.length - i - 1;
-//                fallsWithinWall(wall, i, j, oppIndex);
-//            }
-//        }
-//    }
-//
-//    private void fallsWithinWall(Area wall, int i, int j, int oppIndex) {
-//        System.out.println(i + ", " + j);
-//        if (oppIndex >= wall.getLeftBoundary() && oppIndex <= wall.getRightBoundary() && j <= wall.getTopBoundary() && j >= wall.getBottomBoundary()) {
-//            setTile(new Wall(i,j));
-//        }
-//    }
-//
-//    public void loadTeleportal(TelePortal teleportal){
-//        for (int i = 0; i < tiles[0].length; i++) {
-//            for (int j = 0; j < tiles.length; j++) {
-//                if(teleportal.containP(getTile(i,j).getX(), getTile(i,j).getY())){
-//                    setTile(new TeleportalTile(i, j, teleportal));
-//                }
-//            }
-//        }
-//    }
-
 
 
     public void printMap(){
@@ -301,22 +260,163 @@ public class Map {
     }
 
     public ArrayList<Tile> computeVisibleTiles(Agent agent) {
-        int d = (int)Scenario.config.getVISION();
+        int d = Scenario.config.getDistanceViewing();
         double angle = agent.getAngle();
         int agentX = agent.getAgentPosition().getX();
         int agentY = agent.getAgentPosition().getY();
         ArrayList<Tile> visibleTiles = new ArrayList<>();
+
         if(angle==0){
-            int topLimit = Math.max(0, agentY-d);
+            int topLimit = Math.max(0, agentY-d+1);
             int leftLimit = Math.max(0,agentX-1);
-            int rightLimit = Math.min(tiles.length-1, agentX+1);
+            int rightLimit = Math.min(tiles[0].length-1, agentX+1);
             for(int i=leftLimit; i<=rightLimit; i++){
-                for(int j=agentY; j<=topLimit; j++){
+                for(int j=agentY; j>=topLimit; j--){
                     visibleTiles.add(getTile(i,j));
                 }
             }
+            return visibleTiles;
+
         }
-        return visibleTiles;
+        if(angle==45.0) {
+            int topLimit = Math.max(0, agentY - d + 1);
+            int leftLimit = Math.max(0, agentX - d + 1);
+            int finalI = 0;
+            int finalJ = 0;
+            for (int i = agentX, j=agentY; i >= leftLimit && j >= topLimit; i--, j--) {
+
+                if(i!=agentX){
+                    visibleTiles.add(getTile(i+1, j));
+                    visibleTiles.add(getTile(i, j+1));
+                }
+                visibleTiles.add(getTile(i, j));
+                finalI = i;
+                finalJ = j;
+            }
+            if(finalI!=0){
+                visibleTiles.add(getTile(finalI-1,finalJ));
+            }
+            if(finalJ!=0){
+                visibleTiles.add(getTile(finalI, finalJ-1));
+            }
+            return visibleTiles;
+        }
+
+        if(angle==90.0){
+            int topLimit = Math.max(0, agentY-1);
+            int bottomLimit = Math.min(tiles.length-1, agentY+1);
+            int leftLimit = Math.max(0, agentX - d + 1);
+            for(int i=agentX; i>=leftLimit; i--){
+                for(int j=bottomLimit; j>=topLimit; j--){
+                    visibleTiles.add(getTile(i,j));
+
+                }
+            }
+            return visibleTiles;
+        }
+
+        if(angle==135){
+            int bottomLimit = Math.max(0, agentY + d - 1);
+            int leftLimit = Math.max(0, agentX - d + 1);
+            int finalI = 0;
+            int finalJ = 0;
+            for (int i = agentX, j=agentY; i >= leftLimit && j <= bottomLimit; i--, j++) {
+
+
+                if(i!=agentX){
+                    visibleTiles.add(getTile(i+1, j));
+                    visibleTiles.add(getTile(i, j-1));
+                }
+                visibleTiles.add(getTile(i, j));
+                finalI = i;
+                finalJ = j;
+            }
+            if(finalI!=0){
+                visibleTiles.add(getTile(finalI-1,finalJ));
+            }
+            if(finalJ!=tiles.length-1){
+                visibleTiles.add(getTile(finalI, finalJ+1));
+            }
+            return visibleTiles;
+        }
+
+        if(angle==180){
+            int  bottomLimit = Math.min(tiles.length-1, agentY+d-1);
+            int leftLimit = Math.max(0,agentX-1);
+            int rightLimit = Math.min(tiles[0].length-1, agentX+1);
+            for(int i=leftLimit; i<=rightLimit; i++){
+                for(int j=agentY; j<=bottomLimit; j++){
+                    visibleTiles.add(getTile(i,j));
+
+                }
+            }
+            return visibleTiles;
+
+        }
+
+        if(angle==225){
+            int bottomLimit = Math.min(tiles.length-1, agentY + d - 1);
+            int rightLimit = Math.min(tiles[0].length, agentX + d - 1);
+            int finalI = 0;
+            int finalJ = 0;
+            for (int i = agentX, j=agentY; i <= rightLimit && j <= bottomLimit; i++, j++) {
+
+
+                if(i!=agentX){
+                    visibleTiles.add(getTile(i-1, j));
+                    visibleTiles.add(getTile(i, j-1));
+                }
+                visibleTiles.add(getTile(i, j));
+                finalI = i;
+                finalJ = j;
+            }
+            if(finalI!=tiles[0].length-1){
+                visibleTiles.add(getTile(finalI+1,finalJ));
+            }
+            if(finalJ!=tiles.length-1){
+                visibleTiles.add(getTile(finalI, finalJ+1));
+            }
+            return visibleTiles;
+        }
+
+        if(angle==270.0){
+            int topLimit = Math.max(0, agentY-1);
+            int bottomLimit = Math.min(tiles.length-1, agentY+1);
+            int rightLimit = Math.min(tiles[0].length-1, agentX + d - 1);
+            for(int i=agentX; i<=rightLimit; i++){
+                for(int j=bottomLimit; j>=topLimit; j--){
+                    visibleTiles.add(getTile(i,j));
+                }
+            }
+            return visibleTiles;
+        }
+        if(angle==315.0) {
+            int topLimit = Math.max(0, agentY - d + 1);
+            int rightLimit = Math.min(tiles[0].length, agentX + d - 1);
+            int finalI = 0;
+            int finalJ = 0;
+            for (int i = agentX, j=agentY; i <= rightLimit && j >= topLimit; i++, j--) {
+
+                if(i!=agentX){
+                    visibleTiles.add(getTile(i-1, j));
+                    visibleTiles.add(getTile(i, j+1));
+                }
+                visibleTiles.add(getTile(i, j));
+                finalI = i;
+                finalJ = j;
+            }
+            if(finalI!=tiles[0].length-1){
+                visibleTiles.add(getTile(finalI+1,finalJ));
+            }
+            if(finalJ!=0){
+                visibleTiles.add(getTile(finalI, finalJ-1));
+            }
+            return visibleTiles;
+        }
+
+        throw new IllegalStateException("The angle of the agent is not a valid discrete value: " + angle);
+
+
     }
 
     public Tile getTile(int x, int y){

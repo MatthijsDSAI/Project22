@@ -1,7 +1,7 @@
 package utils;
 
 public class Config {
-    private double VISION;
+    private int VISION;
     private double BASESPEEDINTRUDER;
     private double BASESPEEDGUARD;
     private double SPRINTSTEEDINTRUDER;
@@ -11,11 +11,11 @@ public class Config {
     //Then we can access that instance as a field from other classes and have all these constants in one place
     public Config(){
     }
-    public double getVISION() {
+    public int getDistanceViewing() {
         return VISION;
     }
 
-    public void setVISION(double VISION) {
+    public void setDistanceViewing(int VISION) {
         this.VISION = VISION;
     }
 

@@ -41,8 +41,8 @@ public class MapGui extends Application {
 
         row = map.length;
         col = map[0].length;
-        mapHeight = 800;
-        mapWidth = 1200;
+        mapHeight = 810;
+        mapWidth = 1210;
 
         Pane root = createPane();
         Scene scene = new Scene(root, mapWidth, mapHeight);

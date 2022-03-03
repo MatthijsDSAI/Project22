@@ -4,6 +4,7 @@ import controller.Area;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
+import javafx.scene.paint.Color;
 import utils.Utils;
 
 import java.awt.geom.Point2D;
@@ -19,6 +20,7 @@ public abstract class Agent implements AgentI{
 
     public Agent(int x_position, int y_position)
     {
+
         this.x_position = x_position;
         this.y_position = y_position;
         this.a_name = "Agent";
@@ -162,8 +164,17 @@ public abstract class Agent implements AgentI{
     }
 
     public void computeVisibleTiles(Map map){
-        double d = Scenario.config.getVISION();
         ArrayList<Tile> visibleTiles = map.computeVisibleTiles(this);
+
+        //Todo: temp just for visualisation
+        for(Tile tile : visibleTiles){
+            if(!tile.hasAgent())
+                tile.setColor(Color.CYAN);
+            if(tile.hasAgent()){
+                tile.setColor(Color.YELLOW);
+            }
+        }
+
 
     }
 
