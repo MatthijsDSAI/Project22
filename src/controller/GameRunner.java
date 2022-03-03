@@ -18,7 +18,8 @@ public class GameRunner {
     public GameRunner(Scenario scenario) {
         MapGui gui = new MapGui();
         init(scenario);
-        
+        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
+        gui.launchGUI(graphicsConnector);
 //        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
 //        if(Scenario.config.GUI){
 //            try{

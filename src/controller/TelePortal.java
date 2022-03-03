@@ -6,14 +6,14 @@ public class TelePortal extends Area {
     protected double outOrientation;
 
     public TelePortal(int x1, int y1, int x2, int y2, int targetX, int targetY){
-        super(x1,x2,y1,y2);
+        super(x1,x2,y1,y2, "TelePortal");
         yTarget=targetY;
         xTarget=targetX;
         outOrientation = 0.0;
     }
 
     public TelePortal(int x1, int y1, int x2, int y2, int targetX, int targetY, double orient){
-        super(x1,x2,y1,y2);
+        super(x1,x2,y1,y2, "TelePortal");
         yTarget=targetY;
         xTarget=targetX;
         outOrientation = orient;
