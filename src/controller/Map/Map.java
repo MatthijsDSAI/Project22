@@ -261,7 +261,7 @@ public class Map {
 
     public ArrayList<Tile> computeVisibleTiles(Agent agent) {
         int d = Scenario.config.getDistanceViewing();
-        double angle = agent.getAngle();
+        double angle = 270.0;//agent.getAngle();
         int agentX = agent.getAgentPosition().getX();
         int agentY = agent.getAgentPosition().getY();
         ArrayList<Tile> visibleTiles = new ArrayList<>();
@@ -270,9 +270,15 @@ public class Map {
             int topLimit = Math.max(0, agentY-d+1);
             int leftLimit = Math.max(0,agentX-1);
             int rightLimit = Math.min(tiles[0].length-1, agentX+1);
+
             for(int i=leftLimit; i<=rightLimit; i++){
                 for(int j=agentY; j>=topLimit; j--){
-                    visibleTiles.add(getTile(i,j));
+                    if(getTile(i,j).isSeeThrough()){
+                        visibleTiles.add(getTile(i,j));
+                    }
+                    else{
+                        break;
+                    }
                 }
             }
             return visibleTiles;
@@ -306,9 +312,14 @@ public class Map {
             int topLimit = Math.max(0, agentY-1);
             int bottomLimit = Math.min(tiles.length-1, agentY+1);
             int leftLimit = Math.max(0, agentX - d + 1);
-            for(int i=agentX; i>=leftLimit; i--){
-                for(int j=bottomLimit; j>=topLimit; j--){
-                    visibleTiles.add(getTile(i,j));
+            for(int j=bottomLimit; j>=topLimit; j--){
+                for(int i=agentX; i>=leftLimit; i--){
+                    if(getTile(i,j).isSeeThrough()){
+                        visibleTiles.add(getTile(i,j));
+                    }
+                    else{
+                        break;
+                    }
 
                 }
             }
@@ -346,7 +357,12 @@ public class Map {
             int rightLimit = Math.min(tiles[0].length-1, agentX+1);
             for(int i=leftLimit; i<=rightLimit; i++){
                 for(int j=agentY; j<=bottomLimit; j++){
-                    visibleTiles.add(getTile(i,j));
+                    if(getTile(i,j).isSeeThrough()){
+                        visibleTiles.add(getTile(i,j));
+                    }
+                    else{
+                        break;
+                    };
 
                 }
             }
@@ -383,9 +399,14 @@ public class Map {
             int topLimit = Math.max(0, agentY-1);
             int bottomLimit = Math.min(tiles.length-1, agentY+1);
             int rightLimit = Math.min(tiles[0].length-1, agentX + d - 1);
-            for(int i=agentX; i<=rightLimit; i++){
-                for(int j=bottomLimit; j>=topLimit; j--){
-                    visibleTiles.add(getTile(i,j));
+            for(int j=bottomLimit; j>=topLimit; j--){
+                for(int i=agentX; i<=rightLimit; i++){
+                    if(getTile(i,j).isSeeThrough()){
+                        visibleTiles.add(getTile(i,j));
+                    }
+                    else{
+                        break;
+                    }
                 }
             }
             return visibleTiles;
