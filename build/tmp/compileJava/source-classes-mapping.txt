@@ -4,8 +4,8 @@ controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
 GivenCode/FileWatcher.java
  GivenCode.FileWatcher
-exploration/RandomExploration.java
- exploration.RandomExploration
+controller/Map/tiles/Floor.java
+ controller.Map.tiles.Floor
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
 GUI/MapGui.java
@@ -62,5 +62,5 @@ controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
 Explorer.java
  Explorer
-controller/Map/tiles/Floor.java
- controller.Map.tiles.Floor
+exploration/RandomExploration.java
+ exploration.RandomExploration

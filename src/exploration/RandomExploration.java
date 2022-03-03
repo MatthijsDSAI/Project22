@@ -6,13 +6,20 @@ public class RandomExploration {
 
     public static int randomMove() {
         int randomMove = (int) (Math.random()*360);
-        
-        return randomMove;
+        if (randomMove < 90) {
+            return 0;
+        }   else if (randomMove < 180) {
+            return 90;
+        }   else if (randomMove < 270) {
+            return 180;
+        }   else return 270;
+
     }
+
 
     public static void main(String[] args){
         int randomMove = randomMove();
-        System.out.println(String.valueOf(randomMove));
+        System.out.println(randomMove);
     }
 
 }
