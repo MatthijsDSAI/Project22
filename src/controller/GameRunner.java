@@ -12,23 +12,22 @@ public class GameRunner {
     private Map map;
     private final Config config = Scenario.config;
     private Agent agent;
+    private MapGui gui;
 
     private int t;
 
     public GameRunner(Scenario scenario) {
-        MapGui gui = new MapGui();
         init(scenario);
+        gui = new MapGui();
         GraphicsConnector graphicsConnector = new GraphicsConnector(this);
-        gui.launchGUI(graphicsConnector);
-//        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
-//        if(Scenario.config.GUI){
-//            try{
-//                gui.launchGUI(graphicsConnector);
-//            }
-//            catch(RuntimeException e ){
-//                System.out.println("There has been an issue with the initialization of the GUI");
-//            }
-//        }
+        if(Scenario.config.GUI){
+            try{
+                gui.launchGUI(graphicsConnector);
+            }
+            catch(IllegalStateException e ){
+                System.out.println("There has been an issue with the initialization of the GUI");
+            }
+        }
     }
 
 
@@ -40,7 +39,6 @@ public class GameRunner {
         agent = new TestAgent(0,0);
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
         map.loadMap(scenario);
-        map.printMap();
         int x = 0, y = 15;
         map.addAgent(agent,x,y);
         agent.initializeEmptyMap(map);

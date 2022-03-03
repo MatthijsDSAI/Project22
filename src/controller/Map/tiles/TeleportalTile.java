@@ -13,7 +13,7 @@ public class TeleportalTile extends Tile {
         this.setWalkable(true);
         this.setSeeThrough(true);
         this.setExploredByDefault(false);
-        this.setC(Color.MAGENTA);
+        this.setColor(Color.MAGENTA);
         this.setX(x);
         this.setY(y);
         this.targetX = targetX;

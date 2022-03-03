@@ -1,11 +1,14 @@
 package controller.Map.tiles;
 
+
+import javafx.scene.paint.Color;
+
 public class Shaded extends Tile {
     public Shaded(int x, int y) {
         this.setWalkable(true);
         this.setSeeThrough(false);
         this.setExploredByDefault(false);
-        // this.setC(Color.WHITE);
+        this.setColor(Color.GRAY);
         this.setX(x);
         this.setY(y);
     }

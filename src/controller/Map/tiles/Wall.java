@@ -7,7 +7,7 @@ public class Wall extends Tile {
         this.setWalkable(false);
         this.setSeeThrough(false);
         this.setExploredByDefault(true);
-        this.setC(Color.BLACK);
+        this.setColor(Color.BLACK);
         this.setX(x);
         this.setY(y);
     }
@@ -16,4 +16,5 @@ public class Wall extends Tile {
     public String toString(){
         return "Wall";
     }
+
 }

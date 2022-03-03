@@ -1,5 +1,6 @@
 package controller;
 
+import GUI.MapGui;
 import agents.Agent;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
@@ -11,12 +12,14 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GraphicsConnector {
     private Map map;
     private Tile[][] tiles;
     private GameRunner gameRunner;
     private ArrayList<Agent> agents;
+    private MapGui gui;
     public GraphicsConnector(GameRunner gameRunner) {
         map = gameRunner.getMap();
         tiles = map.getTiles();
@@ -26,11 +29,13 @@ public class GraphicsConnector {
 
     public Color[][] getMapOfColors(){
         Color[][] mapOfColors = new Color[map.getTiles().length][map.getTiles()[0].length];
+        System.out.println(Arrays.deepToString(tiles).replace("], ", "]\n"));
         for(int i=0; i<tiles.length; i++){
             for(int j=0; j<tiles[0].length; j++){
                 mapOfColors[i][j] = tiles[i][j].getColor();
             }
         }
+        System.out.println(Arrays.deepToString(mapOfColors).replace("], ", "]\n"));
         return mapOfColors;
     }
 
@@ -54,5 +59,9 @@ public class GraphicsConnector {
 
         }
         return list;
+    }
+
+    public void setGui(MapGui gui) {
+        this.gui = gui;
     }
 }

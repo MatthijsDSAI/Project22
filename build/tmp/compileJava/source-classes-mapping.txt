@@ -1,29 +1,29 @@
-controller/Map/tiles/Floor.java
- controller.Map.tiles.Floor
+controller/Map/Map.java
+ controller.Map.Map
 controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
 GivenCode/FileWatcher.java
  GivenCode.FileWatcher
-controller/Map/tiles/SpawnAreaGuards.java
- controller.Map.tiles.SpawnAreaGuards
-controller/Map/tiles/Wall.java
- controller.Map.tiles.Wall
-utils/Utils.java
- utils.Utils
-controller/Map/tiles/SpawnAreaIntruders.java
- controller.Map.tiles.SpawnAreaIntruders
 exploration/Baseline.java
  exploration.Baseline
+Explorer.java
+ Explorer
+utils/Utils.java
+ utils.Utils
+controller/Map/tiles/Floor.java
+ controller.Map.tiles.Floor
+controller/Map/tiles/SpawnAreaIntruders.java
+ controller.Map.tiles.SpawnAreaIntruders
 GivenCode/ExGameAgent.java
  GivenCode.ExGameAgent
-controller/Map/tiles/SpawnArea.java
- controller.Map.tiles.SpawnArea
+controller/Map/tiles/SpawnAreaGuards.java
+ controller.Map.tiles.SpawnAreaGuards
 utils/Config.java
  utils.Config
 controller/Scenario.java
  controller.Scenario
-controller/Map/tiles/TargetArea.java
- controller.Map.tiles.TargetArea
+controller/Map/tiles/Wall.java
+ controller.Map.tiles.Wall
 controller/GameMode.java
  controller.GameMode
 controller/TelePortal.java
@@ -32,8 +32,8 @@ agents/Intruder.java
  agents.Intruder
 agents/TestAgent.java
  agents.TestAgent
-controller/Map/Map.java
- controller.Map.Map
+utils/DirectionEnum.java
+ utils.DirectionEnum
 agents/Agent.java
  agents.Agent
 controller/Area.java
@@ -52,15 +52,15 @@ GUI/GoodLuck.java
  GUI.GoodLuck
 controller/Map/tiles/TeleportalTile.java
  controller.Map.tiles.TeleportalTile
-utils/DirectionEnum.java
- utils.DirectionEnum
+controller/Map/tiles/SpawnArea.java
+ controller.Map.tiles.SpawnArea
+controller/Map/tiles/TargetArea.java
+ controller.Map.tiles.TargetArea
 controller/Map/tiles/Shaded.java
  controller.Map.tiles.Shaded
 controller/GameRunner.java
  controller.GameRunner
 GUI/MapGui.java
  GUI.MapGui
-Explorer.java
- Explorer
 controller/GraphicsConnector.java
  controller.GraphicsConnector

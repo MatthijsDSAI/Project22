@@ -42,9 +42,6 @@ public abstract class Tile {
     public void setSeeThrough(boolean seeThrough) {this.seeThrough = seeThrough;}
     public boolean isSeeThrough() {return seeThrough;}
 
-    public Color getC() {return c;}
-    public void setC(Color c) {this.c = c;}
-
     public Tile getType() {return type;}
     public void setType(Tile type) {this.type = type;}
 
@@ -71,9 +68,9 @@ public abstract class Tile {
 
     public javafx.scene.shape.Rectangle createRec(int x, int y){return new Rectangle(x, y,10,10);}
 
-    public javafx.scene.paint.Color getColor() { //TODO: find a solution to this, we need 2 different type of colour here
+    public Color getColor() { //TODO: find a solution to this, we need 2 different type of colour here
         return c;
     }
-    public void setColor(javafx.scene.paint.Color c) {this.c = c;}
+    public void setColor(Color c) {this.c = c;}
 
 }

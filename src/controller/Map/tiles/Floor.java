@@ -8,7 +8,7 @@ public class Floor extends Tile {
         this.setWalkable(true);
         this.setSeeThrough(true);
         this.setExploredByDefault(false);
-        this.setC(Color.WHITE);
+        this.setColor(Color.BURLYWOOD);
         this.setX(x);
         this.setY(y);
     }

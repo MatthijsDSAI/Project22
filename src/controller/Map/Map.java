@@ -6,9 +6,10 @@ import controller.Area;
 import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
+import javafx.scene.paint.Color;
 import utils.DirectionEnum;
 
-import java.awt.*;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -228,8 +229,6 @@ public class Map {
                 spawnGuard(scenario.getSpawnAreaIntruders());
             }
         }
-        printMap();
-        System.out.println();
     }
 
     public void spawnGuard(Area givenArea){

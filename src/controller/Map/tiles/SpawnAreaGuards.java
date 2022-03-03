@@ -1,11 +1,13 @@
 package controller.Map.tiles;
 
+import javafx.scene.paint.Color;
+
 public class SpawnAreaGuards extends Tile {
     public SpawnAreaGuards(int x, int y) {
         this.setWalkable(true);
         this.setSeeThrough(true);
         this.setExploredByDefault(true);
-        // this.setC(Color.WHITE);
+        this.setColor(Color.MIDNIGHTBLUE);
         this.setX(x);
         this.setY(y);
     }
