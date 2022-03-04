@@ -16,6 +16,7 @@ public abstract class Agent implements AgentI{
     public String a_name;
     double baseSpeed, range, visangle, visibility,restTime,sprintTime, turn_speed, noiseProd;
     public Map map;
+    //not to be used in agent class
     private Tile agentPosition;
 
     public Agent(int x_position, int y_position)

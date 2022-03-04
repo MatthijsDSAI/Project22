@@ -367,7 +367,6 @@ public class Map {
                 }
             }
             return visibleTiles;
-
         }
 
         if(angle==225){
