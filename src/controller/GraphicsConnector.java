@@ -36,7 +36,6 @@ public class GraphicsConnector {
         }
         return mapOfColors;
     }
-
     public ArrayList<BufferedImage> getAgents()  {
         //TODO: implement difference between guard and intruder
         ArrayList<BufferedImage> list = new ArrayList<>();

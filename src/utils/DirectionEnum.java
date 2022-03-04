@@ -2,10 +2,10 @@ package utils;
 
 public enum DirectionEnum {
     //right is 0 degrees, like unit circle
-    LEFT("left", 270),
-    RIGHT("right", 90),
-    UP("up", 0),
-    DOWN("down", 180);
+    WEST("west", 90),
+    EAST("east", 270),
+    NORTH("north", 0),
+    SOUTH("south", 180);
 
 
     private final String direction;
@@ -28,17 +28,17 @@ public enum DirectionEnum {
         if(angle<0){
             angle+=360;
         }
-        if(angle==0){
-            return DirectionEnum.UP;
+        if(angle==DirectionEnum.NORTH.getAngle()){
+            return DirectionEnum.NORTH;
         }
-        if(angle==90){
-            return DirectionEnum.RIGHT;
+        if(angle==DirectionEnum.EAST.getAngle()){
+            return DirectionEnum.EAST;
         }
-        if(angle==180){
-            return DirectionEnum.DOWN;
+        if(angle==DirectionEnum.SOUTH.getAngle()){
+            return DirectionEnum.SOUTH;
         }
-        if(angle==270){
-            return DirectionEnum.LEFT;
+        if(angle==DirectionEnum.WEST.getAngle()){
+            return DirectionEnum.WEST;
         }
         throw new RuntimeException("Issue with angle passed to enum; invalid value: " + angle + " , must be multiple of 90 or 0.");
     }

@@ -83,4 +83,8 @@ public class GameRunner {
     public Agent getAgent() {
         return agent;
     }
+
+    public static void main(String[] args){
+        GameRunner g = new GameRunner(new Scenario("textmap.txt"));
+    }
 }
