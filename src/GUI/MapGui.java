@@ -146,7 +146,7 @@ public class MapGui extends Application {
     }
 
     public void launchGUI(GraphicsConnector graphicsConnector){
-        graphicsConnector = graphicsConnector;
+        this.graphicsConnector = graphicsConnector;
         String[] args  = new String[0];
         launch(args);
     }
