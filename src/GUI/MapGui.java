@@ -35,7 +35,7 @@ public class MapGui extends Application {
     private double scaling;
     private GameRunner gr;
     private Color[][] map;
-    private GraphicsConnector graphicsConnector;
+    private static GraphicsConnector graphicsConnector;
     private Timeline t;
     private BorderPane root;
 
@@ -146,7 +146,7 @@ public class MapGui extends Application {
     }
 
     public void launchGUI(GraphicsConnector graphicsConnector){
-        this.graphicsConnector = graphicsConnector;
+        MapGui.graphicsConnector = graphicsConnector;
         String[] args  = new String[0];
         launch(args);
     }

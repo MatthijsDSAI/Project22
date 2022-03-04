@@ -48,18 +48,18 @@ GivenCode/ExGameAgent.java
  GivenCode.ExGameAgent
 utils/Config.java
  utils.Config
-controller/GameRunner.java
- controller.GameRunner
+agents/Agent.java
+ agents.Agent
 controller/Scenario.java
  controller.Scenario
+controller/Map/Map.java
+ controller.Map.Map
+Explorer.java
+ Explorer
+controller/GameRunner.java
+ controller.GameRunner
 GUI/MapGui.java
  GUI.MapGui
  GUI.MapGui$1
-Explorer.java
- Explorer
-controller/Map/Map.java
- controller.Map.Map
 controller/GraphicsConnector.java
  controller.GraphicsConnector
-agents/Agent.java
- agents.Agent
