@@ -57,7 +57,7 @@ public class Map {
         }
     }
 
-    public void moveAgent(Agent agent, String direction){
+    public void moveAgent(Agent agent, DirectionEnum direction){
         Tile fromTile = agent.getAgentPosition();
         Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
 
@@ -90,19 +90,19 @@ public class Map {
         }
     }
 
-    private Tile getTileFromDirection(Tile agentPosition, String direction) {
+    private Tile getTileFromDirection(Tile agentPosition, DirectionEnum direction) {
         int x = agentPosition.getX();
         int y = agentPosition.getY();
-        if(direction.equals(DirectionEnum.RIGHT.getDirection())){
+        if(direction.equals(DirectionEnum.EAST)){
             x++;
         }
-        else if(direction.equals(DirectionEnum.LEFT.getDirection())){
+        else if(direction.equals(DirectionEnum.WEST)){
             x--;
         }
-        else if(direction.equals(DirectionEnum.UP.getDirection())){
+        else if(direction.equals(DirectionEnum.NORTH)){
             y--;
         }
-        else if(direction.equals(DirectionEnum.DOWN.getDirection())){
+        else if(direction.equals(DirectionEnum.SOUTH)){
             y++;
         }
         return getTile(x,y);
