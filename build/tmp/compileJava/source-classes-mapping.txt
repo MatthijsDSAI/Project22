@@ -6,20 +6,20 @@ GivenCode/FileWatcher.java
  GivenCode.FileWatcher
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
-controller/Map/tiles/Wall.java
- controller.Map.tiles.Wall
+Explorer.java
+ Explorer
 utils/Utils.java
  utils.Utils
 controller/Map/tiles/SpawnAreaIntruders.java
  controller.Map.tiles.SpawnAreaIntruders
-exploration/Baseline.java
- exploration.Baseline
-GUI/GoodLuck.java
- GUI.GoodLuck
-controller/Map/tiles/Shaded.java
- controller.Map.tiles.Shaded
-utils/DirectionEnum.java
- utils.DirectionEnum
+controller/Map/tiles/Wall.java
+ controller.Map.tiles.Wall
+GivenCode/ExGameAgent.java
+ GivenCode.ExGameAgent
+utils/Config.java
+ utils.Config
+controller/Scenario.java
+ controller.Scenario
 controller/Map/tiles/TargetArea.java
  controller.Map.tiles.TargetArea
 controller/GameMode.java
@@ -30,10 +30,10 @@ agents/Intruder.java
  agents.Intruder
 agents/TestAgent.java
  agents.TestAgent
-controller/Map/tiles/TeleportalTile.java
- controller.Map.tiles.TeleportalTile
-controller/Map/MapInitialization.java
- controller.Map.MapInitialization
+controller/Map/Map.java
+ controller.Map.Map
+agents/Agent.java
+ agents.Agent
 controller/Area.java
  controller.Area
 agents/AgentI.java
@@ -44,18 +44,18 @@ mapgenerator/SimpleMapReader.java
  mapgenerator.SimpleMapReader
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
-GivenCode/ExGameAgent.java
- GivenCode.ExGameAgent
-utils/Config.java
- utils.Config
-agents/Agent.java
- agents.Agent
-controller/Scenario.java
- controller.Scenario
-controller/Map/Map.java
- controller.Map.Map
-Explorer.java
- Explorer
+controller/Map/MapInitialization.java
+ controller.Map.MapInitialization
+GUI/GoodLuck.java
+ GUI.GoodLuck
+controller/Map/tiles/TeleportalTile.java
+ controller.Map.tiles.TeleportalTile
+utils/DirectionEnum.java
+ utils.DirectionEnum
+controller/Map/tiles/Shaded.java
+ controller.Map.tiles.Shaded
+exploration/Baseline.java
+ exploration.Baseline
 controller/GameRunner.java
  controller.GameRunner
 GUI/MapGui.java

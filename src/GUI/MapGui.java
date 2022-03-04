@@ -95,7 +95,7 @@ public class MapGui extends Application {
             for(int j = 0; j < col; j++){
                 Rectangle r = new Rectangle(j * 10, i * 10, 10, 10);
                 r.setStroke(Color.BLACK);
-                r.setFill(map[j][i]);
+                r.setFill(map[i][j]);
                 p.getChildren().add(r);
             }
         }
