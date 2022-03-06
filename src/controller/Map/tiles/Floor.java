@@ -18,4 +18,8 @@ public class Floor extends Tile {
         return "Floor";
     }
 
+    public Floor clone(){
+        return new Floor(this.getX(), this.getY());
+    }
+
 }

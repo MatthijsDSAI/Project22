@@ -16,4 +16,8 @@ public class SpawnAreaGuards extends Tile {
     public String toString() {
         return "SpawnAreaGuards";
     }
+
+    public SpawnAreaGuards clone(){
+        return new SpawnAreaGuards(this.getX(), this.getY());
+    }
 }

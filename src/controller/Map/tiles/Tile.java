@@ -73,4 +73,7 @@ public abstract class Tile {
     }
     public void setColor(Color c) {this.c = c;}
 
+    public Tile clone(){
+        return null;
+    }
 }

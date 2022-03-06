@@ -36,7 +36,7 @@ public class Map {
 
     public static Map createEmptyMap(Map map) {
         int horizontalSize = map.getTiles().length;
-        int verticalSize = map.getTiles().length;
+        int verticalSize = map.getTiles()[0].length;
         return new Map(horizontalSize, verticalSize);
     }
 
