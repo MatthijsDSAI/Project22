@@ -17,4 +17,8 @@ public class Shaded extends Tile {
     public String toString() {
         return "Shaded";
     }
+
+    public Shaded clone(){
+        return new Shaded(this.getX(), this.getY());
+    }
 }

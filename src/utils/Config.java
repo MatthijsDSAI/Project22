@@ -11,6 +11,7 @@ public class Config {
     //Then we can access that instance as a field from other classes and have all these constants in one place
     public Config(){
     }
+
     public int getDistanceViewing() {
         return VISION;
     }

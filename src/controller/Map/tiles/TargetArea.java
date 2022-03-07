@@ -16,4 +16,8 @@ public class TargetArea extends Tile {
     public String toString() {
         return "TargetArea";
     }
+
+    public TargetArea clone(){
+        return new TargetArea(this.getX(), this.getY());
+    }
 }

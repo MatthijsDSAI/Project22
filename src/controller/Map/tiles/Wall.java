@@ -17,4 +17,7 @@ public class Wall extends Tile {
         return "Wall";
     }
 
+    public Wall clone(){
+        return new Wall(this.getX(), this.getY());
+    }
 }

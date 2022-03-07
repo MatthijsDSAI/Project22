@@ -15,7 +15,8 @@ public abstract class Agent implements AgentI{
     int x_position,y_position, angle;
     public String a_name;
     double baseSpeed, range, visangle, visibility,restTime,sprintTime, turn_speed, noiseProd;
-    public Map map;
+    public Map ownMap;
+    //not to be used in agent class
     private Tile agentPosition;
 
     public Agent(int x_position, int y_position)
@@ -160,7 +161,7 @@ public abstract class Agent implements AgentI{
     }
 
     public void initializeEmptyMap(Map map){
-        this.map = Map.createEmptyMap(map);
+        this.ownMap = Map.createEmptyMap(map);
     }
 
     public void computeVisibleTiles(Map map){
@@ -173,9 +174,8 @@ public abstract class Agent implements AgentI{
             if(tile.hasAgent()){
                 tile.setColor(Color.YELLOW);
             }
+            ownMap.setTile(tile.clone());
         }
-
-
     }
 
     public void setAgentPosition(Tile tile){

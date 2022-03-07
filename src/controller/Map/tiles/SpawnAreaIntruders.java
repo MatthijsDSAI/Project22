@@ -17,4 +17,8 @@ public class SpawnAreaIntruders extends Tile {
     public String toString() {
         return "SpawnAreaIntruders";
     }
+
+    public SpawnAreaIntruders clone(){
+        return new SpawnAreaIntruders(this.getX(), this.getY());
+    }
 }

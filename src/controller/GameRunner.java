@@ -39,7 +39,7 @@ public class GameRunner {
         agent = new TestAgent(0,0);
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
         map.loadMap(scenario);
-        int x = 7, y = 18;
+        int x = 9, y = 18;
         map.addAgent(agent,x,y);
         agent.setAgentPosition(map.getTile(x,y));
         agent.initializeEmptyMap(map);
@@ -82,5 +82,9 @@ public class GameRunner {
 
     public Agent getAgent() {
         return agent;
+    }
+
+    public static void main(String[] args){
+        GameRunner g = new GameRunner(new Scenario("textmap.txt"));
     }
 }
