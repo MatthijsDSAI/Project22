@@ -21,6 +21,7 @@ public class GraphicsConnector {
     private ArrayList<Agent> agents;
     private MapGui gui;
     public GraphicsConnector(GameRunner gameRunner) {
+        this.gameRunner = gameRunner;
         map = gameRunner.getMap();
         tiles = map.getTiles();
         agents = new ArrayList<>();
@@ -57,7 +58,12 @@ public class GraphicsConnector {
         }
         return list;
     }
-
+    public void updateGraphics(){
+        gui.updateGraphics();
+    }
+    public void run(){
+        gameRunner.run();
+    }
     public void setGui(MapGui gui) {
         this.gui = gui;
     }

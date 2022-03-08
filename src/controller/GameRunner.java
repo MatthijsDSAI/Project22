@@ -13,13 +13,18 @@ public class GameRunner {
     private final Config config = Scenario.config;
     private Agent agent;
     private MapGui gui;
-
+    private Scenario scenario;
     private int t;
 
     public GameRunner(Scenario scenario) {
-        init(scenario);
-        gui = new MapGui();
+        this.scenario = scenario;
+        init();
         GraphicsConnector graphicsConnector = new GraphicsConnector(this);
+        gui = new MapGui();
+        map.setGraphicsConnector(graphicsConnector);
+
+
+
         if(Scenario.config.GUI){
             try{
                 gui.launchGUI(graphicsConnector);
@@ -28,6 +33,7 @@ public class GameRunner {
                 System.out.println("There has been an issue with the initialization of the GUI");
             }
         }
+
     }
 
 
@@ -35,16 +41,18 @@ public class GameRunner {
         return map;
     }
 
-    public void init(Scenario scenario){
+    public void init(){
         agent = new TestAgent(0,0);
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
+
         map.loadMap(scenario);
-        int x = 9, y = 18;
+        int x = 0, y = 0;
         map.addAgent(agent,x,y);
         agent.setAgentPosition(map.getTile(x,y));
         agent.initializeEmptyMap(map);
         agent.computeVisibleTiles(map);
         t = 0;
+
     }
 
 
@@ -53,12 +61,10 @@ public class GameRunner {
         t++;
         //map.moveAgent(agent, DirectionEnum.RIGHT.getDirection());
         //System.out.println(map.getAgentPosition(agent));
-        for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
-            //agent.update();
-            //if i understand correctly per timestep we can do 15 things, where 15 is the speed
-            //so we can either walk 15 steps, or walk 14 and turn once, etc.
-            //which is decided in agent.update()
-        }
+        //for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
+        map.moveAgent(agent, DirectionEnum.EAST);
+       // }
+        map.getGraphicsConnector().updateGraphics();
     }
 
 
@@ -66,14 +72,14 @@ public class GameRunner {
         boolean explored = false;
         while(!explored){
             try {
-                Thread.sleep(50);
+                Thread.sleep(100000);
             }
             catch(InterruptedException e){
                 System.out.println("Threading issue");
             }
             step();
             explored = map.isExplored();
-            //System.out.println(map.explored() + " of map has been explored");
+            System.out.println(map.explored() + " of map has been explored");
             //map.printMap();
         }
     }

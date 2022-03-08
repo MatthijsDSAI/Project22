@@ -2,22 +2,22 @@ package GUI;
 
 import controller.GameRunner;
 import controller.GraphicsConnector;
-import controller.Map.tiles.Tile;
 import controller.Scenario;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import utils.Utils;
@@ -37,8 +37,13 @@ public class MapGui extends Application {
     private Color[][] map;
     private static GraphicsConnector graphicsConnector;
     private Timeline t;
+    private BorderPane mapPane;
     private BorderPane root;
-
+    private BorderPane p;
+    private Stage stage;
+    private double width = 1210;
+    private double height = 810;
+    private StartScreen mainMenu;
     public MapGui(){
     }
 
@@ -51,45 +56,55 @@ public class MapGui extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         graphicsConnector.setGui(this);
+        this.stage = stage;
         map = graphicsConnector.getMapOfColors();
 
         row = map.length;
         col = map[0].length;
         mapHeight = 810;
         mapWidth = 1210;
+        //root = createPane();
+        //Scene scene = new Scene(root, mapWidth, mapHeight);
+        this.mainMenu = new StartScreen(this);
+        Scene startMenu = new Scene(mainMenu, width, height);
 
-        root = createPane();
-        Canvas c = new Canvas();
-        Scene scene = new Scene(root, mapWidth, mapHeight);
+
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("Information Dialog");
+//        alert.setHeaderText(null);
+//        alert.setContentText("Game is over");
+//        alert.showAndWait();
+
         stage.setTitle("MAP");
-        stage.setScene(scene);
+        stage.setScene(startMenu);
         stage.show();
+//        graphicsConnector.setGui(this);
+//        this.stage = stage;
+//        this.mainMenu = new StartScreen(this);
+//
+//        stage.setResizable(false);
+//        stage.setScene(startMenu);
+//
+//        stage.show();
     }
 
     public BorderPane createPane(){
-        BorderPane p = new BorderPane();
+        p = new BorderPane();
 
-//        ArrayList<Tile> guardSpawn = new ArrayList<>();
-//        ArrayList<Tile> intruderSpawn = new ArrayList<>();
-
+        // initial paint
         drawMap(p);
-//        initTimeLine(p);
-//        Random r = new Random();
-//        for(int i=0; i< scenario.getNumGuards(); i++){
-//            Tile t = guardSpawn.get(r.nextInt(guardSpawn.size()));
-////            t.addAgent();
-//            t.setColor(Color.BLACK);
-//        }
+        //update();
 
-//        for(int i=0; i< scenario.getNumIntruders(); i++){
-//            Tile t = intruderSpawn.get(r.nextInt(intruderSpawn.size()));
-////            t.addAgent();
-//            t.setColor(Color.BLACK);
-//        }
+        //initTimeLine(p);
+        //t.play();
+
         return p;
     }
 
+
+    //Main draw method
     public void drawMap(BorderPane p){
+        map = graphicsConnector.getMapOfColors();
         p.getChildren().clear();
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
@@ -104,21 +119,32 @@ public class MapGui extends Application {
     //Animation for future
     public void initTimeLine(BorderPane p){
         t = new Timeline();
+        //We could set step count here, for now is infinite
         t.setCycleCount(Timeline.INDEFINITE);
+//        t.setCycleCount(10);
         KeyFrame k = new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //need update
                 drawMap(p);
-//                update();
+                update();
             }
         });
         t.getKeyFrames().add(k);
     }
 
+    //Update for testing
+    //We could use getColorMap method here for updating
     public void update(){
+//        map = graphicsConnector.getMapOfColors();
         Random r = new Random();
         map[r.nextInt(map.length)][r.nextInt(map[0].length)] = Color.BLACK;
+    }
+
+    public void updateGraphics(){
+        drawMap(mapPane);
+        Scene mapScene = new Scene(mapPane);
+        stage.setScene(mapScene);
+        System.out.println("YERSRE");
     }
 
     public void start(){
@@ -129,21 +155,21 @@ public class MapGui extends Application {
         t.pause();
     }
 
-    public void stop(){
-        t.stop();
-    }
+//    public void stop(){
+//        t.stop();
+//    }
 
-    public void keyBoardPressed(KeyEvent event){
-        if(event.getCode() == KeyCode.LEFT){
-
-        }else if(event.getCode() == KeyCode.RIGHT){
-
-        }else if(event.getCode() == KeyCode.UP){
-
-        }else if(event.getCode() == KeyCode.DOWN){
-
-        }
-    }
+//    public void keyBoardPressed(KeyEvent event){
+//        if(event.getCode() == KeyCode.LEFT){
+//
+//        }else if(event.getCode() == KeyCode.RIGHT){
+//
+//        }else if(event.getCode() == KeyCode.UP){
+//
+//        }else if(event.getCode() == KeyCode.DOWN){
+//
+//        }
+//    }
 
     public void launchGUI(GraphicsConnector graphicsConnector){
         MapGui.graphicsConnector = graphicsConnector;
@@ -153,5 +179,15 @@ public class MapGui extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void startExploration() {
+        mapPane = createPane();
+        stage.getScene().setRoot(mapPane);
+        graphicsConnector.run();
+        stage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 }

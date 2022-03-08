@@ -3,6 +3,7 @@ package controller.Map;
 import agents.Agent;
 import agents.TestAgent;
 import controller.Area;
+import controller.GraphicsConnector;
 import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
@@ -10,7 +11,7 @@ import javafx.scene.paint.Color;
 import org.w3c.dom.ls.LSOutput;
 import utils.DirectionEnum;
 
-
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.Arrays;
 public class Map {
     private Tile[][] tiles;
     private Agent agent;
-
+    private GraphicsConnector graphicsConnector;
     private Tile tileVersion;
     private ArrayList<Agent> guards = new ArrayList<Agent>(); // TODO change to "Guard", "Intruder" later
     private ArrayList<Agent> intruders = new ArrayList<>();
@@ -516,5 +517,13 @@ public class Map {
 
     public void setTile(Tile tile){
         tiles[tile.getY()][tile.getX()] = tile;
+    }
+
+    public GraphicsConnector getGraphicsConnector() {
+        return graphicsConnector;
+    }
+
+    public void setGraphicsConnector(GraphicsConnector graphicsConnector) {
+        this.graphicsConnector = graphicsConnector;
     }
 }
