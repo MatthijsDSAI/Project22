@@ -12,45 +12,48 @@ exploration/Baseline.java
  exploration.Baseline
 utils/DirectionEnum.java
  utils.DirectionEnum
-utils/Utils.java
- utils.Utils
+agents/Guard.java
+ agents.Guard
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
 GUI/MapScreen.java
  GUI.MapScreen
 GUI/GoodLuck.java
  GUI.GoodLuck
-GivenCode/ExGameAgent.java
- GivenCode.ExGameAgent
-utils/Config.java
- utils.Config
-controller/Scenario.java
- controller.Scenario
+exploration/FrontierBasedExploration.java
+ exploration.FrontierBasedExploration
+agents/Intruder.java
+ agents.Intruder
+controller/TelePortal.java
+ controller.TelePortal
 controller/Map/MapInitialization.java
  controller.Map.MapInitialization
 controller/GameMode.java
  controller.GameMode
-controller/TelePortal.java
- controller.TelePortal
-agents/Intruder.java
- agents.Intruder
-exploration/FrontierBasedExploration.java
- exploration.FrontierBasedExploration
-agents/Guard.java
- agents.Guard
+GivenCode/ExGameAgent.java
+ GivenCode.ExGameAgent
+controller/Scenario.java
+ controller.Scenario
+utils/Config.java
+ utils.Config
 Explorer.java
  Explorer
 GUI/StartScreen.java
  GUI.StartScreen
+GUI/MapGui.java
+ GUI.MapGui
+ GUI.MapGui$1
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
 controller/GameRunner.java
  controller.GameRunner
 controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
-GUI/MapGui.java
- GUI.MapGui
- GUI.MapGui$1
+utils/Utils.java
+ utils.Utils
 controller/Map/tiles/SpawnAreaIntruders.java
  controller.Map.tiles.SpawnAreaIntruders
 controller/GraphicsConnector.java
@@ -65,9 +68,6 @@ agents/TestAgent.java
  agents.TestAgent
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
 controller/Map/Map.java

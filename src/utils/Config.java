@@ -1,10 +1,14 @@
 package utils;
 
+import javafx.scene.paint.Color;
+
+
 public class Config {
     private int VISION;
     private double BASESPEEDINTRUDER;
     private double BASESPEEDGUARD;
     private double SPRINTSTEEDINTRUDER;
+    private Color agentColor = Color.CYAN;
     public boolean GUI = true;
 
     //store an instance of this in our main gamerunner class eventually
@@ -42,6 +46,10 @@ public class Config {
 
     public void setSPRINTSTEEDINTRUDER(double SPRINTSTEEDINTRUDER) {
         this.SPRINTSTEEDINTRUDER = SPRINTSTEEDINTRUDER;
+    }
+
+    public Color getAgentColor(){
+        return agentColor;
     }
 
 }

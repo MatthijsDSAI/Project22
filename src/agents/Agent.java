@@ -19,15 +19,16 @@ public abstract class Agent implements AgentI{
     //not to be used in agent class
     private Tile agentPosition;
 
+
+
     public Agent(int x_position, int y_position)
     {
-
         this.x_position = x_position;
         this.y_position = y_position;
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=0;
+        angle=270;
     }
 
     public Agent(double baseSpeed, int x_position, int y_position, int angle)
@@ -169,14 +170,11 @@ public abstract class Agent implements AgentI{
 
         //Todo: temp just for visualisation
         for(Tile tile : visibleTiles){
-            if(!tile.hasAgent())
-                tile.setColor(Color.CYAN);
-            if(tile.hasAgent()){
-                tile.setColor(Color.YELLOW);
-            }
+            tile.setExplored(true);
             ownMap.setTile(tile.clone());
         }
     }
+
 
     public void setAgentPosition(Tile tile){
         agentPosition = tile;

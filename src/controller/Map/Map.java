@@ -62,7 +62,6 @@ public class Map {
         Tile fromTile = agent.getAgentPosition();
         Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
 
-
         changeTiles(fromTile, toTile);
 
         checkTeleport(fromTile, toTile);
@@ -127,13 +126,17 @@ public class Map {
         for(Tile[] tiles : tiles){
             for(Tile tile : tiles){
                 if(!tile.isExploredByDefault()) {
-                    if (!tile.isExploredByDefault()) {
-                        notExplored++;
-                    }
-                    else{
+                    if(tile.getExplored()){
                         explored++;
                     }
+                    else{
+                        notExplored++;
+                    }
                 }
+                else{
+                    explored++;
+                }
+
             }
         }
         return explored/(notExplored+explored);
@@ -262,7 +265,7 @@ public class Map {
 
     public ArrayList<Tile> computeVisibleTiles(Agent agent) {
         int d = Scenario.config.getDistanceViewing();
-        double angle = 315;//agent.getAngle();
+        double angle = agent.getAngle();
         int agentX = agent.getAgentPosition().getX();
         int agentY = agent.getAgentPosition().getY();
         ArrayList<Tile> visibleTiles = new ArrayList<>();

@@ -4,6 +4,8 @@ import GUI.MapGui;
 import agents.Agent;
 import agents.TestAgent;
 import controller.Map.Map;
+import controller.Map.tiles.SpawnAreaIntruders;
+import controller.Map.tiles.TeleportalTile;
 import javafx.application.Platform;
 import utils.Config;
 import utils.DirectionEnum;
@@ -47,7 +49,7 @@ public class GameRunner {
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
 
         map.loadMap(scenario);
-        int x = 0, y = 0;
+        int x = 0, y = 5;
         map.addAgent(agent,x,y);
         agent.setAgentPosition(map.getTile(x,y));
         agent.initializeEmptyMap(map);
@@ -64,6 +66,7 @@ public class GameRunner {
         //System.out.println(map.getAgentPosition(agent));
         //for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
         map.moveAgent(agent, DirectionEnum.EAST);
+        agent.computeVisibleTiles(map);
         // }
         //map.getGraphicsConnector().updateGraphics();
     }
