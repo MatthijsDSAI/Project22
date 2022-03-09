@@ -4,6 +4,7 @@ import GUI.MapGui;
 import agents.Agent;
 import agents.TestAgent;
 import controller.Map.Map;
+import javafx.application.Platform;
 import utils.Config;
 import utils.DirectionEnum;
 
@@ -63,25 +64,29 @@ public class GameRunner {
         //System.out.println(map.getAgentPosition(agent));
         //for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
         map.moveAgent(agent, DirectionEnum.EAST);
-       // }
-        map.getGraphicsConnector().updateGraphics();
+        // }
+        //map.getGraphicsConnector().updateGraphics();
     }
 
 
     public void run(){
         boolean explored = false;
-        while(!explored){
-            try {
-                Thread.sleep(100000);
-            }
-            catch(InterruptedException e){
-                System.out.println("Threading issue");
-            }
-            step();
-            explored = map.isExplored();
-            System.out.println(map.explored() + " of map has been explored");
-            //map.printMap();
-        }
+        Thread t = new Thread(() ->{
+            while(true){
+                try {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException e){
+                    System.out.println("Threading issue");
+                }
+                step();
+                //explored = map.isExplored();
+                System.out.println(map.explored() + " of map has been explored");
+                //map.printMap();
+
+        }});
+        t.start();
+
     }
 
 

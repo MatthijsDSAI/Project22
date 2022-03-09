@@ -1,7 +1,7 @@
-agents/Guard.java
- agents.Guard
-GUI/MapScreen.java
- GUI.MapScreen
+agents/AgentI.java
+ agents.AgentI
+controller/Area.java
+ controller.Area
 mapgenerator/SimpleMapReader.java
  mapgenerator.SimpleMapReader
 GivenCode/FileWatcher.java
@@ -16,6 +16,8 @@ utils/Utils.java
  utils.Utils
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
+GUI/MapScreen.java
+ GUI.MapScreen
 GUI/GoodLuck.java
  GUI.GoodLuck
 GivenCode/ExGameAgent.java
@@ -34,10 +36,8 @@ agents/Intruder.java
  agents.Intruder
 exploration/FrontierBasedExploration.java
  exploration.FrontierBasedExploration
-agents/AgentI.java
- agents.AgentI
-controller/Area.java
- controller.Area
+agents/Guard.java
+ agents.Guard
 Explorer.java
  Explorer
 GUI/StartScreen.java

@@ -1,5 +1,6 @@
 package GUI;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import controller.GameRunner;
 import controller.GraphicsConnector;
 import controller.Scenario;
@@ -142,9 +143,6 @@ public class MapGui extends Application {
 
     public void updateGraphics(){
         drawMap(mapPane);
-        Scene mapScene = new Scene(mapPane);
-        stage.setScene(mapScene);
-        System.out.println("YERSRE");
     }
 
     public void start(){
@@ -185,6 +183,8 @@ public class MapGui extends Application {
         mapPane = createPane();
         stage.getScene().setRoot(mapPane);
         graphicsConnector.run();
+        initTimeLine(mapPane);
+        start();
         stage.setOnCloseRequest(e -> {
             Platform.exit();
             System.exit(0);
