@@ -269,17 +269,31 @@ public class Map {
         int agentX = agent.getAgentPosition().getX();
         int agentY = agent.getAgentPosition().getY();
         ArrayList<Tile> visibleTiles = new ArrayList<>();
-
+        boolean middleLane = true;
+        boolean leftLane = true;
+        boolean rightLane = true;
         if(angle==0){
             int topLimit = Math.max(0, agentY-d+1);
-            int leftLimit = Math.max(0,agentX-1);
-            int rightLimit = Math.min(tiles[0].length-1, agentX+1);
+            int leftLimit = 0;
+            int rightLimit = tiles[0].length-1;
 
-            for(int i=leftLimit; i<=rightLimit; i++){
-                for(int j=agentY; j>=topLimit; j--){
-                        visibleTiles.add(getTile(i,j));
-                    if(!getTile(i,j).isSeeThrough()){
-                        break;
+            for(int j = agentY; j>=topLimit && (middleLane || rightLane || leftLane); j--){
+                if((agentX+1)<=rightLimit && rightLane){
+                    visibleTiles.add(getTile(agentX+1, j));
+                    if(!getTile(agentX+1, j).isSeeThrough()){
+                        rightLane = false;
+                    }
+                }
+                if(middleLane){
+                    visibleTiles.add(getTile(agentX, j));
+                    if(!getTile(agentX, j).isSeeThrough()){
+                        middleLane = false;
+                    }
+                }
+                if((agentX-1)>=leftLimit && leftLane){
+                    visibleTiles.add(getTile(agentX-1, j));
+                    if(!getTile(agentX-1, j).isSeeThrough()){
+                        leftLane = false;
                     }
                 }
             }
@@ -291,10 +305,7 @@ public class Map {
             int leftLimit = Math.max(0, agentX - d + 1);
             int finalI = 0;
             int finalJ = 0;
-            boolean middleLane = true;
-            boolean leftLane = true;
-            boolean rightLane = true;
-            for (int i = agentX, j=agentY; i >= leftLimit && j >= topLimit; i--, j--) {
+            for (int i = agentX, j=agentY; i >= leftLimit && j >= topLimit && (middleLane || rightLane || leftLane); i--, j--) {
 
                 if(i!=agentX && rightLane){
                         visibleTiles.add(getTile(i+1, j));
@@ -330,16 +341,26 @@ public class Map {
         }
 
         if(angle==90.0){
-            int topLimit = Math.max(0, agentY-1);
-            int bottomLimit = Math.min(tiles.length-1, agentY+1);
+            int topLimit = 0;
+            int bottomLimit = tiles.length-1;
             int leftLimit = Math.max(0, agentX - d + 1);
-            for(int j=bottomLimit; j>=topLimit; j--){
-                for(int i=agentX; i>=leftLimit; i--){
-                    if(getTile(i,j).isSeeThrough()){
-                        visibleTiles.add(getTile(i,j));
-                        if(!getTile(i,j).isSeeThrough()){
-                            break;
-                        }
+            for(int i = agentX; i>=leftLimit && (middleLane || rightLane || leftLane); i--){
+                if((agentY +1)<=bottomLimit && leftLane){
+                    visibleTiles.add(getTile(i, agentY +1));
+                    if(!getTile(i, agentY +1).isSeeThrough()){
+                        leftLane = false;
+                    }
+                }
+                if(middleLane){
+                    visibleTiles.add(getTile(i, agentY));
+                    if(!getTile(i, agentY).isSeeThrough()){
+                        middleLane = false;
+                    }
+                }
+                if((agentY -1)>=topLimit && rightLane){
+                    visibleTiles.add(getTile(i, agentY -1));
+                    if(!getTile(i, agentY -1).isSeeThrough()){
+                        rightLane = false;
                     }
                 }
             }
@@ -351,10 +372,7 @@ public class Map {
             int leftLimit = Math.max(0, agentX - d + 1);
             int finalI = 0;
             int finalJ = 0;
-            boolean middleLane = true;
-            boolean leftLane = true;
-            boolean rightLane = true;
-            for (int i = agentX, j=agentY; i >= leftLimit && j <= bottomLimit; i--, j++) {
+            for (int i = agentX, j=agentY; i >= leftLimit && j <= bottomLimit && (middleLane || rightLane || leftLane); i--, j++) {
 
 
                 if(i!=agentX && rightLane){
@@ -389,18 +407,27 @@ public class Map {
         }
 
         if(angle==180){
-            int  bottomLimit = Math.min(tiles.length-1, agentY+d-1);
-            int leftLimit = Math.max(0,agentX-1);
-            int rightLimit = Math.min(tiles[0].length-1, agentX+1);
-            for(int i=leftLimit; i<=rightLimit; i++){
-                for(int j=agentY; j<=bottomLimit; j++){
-                    if(getTile(i,j).isSeeThrough()){
-                        visibleTiles.add(getTile(i,j));
-                        if(!getTile(i,j).isSeeThrough()){
-                            break;
-                        }
+            int bottomLimit = Math.min(tiles.length-1, agentY+d-1);
+            int leftLimit = 0;
+            int rightLimit = tiles[0].length-1;
+            for(int j = agentY; j<=bottomLimit && (middleLane || rightLane || leftLane); j++){
+                if((agentX+1)<=rightLimit && leftLane){
+                    visibleTiles.add(getTile(agentX+1, j));
+                    if(!getTile(agentX+1, j).isSeeThrough()){
+                        leftLane = false;
                     }
-
+                }
+                if(middleLane){
+                    visibleTiles.add(getTile(agentX, j));
+                    if(!getTile(agentX, j).isSeeThrough()){
+                        middleLane = false;
+                    }
+                }
+                if((agentX-1)>=leftLimit && rightLane){
+                    visibleTiles.add(getTile(agentX-1, j));
+                    if(!getTile(agentX-1, j).isSeeThrough()){
+                        rightLane = false;
+                    }
                 }
             }
             return visibleTiles;
@@ -411,10 +438,7 @@ public class Map {
             int rightLimit = Math.min(tiles[0].length, agentX + d - 1);
             int finalI = 0;
             int finalJ = 0;
-            boolean middleLane = true;
-            boolean leftLane = true;
-            boolean rightLane = true;
-            for (int i = agentX, j=agentY; i <= rightLimit && j <= bottomLimit; i++, j++) {
+            for (int i = agentX, j=agentY; i <= rightLimit && j <= bottomLimit && (middleLane || rightLane || leftLane); i++, j++) {
 
 
                 if(i!=agentX && rightLane){
@@ -449,16 +473,26 @@ public class Map {
         }
 
         if(angle==270.0){
-            int topLimit = Math.max(0, agentY-1);
-            int bottomLimit = Math.min(tiles.length-1, agentY+1);
+            int topLimit = 0;
+            int bottomLimit = tiles.length-1;
             int rightLimit = Math.min(tiles[0].length-1, agentX + d - 1);
-            for(int j=bottomLimit; j>=topLimit; j--){
-                for(int i=agentX; i<=rightLimit; i++){
-                    if(getTile(i,j).isSeeThrough()){
-                        visibleTiles.add(getTile(i,j));
-                        if(!getTile(i,j).isSeeThrough()){
-                            break;
-                        }
+            for(int i = agentX; i<=rightLimit && (middleLane || rightLane || leftLane); i++){
+                if((agentY +1)<=bottomLimit && rightLane){
+                    visibleTiles.add(getTile(i, agentY +1));
+                    if(!getTile(i, agentY +1).isSeeThrough()){
+                        rightLane = false;
+                    }
+                }
+                if(middleLane){
+                    visibleTiles.add(getTile(i, agentY));
+                    if(!getTile(i, agentY).isSeeThrough()){
+                        middleLane = false;
+                    }
+                }
+                if((agentY -1)>=topLimit && leftLane){
+                    visibleTiles.add(getTile(i, agentY -1));
+                    if(!getTile(i, agentY -1).isSeeThrough()){
+                        leftLane = false;
                     }
                 }
             }
@@ -469,10 +503,7 @@ public class Map {
             int rightLimit = Math.min(tiles[0].length, agentX + d - 1);
             int finalI = 0;
             int finalJ = 0;
-            boolean middleLane = true;
-            boolean leftLane = true;
-            boolean rightLane = true;
-            for (int i = agentX, j=agentY; i <= rightLimit && j >= topLimit; i++, j--) {
+            for (int i = agentX, j=agentY; i <= rightLimit && j >= topLimit && (middleLane || rightLane || leftLane); i++, j--) {
 
                 if(i!=agentX && rightLane){
                     visibleTiles.add(getTile(i, j+1));

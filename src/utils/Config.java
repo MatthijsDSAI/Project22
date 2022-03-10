@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 
 public class Config {
-    private int VISION;
+    private int VISION = 5;
     private double BASESPEEDINTRUDER;
     private double BASESPEEDGUARD;
     private double SPRINTSTEEDINTRUDER;

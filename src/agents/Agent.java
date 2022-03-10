@@ -28,7 +28,7 @@ public abstract class Agent implements AgentI{
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=270;
+        angle=180;
     }
 
     public Agent(double baseSpeed, int x_position, int y_position, int angle)
@@ -170,6 +170,7 @@ public abstract class Agent implements AgentI{
 
         //Todo: temp just for visualisation
         for(Tile tile : visibleTiles){
+            System.out.println(tile.getExplored());
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
         }

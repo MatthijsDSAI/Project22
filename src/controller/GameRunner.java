@@ -49,7 +49,7 @@ public class GameRunner {
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
 
         map.loadMap(scenario);
-        int x = 0, y = 5;
+        int x = 50, y = 78;
         map.addAgent(agent,x,y);
         agent.setAgentPosition(map.getTile(x,y));
         agent.initializeEmptyMap(map);
@@ -65,7 +65,7 @@ public class GameRunner {
         //map.moveAgent(agent, DirectionEnum.RIGHT.getDirection());
         //System.out.println(map.getAgentPosition(agent));
         //for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
-        map.moveAgent(agent, DirectionEnum.EAST);
+        map.moveAgent(agent, DirectionEnum.SOUTH);
         agent.computeVisibleTiles(map);
         // }
         //map.getGraphicsConnector().updateGraphics();
@@ -77,7 +77,7 @@ public class GameRunner {
         Thread t = new Thread(() ->{
             while(true){
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 }
                 catch(InterruptedException e){
                     System.out.println("Threading issue");

@@ -123,7 +123,7 @@ public class MapGui extends Application {
         //We could set step count here, for now is infinite
         t.setCycleCount(Timeline.INDEFINITE);
 //        t.setCycleCount(10);
-        KeyFrame k = new KeyFrame(Duration.millis(985), new EventHandler<ActionEvent>() {
+        KeyFrame k = new KeyFrame(Duration.millis(185), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 drawMap(p);

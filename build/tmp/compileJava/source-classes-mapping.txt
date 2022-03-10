@@ -36,13 +36,10 @@ controller/Scenario.java
  controller.Scenario
 utils/Config.java
  utils.Config
-Explorer.java
- Explorer
+utils/Utils.java
+ utils.Utils
 GUI/StartScreen.java
  GUI.StartScreen
-GUI/MapGui.java
- GUI.MapGui
- GUI.MapGui$1
 GUI/StartButton.java
  GUI.StartButton
  GUI.StartButton$1
@@ -52,8 +49,9 @@ controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
-utils/Utils.java
- utils.Utils
+GUI/MapGui.java
+ GUI.MapGui
+ GUI.MapGui$1
 controller/Map/tiles/SpawnAreaIntruders.java
  controller.Map.tiles.SpawnAreaIntruders
 controller/GraphicsConnector.java
@@ -68,6 +66,8 @@ agents/TestAgent.java
  agents.TestAgent
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
+Explorer.java
+ Explorer
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
 controller/Map/Map.java
