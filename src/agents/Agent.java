@@ -184,4 +184,12 @@ public abstract class Agent implements AgentI{
     public Tile getAgentPosition(){
         return agentPosition;
     }
+
+    public int getX_position() {
+        return x_position;
+    }
+
+    public int getY_position() {
+        return y_position;
+    }
 }

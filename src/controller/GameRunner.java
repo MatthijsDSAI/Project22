@@ -2,6 +2,8 @@ package controller;
 
 import GUI.MapGui;
 import agents.Agent;
+import agents.Guard;
+import agents.Intruder;
 import agents.TestAgent;
 import controller.Map.Map;
 import controller.Map.tiles.SpawnAreaIntruders;
@@ -10,17 +12,23 @@ import javafx.application.Platform;
 import utils.Config;
 import utils.DirectionEnum;
 
+import java.util.ArrayList;
+
 //idea is to make this the class where we run store everything and have our main loop
 public class GameRunner {
     private Map map;
     private final Config config = Scenario.config;
     private Agent agent;
+    private ArrayList<Guard> guards;
+    private ArrayList<Intruder> intruders;
     private MapGui gui;
     private Scenario scenario;
     private int t;
+    private boolean isGameMode1;
 
     public GameRunner(Scenario scenario) {
         this.scenario = scenario;
+        isGameMode1 = (scenario.getGameMode() == 1);
         init();
         GraphicsConnector graphicsConnector = new GraphicsConnector(this);
         gui = new MapGui();
@@ -45,17 +53,38 @@ public class GameRunner {
     }
 
     public void init(){
-        agent = new TestAgent(0,0);
-        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1, agent);
-
+        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
         map.loadMap(scenario);
-        int x = 50, y = 78;
-        map.addAgent(agent,x,y);
-        agent.setAgentPosition(map.getTile(x,y));
-        agent.initializeEmptyMap(map);
-        agent.computeVisibleTiles(map);
-        t = 0;
+        guards = map.getGuards();
+        intruders = map.getIntruders();
+        loadGuards();
+        if (isGameMode1) {
+            loadIntruders();
+        }
 
+        t = 0;
+    }
+
+    public void loadGuards() { // "loadGuards" and "loadIntruders" can later be combined if either of them doesn't need any additional code
+        for (Guard guard: guards) {
+            int x = guard.getX_position();
+            int y = guard.getY_position();
+            map.addAgent(new TestAgent(x, y), x, y);
+            guard.setAgentPosition(map.getTile(x,y));
+            guard.initializeEmptyMap(map);
+            guard.computeVisibleTiles(map);
+        }
+    }
+
+    public void loadIntruders() {
+        for (Intruder intruder: intruders) {
+            int x = intruder.getX_position();
+            int y = intruder.getY_position();
+            map.addAgent(new TestAgent(x, y), x, y);
+            intruder.setAgentPosition(map.getTile(x,y));
+            intruder.initializeEmptyMap(map);
+            intruder.computeVisibleTiles(map);
+        }
     }
 
 
@@ -65,10 +94,21 @@ public class GameRunner {
         //map.moveAgent(agent, DirectionEnum.RIGHT.getDirection());
         //System.out.println(map.getAgentPosition(agent));
         //for(int i =0; i<Scenario.config.getBASESPEEDINTRUDER(); i++){
-        map.moveAgent(agent, DirectionEnum.SOUTH);
-        agent.computeVisibleTiles(map);
+        //        map.moveAgent(agent, DirectionEnum.EAST);
+//        agent.computeVisibleTiles(map);
         // }
         //map.getGraphicsConnector().updateGraphics();
+
+        for (Guard guard: guards) {
+            map.moveAgent(guard, DirectionEnum.EAST);
+            guard.computeVisibleTiles(map);
+        }
+        if (isGameMode1) {
+            for (Intruder intruder : intruders) {
+                map.moveAgent(intruder, DirectionEnum.EAST);
+                intruder.computeVisibleTiles(map);
+            }
+        }
     }
 
 
@@ -77,7 +117,7 @@ public class GameRunner {
         Thread t = new Thread(() ->{
             while(true){
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 }
                 catch(InterruptedException e){
                     System.out.println("Threading issue");
@@ -94,9 +134,16 @@ public class GameRunner {
 
 
 
-    public Agent getAgent() {
-        return agent;
-    }
+//    public Agent getAgent() {
+//        return agent;
+//    }
+
+
+    public ArrayList<Guard> getGuards() {return guards;}
+
+    public ArrayList<Intruder> getIntruders() {return intruders;}
+
+    public boolean isGameMode1() {return isGameMode1;}
 
     public static void main(String[] args){
         GameRunner g = new GameRunner(new Scenario("textmap.txt"));

@@ -1,6 +1,8 @@
 package controller.Map;
 
 import agents.Agent;
+import agents.Guard;
+import agents.Intruder;
 import agents.TestAgent;
 import controller.Area;
 import controller.GraphicsConnector;
@@ -16,13 +18,14 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
 public class Map {
     private Tile[][] tiles;
     private Agent agent;
     private GraphicsConnector graphicsConnector;
     private Tile tileVersion;
-    private ArrayList<Agent> guards = new ArrayList<Agent>(); // TODO change to "Guard", "Intruder" later
-    private ArrayList<Agent> intruders = new ArrayList<>();
+    private ArrayList<Guard> guards = new ArrayList<>();
+    private ArrayList<Intruder> intruders = new ArrayList<>();
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
@@ -62,9 +65,12 @@ public class Map {
         Tile fromTile = agent.getAgentPosition();
         Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
 
-        changeTiles(fromTile, toTile);
+        changeTiles(agent, fromTile, toTile);
 
-        checkTeleport(fromTile, toTile);
+//        if (checkTeleport(fromTile, toTile)) {
+//            int a =0;
+//        changeTiles(fromTile, toTile);
+//        }
 
 
     }
@@ -76,10 +82,9 @@ public class Map {
             int y = teleportalTile.getY();
             fromTile = toTile;
             toTile = getTile(x, y);
-            changeTiles(fromTile, toTile);
         }
     }
-    public void changeTiles(Tile fromTile, Tile toTile){
+    public void changeTiles(Agent agent, Tile fromTile, Tile toTile){
         if(fromTile.isWalkable()) {
             getTile(fromTile.getX(),fromTile.getY()).removeAgent();
             getTile(toTile.getX(),toTile.getY()).addAgent(agent);
@@ -239,15 +244,19 @@ public class Map {
     public void spawnGuard(Area givenArea){
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
-        Agent tempAgent = new TestAgent(rand1, rand2);
+        Guard tempAgent = new Guard(rand1, rand2);
+        tempAgent.setAgentPosition(getTile(rand1,rand2));
         guards.add(tempAgent);
-        getTile(rand1, rand2).addAgent(tempAgent); // TODO replace with Guard agent later
+        getTile(rand1, rand2).addAgent(tempAgent);
     }
 
     public void spawnIntruder(Area givenArea){
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
-        // tiles[rand1][rand2].addAgent(new Intruder(rand1, rand2));
+        Intruder tempAgent = new Intruder(rand1, rand2);
+        tempAgent.setAgentPosition(getTile(rand1,rand2));
+        intruders.add(tempAgent);
+        getTile(rand1, rand2).addAgent(tempAgent);
     }
 
     private void initializeEmptyMap() {
@@ -560,4 +569,8 @@ public class Map {
     public void setGraphicsConnector(GraphicsConnector graphicsConnector) {
         this.graphicsConnector = graphicsConnector;
     }
+
+    public ArrayList<Guard> getGuards() {return guards;}
+
+    public ArrayList<Intruder> getIntruders() {return intruders;}
 }
