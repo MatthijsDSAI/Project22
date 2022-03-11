@@ -12,8 +12,8 @@ exploration/Baseline.java
  exploration.Baseline
 utils/DirectionEnum.java
  utils.DirectionEnum
-agents/Guard.java
- agents.Guard
+utils/Config.java
+ utils.Config
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
 GUI/MapScreen.java
@@ -22,8 +22,8 @@ GUI/GoodLuck.java
  GUI.GoodLuck
 exploration/FrontierBasedExploration.java
  exploration.FrontierBasedExploration
-agents/Intruder.java
- agents.Intruder
+utils/Utils.java
+ utils.Utils
 controller/TelePortal.java
  controller.TelePortal
 controller/Map/MapInitialization.java
@@ -34,10 +34,6 @@ GivenCode/ExGameAgent.java
  GivenCode.ExGameAgent
 controller/Scenario.java
  controller.Scenario
-utils/Config.java
- utils.Config
-utils/Utils.java
- utils.Utils
 GUI/StartScreen.java
  GUI.StartScreen
 GUI/StartButton.java
@@ -45,6 +41,8 @@ GUI/StartButton.java
  GUI.StartButton$1
 controller/GameRunner.java
  controller.GameRunner
+agents/Guard.java
+ agents.Guard
 controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
 controller/Map/tiles/SpawnAreaGuards.java
@@ -62,6 +60,8 @@ controller/Map/tiles/TargetArea.java
  controller.Map.tiles.TargetArea
 controller/Map/tiles/Shaded.java
  controller.Map.tiles.Shaded
+agents/Intruder.java
+ agents.Intruder
 agents/TestAgent.java
  agents.TestAgent
 controller/Map/tiles/Wall.java

@@ -69,7 +69,7 @@ public class GameRunner {
         for (Guard guard: guards) {
             int x = guard.getX_position();
             int y = guard.getY_position();
-            map.addAgent(new TestAgent(x, y), x, y);
+            map.addAgent(new TestAgent(x,y), x, y);
             guard.setAgentPosition(map.getTile(x,y));
             guard.initializeEmptyMap(map);
             guard.computeVisibleTiles(map);
@@ -115,7 +115,7 @@ public class GameRunner {
     public void run(){
         boolean explored = false;
         Thread t = new Thread(() ->{
-            while(true){
+            while(explored){
                 try {
                     Thread.sleep(1000);
                 }
