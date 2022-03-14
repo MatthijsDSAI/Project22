@@ -170,7 +170,6 @@ public abstract class Agent implements AgentI{
 
         //Todo: temp just for visualisation
         for(Tile tile : visibleTiles){
-            System.out.println(tile.getExplored());
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
         }

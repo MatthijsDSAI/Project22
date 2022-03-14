@@ -115,7 +115,7 @@ public class GameRunner {
     public void run(){
         boolean explored = false;
         Thread t = new Thread(() ->{
-            while(explored){
+            while(!explored){
                 try {
                     Thread.sleep(1000);
                 }
