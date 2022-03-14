@@ -52,7 +52,7 @@ public class FrontierBasedExploration {
         return y;
     }
 
-    public int[][] getMap(){
-        return Map;
+    public Tile[][] getMap(){
+        return map;
     }
 }
