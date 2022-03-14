@@ -146,6 +146,6 @@ public class GameRunner {
     public boolean isGameMode1() {return isGameMode1;}
 
     public static void main(String[] args){
-        GameRunner g = new GameRunner(new Scenario("textmap.txt"));
+        GameRunner g = new GameRunner(new Scenario("testmap.txt"));
     }
 }
