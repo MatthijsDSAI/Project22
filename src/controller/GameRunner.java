@@ -100,7 +100,7 @@ public class GameRunner {
         //map.getGraphicsConnector().updateGraphics();
 
         for (Guard guard: guards) {
-            map.moveAgent(guard, DirectionEnum.EAST);
+            map.moveAgent(guard, DirectionEnum.SOUTHEAST);
             guard.computeVisibleTiles(map);
         }
         if (isGameMode1) {
@@ -115,7 +115,7 @@ public class GameRunner {
     public void run(){
         boolean explored = false;
         Thread t = new Thread(() ->{
-            while(explored){
+            while(!explored){
                 try {
                     Thread.sleep(1000);
                 }

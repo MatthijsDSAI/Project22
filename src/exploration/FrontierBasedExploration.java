@@ -3,7 +3,7 @@ import controller.Map.Map;
 
 public class FrontierBasedExploration {
     //no prior information about the map
-    int[][] map= int[Map.horizontalSize+2][Map.verticalSize+2];
+//    int[][] map= int[Map.horizontalSize+2][Map.verticalSize+2];
     int x, y, angle;
 
     //Constructor -> tells which is the position of the robot and the angle
@@ -15,7 +15,7 @@ public class FrontierBasedExploration {
     }
 
     public void explore(){
-        map[x][y]=0;
+//        map[x][y]=0;
         //check vision field
         //update map
         //decide which fronteier to explore
@@ -50,7 +50,7 @@ public class FrontierBasedExploration {
         return y;
     }
 
-    public int[][] getMap(){
-        return Map;
-    }
+//    public int[][] getMap(){
+//        return Map;
+//    }
 }

@@ -71,8 +71,11 @@ public class Map {
 //            int a =0;
 //        changeTiles(fromTile, toTile);
 //        }
+    }
 
-
+    public void rotateAgent(Agent agent, DirectionEnum direction){
+        int rotate = (int) (direction.getAngle() - agent.getAngle());
+        agent.setAngle((int) (agent.getAngle() + rotate));
     }
 
     public void checkTeleport(Tile fromTile, Tile toTile){
@@ -84,6 +87,7 @@ public class Map {
             toTile = getTile(x, y);
         }
     }
+
     public void changeTiles(Agent agent, Tile fromTile, Tile toTile){
         if(fromTile.isWalkable()) {
             getTile(fromTile.getX(),fromTile.getY()).removeAgent();
@@ -109,6 +113,22 @@ public class Map {
         }
         else if(direction.equals(DirectionEnum.SOUTH)){
             y++;
+        }
+        else if(direction.equals(DirectionEnum.NORTHWEST)){
+            y--;
+            x--;
+        }
+        else if(direction.equals(DirectionEnum.NORTHEAST)){
+            y--;
+            x++;
+        }
+        else if(direction.equals(DirectionEnum.SOUTHWEST)){
+            y++;
+            x--;
+        }
+        else if(direction.equals(DirectionEnum.SOUTHEAST)){
+            y++;
+            x++;
         }
         return getTile(x,y);
     }
