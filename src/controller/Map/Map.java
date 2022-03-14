@@ -26,9 +26,25 @@ public class Map {
     private Tile tileVersion;
     private ArrayList<Guard> guards = new ArrayList<>();
     private ArrayList<Intruder> intruders = new ArrayList<>();
+    private int horizontalSize;
+    private int verticalSize;
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public int getHorizontalSize() {
+        return horizontalSize;
+    }
+
+    public int getVerticalSize() {
+        return verticalSize;
+    }
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
+        this.horizontalSize = horizontalSize;
+        this.verticalSize = verticalSize;
         tiles = new Tile[horizontalSize][verticalSize];
     }
 

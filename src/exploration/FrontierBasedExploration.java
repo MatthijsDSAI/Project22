@@ -1,21 +1,23 @@
 package exploration;
 import controller.Map.Map;
+import controller.Map.tiles.Tile;
 
 public class FrontierBasedExploration {
     //no prior information about the map
-    int[][] map= int[Map.horizontalSize+2][Map.verticalSize+2];
+    Tile[][] map;
     int x, y, angle;
 
     //Constructor -> tells which is the position of the robot and the angle
-    public FrontierBasedExploration(int x, int y, int angle) {
+    public FrontierBasedExploration(int x, int y, int angle, int horizontalSize, int verticalSize) {
         this.x=x;
         this.y=y;
         this.angle=angle;
+        map = new Tile[horizontalSize][verticalSize];
         explore();
     }
 
     public void explore(){
-        map[x][y]=0;
+        map[x][y]=null;
         //check vision field
         //update map
         //decide which fronteier to explore
