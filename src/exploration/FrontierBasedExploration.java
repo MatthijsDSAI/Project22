@@ -1,27 +1,57 @@
 package exploration;
+import agents.Agent;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 
-public class FrontierBasedExploration {
-    //no prior information about the map
-    Tile[][] map;
-//    int[][] map= int[Map.horizontalSize+2][Map.verticalSize+2];
-    int x, y, angle;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
-    //Constructor -> tells which is the position of the robot and the angle
-    public FrontierBasedExploration(int x, int y, int angle, int horizontalSize, int verticalSize) {
-        this.x=x;
-        this.y=y;
-        this.angle=angle;
-        map = new Tile[horizontalSize][verticalSize];
+public class FrontierBasedExploration extends Agent {
+    //no prior information about the map
+    int x, y, angle;
+    int visited[];
+    boolean map_covered=false;
+    Map map;
+    Queue<Tile> frontiers = new PriorityQueue<Tile> ();
+    public FrontierBasedExploration(int x, int y){
+        super(x,y);
         explore();
     }
 
+    //x is the starting node
+    public void dfs(int x){
+        initv();
+        visited[x]=1;
+        for(Tile t:frontiers) {
+            //add traverse of right and left nodes when dif of 0 and not visited before
+                dfs(t.getX());
+        }
+    }
+    public void initv(){
+        for(int i=0; i<visited.length;i++)
+            visited[i]=0;
+    }
+
     public void explore(){
-        map[x][y]=null;
-//        map[x][y]=0;
-        //check vision field
-        //update map
+    /* while ( !map_covered & !no_frontier_with_e
+    ܯ map -> Current_map
+ܴ    R -> Robot_position
+    F <- Find_frontier_points(M)
+    Fc <-Distances_based_connected_component(F)
+    for each Fc
+    Fcg <- Find_cluster_center(Fc)
+    Ftarget <= argmin g {Traversible_distance(Fcg, R)} */
+        //initialize map as empty
+        initializeEmptyMap(map);
+        while (map_covered != true)
+        {
+            //add frontiers as they are visited, to explore all frontiers connected to a tile
+            frontiers.add(getAgentPosition());
+            //check visual field
+            computeVisibleTiles(map);
+            //move forward by 1 step
+            move();
+        }
         //decide which fronteier to explore
     }
 
@@ -42,7 +72,7 @@ public class FrontierBasedExploration {
         this.angle=angle;
     }
 
-    public int getAngle(){
+    public double getAngle(){
         return angle;
     }
 
@@ -54,7 +84,7 @@ public class FrontierBasedExploration {
         return y;
     }
 
-    public Tile[][] getMap(){
+    public Map getMap(){
         return map;
     }
 }

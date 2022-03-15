@@ -5,13 +5,12 @@ import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import javafx.scene.paint.Color;
-import utils.DirectionEnum;
 import utils.Utils;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public abstract class Agent implements AgentI{
+public abstract class Agent{
     double audiostdeviation;
     int x_position,y_position, angle;
     DirectionEnum direction;
@@ -21,8 +20,13 @@ public abstract class Agent implements AgentI{
     //not to be used in agent class
     private Tile agentPosition;
 
-
-
+    public Agent(Tile agentpos){
+        this.agentPosition = agentpos;
+        this.a_name = "Agent";
+        this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
+        this.audiostdeviation=10;
+        angle=180;
+    }
 
     public Agent(int x_position, int y_position)
     {
@@ -31,7 +35,7 @@ public abstract class Agent implements AgentI{
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        direction = DirectionEnum.EAST;
+        angle=180;
     }
 
     public Agent(double baseSpeed, int x_position, int y_position, int angle)
@@ -54,7 +58,6 @@ public abstract class Agent implements AgentI{
         this.angle=angle;
     }
 
-    @Override
     public void setVelocities(double speed, double rest, double sprint_time, double turn_speed, double noise_level)
     {
         this.baseSpeed=speed;
@@ -64,7 +67,6 @@ public abstract class Agent implements AgentI{
         this.noiseProd = noise_level;
     }
 
-    @Override
     public void setVisualcap(double range, double angle, double visibility){
         this.range = range;
         this.visangle = angle;
@@ -72,13 +74,10 @@ public abstract class Agent implements AgentI{
     }
 
     //To be done
-    @Override
     public void setAudiocap(){
         this.audiostdeviation=10;
     }
 
-    @Override
-    //1-> visited, the rest will be determined later
     public void setCommunication(Area[] markers, int[] type){
         //To be done
     }
@@ -88,8 +87,6 @@ public abstract class Agent implements AgentI{
         //if object is a wall turnDirection
     }
 
-
-    //Is my logic here valid?
     public void turnNorth()
     {
         rotate(-angle);
@@ -145,25 +142,25 @@ public abstract class Agent implements AgentI{
         //0  -> north
         if(angle == 0)
         {
-            y_position--;
+            y_position++;
             //checkarea();
         }
         //90 -> east
         if(angle == 90)
         {
-            x_position--;
+            x_position++;
             //checkarea();
         }
         //180 -> South
         if(angle == 180)
         {
-            y_position++;
+            y_position--;
             //checkarea();
         }
         // 270 -> west
         if(angle == 270)
         {
-            x_position++;
+            x_position--;
             //checkarea();
         }
         //check relationship between speed and position when related to time
