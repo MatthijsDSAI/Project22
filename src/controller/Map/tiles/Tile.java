@@ -19,6 +19,7 @@ public abstract class Tile {
     private Agent agent;
     private int x;
     private int y;
+    private double weight;
 
     protected Tile(){}
 
@@ -50,6 +51,10 @@ public abstract class Tile {
 
     public int getX() {return this.x;}
     public void setX(int x) {this.x = x;}
+
+    public double getWeight() {return this.weight;}
+    public void setWeight(double weight) {this.weight = weight;}
+
 
     public int getY() {return y;}
     public void setY(int y) {this.y = y;}
