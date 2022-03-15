@@ -6,13 +6,10 @@ import agents.Guard;
 import agents.Intruder;
 import agents.TestAgent;
 import controller.Map.Map;
-import controller.Map.tiles.SpawnAreaIntruders;
-import controller.Map.tiles.TeleportalTile;
-import javafx.application.Platform;
 import utils.Config;
-import utils.DirectionEnum;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 //idea is to make this the class where we run store everything and have our main loop
 public class GameRunner {
@@ -100,12 +97,12 @@ public class GameRunner {
         //map.getGraphicsConnector().updateGraphics();
 
         for (Guard guard: guards) {
-            map.moveAgent(guard, DirectionEnum.EAST);
+            map.moveAgent(guard);
             guard.computeVisibleTiles(map);
         }
         if (isGameMode1) {
             for (Intruder intruder : intruders) {
-                map.moveAgent(intruder, DirectionEnum.EAST);
+                map.moveAgent(intruder);
                 intruder.computeVisibleTiles(map);
             }
         }
@@ -113,17 +110,17 @@ public class GameRunner {
 
 
     public void run(){
-        boolean explored = false;
+        AtomicBoolean explored = new AtomicBoolean(false);
         Thread t = new Thread(() ->{
-            while(!explored){
+            while(!explored.get()){
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(Scenario.config.getSleep());
                 }
                 catch(InterruptedException e){
                     System.out.println("Threading issue");
                 }
                 step();
-                //explored = map.isExplored();
+                explored.set(map.isExplored());
                 System.out.println(map.explored() + " of map has been explored");
                 //map.printMap();
 

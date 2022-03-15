@@ -1,7 +1,8 @@
-controller/Area.java
- controller.Area
-mapgenerator/SimpleMapReader.java
- mapgenerator.SimpleMapReader
+GUI/StartScreen.java
+ GUI.StartScreen
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
 agents/AgentI.java
  agents.AgentI
 GivenCode/FileWatcher.java
@@ -10,8 +11,9 @@ exploration/RandomExploration.java
  exploration.RandomExploration
 exploration/Baseline.java
  exploration.Baseline
-utils/DirectionEnum.java
- utils.DirectionEnum
+GUI/MapGui.java
+ GUI.MapGui
+ GUI.MapGui$1
 utils/Utils.java
  utils.Utils
 controller/Map/MapInitialization.java
@@ -20,20 +22,26 @@ GUI/MapScreen.java
  GUI.MapScreen
 GUI/GoodLuck.java
  GUI.GoodLuck
-GivenCode/ExGameAgent.java
- GivenCode.ExGameAgent
-utils/Config.java
- utils.Config
-controller/Scenario.java
- controller.Scenario
+controller/Area.java
+ controller.Area
+mapgenerator/SimpleMapReader.java
+ mapgenerator.SimpleMapReader
+controller/TelePortal.java
+ controller.TelePortal
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
 controller/GameMode.java
  controller.GameMode
-controller/TelePortal.java
- controller.TelePortal
-GUI/StartScreen.java
- GUI.StartScreen
+GivenCode/ExGameAgent.java
+ GivenCode.ExGameAgent
+controller/Scenario.java
+ controller.Scenario
+utils/Config.java
+ utils.Config
+Explorer.java
+ Explorer
+utils/DirectionEnum.java
+ utils.DirectionEnum
 controller/GameRunner.java
  controller.GameRunner
 agents/Guard.java
@@ -42,9 +50,6 @@ controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
-GUI/MapGui.java
- GUI.MapGui
- GUI.MapGui$1
 exploration/FrontierBasedExploration.java
  exploration.FrontierBasedExploration
 controller/Map/tiles/SpawnAreaIntruders.java
@@ -63,11 +68,6 @@ agents/TestAgent.java
  agents.TestAgent
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
-Explorer.java
- Explorer
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
 controller/Map/Map.java

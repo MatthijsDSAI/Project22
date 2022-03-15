@@ -77,37 +77,38 @@ public class Map {
         }
     }
 
-    public void moveAgent(Agent agent, DirectionEnum direction){
+    public void moveAgent(Agent agent){
         Tile fromTile = agent.getAgentPosition();
-        Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
-
+        Tile toTile = getTileFromDirection(agent.getAgentPosition(), agent.getDirection());
         changeTiles(agent, fromTile, toTile);
 
-//        if (checkTeleport(fromTile, toTile)) {
-//            int a =0;
-//        changeTiles(fromTile, toTile);
-//        }
+        if (checkTeleport(fromTile, toTile)) {
 
-
-    }
-
-    public void checkTeleport(Tile fromTile, Tile toTile){
-        if(toTile.toString().equals("TelePortal")){
+            changeTiles(agent, fromTile, toTile);
             TeleportalTile teleportalTile = (TeleportalTile) getTile(toTile.getX(), toTile.getY());
-            int x = teleportalTile.getX();
-            int y = teleportalTile.getY();
+            int x = teleportalTile.getTargetX();
+            int y = teleportalTile.getTargetY();
             fromTile = toTile;
             toTile = getTile(x, y);
+
+            changeTiles(agent, fromTile, toTile);
+            agent.setDirection(DirectionEnum.getDirection(teleportalTile.getAngle()));
         }
+
+
+    }
+
+    public boolean checkTeleport(Tile fromTile, Tile toTile){
+        return toTile.toString().equals("TelePortal");
     }
     public void changeTiles(Agent agent, Tile fromTile, Tile toTile){
-        if(fromTile.isWalkable()) {
+        if(toTile.isWalkable()) {
             getTile(fromTile.getX(),fromTile.getY()).removeAgent();
             getTile(toTile.getX(),toTile.getY()).addAgent(agent);
             agent.setAgentPosition(toTile);
         }
         else{
-            throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
+            throw new IllegalStateException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
         }
     }
 
@@ -290,7 +291,7 @@ public class Map {
 
     public ArrayList<Tile> computeVisibleTiles(Agent agent) {
         int d = Scenario.config.getDistanceViewing();
-        double angle = agent.getAngle();
+        double angle = agent.getDirection().getAngle();
         int agentX = agent.getAgentPosition().getX();
         int agentY = agent.getAgentPosition().getY();
         ArrayList<Tile> visibleTiles = new ArrayList<>();

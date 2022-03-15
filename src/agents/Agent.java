@@ -5,6 +5,7 @@ import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import javafx.scene.paint.Color;
+import utils.DirectionEnum;
 import utils.Utils;
 
 import java.awt.geom.Point2D;
@@ -13,11 +14,13 @@ import java.util.ArrayList;
 public abstract class Agent implements AgentI{
     double audiostdeviation;
     int x_position,y_position, angle;
+    DirectionEnum direction;
     public String a_name;
     double baseSpeed, range, visangle, visibility,restTime,sprintTime, turn_speed, noiseProd;
     public Map ownMap;
     //not to be used in agent class
     private Tile agentPosition;
+
 
 
 
@@ -28,7 +31,7 @@ public abstract class Agent implements AgentI{
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=180;
+        direction = DirectionEnum.EAST;
     }
 
     public Agent(double baseSpeed, int x_position, int y_position, int angle)
@@ -107,6 +110,13 @@ public abstract class Agent implements AgentI{
         rotate(-angle-90);
     }
 
+    public DirectionEnum getDirection() {
+        return direction;
+    }
+
+    public void setDirection(DirectionEnum direction) {
+        this.direction = direction;
+    }
 
     //I changed this so that it only actually moves forward by one step. So the angle has to be changed beforehand.
     //Also not baseSpeed but 1
