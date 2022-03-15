@@ -1,18 +1,22 @@
 package exploration;
 
-import static java.lang.Math.*;
+import utils.DirectionEnum;
 
-public class RandomExploration {
+public class RandomExploration extends Exploration {
 
-    public static int randomMove() {
-        int randomMove = (int) (Math.random() * 360);
-        if (randomMove < 90) {
-            return 0;
-        } else if (randomMove < 180) {
-            return 90;
-        } else if (randomMove < 270) {
-            return 180;
-        } else return 270;
+    @Override
+    public DirectionEnum makeMove() {
+        int randomMove = (int) (Math.random()*3);
+        return switch (randomMove) {
+            case 0 -> DirectionEnum.WEST;
+            case 1 -> DirectionEnum.EAST;
+            case 2 -> DirectionEnum.NORTH;
+            default -> DirectionEnum.SOUTH;
+        };
     }
 
+    @Override
+    public String getExplorationName() {
+        return "RandomExploration";
+    }
 }

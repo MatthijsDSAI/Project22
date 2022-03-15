@@ -2,6 +2,7 @@ package exploration;
 import agents.Agent;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
+import utils.DirectionEnum;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -50,7 +51,7 @@ public class FrontierBasedExploration extends Agent {
             //check visual field
             computeVisibleTiles(map);
             //move forward by 1 step
-            move();
+            // move();
         }
         //decide which fronteier to explore
     }

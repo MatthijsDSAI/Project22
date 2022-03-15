@@ -1,41 +1,46 @@
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
-utils/DirectionEnum.java
- utils.DirectionEnum
+controller/GameMode.java
+ controller.GameMode
 agents/AgentI.java
  agents.AgentI
 GivenCode/FileWatcher.java
  GivenCode.FileWatcher
-exploration/RandomExploration.java
- exploration.RandomExploration
+GivenCode/ExGameAgent.java
+ GivenCode.ExGameAgent
 exploration/Baseline.java
  exploration.Baseline
-utils/Config.java
- utils.Config
+mapgenerator/SimpleMapReader.java
+ mapgenerator.SimpleMapReader
 utils/Utils.java
  utils.Utils
 controller/Map/MapInitialization.java
  controller.Map.MapInitialization
 GUI/MapScreen.java
  GUI.MapScreen
-GUI/GoodLuck.java
- GUI.GoodLuck
-controller/GameMode.java
- controller.GameMode
-mapgenerator/SimpleMapReader.java
- mapgenerator.SimpleMapReader
-controller/Area.java
- controller.Area
-controller/TelePortal.java
- controller.TelePortal
+utils/Config.java
+ utils.Config
 GUI/StartScreen.java
  GUI.StartScreen
+controller/TelePortal.java
+ controller.TelePortal
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
+utils/DirectionEnum.java
+ utils.DirectionEnum
+controller/Scenario.java
+ controller.Scenario
+controller/Area.java
+ controller.Area
 controller/GameRunner.java
  controller.GameRunner
 agents/Guard.java
  agents.Guard
 controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
+exploration/RandomExploration.java
+ exploration.RandomExploration
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
 GUI/MapGui.java
@@ -47,12 +52,10 @@ controller/Map/tiles/SpawnAreaIntruders.java
  controller.Map.tiles.SpawnAreaIntruders
 controller/GraphicsConnector.java
  controller.GraphicsConnector
-GivenCode/ExGameAgent.java
- GivenCode.ExGameAgent
+exploration/Exploration.java
+ exploration.Exploration
 controller/Map/tiles/TeleportalTile.java
  controller.Map.tiles.TeleportalTile
-controller/Scenario.java
- controller.Scenario
 controller/Map/tiles/TargetArea.java
  controller.Map.tiles.TargetArea
 controller/Map/tiles/Shaded.java
@@ -63,9 +66,6 @@ agents/TestAgent.java
  agents.TestAgent
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
 Explorer.java
  Explorer
 controller/Map/tiles/Floor.java
