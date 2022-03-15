@@ -14,7 +14,7 @@ Automated surveillance of different environments through cooperating mobile agen
 How to run the code correctly:
 
 Please make sure you have installed a version of Java, Gradle on your device.
-To run the GUI, run the MapGui class. (project --> src --> GUI --> MapGui)
+To run the GUI, run the GameRunner class. (project --> src --> controller --> GameRunner)
 
 ## IntelliJ
 After downloading the code, go to:
