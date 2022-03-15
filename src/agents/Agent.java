@@ -81,9 +81,15 @@ public abstract class Agent{
         //To be done
     }
 
-    public void checkarea()
+    public boolean checkarea(int posx, int posy)
     {
-        //if object is a wall turnDirection
+        Tile check = agentPosition;
+        check.setX(posx);
+        check.setY(posy);
+        if(check.isWalkable()==true)
+            return true;
+        else
+            return false;
     }
 
     public void turnNorth()
@@ -115,25 +121,25 @@ public abstract class Agent{
         if(angle == 0)
         {
             y_position++;
-            //checkarea();
+//            checkarea(x_position,y_position);
         }
         //90 -> east
         if(angle == 90)
         {
             x_position++;
-            //checkarea();
+            //checkarea(x_position,y_position);
         }
         //180 -> South
         if(angle == 180)
         {
             y_position--;
-            //checkarea();
+            //checkarea(x_position,y_position);
         }
         // 270 -> west
         if(angle == 270)
         {
             x_position--;
-            //checkarea();
+            //checkarea(x_position,y_position);
         }
         //check relationship between speed and position when related to time
     }
