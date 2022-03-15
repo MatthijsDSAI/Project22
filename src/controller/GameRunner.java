@@ -28,6 +28,8 @@ public class GameRunner {
         isGameMode1 = (scenario.getGameMode() == 1);
         init();
         GraphicsConnector graphicsConnector = new GraphicsConnector(this);
+        graphicsConnector.setGuiHeight((scenario.getMapHeight()+1)*10);
+        graphicsConnector.setGuiWidth((scenario.getMapWidth()+1)*10);
         gui = new MapGui();
         map.setGraphicsConnector(graphicsConnector);
 

@@ -23,6 +23,8 @@ public class GraphicsConnector {
     private ArrayList<Guard> guards;
     private ArrayList<Intruder> intruders;
     private MapGui gui;
+    private int guiHeight;
+    private int guiWidth;
     public GraphicsConnector(GameRunner gameRunner) {
         this.gameRunner = gameRunner;
         map = gameRunner.getMap();
@@ -73,4 +75,22 @@ public class GraphicsConnector {
     public void setGui(MapGui gui) {
         this.gui = gui;
     }
+
+    public void setGuiHeight(int height) {
+        guiHeight = height;
+    }
+
+    public int getGuiHeight() {
+        return guiHeight;
+    }
+
+    public void setGuiWidth(int width) {
+        guiWidth = width;
+    }
+
+    public int getGuiWidth() {
+        return guiWidth;
+    }
+
+
 }

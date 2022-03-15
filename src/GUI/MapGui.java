@@ -62,8 +62,8 @@ public class MapGui extends Application {
 
         row = map.length;
         col = map[0].length;
-        mapHeight = 810;
-        mapWidth = 1210;
+        mapHeight = graphicsConnector.getGuiHeight();
+        mapWidth = graphicsConnector.getGuiWidth();
         //root = createPane();
         //Scene scene = new Scene(root, mapWidth, mapHeight);
         this.mainMenu = new StartScreen(this);
