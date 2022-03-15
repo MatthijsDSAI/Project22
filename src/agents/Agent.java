@@ -10,7 +10,7 @@ import utils.Utils;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public abstract class Agent implements AgentI{
+public abstract class Agent{
     double audiostdeviation;
     int x_position,y_position, angle;
     public String a_name;
@@ -19,15 +19,22 @@ public abstract class Agent implements AgentI{
     //not to be used in agent class
     private Tile agentPosition;
 
+    public Agent(Tile agentpos){
+        this.agentPosition = agentpos;
+        this.a_name = "Agent";
+        this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
+        this.audiostdeviation=10;
+        angle=180;
+    }
+
     public Agent(int x_position, int y_position)
     {
-
         this.x_position = x_position;
         this.y_position = y_position;
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=0;
+        angle=180;
     }
 
     public Agent(double baseSpeed, int x_position, int y_position, int angle)
@@ -50,7 +57,6 @@ public abstract class Agent implements AgentI{
         this.angle=angle;
     }
 
-    @Override
     public void setVelocities(double speed, double rest, double sprint_time, double turn_speed, double noise_level)
     {
         this.baseSpeed=speed;
@@ -60,7 +66,6 @@ public abstract class Agent implements AgentI{
         this.noiseProd = noise_level;
     }
 
-    @Override
     public void setVisualcap(double range, double angle, double visibility){
         this.range = range;
         this.visangle = angle;
@@ -68,13 +73,10 @@ public abstract class Agent implements AgentI{
     }
 
     //To be done
-    @Override
     public void setAudiocap(){
         this.audiostdeviation=10;
     }
 
-    @Override
-    //1-> visited, the rest will be determined later
     public void setCommunication(Area[] markers, int[] type){
         //To be done
     }
@@ -84,8 +86,6 @@ public abstract class Agent implements AgentI{
         //if object is a wall turnDirection
     }
 
-
-    //Is my logic here valid?
     public void turnNorth()
     {
         rotate(-angle);
@@ -169,14 +169,11 @@ public abstract class Agent implements AgentI{
 
         //Todo: temp just for visualisation
         for(Tile tile : visibleTiles){
-            if(!tile.hasAgent())
-                tile.setColor(Color.CYAN);
-            if(tile.hasAgent()){
-                tile.setColor(Color.YELLOW);
-            }
+            tile.setExplored(true);
             ownMap.setTile(tile.clone());
         }
     }
+
 
     public void setAgentPosition(Tile tile){
         agentPosition = tile;
@@ -184,5 +181,13 @@ public abstract class Agent implements AgentI{
 
     public Tile getAgentPosition(){
         return agentPosition;
+    }
+
+    public int getX_position() {
+        return x_position;
+    }
+
+    public int getY_position() {
+        return y_position;
     }
 }

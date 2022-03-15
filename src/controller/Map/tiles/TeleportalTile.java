@@ -38,7 +38,7 @@ public class TeleportalTile extends Tile {
 //            }
 //            throw new RuntimeException("There is no agent to teleport on tile: " + getX() + ", " + getY());
 //        }
-    public TeleportalTile clone(TeleportalTile teleportalTile){
-        return new TeleportalTile(teleportalTile.getX(), teleportalTile.getY(), teleportalTile.getTargetX(), teleportalTile.getTargetY(), teleportalTile.getAngle());
+    public TeleportalTile clone(){
+        return new TeleportalTile(this.getX(), this.getY(), this.getTargetX(), this.getTargetY(), this.getAngle());
     }
 }

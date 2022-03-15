@@ -14,6 +14,9 @@ public enum DirectionEnum {
         this.direction = direction;
         this.angle = angle;
     }
+
+
+
     public String getDirection(){
         return direction;
     }
@@ -21,7 +24,7 @@ public enum DirectionEnum {
 
 
     //i think this should work, but might require debugging
-    public DirectionEnum getDirection(int angle) {
+    public static DirectionEnum getDirection(double angle) {
         if(angle>=360){
             angle-=360;
         }

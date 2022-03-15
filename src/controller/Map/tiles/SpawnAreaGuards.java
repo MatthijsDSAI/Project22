@@ -6,7 +6,7 @@ public class SpawnAreaGuards extends Tile {
     public SpawnAreaGuards(int x, int y) {
         this.setWalkable(true);
         this.setSeeThrough(true);
-        this.setExploredByDefault(true);
+        this.setExploredByDefault(false);
         this.setColor(Color.MIDNIGHTBLUE);
         this.setX(x);
         this.setY(y);

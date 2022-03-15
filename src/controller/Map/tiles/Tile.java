@@ -1,6 +1,7 @@
 package controller.Map.tiles;
 
 import agents.Agent;
+import controller.Scenario;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -12,6 +13,7 @@ public abstract class Tile {
     private boolean exploredByDefault;
     private boolean walkable;
     private boolean seeThrough;
+    private boolean explored;
     private Color c;
     private Tile type;
     private Agent agent;
@@ -22,6 +24,7 @@ public abstract class Tile {
 
     public Tile(boolean exploredByDefault, boolean walkable, boolean seeThrough, Color c, Tile type, Agent agent) {
         this.exploredByDefault = exploredByDefault;
+        this.explored = exploredByDefault;
         this.walkable = walkable;
         this.seeThrough = seeThrough;
         this.c = c;
@@ -64,16 +67,31 @@ public abstract class Tile {
     }
 
     public void removeAgent() {this.agent = null;}
+
     public boolean hasAgent() {return (agent != null);}
 
     public javafx.scene.shape.Rectangle createRec(int x, int y){return new Rectangle(x, y,10,10);}
 
     public Color getColor() { //TODO: find a solution to this, we need 2 different type of colour here
+        if(hasAgent()){
+            return Scenario.config.getAgentColor();
+        }
+        if(explored){
+            return Color.TAN;
+        }
         return c;
     }
     public void setColor(Color c) {this.c = c;}
 
     public Tile clone(){
         return null;
+    }
+
+    public void setExplored(boolean b){
+        explored = true;
+    }
+
+    public boolean getExplored() {
+        return explored;
     }
 }
