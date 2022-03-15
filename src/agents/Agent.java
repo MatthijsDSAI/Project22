@@ -95,9 +95,20 @@ public abstract class Agent implements AgentI{
         rotate(-angle);
     }
 
+    public void turnNorthWest()
+    {
+        rotate(-angle+45);
+    }
+
     public void turnEast()
     {
-        rotate(-angle+90);
+        //rotate(-angle+90);
+        rotate(-angle+270);
+    }
+
+    public void turnSouthWest()
+    {
+        rotate(-angle+135);
     }
 
     public void turnSouth()
@@ -105,9 +116,14 @@ public abstract class Agent implements AgentI{
         rotate(-angle+180);
     }
 
+    public void turnSouthEast()
+    {
+        rotate(-angle+225);
+    }
+
     public void turnWest()
     {
-        rotate(-angle-90);
+        rotate(-angle+90);
     }
 
     public DirectionEnum getDirection() {
@@ -117,6 +133,10 @@ public abstract class Agent implements AgentI{
     public void setDirection(DirectionEnum direction) {
         this.direction = direction;
     }
+    public void turnNorthEast()
+    {
+        rotate(-angle+315);
+    }
 
     //I changed this so that it only actually moves forward by one step. So the angle has to be changed beforehand.
     //Also not baseSpeed but 1
@@ -125,25 +145,25 @@ public abstract class Agent implements AgentI{
         //0  -> north
         if(angle == 0)
         {
-            y_position++;
+            y_position--;
             //checkarea();
         }
         //90 -> east
         if(angle == 90)
         {
-            x_position++;
+            x_position--;
             //checkarea();
         }
         //180 -> South
         if(angle == 180)
         {
-            y_position--;
+            y_position++;
             //checkarea();
         }
         // 270 -> west
         if(angle == 270)
         {
-            x_position--;
+            x_position++;
             //checkarea();
         }
         //check relationship between speed and position when related to time
@@ -200,5 +220,9 @@ public abstract class Agent implements AgentI{
 
     public int getY_position() {
         return y_position;
+    }
+
+    public void setAngle(int angle) {
+        this.angle = angle;
     }
 }

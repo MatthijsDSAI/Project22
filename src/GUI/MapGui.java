@@ -128,7 +128,7 @@ public class MapGui extends Application {
             public void handle(ActionEvent event) {
                 drawMap(p);
                 //stage.getScene().setRoot(p);
-                update();
+//                update();
                 graphicsConnector.getMapOfColors();
 
             }
