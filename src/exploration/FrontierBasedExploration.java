@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class FrontierBasedExploration {
+public class FrontierBasedExploration extends Exploration{
     //no prior information about the map
     int x, y;
 //    boolean visited[];
 //    boolean map_covered=false;
+
     Map map;
     Tile tile;
     //1st in, 1st out
@@ -26,6 +27,7 @@ public class FrontierBasedExploration {
     public FrontierBasedExploration(int x, int y){
         this.x=x;
         this.y=y;
+
     }
 
     private double calculateWeight(Tile t)
@@ -38,6 +40,7 @@ public class FrontierBasedExploration {
 
     //x is the starting Tile
     // a is the agent on the current position
+    @Override
     public void dfs(Tile x, Agent a) {
         x.setExplored(true);
         //agent moves a tile
@@ -50,7 +53,7 @@ public class FrontierBasedExploration {
             if(a.getCurrentDirection()== DirectionEnum.NORTH)
             {
 
-                int topLimit = Math.min(0, a.getY_position()  -a.getViewingDistance()+1);
+                int topLimit = Math.max(0, a.getY_position() -a.getViewingDistance()+1);
                 int leftBorder = a.getX_position()-2;
                 int rightBorder = a.getX_position()+2;
                 for(int j=a.getY_position(); j>=topLimit; j--){
@@ -127,6 +130,7 @@ public class FrontierBasedExploration {
     }
 
     public void computeVisibleTiles(Map map, Agent a){
+
         ArrayList<Tile> visibleTiles = map.computeVisibleTiles(a);
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
@@ -156,7 +160,203 @@ public class FrontierBasedExploration {
         this.x=x;
         this.y=y;
     }
+    public void selectFrontiers(Agent a, Map map){
 
+        if(a.getCurrentDirection() == DirectionEnum.NORTH){
+
+            int topLimit = Math.max(0, a.getY_position() -a.getViewingDistance()+1);
+            int leftBorder = a.getX_position()-2;
+            int rightBorder = a.getX_position()+2;
+            boolean leftSide = true;
+            boolean rightSide = true;
+            for(int j=a.getY_position(); j>=topLimit; j--){
+                if(leftBorder>=0 && leftSide){
+                    //set the weight of the frontier based on the previous seen tile
+                    if(j==a.getY_position()){
+                        frontiers.add(map.getTile(leftBorder, j));
+                    }
+                    if(map.getTile(leftBorder, j+1).isSeeThrough()){
+                        frontiers.add(map.getTile(leftBorder, j));
+                    }
+                    else{
+                        leftSide = false;
+                    }
+                }
+
+                if(rightBorder<=map.getHorizontalSize()-1 && rightSide){
+                    if(j==a.getY_position()){
+                        frontiers.add(map.getTile(rightBorder, j));
+                    }
+                    else if(map.getTile(rightBorder, j+1).isSeeThrough()){
+                        frontiers.add(map.getTile(rightBorder, j));
+                    }
+                    else{
+                        rightSide = false;
+                    }
+                }
+            }
+            if(a.getY_position()+1<=map.getVerticalSize()-1){
+                for(int i = leftBorder; i<=rightBorder; i++) {
+                    if(i>=0 && i<=map.getHorizontalSize()-1){
+                        frontiers.add(map.getTile(i, a.getY_position()+1));
+                    }
+                }
+            }
+
+            if(a.getY_position()-a.getViewingDistance()>=0){
+                for(int i = leftBorder; i<=rightBorder; i++) {
+                    if(i>=0 && i<=map.getHorizontalSize()-1 && map.getTile(i, a.getY_position()-a.getViewingDistance()+1).isSeeThrough()){
+                        frontiers.add(map.getTile(i, a.getY_position()-a.getViewingDistance()));
+                    }
+                }
+            }
+        }
+        if(a.getCurrentDirection() == DirectionEnum.SOUTH){
+            int bottomLimit = Math.min(map.getVerticalSize()-1, a.getY_position() +a.getViewingDistance()-1);
+            int leftBorder = a.getX_position()-2;
+            int rightBorder = a.getX_position()+2;
+            boolean leftSide = true;
+            boolean rightSide = true;
+            for(int j=a.getY_position(); j<=bottomLimit; j++){
+                if(leftBorder>=0 && leftSide){
+                    if(j==a.getY_position()){
+                        frontiers.add(map.getTile(leftBorder, j));
+                    }
+                    //set the weight of the frontier based on the previous seen tile
+                    else if(map.getTile(leftBorder, j-1).isSeeThrough()){
+                        frontiers.add(map.getTile(leftBorder, j));
+                    }
+                    else{
+                        leftSide = false;
+                    }
+                }
+
+                if(rightBorder<=map.getHorizontalSize()-1 && rightSide){
+                    if(j==a.getY_position()){
+                        frontiers.add(map.getTile(rightBorder, j));
+                    }
+                    else if(map.getTile(rightBorder, j-1).isSeeThrough()){
+                        frontiers.add(map.getTile(rightBorder, j));
+                    }
+                    else{
+                        rightSide = false;
+                    }
+                }
+            }
+            if(a.getY_position()-1>=0){
+                for(int i = leftBorder; i<=rightBorder; i++) {
+                    if(i>=0 && i<=map.getHorizontalSize()-1){
+                        frontiers.add(map.getTile(i, a.getY_position()-1));
+                    }
+                }
+            }
+
+            if(a.getY_position()+a.getViewingDistance()<=map.getVerticalSize()){
+                for(int i = leftBorder; i<=rightBorder; i++) {
+                    if(i>=0 && i<=map.getHorizontalSize()-1 && map.getTile(i, a.getY_position()+a.getViewingDistance()-1).isSeeThrough()){
+                        frontiers.add(map.getTile(i, a.getY_position()+a.getViewingDistance()));
+                    }
+                }
+            }
+        }
+
+        if(a.getCurrentDirection() == DirectionEnum.EAST){
+            int rightLimit = Math.min(map.getHorizontalSize()-1, a.getX_position() +a.getViewingDistance()-1);
+            int topBorder = a.getY_position()-2;
+            int bottomBorder = a.getY_position()+2;
+            boolean topSide = true;
+            boolean bottomSide = true;
+            for(int i=a.getX_position(); i<=rightLimit; i++){
+                if(topBorder>=0 && topSide){
+                    if(i==a.getX_position()){
+                        frontiers.add(map.getTile(i, topBorder));
+                    }
+                    //set the weight of the frontier based on the previous seen tile
+                    else if(map.getTile(i-1, topBorder).isSeeThrough()){
+                        frontiers.add(map.getTile(i, topBorder));
+                    }
+                    else{
+                        topSide = false;
+                    }
+                }
+
+                if(bottomBorder<=map.getVerticalSize()-1 && bottomSide){
+                    if(i==a.getX_position()){
+                        frontiers.add(map.getTile(i, bottomBorder));
+                    }
+                    else if(map.getTile(i-1, bottomBorder).isSeeThrough()){
+                        frontiers.add(map.getTile(i, bottomBorder));
+                    }
+                    else{
+                        bottomSide = false;
+                    }
+                }
+            }
+            if(a.getX_position()-1>=0){
+                for(int j = topBorder; j<=bottomBorder; j++) {
+                    if(j>=0 && j<=map.getVerticalSize()-1){
+                        frontiers.add(map.getTile(a.getX_position()-1, j));
+                    }
+                }
+            }
+
+            if(a.getX_position()+a.getViewingDistance()<=map.getHorizontalSize()){
+                for(int j = topBorder; j<=bottomBorder; j++) {
+                    if(j>=0 && j<=map.getVerticalSize()-1 && map.getTile(a.getX_position()+a.getViewingDistance(), j).isSeeThrough()){
+                        frontiers.add(map.getTile(a.getX_position()+a.getViewingDistance(), j));
+                    }
+                }
+            }
+        }
+        if(a.getCurrentDirection() == DirectionEnum.WEST){
+            int leftLimit = Math.max(0, a.getX_position() -a.getViewingDistance()+1);
+            int topBorder = a.getY_position()-2;
+            int bottomBorder = a.getY_position()+2;
+            boolean topSide = true;
+            boolean bottomSide = true;
+            for(int i=a.getX_position(); i>=leftLimit; i--){
+                if(topBorder>=0 && topSide){
+                    if(i==a.getX_position()){
+                        frontiers.add(map.getTile(i, topBorder));
+                    }
+                    //set the weight of the frontier based on the previous seen tile
+                    else if(map.getTile(i+1, topBorder).isSeeThrough()){
+                        frontiers.add(map.getTile(i, topBorder));
+                    }
+                    else{
+                        topSide = false;
+                    }
+                }
+
+                if(bottomBorder<=map.getVerticalSize()-1 && bottomSide){
+                    if(i==a.getX_position()){
+                        frontiers.add(map.getTile(i, bottomBorder));
+                    }
+                    else if(map.getTile(i+1, bottomBorder).isSeeThrough()){
+                        frontiers.add(map.getTile(i, bottomBorder));
+                    }
+                    else{
+                        bottomSide = false;
+                    }
+                }
+            }
+            if(a.getX_position()+1>=0){
+                for(int j = topBorder; j<=bottomBorder; j++) {
+                    if(j>=0 && j<=map.getVerticalSize()-1){
+                        frontiers.add(map.getTile(a.getX_position()+1, j));
+                    }
+                }
+            }
+
+            if(a.getX_position()-a.getViewingDistance()>=0){
+                for(int j = topBorder; j<=bottomBorder; j++) {
+                    if(j>=0 && j<=map.getVerticalSize()-1 && map.getTile(a.getX_position()-a.getViewingDistance(), j).isSeeThrough()){
+                        frontiers.add(map.getTile(a.getX_position()-a.getViewingDistance(), j));
+                    }
+                }
+            }
+        }
+    }
     public void setX(int x) {
         this.x=x;
     }
@@ -176,4 +376,18 @@ public class FrontierBasedExploration {
     public Map getMap(){
         return map;
     }
+
+    @Override
+    public DirectionEnum makeMove() {
+        return null;
+    }
+
+    @Override
+    public String getExplorationName() {
+        return null;
+    }
+
+
+
+
 }

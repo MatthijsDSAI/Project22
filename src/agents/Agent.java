@@ -9,6 +9,9 @@ import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import exploration.RandomExploration;
 import utils.DirectionEnum;
+import javafx.scene.paint.Color;
+import utils.DirectionEnum;
+import utils.Utils;
 
 import java.util.ArrayList;
 
@@ -24,13 +27,15 @@ public abstract class Agent{
     private DirectionEnum currentDirection;
     private String algoName;
     private Exploration algo;
+    private int viewingDistance;
+
 
     public Agent(Tile agentpos){
         this.agentPosition = agentpos;
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        this.currentDirection = DirectionEnum.EAST;
+        this.currentDirection = DirectionEnum.WEST;
     }
 
     public Agent(int x_position, int y_position, String chosenAlgo) {
@@ -39,10 +44,33 @@ public abstract class Agent{
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        this.currentDirection = DirectionEnum.EAST;
+        this.currentDirection = DirectionEnum.WEST;
         this.algoName = chosenAlgo;
         createAlgo(chosenAlgo);
+
+        this.viewingDistance = Scenario.config.getDistanceViewing();
     }
+
+
+//    public Agent(double baseSpeed, int x_position, int y_position, int angle)
+//    {
+//        this.a_name="Agent";
+//        this.baseSpeed = baseSpeed;
+//        this.x_position = x_position;
+//        this.y_position = y_position;
+//        this.audiostdeviation=10;
+//        this.angle=angle;
+//    }
+//
+//    public Agent(String name, double baseSpeed, int x_position, int y_position, int angle)
+//    {
+//        this.a_name=name;
+//        this.baseSpeed = baseSpeed;
+//        this.audiostdeviation=10;
+//        this.x_position = x_position;
+//        this.y_position = y_position;
+//        this.angle=angle;
+//    }
 
     public void createAlgo(String chosenAlgo) {
          switch (chosenAlgo) {
@@ -87,6 +115,10 @@ public abstract class Agent{
     public void turnNorth()
     {
         rotate(-angle);
+    }
+
+    public Exploration getAlgo() {
+        return algo;
     }
 
     public void turnNorthWest()
@@ -191,12 +223,14 @@ public abstract class Agent{
 
     public void computeVisibleTiles(Map map){
         ArrayList<Tile> visibleTiles = map.computeVisibleTiles(this);
+
         //Todo: temp just for visualisation
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
         }
     }
+
 
     public void setAgentPosition(Tile tile){
         agentPosition = tile;
@@ -224,5 +258,9 @@ public abstract class Agent{
 
     public void setAngle(int angle) {
         this.angle = angle;
+    }
+
+    public int getViewingDistance(){
+        return viewingDistance;
     }
 }

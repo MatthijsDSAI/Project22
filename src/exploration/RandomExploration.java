@@ -1,5 +1,7 @@
 package exploration;
 
+import agents.Agent;
+import controller.Map.tiles.Tile;
 import utils.DirectionEnum;
 
 public class RandomExploration extends Exploration {
@@ -18,5 +20,10 @@ public class RandomExploration extends Exploration {
     @Override
     public String getExplorationName() {
         return "RandomExploration";
+    }
+
+    @Override
+    public void dfs(Tile x, Agent a) {
+
     }
 }

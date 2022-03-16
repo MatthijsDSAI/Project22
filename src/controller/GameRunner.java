@@ -73,18 +73,19 @@ public class GameRunner {
         for (Guard guard: guards) {
             int x = guard.getX_position();
             int y = guard.getY_position();
-            map.addAgent(new TestAgent(x,y), x, y);
+            map.addAgent(guard, x, y);
             guard.setAgentPosition(map.getTile(x,y));
             guard.initializeEmptyMap(map);
             guard.computeVisibleTiles(map);
         }
+
     }
 
     public void loadIntruders() {
         for (Intruder intruder: intruders) {
             int x = intruder.getX_position();
             int y = intruder.getY_position();
-            map.addAgent(new TestAgent(x, y), x, y);
+            map.addAgent(intruder, x, y);
             intruder.setAgentPosition(map.getTile(x,y));
             intruder.initializeEmptyMap(map);
             intruder.computeVisibleTiles(map);
@@ -104,8 +105,9 @@ public class GameRunner {
         //map.getGraphicsConnector().updateGraphics();
 
         for (Guard guard: guards) {
-            guard.setCurrentDirection(guard.makeMove());
-            map.moveAgent(guard);
+            //guard.setCurrentDirection(guard.makeMove());
+            map.test(guard, map);
+            //map.moveAgent(guard);
             guard.computeVisibleTiles(map);
         }
         if (isGameMode1) {
