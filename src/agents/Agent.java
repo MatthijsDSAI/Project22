@@ -24,6 +24,7 @@ public abstract class Agent{
     private String algoName;
     private Exploration algo;
 
+    //Constructor
     public Agent(int x_position, int y_position) {
         this.x_position = x_position;
         this.y_position = y_position;
@@ -33,6 +34,7 @@ public abstract class Agent{
         this.currentDirection = DirectionEnum.EAST;
     }
 
+    //Constructor
     public Agent(int x_position, int y_position, String chosenAlgo) {
         this.x_position = x_position;
         this.y_position = y_position;
@@ -44,6 +46,10 @@ public abstract class Agent{
         createAlgo(chosenAlgo);
     }
 
+    /*
+    Accesses the exploration algorithm that was chosen
+    @param chosenAlgo - the name of the chosen exploration algorithm
+    */
     public void createAlgo(String chosenAlgo) {
          switch (chosenAlgo) {
             case "RandomExploration" -> algo = new RandomExploration();
@@ -53,6 +59,9 @@ public abstract class Agent{
         }
     }
 
+    /*
+    Decided on the direction in which the agent should move
+    */
     public DirectionEnum makeMove() {
         return algo.makeMove();
     }
@@ -77,10 +86,18 @@ public abstract class Agent{
 
     public void setCommunication(Area[] markers, int[] type){ } //TODO
 
+    /*
+    Creates an empty map of the same size as the actual map
+    @param map - the map that the agent should explore
+    */
     public void initializeEmptyMap(Map map){
         this.ownMap = Map.createEmptyMap(map);
     }
 
+    /*
+    Update the tiles on the map that are visible to the agent
+    @param map - version of the map
+    */
     public void computeVisibleTiles(Map map){
         ArrayList<Tile> visibleTiles = map.computeVisibleTiles(this);
         //Todo: temp just for visualisation
