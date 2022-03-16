@@ -7,16 +7,15 @@ import utils.DirectionEnum;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class FrontierBasedExploration extends Agent {
+public class FrontierBasedExploration extends Exploration{
     //no prior information about the map
     int x, y, angle;
     int visited[];
     boolean map_covered=false;
     Map map;
     Queue<Tile> frontiers = new PriorityQueue<Tile> ();
-    public FrontierBasedExploration(int x, int y){
-        super(x,y);
-        explore();
+    public FrontierBasedExploration(Map map){
+        this.map = map;
     }
 
     //x is the starting node
@@ -43,17 +42,26 @@ public class FrontierBasedExploration extends Agent {
     Fcg <- Find_cluster_center(Fc)
     Ftarget <= argmin g {Traversible_distance(Fcg, R)} */
         //initialize map as empty
-        initializeEmptyMap(map);
+        //initializeEmptyMap(map);
         while (map_covered != true)
         {
             //add frontiers as they are visited, to explore all frontiers connected to a tile
-            frontiers.add(getAgentPosition());
+            //frontiers.add(getAgentPosition());
             //check visual field
-            computeVisibleTiles(map);
+            //computeVisibleTiles(map);
             //move forward by 1 step
             // move();
         }
         //decide which fronteier to explore
+    }
+    @Override
+    public DirectionEnum makeMove() {
+        return null;
+    }
+
+    @Override
+    public String getExplorationName() {
+        return "FrontierBasedExploration";
     }
 
     public void setLocation(int x, int y) {

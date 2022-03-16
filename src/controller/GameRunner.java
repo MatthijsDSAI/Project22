@@ -110,6 +110,7 @@ public class GameRunner {
         }
         if (isGameMode1) {
             for (Intruder intruder : intruders) {
+                intruder.setCurrentDirection(intruder.makeMove());
                 map.moveAgent(intruder);
                 intruder.computeVisibleTiles(map);
             }
@@ -143,7 +144,11 @@ public class GameRunner {
 
     public boolean isGameMode1() {return isGameMode1;}
 
-    // public static void main(String[] args){
-//        GameRunner g = new GameRunner(new Scenario("testmap.txt"));
-//    }
+    public String getGuardAlgo() {
+        return GuardAlgo;
+    }
+
+    public String getIntruderAlgo() {
+        return IntruderAlgo;
+    }
 }

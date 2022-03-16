@@ -24,13 +24,6 @@ public abstract class Agent{
     private String algoName;
     private Exploration algo;
 
-    public Agent(Tile agentpos) {
-        this.agentPosition = agentpos;
-        this.a_name = "Agent";
-        this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
-        this.audiostdeviation=10;
-    }
-
     public Agent(int x_position, int y_position) {
         this.x_position = x_position;
         this.y_position = y_position;
@@ -54,32 +47,14 @@ public abstract class Agent{
     public void createAlgo(String chosenAlgo) {
          switch (chosenAlgo) {
             case "RandomExploration" -> algo = new RandomExploration();
-            case "FrontierBasedExploration" -> new FrontierBasedExploration(1, 1);
-            case "Baseline" -> new Baseline();
+            case "FrontierBasedExploration" -> algo = new FrontierBasedExploration(null);
+            case "Baseline" -> algo = new Baseline();
             default -> new RandomExploration();
         }
     }
 
     public DirectionEnum makeMove() {
         return algo.makeMove();
-    }
-
-    public Agent(double baseSpeed, int x_position, int y_position, DirectionEnum givenDirection) {
-        this.a_name="Agent";
-        this.baseSpeed = baseSpeed;
-        this.x_position = x_position;
-        this.y_position = y_position;
-        this.audiostdeviation=10;
-        this.currentDirection = givenDirection;
-    }
-
-    public Agent(String name, double baseSpeed, int x_position, int y_position, DirectionEnum givenDirection) {
-        this.a_name=name;
-        this.baseSpeed = baseSpeed;
-        this.audiostdeviation=10;
-        this.x_position = x_position;
-        this.y_position = y_position;
-        this.currentDirection = givenDirection;
     }
 
     public void setVelocities(double speed, double rest, double sprint_time, double turn_speed, double noise_level) {

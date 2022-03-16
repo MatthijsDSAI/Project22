@@ -14,9 +14,6 @@ public class Scenario {
 
     public static Config config;
 
-
-
-
     protected double baseSpeedIntruder;
     protected double sprintSpeedIntruder;
     protected double baseSpeedGuard;
