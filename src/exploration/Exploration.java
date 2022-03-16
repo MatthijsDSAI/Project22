@@ -12,5 +12,4 @@ public abstract class Exploration {
     public abstract DirectionEnum makeMove();
     public abstract String getExplorationName();
 
-    public abstract void dfs(Tile x, Agent a);
 }

@@ -15,9 +15,5 @@ public class Baseline extends Exploration{
         return "FrontierBasedExploration";
     }
 
-    @Override
-    public void dfs(Tile t, Agent x) {
-
-    }
 
 }

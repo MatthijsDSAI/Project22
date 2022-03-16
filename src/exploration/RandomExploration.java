@@ -22,8 +22,5 @@ public class RandomExploration extends Exploration {
         return "RandomExploration";
     }
 
-    @Override
-    public void dfs(Tile x, Agent a) {
 
-    }
 }

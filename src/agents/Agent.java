@@ -139,13 +139,7 @@ public abstract class Agent{
         rotate(-angle+90);
     }
 
-    public DirectionEnum getDirection() {
-        return direction;
-    }
 
-    public void setDirection(DirectionEnum direction) {
-        this.direction = direction;
-    }
     public void turnNorthEast()
     {
         rotate(-angle+315);
