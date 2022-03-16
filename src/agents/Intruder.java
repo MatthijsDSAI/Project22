@@ -1,7 +1,7 @@
 package agents;
 
 public class Intruder extends Agent{
-    public Intruder(int x, int y){
-        super(x,y);
+    public Intruder(int x, int y, String chosenAlgo){
+        super(x,y, chosenAlgo);
     }
 }

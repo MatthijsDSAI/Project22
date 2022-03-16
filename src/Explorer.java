@@ -15,7 +15,7 @@ public class Explorer {
         //game.writeGameFile();
         //game.p.start();
         Scenario scenario = new Scenario(mapD);
-        GameRunner gr = new GameRunner(scenario);
+        GameRunner gr = new GameRunner(scenario, "RandomExploration", "RandomExploration"); //TODO add to gui
         gr.run();
     }
 

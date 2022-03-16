@@ -2,6 +2,7 @@ package exploration;
 import agents.Agent;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
+import utils.DirectionEnum;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -71,6 +72,15 @@ public class FrontierBasedExploration extends Agent {
             map_covered=map.isExplored();
         }
         //decide which fronteier to explore
+    }
+    @Override
+    public DirectionEnum makeMove() {
+        return null;
+    }
+
+    @Override
+    public String getExplorationName() {
+        return "FrontierBasedExploration";
     }
 
     public void setLocation(int x, int y) {
