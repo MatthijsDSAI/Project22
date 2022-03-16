@@ -1,26 +1,27 @@
 GUI/StartScreen.java
  GUI.StartScreen
-controller/GameRunner.java
- controller.GameRunner
-controller/Map/tiles/Tile.java
- controller.Map.tiles.Tile
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
+agents/AgentI.java
+ agents.AgentI
 GivenCode/FileWatcher.java
  GivenCode.FileWatcher
 exploration/RandomExploration.java
  exploration.RandomExploration
-controller/Map/tiles/SpawnAreaGuards.java
- controller.Map.tiles.SpawnAreaGuards
+exploration/Baseline.java
+ exploration.Baseline
 GUI/MapGui.java
  GUI.MapGui
  GUI.MapGui$1
-utils/Utils.java
- utils.Utils
-controller/Map/tiles/SpawnAreaIntruders.java
- controller.Map.tiles.SpawnAreaIntruders
+mapgenerator/SimpleMapReader.java
+ mapgenerator.SimpleMapReader
+mapgenerator/MapDrawer.java
+ mapgenerator.MapDrawer
 GUI/MapScreen.java
  GUI.MapScreen
-controller/GraphicsConnector.java
- controller.GraphicsConnector
+controller/Map/MapInitialization.java
+ controller.Map.MapInitialization
 exploration/Exploration.java
  exploration.Exploration
 GivenCode/ExGameAgent.java
@@ -29,48 +30,47 @@ utils/Config.java
  utils.Config
 controller/Scenario.java
  controller.Scenario
-controller/Map/tiles/TargetArea.java
- controller.Map.tiles.TargetArea
+utils/DirectionEnum.java
+ utils.DirectionEnum
 controller/GameMode.java
  controller.GameMode
 controller/TelePortal.java
  controller.TelePortal
+controller/Area.java
+ controller.Area
+controller/GameRunner.java
+ controller.GameRunner
+agents/Guard.java
+ agents.Guard
+controller/Map/tiles/Tile.java
+ controller.Map.tiles.Tile
+controller/Map/tiles/SpawnAreaGuards.java
+ controller.Map.tiles.SpawnAreaGuards
+exploration/FrontierBasedExploration.java
+ exploration.FrontierBasedExploration
+utils/Utils.java
+ utils.Utils
+controller/Map/tiles/SpawnAreaIntruders.java
+ controller.Map.tiles.SpawnAreaIntruders
+controller/GraphicsConnector.java
+ controller.GraphicsConnector
+controller/Map/tiles/TeleportalTile.java
+ controller.Map.tiles.TeleportalTile
+controller/Map/tiles/TargetArea.java
+ controller.Map.tiles.TargetArea
+controller/Map/tiles/Shaded.java
+ controller.Map.tiles.Shaded
 agents/Intruder.java
  agents.Intruder
 agents/TestAgent.java
  agents.TestAgent
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
-controller/Map/Map.java
- controller.Map.Map
-agents/Agent.java
- agents.Agent
-agents/AgentI.java
- agents.AgentI
-controller/Area.java
- controller.Area
-agents/Guard.java
- agents.Guard
-mapgenerator/SimpleMapReader.java
- mapgenerator.SimpleMapReader
-exploration/FrontierBasedExploration.java
- exploration.FrontierBasedExploration
-mapgenerator/MapDrawer.java
- mapgenerator.MapDrawer
-controller/Map/MapInitialization.java
- controller.Map.MapInitialization
-controller/Map/tiles/TeleportalTile.java
- controller.Map.tiles.TeleportalTile
-controller/Map/tiles/Shaded.java
- controller.Map.tiles.Shaded
-utils/DirectionEnum.java
- utils.DirectionEnum
-exploration/Baseline.java
- exploration.Baseline
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
 Explorer.java
  Explorer
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
+controller/Map/Map.java
+ controller.Map.Map
+agents/Agent.java
+ agents.Agent

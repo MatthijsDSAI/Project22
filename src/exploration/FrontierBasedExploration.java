@@ -7,7 +7,7 @@ import utils.DirectionEnum;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class FrontierBasedExploration extends Agent {
+public class FrontierBasedExploration extends Exploration {
     //no prior information about the map
     int x, y, angle;
     boolean visited[];

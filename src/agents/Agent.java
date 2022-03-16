@@ -47,7 +47,7 @@ public abstract class Agent{
     public void createAlgo(String chosenAlgo) {
          switch (chosenAlgo) {
             case "RandomExploration" -> algo = new RandomExploration();
-            case "FrontierBasedExploration" -> algo = new FrontierBasedExploration(null);
+            case "FrontierBasedExploration" -> algo = new FrontierBasedExploration(1,1);
             case "Baseline" -> algo = new Baseline();
             default -> new RandomExploration();
         }
