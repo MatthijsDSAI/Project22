@@ -2,16 +2,18 @@ package exploration;
 import agents.Agent;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
+import utils.DirectionEnum;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class FrontierBasedExploration extends Agent {
+public class FrontierBasedExploration extends Exploration {
     //no prior information about the map
     int x, y, angle;
-    int visited[];
+    boolean visited[];
     boolean map_covered=false;
     Map map;
+    //1st in, 1st out
     Queue<Tile> frontiers = new PriorityQueue<Tile> ();
     public FrontierBasedExploration(int x, int y){
         super(x,y);
@@ -19,40 +21,66 @@ public class FrontierBasedExploration extends Agent {
     }
 
     //x is the starting node
-    public void dfs(int x){
-        initv();
-        visited[x]=1;
+    public void dfs(Tile x) {
+        x.setExplored(true);
         for(Tile t:frontiers) {
             //add traverse of right and left nodes when dif of 0 and not visited before
-                dfs(t.getX());
+            Tile z= null;
+            //depending on position I get x+1,y+1
+            if(getAngle()==90 || getAngle()==180)
+            {
+                z.setY(getY_position()+1);
+                z.setX(getX_position());
+                frontiers.add(z);
+                z.setY(getY_position()-1);
+            }
+            else
+            {
+                z.setY(getX_position()+1);
+                z.setX(getY_position());
+                frontiers.add(z);
+                z.setY(getX_position()-1);
+            }
+            dfs(t);
         }
     }
+
+    //makes all tiles unexplored
     public void initv(){
-        for(int i=0; i<visited.length;i++)
-            visited[i]=0;
+        for(int i=0; i< map.getHorizontalSize(); i++) //getTiles [][]
+            for(int j=0; j< map.getVerticalSize(); j++)
+            {
+                Tile t = map.getTile(i,j);
+                t.setExplored(false);
+            }
     }
 
     public void explore(){
-    /* while ( !map_covered & !no_frontier_with_e
-    ܯ map -> Current_map
-ܴ    R -> Robot_position
-    F <- Find_frontier_points(M)
-    Fc <-Distances_based_connected_component(F)
-    for each Fc
-    Fcg <- Find_cluster_center(Fc)
-    Ftarget <= argmin g {Traversible_distance(Fcg, R)} */
         //initialize map as empty
         initializeEmptyMap(map);
+        //while map is not explored
         while (map_covered != true)
         {
             //add frontiers as they are visited, to explore all frontiers connected to a tile
             frontiers.add(getAgentPosition());
             //check visual field
             computeVisibleTiles(map);
-            //move forward by 1 step
+            //add end of visual field to frontier
+            dfs(frontiers.remove());
+            //move forward
             move();
+            map_covered=map.isExplored();
         }
         //decide which fronteier to explore
+    }
+    @Override
+    public DirectionEnum makeMove() {
+        return null;
+    }
+
+    @Override
+    public String getExplorationName() {
+        return "FrontierBasedExploration";
     }
 
     public void setLocation(int x, int y) {

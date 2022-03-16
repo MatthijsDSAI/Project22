@@ -22,9 +22,14 @@ public class GameRunner {
     private Scenario scenario;
     private int t;
     private boolean isGameMode1;
+    private String GuardAlgo;
+    private String IntruderAlgo;
 
-    public GameRunner(Scenario scenario) {
+    public GameRunner(Scenario scenario, String GuardAlgo, String IntruderAlgo) {
         this.scenario = scenario;
+        this.GuardAlgo = GuardAlgo;
+        this.IntruderAlgo = IntruderAlgo;
+
         isGameMode1 = (scenario.getGameMode() == 1);
         init();
         GraphicsConnector graphicsConnector = new GraphicsConnector(this);
@@ -99,11 +104,13 @@ public class GameRunner {
         //map.getGraphicsConnector().updateGraphics();
 
         for (Guard guard: guards) {
+            guard.setCurrentDirection(guard.makeMove());
             map.moveAgent(guard);
             guard.computeVisibleTiles(map);
         }
         if (isGameMode1) {
             for (Intruder intruder : intruders) {
+                intruder.setCurrentDirection(intruder.makeMove());
                 map.moveAgent(intruder);
                 intruder.computeVisibleTiles(map);
             }
@@ -131,20 +138,17 @@ public class GameRunner {
 
     }
 
-
-
-//    public Agent getAgent() {
-//        return agent;
-//    }
-
-
     public ArrayList<Guard> getGuards() {return guards;}
 
     public ArrayList<Intruder> getIntruders() {return intruders;}
 
     public boolean isGameMode1() {return isGameMode1;}
 
-    public static void main(String[] args){
-        GameRunner g = new GameRunner(new Scenario("testmap.txt"));
+    public String getGuardAlgo() {
+        return GuardAlgo;
+    }
+
+    public String getIntruderAlgo() {
+        return IntruderAlgo;
     }
 }

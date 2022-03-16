@@ -4,10 +4,12 @@ import controller.Area;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
-import javafx.scene.paint.Color;
-import utils.Utils;
+import exploration.Baseline;
+import exploration.Exploration;
+import exploration.FrontierBasedExploration;
+import exploration.RandomExploration;
+import utils.DirectionEnum;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public abstract class Agent{
@@ -19,47 +21,43 @@ public abstract class Agent{
     public Map ownMap;
     //not to be used in agent class
     private Tile agentPosition;
+    private DirectionEnum currentDirection;
+    private String algoName;
+    private Exploration algo;
 
     public Agent(Tile agentpos){
         this.agentPosition = agentpos;
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=180;
+        this.currentDirection = DirectionEnum.EAST;
     }
 
-    public Agent(int x_position, int y_position)
-    {
+    public Agent(int x_position, int y_position, String chosenAlgo) {
         this.x_position = x_position;
         this.y_position = y_position;
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=180;
+        this.currentDirection = DirectionEnum.EAST;
+        this.algoName = chosenAlgo;
+        createAlgo(chosenAlgo);
     }
 
-    public Agent(double baseSpeed, int x_position, int y_position, int angle)
-    {
-        this.a_name="Agent";
-        this.baseSpeed = baseSpeed;
-        this.x_position = x_position;
-        this.y_position = y_position;
-        this.audiostdeviation=10;
-        this.angle=angle;
+    public void createAlgo(String chosenAlgo) {
+         switch (chosenAlgo) {
+            case "RandomExploration" -> algo = new RandomExploration();
+            case "FrontierBasedExploration" -> algo = new FrontierBasedExploration(1,1);
+            case "Baseline" -> algo = new Baseline();
+            default -> new RandomExploration();
+        }
     }
 
-    public Agent(String name, double baseSpeed, int x_position, int y_position, int angle)
-    {
-        this.a_name=name;
-        this.baseSpeed = baseSpeed;
-        this.audiostdeviation=10;
-        this.x_position = x_position;
-        this.y_position = y_position;
-        this.angle=angle;
+    public DirectionEnum makeMove() {
+        return algo.makeMove();
     }
 
-    public void setVelocities(double speed, double rest, double sprint_time, double turn_speed, double noise_level)
-    {
+    public void setVelocities(double speed, double rest, double sprint_time, double turn_speed, double noise_level) {
         this.baseSpeed=speed;
         this.restTime = rest;
         this.sprintTime=sprint_time;
@@ -73,7 +71,6 @@ public abstract class Agent{
         this.visibility = visibility;
     }
 
-    //To be done
     public void setAudiocap(){
         this.audiostdeviation=10;
     }
@@ -194,14 +191,12 @@ public abstract class Agent{
 
     public void computeVisibleTiles(Map map){
         ArrayList<Tile> visibleTiles = map.computeVisibleTiles(this);
-
         //Todo: temp just for visualisation
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
         }
     }
-
 
     public void setAgentPosition(Tile tile){
         agentPosition = tile;
@@ -217,6 +212,14 @@ public abstract class Agent{
 
     public int getY_position() {
         return y_position;
+    }
+
+    public DirectionEnum getCurrentDirection() {
+        return currentDirection;
+    }
+
+    public void setCurrentDirection(DirectionEnum currentDirection) {
+        this.currentDirection = currentDirection;
     }
 
     public void setAngle(int angle) {

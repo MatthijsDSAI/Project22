@@ -4,11 +4,8 @@ import agents.Agent;
 import agents.Guard;
 import agents.Intruder;
 import agents.TestAgent;
-import controller.Area;
-import controller.GraphicsConnector;
+import controller.*;
 import controller.Map.tiles.*;
-import controller.Scenario;
-import controller.TelePortal;
 import javafx.scene.paint.Color;
 import org.w3c.dom.ls.LSOutput;
 import utils.DirectionEnum;
@@ -79,20 +76,17 @@ public class Map {
 
     public void moveAgent(Agent agent){
         Tile fromTile = agent.getAgentPosition();
-        Tile toTile = getTileFromDirection(agent.getAgentPosition(), agent.getDirection());
+        Tile toTile = getTileFromDirection(agent.getAgentPosition(), agent.getCurrentDirection());
         changeTiles(agent, fromTile, toTile);
 
-        if (checkTeleport(fromTile, toTile)) {
+        if (toTile.toString().equals("TelePortal")) {
 
             changeTiles(agent, fromTile, toTile);
             TeleportalTile teleportalTile = (TeleportalTile) getTile(toTile.getX(), toTile.getY());
-            int x = teleportalTile.getTargetX();
-            int y = teleportalTile.getTargetY();
             fromTile = toTile;
-            toTile = getTile(x, y);
-
+            toTile = getTile(teleportalTile.getTargetX(), teleportalTile.getTargetY());
             changeTiles(agent, fromTile, toTile);
-            agent.setDirection(DirectionEnum.getDirection(teleportalTile.getAngle()));
+            agent.setCurrentDirection(DirectionEnum.getDirection(teleportalTile.getAngle()));
         }
 
 
@@ -265,7 +259,7 @@ public class Map {
     public void spawnGuard(Area givenArea){
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
-        Guard tempAgent = new Guard(rand1, rand2);
+        Guard tempAgent = new Guard(rand1, rand2, "RandomExploration"); // TODO later change
         tempAgent.setAgentPosition(getTile(rand1,rand2));
         guards.add(tempAgent);
         getTile(rand1, rand2).addAgent(tempAgent);
@@ -274,7 +268,7 @@ public class Map {
     public void spawnIntruder(Area givenArea){
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
-        Intruder tempAgent = new Intruder(rand1, rand2);
+        Intruder tempAgent = new Intruder(rand1, rand2, "RandomExploration"); // TODO later change
         tempAgent.setAgentPosition(getTile(rand1,rand2));
         intruders.add(tempAgent);
         getTile(rand1, rand2).addAgent(tempAgent);
@@ -295,7 +289,7 @@ public class Map {
 
     public ArrayList<Tile> computeVisibleTiles(Agent agent) {
         int d = Scenario.config.getDistanceViewing();
-        double angle = agent.getDirection().getAngle();
+        double angle = agent.getCurrentDirection().getAngle();
         int agentX = agent.getAgentPosition().getX();
         int agentY = agent.getAgentPosition().getY();
         ArrayList<Tile> visibleTiles = new ArrayList<>();
