@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class FrontierBasedExploration {
+public class FrontierBasedExploration extends Exploration{
     //no prior information about the map
     int x, y;
 //    boolean visited[];
@@ -175,5 +175,15 @@ public class FrontierBasedExploration {
 
     public Map getMap(){
         return map;
+    }
+
+    @Override
+    public DirectionEnum makeMove() {
+        return null;
+    }
+
+    @Override
+    public String getExplorationName() {
+        return "Frontier Based Exploration";
     }
 }
