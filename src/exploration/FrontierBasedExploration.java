@@ -40,7 +40,6 @@ public class FrontierBasedExploration extends Exploration{
 
     //x is the starting Tile
     // a is the agent on the current position
-    @Override
     public void dfs(Tile x, Agent a) {
         x.setExplored(true);
         //agent moves a tile
@@ -384,8 +383,9 @@ public class FrontierBasedExploration extends Exploration{
 
     @Override
     public String getExplorationName() {
-        return null;
+        return "Frontier Based Exploration";
     }
+
 
 
 

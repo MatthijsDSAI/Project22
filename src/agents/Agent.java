@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public abstract class Agent{
     double audiostdeviation;
     int x_position,y_position, angle;
-    DirectionEnum direction;
     public String a_name;
     double baseSpeed, range, visangle, visibility,restTime,sprintTime, turn_speed, noiseProd;
     public Map ownMap;
@@ -29,49 +28,34 @@ public abstract class Agent{
     private Exploration algo;
     private int viewingDistance;
 
-
-    public Agent(Tile agentpos){
-        this.agentPosition = agentpos;
+    //Constructor
+    public Agent(int x_position, int y_position) {
+        this.x_position = x_position;
+        this.y_position = y_position;
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        this.currentDirection = DirectionEnum.WEST;
+        this.currentDirection = DirectionEnum.EAST;
     }
 
+    //Constructor
     public Agent(int x_position, int y_position, String chosenAlgo) {
         this.x_position = x_position;
         this.y_position = y_position;
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        this.currentDirection = DirectionEnum.WEST;
+        this.currentDirection = DirectionEnum.EAST;
         this.algoName = chosenAlgo;
         createAlgo(chosenAlgo);
 
         this.viewingDistance = Scenario.config.getDistanceViewing();
     }
 
-
-//    public Agent(double baseSpeed, int x_position, int y_position, int angle)
-//    {
-//        this.a_name="Agent";
-//        this.baseSpeed = baseSpeed;
-//        this.x_position = x_position;
-//        this.y_position = y_position;
-//        this.audiostdeviation=10;
-//        this.angle=angle;
-//    }
-//
-//    public Agent(String name, double baseSpeed, int x_position, int y_position, int angle)
-//    {
-//        this.a_name=name;
-//        this.baseSpeed = baseSpeed;
-//        this.audiostdeviation=10;
-//        this.x_position = x_position;
-//        this.y_position = y_position;
-//        this.angle=angle;
-//    }
-
+    /*
+    Accesses the exploration algorithm that was chosen
+    @param chosenAlgo - the name of the chosen exploration algorithm
+    */
     public void createAlgo(String chosenAlgo) {
          switch (chosenAlgo) {
             case "RandomExploration" -> algo = new RandomExploration();
@@ -81,6 +65,9 @@ public abstract class Agent{
         }
     }
 
+    /*
+    Decided on the direction in which the agent should move
+    */
     public DirectionEnum makeMove() {
         return algo.makeMove();
     }
@@ -217,10 +204,18 @@ public abstract class Agent{
         return angle;
     }
 
+    /*
+    Creates an empty map of the same size as the actual map
+    @param map - the map that the agent should explore
+    */
     public void initializeEmptyMap(Map map){
         this.ownMap = Map.createEmptyMap(map);
     }
 
+    /*
+    Update the tiles on the map that are visible to the agent
+    @param map - version of the map
+    */
     public void computeVisibleTiles(Map map){
         ArrayList<Tile> visibleTiles = map.computeVisibleTiles(this);
 
