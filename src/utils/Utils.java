@@ -23,4 +23,12 @@ public class Utils {
         }
         return newMap;
     }
+
+    public static DirectionEnum getRandomDirection(){
+        return DirectionEnum.getDirection(getRandomNumber(0,4)*90);
+    }
+
+    public static int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
 }

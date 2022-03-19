@@ -27,7 +27,7 @@ public abstract class Agent implements AgentI{
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=0;
+        angle=Utils.getRandomNumber(0,4)*90;
     }
 
     public Agent(double baseSpeed, int x_position, int y_position, int angle)

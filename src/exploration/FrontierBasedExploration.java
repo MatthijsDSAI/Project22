@@ -2,6 +2,7 @@ package exploration;
 import agents.Guard;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
+import controller.Scenario;
 import utils.AdjacencyList;
 import utils.DirectionEnum;
 import utils.Position;
@@ -19,6 +20,7 @@ public class FrontierBasedExploration {
     private Queue<Tile> frontierQueue;
     private Queue<Tile> BFSQueue;
     private Tile nextTile;
+    private boolean DEBUG = Scenario.config.DEBUG;
 
     //Constructor -> tells which is the position of the robot and the angle
     public FrontierBasedExploration(Guard guard, Tile[][] map) {
@@ -82,9 +84,12 @@ public class FrontierBasedExploration {
 
     public Tile findFrontiers(Guard guard) {
         Tile curTile = guard.getAgentPosition();
-        System.out.println(curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
-        //System.out.println("Starting frontier search, looking at tile " + curTileIndex);
+        if(DEBUG)
+            System.out.println(curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
+
+            //System.out.println("Starting frontier search, looking at tile " + curTileIndex);
         BFSQueue = new LinkedList<>();
+
         //System.out.println("Adding tile " + curTileIndex + " to BFSQueue.");
         BFSQueue.add(curTile);
         LinkedList<Tile> tilesSeen = new LinkedList<>();
@@ -104,7 +109,8 @@ public class FrontierBasedExploration {
                 BFSQueue.add(tile);
                 int tileIndex = adjacencyList.getTileIndex(tile);
                 if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && !frontierQueue.contains(tile) && !exploredTiles.contains(tile)) {
-                System.out.println("Adding adjacent tile " + tileIndex + " to frontierQueue.");
+                    if(DEBUG)
+                        System.out.println("Adding adjacent tile " + tileIndex + " to frontierQueue.");
                     frontierQueue.add(tile);
                 }
             }
@@ -118,20 +124,26 @@ public class FrontierBasedExploration {
             curTile = BFSQueue.remove();
             tilesSeen.add(curTile);
             int curTileIndex = adjacencyList.getTileIndex(curTile);
-            System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
+            if(DEBUG)
+                System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(curTile);
-            System.out.print("Tiles adjacent to tile " + curTileIndex + " ");
+            if(DEBUG)    
+                System.out.print("Tiles adjacent to tile " + curTileIndex + " ");
             for(Tile tile : curAdjacencyList) {
                 int tileIndex = adjacencyList.getTileIndex(tile);
-                System.out.println("Looking at adjacent tile " + tileIndex);
+                if(DEBUG)
+                    System.out.println("Looking at adjacent tile " + tileIndex);
                 if(BFSQueue.contains(tile) || tilesSeen.contains(tile)) {
-                    System.out.println("Tile " + tileIndex + " skipped because it was already explored.");
+                    if(DEBUG)
+                        System.out.println("Tile " + tileIndex + " skipped because it was already explored.");
                     continue;
                 }
-                System.out.println("Adding adjacent tile " + tileIndex + " toBFSQueue.");
+                if(DEBUG)
+                    System.out.println("Adding adjacent tile " + tileIndex + " toBFSQueue.");
                 BFSQueue.add(tile);
                 if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && frontierQueue.contains(tile)) {
-                    System.out.println("Frontier detection returning tile: " + adjacencyList.getTileIndex(tile));
+                    if(DEBUG)
+                        System.out.println("Frontier detection returning tile: " + adjacencyList.getTileIndex(tile));
                     //exploredTiles.add(tile);
                     //frontierQueue.remove(tile);
                     return tile;
@@ -149,7 +161,8 @@ public class FrontierBasedExploration {
         int curY = curTile.getY();
         int goalX = nextTile.getX();
         int goalY = nextTile.getY();
-        System.out.print("Direction for that tile is: ");
+        if(DEBUG)
+            System.out.print("Direction for that tile is: ");
         if(Math.abs((curX-goalX) + (curY-goalY)) == 1 ) {
             frontierQueue.remove();
         }
@@ -157,19 +170,23 @@ public class FrontierBasedExploration {
         ArrayList<DirectionEnum> dirs = new ArrayList<>();
 
         if(curX < goalX) {
-            System.out.println("East");
+            if(DEBUG)
+                System.out.println("East");
             dirs.add(DirectionEnum.EAST);
         }
         else if(curX > goalX) {
-            System.out.println("West");
+            if(DEBUG)    
+                System.out.println("West");
             dirs.add(DirectionEnum.WEST);
         }
         else if (curY < goalY) {
-            System.out.println("South");
+            if(DEBUG)
+                System.out.println("South");
             dirs.add(DirectionEnum.SOUTH);
         }
         else if (curY > goalY) {
-            System.out.println("North");
+            if(DEBUG)
+                System.out.println("North");
             dirs.add(DirectionEnum.NORTH);
         }
         for(DirectionEnum dir : dirs) {
@@ -191,7 +208,8 @@ public class FrontierBasedExploration {
         for(Tile tile : queue) {
             result += adjacencyList.getTileIndex(tile) + ", ";
         }
-        System.out.println(result);
+        if(DEBUG)
+            System.out.println(result);
     }
 
     private boolean isFrontier(LinkedList<Tile> adjacencyList) {

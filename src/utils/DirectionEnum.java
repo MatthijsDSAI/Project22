@@ -44,6 +44,9 @@ public enum DirectionEnum {
         if(angle==DirectionEnum.SOUTH.getAngle()){
             return DirectionEnum.SOUTH;
         }
+        if(angle==DirectionEnum.WEST.getAngle()){
+            return DirectionEnum.WEST;
+        }
         if(angle==DirectionEnum.NORTHWEST.getAngle()){
             return DirectionEnum.NORTHWEST;
         }
