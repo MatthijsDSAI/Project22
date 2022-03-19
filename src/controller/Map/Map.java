@@ -78,7 +78,7 @@ public class Map {
         }
     }
 
-    public void moveAgent(Agent agent, DirectionEnum direction){
+    public Agent moveAgent(Agent agent, DirectionEnum direction){
         Tile fromTile = agent.getAgentPosition();
         Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
 
@@ -89,7 +89,7 @@ public class Map {
 //        changeTiles(fromTile, toTile);
 //        }
 
-
+        return agent;
     }
 
     public void checkTeleport(Tile fromTile, Tile toTile){

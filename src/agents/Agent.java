@@ -181,8 +181,6 @@ public abstract class Agent implements AgentI{
 
     public void setAgentPosition(Tile tile){
         agentPosition = tile;
-        this.x_position = tile.getX();
-        this.y_position = tile.getY();
     }
 
     public Tile getAgentPosition(){
