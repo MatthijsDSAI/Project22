@@ -112,9 +112,10 @@ public class GameRunner {
             FrontierBasedExploration explorer = explorers.get(i);
             DirectionEnum dir = explorer.step(guard);
             //map.moveAgent(guard, DirectionEnum.NORTH);
+            System.out.println(guard.getX_position() + ", " + guard.getY_position());
             map.moveAgent(guard, dir);
-            guard.setAgentPosition(explorer.getNextTile());
-            explorer.moveAgent(guard);
+            System.out.println(guard.getX_position() + ", " + guard.getY_position());
+            //guard.setAgentPosition(explorer.getNextTile());
             guard.computeVisibleTiles(map);
         }
         if (isGameMode1) {

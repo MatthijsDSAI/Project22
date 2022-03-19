@@ -1,0 +1,19 @@
+name = test scenario
+gameFile = /Users/joel/Documents/gamefile.txt
+gameMode = 1
+height = 6
+width = 6
+scaling = 0.1
+numGuards = 1
+numIntruders = 0
+baseSpeedIntruder = 14.0
+sprintSpeedIntruder = 20.0
+baseSpeedGuard = 14.0
+timeStep = 0.1
+targetArea = 0 0 0 0
+spawnAreaGuards = 5 5 5 5
+wall = 0 6 0 0
+wall = 0 0 0 6
+wall = 6 6 0 6
+wall = 0 6 6 6
+
