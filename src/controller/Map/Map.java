@@ -78,17 +78,25 @@ public class Map {
         }
     }
 
+    public Agent turnAgent(Agent agent, DirectionEnum direction) {
+        agent.rotate(direction.getAngle());
+        return agent;
+    }
+
     public Agent moveAgent(Agent agent, DirectionEnum direction){
-        Tile fromTile = agent.getAgentPosition();
-        Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
+        if(agent.getAngle() != direction.getAngle()) {
+            agent.rotate(direction.getAngle());
+        }
+        else{
+            Tile fromTile = agent.getAgentPosition();
+            Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
 
-        changeTiles(agent, fromTile, toTile);
-
+            changeTiles(agent, fromTile, toTile);
 //        if (checkTeleport(fromTile, toTile)) {
 //            int a =0;
 //        changeTiles(fromTile, toTile);
 //        }
-
+        }
         return agent;
     }
 

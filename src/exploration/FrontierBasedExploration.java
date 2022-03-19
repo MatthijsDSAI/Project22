@@ -82,6 +82,7 @@ public class FrontierBasedExploration {
 
     public Tile findFrontiers(Guard guard) {
         Tile curTile = guard.getAgentPosition();
+        System.out.println(curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
         //System.out.println("Starting frontier search, looking at tile " + curTileIndex);
         BFSQueue = new LinkedList<>();
         //System.out.println("Adding tile " + curTileIndex + " to BFSQueue.");
@@ -131,8 +132,8 @@ public class FrontierBasedExploration {
                 BFSQueue.add(tile);
                 if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && frontierQueue.contains(tile)) {
                     System.out.println("Frontier detection returning tile: " + adjacencyList.getTileIndex(tile));
-                    exploredTiles.add(tile);
-                    frontierQueue.remove(tile);
+                    //exploredTiles.add(tile);
+                    //frontierQueue.remove(tile);
                     return tile;
                 }
             }

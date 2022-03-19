@@ -139,8 +139,8 @@ public abstract class Agent implements AgentI{
     }
 
     public void rotate(int angle){
-        angle = this.angle + angle;
-        angle = Utils.TransFormIntoValidAngle(angle);
+        this.angle = this.angle + angle;
+        this.angle = Utils.TransFormIntoValidAngle(angle);
     }
 
 
