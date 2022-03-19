@@ -8,11 +8,15 @@ import agents.TestAgent;
 import controller.Map.Map;
 import controller.Map.tiles.SpawnAreaIntruders;
 import controller.Map.tiles.TeleportalTile;
+import controller.Map.tiles.Tile;
+import exploration.FrontierBasedExploration;
 import javafx.application.Platform;
 import utils.Config;
 import utils.DirectionEnum;
+import utils.Position;
 
 import java.util.ArrayList;
+import java.util.Queue;
 
 //idea is to make this the class where we run store everything and have our main loop
 public class GameRunner {
@@ -21,6 +25,7 @@ public class GameRunner {
     private Agent agent;
     private ArrayList<Guard> guards;
     private ArrayList<Intruder> intruders;
+    private ArrayList<FrontierBasedExploration> explorers;
     private MapGui gui;
     private Scenario scenario;
     private int t;
@@ -57,6 +62,10 @@ public class GameRunner {
         map.loadMap(scenario);
         guards = map.getGuards();
         intruders = map.getIntruders();
+        explorers = new ArrayList<>();
+        for(int i = 0; i < guards.size(); i++) {
+            explorers.add(new FrontierBasedExploration(guards.get(i), map.getTiles()));
+        }
         loadGuards();
         if (isGameMode1) {
             loadIntruders();
@@ -87,7 +96,6 @@ public class GameRunner {
         }
     }
 
-
     //does nothing yet
     public void step(){
         t++;
@@ -99,8 +107,14 @@ public class GameRunner {
         // }
         //map.getGraphicsConnector().updateGraphics();
 
-        for (Guard guard: guards) {
-            map.moveAgent(guard, DirectionEnum.EAST);
+        for (int i = 0; i < guards.size(); i++) {
+            Guard guard = guards.get(i);
+            FrontierBasedExploration explorer = explorers.get(i);
+            DirectionEnum dir = explorer.step(guard);
+            //map.moveAgent(guard, DirectionEnum.NORTH);
+            map.moveAgent(guard, dir);
+            guard.setAgentPosition(explorer.getNextTile());
+            explorer.moveAgent(guard);
             guard.computeVisibleTiles(map);
         }
         if (isGameMode1) {
@@ -146,6 +160,6 @@ public class GameRunner {
     public boolean isGameMode1() {return isGameMode1;}
 
     public static void main(String[] args){
-        GameRunner g = new GameRunner(new Scenario("textmap.txt"));
+        GameRunner g = new GameRunner(new Scenario("testmap2.txt"));
     }
 }

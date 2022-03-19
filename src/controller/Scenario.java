@@ -55,8 +55,6 @@ public class Scenario {
         filePath = Paths.get(mapDoc); // get path
         System.out.println(filePath);
         readMap();
-
-
     }
 
     public void readMap(){
@@ -65,7 +63,9 @@ public class Scenario {
                 parseLine(scanner.nextLine());
             }
         }
-        catch(Exception e) {}
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void parseLine(String line){
@@ -81,7 +81,6 @@ public class Scenario {
                 id=id.trim();
                 // in case multiple parameters
                 String[] items=value.split(" ");
-
                 switch(id) {
                     case "name":
                         name = value;

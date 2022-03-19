@@ -46,6 +46,7 @@ public class Map {
         this.horizontalSize = horizontalSize;
         this.verticalSize = verticalSize;
         tiles = new Tile[horizontalSize][verticalSize];
+        System.out.println(tiles);
     }
 
 
@@ -107,7 +108,7 @@ public class Map {
             agent.setAgentPosition(toTile);
         }
         else{
-            throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
+            //throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
         }
     }
 
@@ -581,6 +582,15 @@ public class Map {
     public GraphicsConnector getGraphicsConnector() {
         return graphicsConnector;
     }
+
+    /*public void printMap() {
+        for(int i = 0; i < tiles.length; i++) {
+            for(int j = 0; j < tiles[0].length; j++) {
+                System.out.print("[] ");
+            }
+            System.out.println();
+        }
+    }*/
 
     public void setGraphicsConnector(GraphicsConnector graphicsConnector) {
         this.graphicsConnector = graphicsConnector;

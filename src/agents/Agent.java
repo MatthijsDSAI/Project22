@@ -16,10 +16,9 @@ public abstract class Agent implements AgentI{
     public String a_name;
     double baseSpeed, range, visangle, visibility,restTime,sprintTime, turn_speed, noiseProd;
     public Map ownMap;
+    private ArrayList<Tile> visibleTiles = new ArrayList<>();
     //not to be used in agent class
     private Tile agentPosition;
-
-
 
     public Agent(int x_position, int y_position)
     {
@@ -28,7 +27,7 @@ public abstract class Agent implements AgentI{
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=180;
+        angle=0;
     }
 
     public Agent(double baseSpeed, int x_position, int y_position, int angle)
@@ -166,18 +165,24 @@ public abstract class Agent implements AgentI{
     }
 
     public void computeVisibleTiles(Map map){
-        ArrayList<Tile> visibleTiles = map.computeVisibleTiles(this);
+        this.visibleTiles = map.computeVisibleTiles(this);
 
         //Todo: temp just for visualisation
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
         }
+
     }
 
+    public ArrayList<Tile> getVisibleTiles() {
+        return visibleTiles;
+    }
 
     public void setAgentPosition(Tile tile){
         agentPosition = tile;
+        this.x_position = tile.getX();
+        this.y_position = tile.getY();
     }
 
     public Tile getAgentPosition(){

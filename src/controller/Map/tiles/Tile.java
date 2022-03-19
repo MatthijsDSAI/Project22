@@ -60,7 +60,7 @@ public abstract class Tile {
     public Agent getAgent() { // should agent part be abstracted?
         if (agent != null)
             return agent;
-        else throw new RuntimeException("There is no agent on this tile");
+        else return null;
     }
     public void addAgent(Agent agent) {
         this.agent = agent;

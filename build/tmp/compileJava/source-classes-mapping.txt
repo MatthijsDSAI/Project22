@@ -1,17 +1,18 @@
-controller/Area.java
- controller.Area
-mapgenerator/SimpleMapReader.java
- mapgenerator.SimpleMapReader
+GUI/StartScreen.java
+ GUI.StartScreen
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
 agents/AgentI.java
  agents.AgentI
-GivenCode/FileWatcher.java
- GivenCode.FileWatcher
+controller/Area.java
+ controller.Area
 exploration/RandomExploration.java
  exploration.RandomExploration
+GivenCode/FileWatcher.java
+ GivenCode.FileWatcher
 exploration/Baseline.java
  exploration.Baseline
-utils/DirectionEnum.java
- utils.DirectionEnum
 utils/Utils.java
  utils.Utils
 controller/Map/MapInitialization.java
@@ -32,8 +33,21 @@ controller/GameMode.java
  controller.GameMode
 controller/TelePortal.java
  controller.TelePortal
-GUI/StartScreen.java
- GUI.StartScreen
+utils/Position.java
+ utils.Position
+mapgenerator/SimpleMapReader.java
+ mapgenerator.SimpleMapReader
+Test.java
+ Test
+utils/DirectionEnum.java
+ utils.DirectionEnum
+controller/GraphicsConnector.java
+ controller.GraphicsConnector
+GUI/MapGui.java
+ GUI.MapGui
+ GUI.MapGui$1
+Explorer.java
+ Explorer
 controller/GameRunner.java
  controller.GameRunner
 agents/Guard.java
@@ -42,32 +56,24 @@ controller/Map/tiles/Tile.java
  controller.Map.tiles.Tile
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
-GUI/MapGui.java
- GUI.MapGui
- GUI.MapGui$1
 exploration/FrontierBasedExploration.java
  exploration.FrontierBasedExploration
 controller/Map/tiles/SpawnAreaIntruders.java
  controller.Map.tiles.SpawnAreaIntruders
-controller/GraphicsConnector.java
- controller.GraphicsConnector
 controller/Map/tiles/TeleportalTile.java
  controller.Map.tiles.TeleportalTile
-controller/Map/tiles/TargetArea.java
- controller.Map.tiles.TargetArea
 controller/Map/tiles/Shaded.java
  controller.Map.tiles.Shaded
+controller/Map/tiles/TargetArea.java
+ controller.Map.tiles.TargetArea
 agents/Intruder.java
  agents.Intruder
 agents/TestAgent.java
  agents.TestAgent
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
-Explorer.java
- Explorer
+utils/AdjacencyList.java
+ utils.AdjacencyList
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
 controller/Map/Map.java

@@ -59,7 +59,6 @@ public class MapGui extends Application {
         graphicsConnector.setGui(this);
         this.stage = stage;
         map = graphicsConnector.getMapOfColors();
-
         row = map.length;
         col = map[0].length;
         mapHeight = 810;
