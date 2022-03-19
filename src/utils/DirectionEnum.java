@@ -5,7 +5,11 @@ public enum DirectionEnum {
     WEST("west", 90),
     EAST("east", 270),
     NORTH("north", 0),
-    SOUTH("south", 180);
+    SOUTH("south", 180),
+    NORTHWEST("northwest",45),
+    SOUTHWEST("southwest", 135),
+    SOUTHEAST("southeast", 225),
+    NORTHEAST("northeast", 315);
 
 
     private final String direction;
@@ -14,13 +18,17 @@ public enum DirectionEnum {
         this.direction = direction;
         this.angle = angle;
     }
+
+
+
     public String getDirection(){
         return direction;
     }
     public int getAngle(){return angle;}
 
+
     //i think this should work, but might require debugging
-    public DirectionEnum getDirection(int angle) {
+    public static DirectionEnum getDirection(double angle) {
         if(angle>=360){
             angle-=360;
         }
@@ -36,8 +44,17 @@ public enum DirectionEnum {
         if(angle==DirectionEnum.SOUTH.getAngle()){
             return DirectionEnum.SOUTH;
         }
-        if(angle==DirectionEnum.WEST.getAngle()){
-            return DirectionEnum.WEST;
+        if(angle==DirectionEnum.NORTHWEST.getAngle()){
+            return DirectionEnum.NORTHWEST;
+        }
+        if(angle==DirectionEnum.SOUTHWEST.getAngle()){
+            return DirectionEnum.SOUTHWEST;
+        }
+        if(angle==DirectionEnum.SOUTHEAST.getAngle()){
+            return DirectionEnum.SOUTHEAST;
+        }
+        if(angle==DirectionEnum.NORTHEAST.getAngle()){
+            return DirectionEnum.NORTHEAST;
         }
         throw new RuntimeException("Issue with angle passed to enum; invalid value: " + angle + " , must be multiple of 90 or 0.");
     }

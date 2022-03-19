@@ -142,40 +142,9 @@ public class FrontierBasedExploration {
         return null;
     }
 
-    /*public Tile findNextMoveTile(Queue<Tile> frontierQueue) {
-        Tile nextTile = frontierQueue.remove();
-        System.out.println("Want to move to tile " + adjacencyList.getTileIndex(nextTile));
-        int curX = this.guard.getX_position();
-        int curY = this.guard.getY_position();
-        int goalX = nextTile.getX();
-        int goalY = nextTile.getY();
-
-        System.out.println("Current x: " + curX);
-        System.out.println("Current y: " + curX);
-        System.out.println("Goal x: " + goalX);
-        System.out.println("Goal y: " + goalY);
-
-        if(curX < goalX) {
-            System.out.println("Return tile at (" + (curX+1) + ", " + curY + ")");
-            return map[curX+1][curY];
-        }
-        else if(curX > goalX) {
-            System.out.println("Return tile at (" + (curX-1) + ", " + curY + ")");
-            return map[curX-1][curY];
-        }
-        else if (curY < goalY) {
-            System.out.println("Return tile at (" + curX + ", " + (curY+1) + ")");
-            return map[curX][curY+1];
-        }
-        else if (curY > goalY) {
-            System.out.println("Return tile at (" + curX + ", " + (curY-1) + ")");
-            return map[curX][curY-1];
-        }
-        return null;
-    }*/
-
     public DirectionEnum findNextMoveDirection(Guard guard, Tile nextTile) {
         Tile curTile = guard.getAgentPosition();
+        double guardAngle = guard.getAngle();
         int curX = curTile.getX();
         int curY = curTile.getY();
         int goalX = nextTile.getX();
@@ -185,23 +154,36 @@ public class FrontierBasedExploration {
             frontierQueue.remove();
         }
 
+        ArrayList<DirectionEnum> dirs = new ArrayList<>();
+
         if(curX < goalX) {
             System.out.println("East");
-            return DirectionEnum.EAST;
+            dirs.add(DirectionEnum.EAST);
         }
         else if(curX > goalX) {
             System.out.println("West");
-            return DirectionEnum.WEST;
+            dirs.add(DirectionEnum.WEST);
         }
         else if (curY < goalY) {
             System.out.println("South");
-            return DirectionEnum.SOUTH;
+            dirs.add(DirectionEnum.SOUTH);
         }
         else if (curY > goalY) {
             System.out.println("North");
-            return DirectionEnum.NORTH;
+            dirs.add(DirectionEnum.NORTH);
         }
-        return null;
+        for(DirectionEnum dir : dirs) {
+            if(guard.getAngle() == dir.getAngle()) {
+                return dir;
+            }
+        }
+
+        if(!dirs.isEmpty()) {
+            return dirs.get(0);
+        }
+        else {
+            return null;
+        }
     }
 
     private void printQueue(Queue<Tile> queue) {
