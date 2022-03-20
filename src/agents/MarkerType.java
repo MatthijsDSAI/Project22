@@ -2,6 +2,7 @@ package agents;
 
 import controller.Map.tiles.Tile;
 import javafx.scene.paint.Color;
+import utils.DirectionEnum;
 
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ public class MarkerType {
 
     public String name;
     private int number;
-    //the distance from which it's percived.
+    //the distance from which it's perceived.
    private int distance;
    private boolean isVisual, isPheromone;
    private Color markerColor;
@@ -67,6 +68,26 @@ public class MarkerType {
            }
        }
        return false;
+    }
+
+    public DirectionEnum performAction(Agent agent){
+        double initialAngle = agent.getAngle();
+        if(isVisual==true){
+            if(isInArea(agent)==true)
+                if(name.equals("Red"))
+                    //Go east
+                    return DirectionEnum.getDirection(270);
+                if(name.equals("Orange"))
+                    //Go north
+                    return DirectionEnum.getDirection(0);
+                    //Go south
+                if(name.equals("Green"))
+                    return DirectionEnum.getDirection(180);
+                    //Go south
+                if(name.equals("White"))
+                    return DirectionEnum.getDirection(90);
+        }
+        return DirectionEnum.getDirection(agent.angle);
     }
 
     public void setNumber(int number_markers){ this.number=number_markers; }
