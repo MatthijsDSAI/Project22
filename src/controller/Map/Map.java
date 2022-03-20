@@ -82,7 +82,6 @@ public class Map {
         changeTiles(agent, fromTile, toTile);
 
         if (toTile.toString().equals("TelePortal")) {
-
             changeTiles(agent, fromTile, toTile);
             TeleportalTile teleportalTile = (TeleportalTile) getTile(toTile.getX(), toTile.getY());
             fromTile = toTile;
