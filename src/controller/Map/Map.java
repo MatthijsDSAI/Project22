@@ -97,9 +97,6 @@ public class Map {
         int rotate = (int) (direction.getAngle() - agent.getAngle());
         agent.setAngle((int) (agent.getAngle() + rotate));
     }
-    public boolean checkTeleport(Tile fromTile, Tile toTile){
-        return toTile.toString().equals("TelePortal");
-    }
 
     public void changeTiles(Agent agent, Tile fromTile, Tile toTile){
         if(toTile.isWalkable()) {
