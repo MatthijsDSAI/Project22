@@ -61,7 +61,8 @@ public class MarkerType {
            agent.computeVisibleTiles(agent.ownMap);
            ArrayList<Tile> visibleTiles = agent.getVisibleTiles();
            for(Tile t : visibleTiles){
-               if(t.getY() == tile.getY() && t.getX()== tile.getX())
+               //if(t.getY() == tile.getY() && t.getX()== tile.getX())
+               if(t.getHasMarker()==true)
                    return true;
            }
        }
