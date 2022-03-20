@@ -52,37 +52,35 @@ public class Map {
             System.out.println("Agent movement initialized");
             System.out.println("Current angle: " + agent.getAngle());
         }
+        Tile fromTile = null;
+        Tile toTile = null;
         if(agent.getAngle() != direction.getAngle()) {
             agent.rotate(direction.getAngle());
             if(agent.getAngle() == direction.getAngle()) {
-                Tile fromTile = agent.getAgentPosition();
-                Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
+                fromTile = agent.getAgentPosition();
+                toTile = getTileFromDirection(agent.getAgentPosition(), direction);
 
                 changeTiles(agent, fromTile, toTile);
             }
         }
         else{
-            Tile fromTile = agent.getAgentPosition();
-            Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
+            fromTile = agent.getAgentPosition();
+            toTile = getTileFromDirection(agent.getAgentPosition(), direction);
+            changeTiles(agent, fromTile, toTile);
+        }
+        assert toTile != null;
+        if (toTile.toString().equals("TelePortal")) {
 
             changeTiles(agent, fromTile, toTile);
-//        if (checkTeleport(fromTile, toTile)) {
-//            int a =0;
-//        changeTiles(fromTile, toTile);
-//        }
+            TeleportalTile teleportalTile = (TeleportalTile) getTile(toTile.getX(), toTile.getY());
+            fromTile = toTile;
+            toTile = getTile(teleportalTile.getTargetX(), teleportalTile.getTargetY());
+            changeTiles(agent, fromTile, toTile);
+            agent.setAngle((int) teleportalTile.getAngle());
         }
         return agent;
     }
 
-    public void checkTeleport(Tile fromTile, Tile toTile){
-        if(toTile.toString().equals("TelePortal")){
-            TeleportalTile teleportalTile = (TeleportalTile) getTile(toTile.getX(), toTile.getY());
-            int x = teleportalTile.getX();
-            int y = teleportalTile.getY();
-            fromTile = toTile;
-            toTile = getTile(x, y);
-        }
-    }
     public void changeTiles(Agent agent, Tile fromTile, Tile toTile){
         if(fromTile.isWalkable()) {
             getTile(fromTile.getX(),fromTile.getY()).removeAgent();

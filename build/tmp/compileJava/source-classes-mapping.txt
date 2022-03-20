@@ -22,8 +22,6 @@ controller/Scenario.java
  controller.Scenario
 utils/Utils.java
  utils.Utils
-Explorer.java
- Explorer
 GUI/StartScreen.java
  GUI.StartScreen
 controller/GameRunner.java
@@ -61,6 +59,8 @@ utils/AdjacencyList.java
 GUI/StartButton.java
  GUI.StartButton
  GUI.StartButton$1
+Explorer.java
+ Explorer
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
 controller/Map/Map.java
