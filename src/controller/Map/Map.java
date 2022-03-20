@@ -3,18 +3,13 @@ package controller.Map;
 import agents.Agent;
 import agents.Guard;
 import agents.Intruder;
-import agents.TestAgent;
 import controller.Area;
 import controller.GraphicsConnector;
 import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
-import javafx.scene.paint.Color;
-import org.w3c.dom.ls.LSOutput;
 import utils.DirectionEnum;
 
-import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,23 +18,11 @@ public class Map {
     private Tile[][] tiles;
     private Agent agent;
     private GraphicsConnector graphicsConnector;
-    private Tile tileVersion;
     private ArrayList<Guard> guards = new ArrayList<>();
     private ArrayList<Intruder> intruders = new ArrayList<>();
     private int horizontalSize;
     private int verticalSize;
 
-    public Agent getAgent() {
-        return agent;
-    }
-
-    public int getHorizontalSize() {
-        return horizontalSize;
-    }
-
-    public int getVerticalSize() {
-        return verticalSize;
-    }
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
@@ -48,8 +31,6 @@ public class Map {
         tiles = new Tile[horizontalSize][verticalSize];
         System.out.println(tiles);
     }
-
-
 
     public Map(int row, int col){
         tiles = new Tile[row][col];
@@ -66,82 +47,12 @@ public class Map {
 
     }
 
-    public void moveAgentFromTo(Agent agent, int xFrom, int yFrom, int xTo, int yTo){
-        Tile tile = getTile(xTo, yTo);
-        if(tile.isWalkable()) {
-            getTile(xFrom, yFrom).removeAgent();
-            getTile(xTo, yTo).addAgent(agent);
-            agent.setAgentPosition(getTile(xTo, yTo));
-        }
-        else{
-            throw new RuntimeException("Can not move to tile " + xTo + ", " + yTo);
-        }
-    }
-
-    public Agent turnAgent(Agent agent, DirectionEnum direction) {
-        agent.rotate(direction.getAngle());
-        return agent;
-    }
-
-    public Agent rotateW45(Agent agent, int angle) {
-        int guardAngle = (int) agent.getAngle();
-        // North to east
-        if(guardAngle == 0 && angle == 90) {
-            agent.setAngle(45);
-            agent.computeVisibleTiles(this);
-            agent.setAngle(90);
-        }
-        // North to west
-        else if(guardAngle == 0 && angle == 270) {
-            agent.setAngle(315);
-            agent.computeVisibleTiles(this);
-            agent.setAngle(270);
-        }
-        // East to north
-        else if(guardAngle == 90 && angle == 0) {
-            agent.setAngle(45);
-            agent.computeVisibleTiles(this);
-            agent.setAngle(0);
-        }
-        // East to south
-        else if(guardAngle == 90 && angle == 180) {
-            agent.setAngle(135);
-            agent.computeVisibleTiles(this);
-            agent.setAngle(180);
-        }
-        // South to east
-        else if(guardAngle == 180 && angle == 90) {
-            agent.setAngle(135);
-            agent.computeVisibleTiles(this);
-            agent.setAngle(90);
-        }
-        // South to west
-        else if(guardAngle == 180 && angle == 270) {
-            agent.setAngle(225);
-            agent.computeVisibleTiles(this);
-            agent.setAngle(270);
-        }
-        // West to north
-        else if(guardAngle == 270 && angle == 0) {
-            agent.setAngle(315);
-            agent.computeVisibleTiles(this);
-            agent.setAngle(0);
-        }
-        // West to south
-        else if(guardAngle == 270 && angle == 180) {
-            agent.setAngle(225);
-            agent.computeVisibleTiles(this);
-            agent.setAngle(180);
-        }
-        return agent;
-    }
-
     public Agent moveAgent(Agent agent, DirectionEnum direction){
-        System.out.println("Agent movement initialized");
-        System.out.println("Current angle: " + agent.getAngle());
+        if(Scenario.config.DEBUG){
+            System.out.println("Agent movement initialized");
+            System.out.println("Current angle: " + agent.getAngle());
+        }
         if(agent.getAngle() != direction.getAngle()) {
-            //agent = rotateW45(agent, direction.getAngle());
-            //System.out.println("Agent angle after rotation: " + agent.getAngle());
             agent.rotate(direction.getAngle());
             if(agent.getAngle() == direction.getAngle()) {
                 Tile fromTile = agent.getAgentPosition();
@@ -179,7 +90,7 @@ public class Map {
             agent.setAgentPosition(toTile);
         }
         else{
-            //throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
+            throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
         }
     }
 
@@ -237,6 +148,10 @@ public class Map {
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public Agent getAgent() {
+        return agent;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -653,15 +568,6 @@ public class Map {
     public GraphicsConnector getGraphicsConnector() {
         return graphicsConnector;
     }
-
-    /*public void printMap() {
-        for(int i = 0; i < tiles.length; i++) {
-            for(int j = 0; j < tiles[0].length; j++) {
-                System.out.print("[] ");
-            }
-            System.out.println();
-        }
-    }*/
 
     public void setGraphicsConnector(GraphicsConnector graphicsConnector) {
         this.graphicsConnector = graphicsConnector;

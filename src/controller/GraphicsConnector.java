@@ -31,7 +31,6 @@ public class GraphicsConnector {
         if (gameRunner.isGameMode1()) {
             intruders = gameRunner.getIntruders();
         }
-        // .add(gameRunner.getAgent());
     }
 
     public Color[][] getMapOfColors(){
@@ -43,30 +42,7 @@ public class GraphicsConnector {
         }
         return mapOfColors;
     }
-//    public ArrayList<BufferedImage> getAgents()  {
-//        //TODO: implement difference between guard and intruder
-//        ArrayList<BufferedImage> list = new ArrayList<>();
-//        for(Agent agent : agents){
-//
-//            try {
-//                BufferedImage image = ImageIO.read(new File("guard.png"));
-//                list.add(image);
-//                AffineTransform transform = new AffineTransform();
-//                transform.rotate(Math.toRadians(agent.getAngle()), image.getWidth()/2, image.getHeight()/2 );
-//                AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR );
-//                list.add(op.filter(image, null));
-//
-//            }
-//            catch(Exception e){
-//                System.out.println("Invalid image passed");
-//            }
-//
-//        }
-//        return list;
-//    }
-    public void updateGraphics(){
-        gui.updateGraphics();
-    }
+
     public void run(){
         gameRunner.run();
     }

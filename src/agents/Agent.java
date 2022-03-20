@@ -10,14 +10,13 @@ import utils.Utils;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public abstract class Agent implements AgentI{
+public abstract class Agent{
     double audiostdeviation;
     int x_position,y_position, angle;
     public String a_name;
-    double baseSpeed, range, visangle, visibility,restTime,sprintTime, turn_speed, noiseProd;
+    double baseSpeed;
     public Map ownMap;
     private ArrayList<Tile> visibleTiles = new ArrayList<>();
-    //not to be used in agent class
     private Tile agentPosition;
 
     public Agent(int x_position, int y_position)
@@ -30,113 +29,6 @@ public abstract class Agent implements AgentI{
         angle=Utils.getRandomNumber(0,4)*90;
     }
 
-    public Agent(double baseSpeed, int x_position, int y_position, int angle)
-    {
-        this.a_name="Agent";
-        this.baseSpeed = baseSpeed;
-        this.x_position = x_position;
-        this.y_position = y_position;
-        this.audiostdeviation=10;
-        this.angle=angle;
-    }
-
-    public Agent(String name, double baseSpeed, int x_position, int y_position, int angle)
-    {
-        this.a_name=name;
-        this.baseSpeed = baseSpeed;
-        this.audiostdeviation=10;
-        this.x_position = x_position;
-        this.y_position = y_position;
-        this.angle=angle;
-    }
-
-    @Override
-    public void setVelocities(double speed, double rest, double sprint_time, double turn_speed, double noise_level)
-    {
-        this.baseSpeed=speed;
-        this.restTime = rest;
-        this.sprintTime=sprint_time;
-        this.turn_speed= turn_speed;
-        this.noiseProd = noise_level;
-    }
-
-    @Override
-    public void setVisualcap(double range, double angle, double visibility){
-        this.range = range;
-        this.visangle = angle;
-        this.visibility = visibility;
-    }
-
-    //To be done
-    @Override
-    public void setAudiocap(){
-        this.audiostdeviation=10;
-    }
-
-    @Override
-    //1-> visited, the rest will be determined later
-    public void setCommunication(Area[] markers, int[] type){
-        //To be done
-    }
-
-    public void checkarea()
-    {
-        //if object is a wall turnDirection
-    }
-
-
-    //Is my logic here valid?
-    public void turnNorth()
-    {
-        rotate(-angle);
-    }
-
-    public void turnEast()
-    {
-        rotate(-angle+90);
-    }
-
-    public void turnSouth()
-    {
-        rotate(-angle+180);
-    }
-
-    public void turnWest()
-    {
-        rotate(-angle-90);
-    }
-
-
-    //I changed this so that it only actually moves forward by one step. So the angle has to be changed beforehand.
-    //Also not baseSpeed but 1
-    public void move()
-    {
-        //0  -> north
-        if(angle == 0)
-        {
-            y_position++;
-            //checkarea();
-        }
-        //90 -> east
-        if(angle == 90)
-        {
-            x_position++;
-            //checkarea();
-        }
-        //180 -> South
-        if(angle == 180)
-        {
-            y_position--;
-            //checkarea();
-        }
-        // 270 -> west
-        if(angle == 270)
-        {
-            x_position--;
-            //checkarea();
-        }
-        //check relationship between speed and position when related to time
-    }
 
     public void rotate(int angle){
         this.angle = this.angle + angle;

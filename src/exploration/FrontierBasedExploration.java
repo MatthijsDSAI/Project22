@@ -87,30 +87,22 @@ public class FrontierBasedExploration {
         if(DEBUG)
             System.out.println("Guard pos at start of Frontier: " + curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
 
-            //System.out.println("Starting frontier search, looking at tile " + curTileIndex);
+
         BFSQueue = new LinkedList<>();
 
-        //System.out.println("Adding tile " + curTileIndex + " to BFSQueue.");
         BFSQueue.add(curTile);
         LinkedList<Tile> tilesSeen = new LinkedList<>();
         while(!BFSQueue.isEmpty()) {
             curTile = BFSQueue.remove();
             tilesSeen.add(curTile);
-            //System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(curTile);
-            //System.out.print("Tiles adjacent to tile " + curTileIndex + " ");
             for(Tile tile : curAdjacencyList) {
-                //System.out.println("Looking at adjacent tile " + tileIndex);
                 if(BFSQueue.contains(tile) || tilesSeen.contains(tile)) {
-                    //System.out.println("Tile " + tileIndex + " skipped because it was already explored.");
                     continue;
                 }
-                //System.out.println("Adding adjacent tile " + tileIndex + " toBFSQueue.");
                 BFSQueue.add(tile);
                 int tileIndex = adjacencyList.getTileIndex(tile);
                 if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && !frontierQueue.contains(tile) && !exploredTiles.contains(tile)) {
-                    if(DEBUG)
-                        //System.out.println("Adding adjacent tile " + tileIndex + " to frontierQueue.");
                     frontierQueue.add(tile);
                 }
             }
@@ -124,28 +116,26 @@ public class FrontierBasedExploration {
             curTile = BFSQueue.remove();
             tilesSeen.add(curTile);
             int curTileIndex = adjacencyList.getTileIndex(curTile);
-            //if(DEBUG)
-                //System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
+            if(DEBUG)
+                System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(curTile);
-            if(DEBUG)    
-                //System.out.print("Tiles adjacent to tile " + curTileIndex + " ");
+            if(DEBUG)
+                System.out.print("Tiles adjacent to tile " + curTileIndex + " ");
             for(Tile tile : curAdjacencyList) {
                 int tileIndex = adjacencyList.getTileIndex(tile);
                 if(DEBUG)
-                    //System.out.println("Looking at adjacent tile " + tileIndex);
+                    System.out.println("Looking at adjacent tile " + tileIndex);
                 if(BFSQueue.contains(tile) || tilesSeen.contains(tile)) {
                     if(DEBUG)
-                        //System.out.println("Tile " + tileIndex + " skipped because it was already explored.");
+                        System.out.println("Tile " + tileIndex + " skipped because it was already explored.");
                     continue;
                 }
                 if(DEBUG)
-                    //System.out.println("Adding adjacent tile " + tileIndex + " toBFSQueue.");
+                    System.out.println("Adding adjacent tile " + tileIndex + " toBFSQueue.");
                 BFSQueue.add(tile);
                 if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && frontierQueue.contains(tile)) {
                     if(DEBUG)
                         System.out.println("Frontier detection returning tile: " + adjacencyList.getTileIndex(tile));
-                    //exploredTiles.add(tile);
-                    //frontierQueue.remove(tile);
                     return tile;
                 }
             }
@@ -156,7 +146,6 @@ public class FrontierBasedExploration {
 
     public DirectionEnum findNextMoveDirection(Guard guard, Tile nextTile) {
         Tile curTile = guard.getAgentPosition();
-        double guardAngle = guard.getAngle();
         int curX = curTile.getX();
         int curY = curTile.getY();
         int goalX = nextTile.getX();

@@ -42,17 +42,9 @@ public class MapGui extends Application {
     private BorderPane root;
     private BorderPane p;
     private Stage stage;
-    private double width = 1210;
-    private double height = 810;
+    private double width;
+    private double height;
     private StartScreen mainMenu;
-    public MapGui(){
-    }
-
-    public MapGui(Scenario scenario){
-        mapHeight = scenario.getMapHeight();
-        mapWidth = scenario.getMapWidth();
-        scaling = scenario.getScaling();
-    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -61,48 +53,17 @@ public class MapGui extends Application {
         map = graphicsConnector.getMapOfColors();
         row = map.length;
         col = map[0].length;
-        mapHeight = 810;
-        mapWidth = 1210;
-        //root = createPane();
-        //Scene scene = new Scene(root, mapWidth, mapHeight);
+        height = row*10;
+        width = col*10;
         this.mainMenu = new StartScreen(this);
         Scene startMenu = new Scene(mainMenu, width, height);
-
-
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Information Dialog");
-//        alert.setHeaderText(null);
-//        alert.setContentText("Game is over");
-//        alert.showAndWait();
-
         stage.setTitle("MAP");
         stage.setScene(startMenu);
         stage.show();
-//        graphicsConnector.setGui(this);
-//        this.stage = stage;
-//        this.mainMenu = new StartScreen(this);
-//
-//        stage.setResizable(false);
-//        stage.setScene(startMenu);
-//
-//        stage.show();
-    }
-
-    public BorderPane createPane(){
-        p = new BorderPane();
-
-        // initial paint
-        drawMap(p);
-        //update();
-
-        //initTimeLine(p);
-        //t.play();
-
-        return p;
     }
 
 
-    //Main draw method
+
     public void drawMap(BorderPane p){
         map = graphicsConnector.getMapOfColors();
         p.getChildren().clear();
@@ -116,58 +77,25 @@ public class MapGui extends Application {
         }
     }
 
-    //Animation for future
     public void initTimeLine(BorderPane p){
         t = new Timeline();
-        //We could set step count here, for now is infinite
         t.setCycleCount(Timeline.INDEFINITE);
-//        t.setCycleCount(10);
-        KeyFrame k = new KeyFrame(Duration.millis(Scenario.config.getSleep()), new EventHandler<ActionEvent>() {
+
+        KeyFrame k = new KeyFrame(Duration.millis(Scenario.config.getSleep()-50), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                drawMap(p);
-                //stage.getScene().setRoot(p);
+                drawMap(p);;
                 update();
                 graphicsConnector.getMapOfColors();
-
             }
         });
         t.getKeyFrames().add(k);
         t.play();
-
     }
 
-    //Update for testing
-    //We could use getColorMap method here for updating
     public void update(){
-        //map = graphicsConnector.getMapOfColors();
         Random r = new Random();
         map[r.nextInt(map.length)][r.nextInt(map[0].length)] = Color.BLACK;
-    }
-
-    public void updateGraphics(){
-        drawMap(mapPane);
-    }
-
-    public void start(){
-        t.play();
-    }
-
-    public void pause(){
-        t.pause();
-    }
-
-    public void stop(){
-        t.stop();
-    }
-    public void launchGUI(GraphicsConnector graphicsConnector){
-        MapGui.graphicsConnector = graphicsConnector;
-        String[] args  = new String[0];
-        launch(args);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     public void startExploration() {
@@ -179,5 +107,17 @@ public class MapGui extends Application {
             Platform.exit();
             System.exit(0);
         });
+    }
+
+    public BorderPane createPane(){
+        p = new BorderPane();
+        drawMap(p);
+        return p;
+    }
+
+    public void launchGUI(GraphicsConnector graphicsConnector){
+        MapGui.graphicsConnector = graphicsConnector;
+        String[] args  = new String[0];
+        launch(args);
     }
 }

@@ -1,6 +1,7 @@
 package utils;
 
 import controller.Map.tiles.Tile;
+import controller.Scenario;
 
 public class Utils {
     public static int TransFormIntoValidAngle(int angle){
@@ -30,5 +31,14 @@ public class Utils {
 
     public static int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
+    }
+
+    public static void sleep(long sleep) {
+        try {
+            Thread.sleep(sleep);
+        }
+        catch(InterruptedException e){
+            System.out.println("Threading issue");
+        }
     }
 }
