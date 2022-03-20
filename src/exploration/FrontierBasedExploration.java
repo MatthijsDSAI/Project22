@@ -61,7 +61,7 @@ public class FrontierBasedExploration {
         return dir;
     }
 
-    private void updateExploredTiles(ArrayList<Tile> visibleTiles) {
+    public void updateExploredTiles(ArrayList<Tile> visibleTiles) {
         for(Tile tile : visibleTiles) {
             if(!exploredTiles.contains(tile) && adjacencyList.get(tile).size() == 4) {
                 exploredTiles.add(tile);
@@ -85,7 +85,7 @@ public class FrontierBasedExploration {
     public Tile findFrontiers(Guard guard) {
         Tile curTile = guard.getAgentPosition();
         if(DEBUG)
-            System.out.println(curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
+            System.out.println("Guard pos at start of Frontier: " + curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
 
             //System.out.println("Starting frontier search, looking at tile " + curTileIndex);
         BFSQueue = new LinkedList<>();
@@ -110,7 +110,7 @@ public class FrontierBasedExploration {
                 int tileIndex = adjacencyList.getTileIndex(tile);
                 if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && !frontierQueue.contains(tile) && !exploredTiles.contains(tile)) {
                     if(DEBUG)
-                        System.out.println("Adding adjacent tile " + tileIndex + " to frontierQueue.");
+                        //System.out.println("Adding adjacent tile " + tileIndex + " to frontierQueue.");
                     frontierQueue.add(tile);
                 }
             }
@@ -124,22 +124,22 @@ public class FrontierBasedExploration {
             curTile = BFSQueue.remove();
             tilesSeen.add(curTile);
             int curTileIndex = adjacencyList.getTileIndex(curTile);
-            if(DEBUG)
-                System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
+            //if(DEBUG)
+                //System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(curTile);
             if(DEBUG)    
-                System.out.print("Tiles adjacent to tile " + curTileIndex + " ");
+                //System.out.print("Tiles adjacent to tile " + curTileIndex + " ");
             for(Tile tile : curAdjacencyList) {
                 int tileIndex = adjacencyList.getTileIndex(tile);
                 if(DEBUG)
-                    System.out.println("Looking at adjacent tile " + tileIndex);
+                    //System.out.println("Looking at adjacent tile " + tileIndex);
                 if(BFSQueue.contains(tile) || tilesSeen.contains(tile)) {
                     if(DEBUG)
-                        System.out.println("Tile " + tileIndex + " skipped because it was already explored.");
+                        //System.out.println("Tile " + tileIndex + " skipped because it was already explored.");
                     continue;
                 }
                 if(DEBUG)
-                    System.out.println("Adding adjacent tile " + tileIndex + " toBFSQueue.");
+                    //System.out.println("Adding adjacent tile " + tileIndex + " toBFSQueue.");
                 BFSQueue.add(tile);
                 if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && frontierQueue.contains(tile)) {
                     if(DEBUG)

@@ -106,20 +106,18 @@ public class GameRunner {
 //        agent.computeVisibleTiles(map);
         // }
         //map.getGraphicsConnector().updateGraphics();
-        for(int j = 0; j<config.getBASESPEEDGUARD(); j++){
-            for (int i = 0; i < guards.size(); i++) {
-                Guard guard = guards.get(i);
-                Tile curTile = guard.getAgentPosition();
-                int curX = curTile.getX();
-                int curY = curTile.getY();
-                FrontierBasedExploration explorer = explorers.get(i);
-                DirectionEnum dir = explorer.step(guard);
-                //map.moveAgent(guard, DirectionEnum.NORTH);
-                //guard = (Guard) map.turnAgent(guard, dir);
-                guard = (Guard) map.moveAgent(guard, dir);
-                //guard.setAgentPosition(explorer.getNextTile());
-                guard.computeVisibleTiles(map);
-            }
+        for (int i = 0; i < guards.size(); i++) {
+            Guard guard = guards.get(i);
+            Tile curTile = guard.getAgentPosition();
+            int curX = curTile.getX();
+            int curY = curTile.getY();
+            FrontierBasedExploration explorer = explorers.get(i);
+            DirectionEnum dir = explorer.step(guard);
+            //map.moveAgent(guard, DirectionEnum.NORTH);
+            //guard = (Guard) map.turnAgent(guard, dir);
+            guard = (Guard) map.moveAgent(guard, dir);
+            //guard.setAgentPosition(explorer.getNextTile());
+            guard.computeVisibleTiles(map);
         }
         if (isGameMode1) {
             for (Intruder intruder : intruders) {
