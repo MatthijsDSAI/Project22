@@ -160,6 +160,10 @@ public abstract class Agent implements AgentI{
         return angle;
     }
 
+    public void setAngle(int angle) {
+        this.angle = angle;
+    }
+
     public void initializeEmptyMap(Map map){
         this.ownMap = Map.createEmptyMap(map);
     }

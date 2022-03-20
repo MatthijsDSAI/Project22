@@ -83,9 +83,72 @@ public class Map {
         return agent;
     }
 
+    public Agent rotateW45(Agent agent, int angle) {
+        int guardAngle = (int) agent.getAngle();
+        // North to east
+        if(guardAngle == 0 && angle == 90) {
+            agent.setAngle(45);
+            agent.computeVisibleTiles(this);
+            agent.setAngle(90);
+        }
+        // North to west
+        else if(guardAngle == 0 && angle == 270) {
+            agent.setAngle(315);
+            agent.computeVisibleTiles(this);
+            agent.setAngle(270);
+        }
+        // East to north
+        else if(guardAngle == 90 && angle == 0) {
+            agent.setAngle(45);
+            agent.computeVisibleTiles(this);
+            agent.setAngle(0);
+        }
+        // East to south
+        else if(guardAngle == 90 && angle == 180) {
+            agent.setAngle(135);
+            agent.computeVisibleTiles(this);
+            agent.setAngle(180);
+        }
+        // South to east
+        else if(guardAngle == 180 && angle == 90) {
+            agent.setAngle(135);
+            agent.computeVisibleTiles(this);
+            agent.setAngle(90);
+        }
+        // South to west
+        else if(guardAngle == 180 && angle == 270) {
+            agent.setAngle(225);
+            agent.computeVisibleTiles(this);
+            agent.setAngle(270);
+        }
+        // West to north
+        else if(guardAngle == 270 && angle == 0) {
+            agent.setAngle(315);
+            agent.computeVisibleTiles(this);
+            agent.setAngle(0);
+        }
+        // West to south
+        else if(guardAngle == 270 && angle == 180) {
+            agent.setAngle(225);
+            agent.computeVisibleTiles(this);
+            agent.setAngle(180);
+        }
+        return agent;
+    }
+
     public Agent moveAgent(Agent agent, DirectionEnum direction){
+        System.out.println("Agent movement initialized");
+        System.out.println("Current angle: " + agent.getAngle());
         if(agent.getAngle() != direction.getAngle()) {
+            //agent = rotateW45(agent, direction.getAngle());
+            //System.out.println("Agent angle after rotation: " + agent.getAngle());
             agent.rotate(direction.getAngle());
+            if(agent.getAngle() == direction.getAngle()) {
+                Tile fromTile = agent.getAgentPosition();
+                Tile toTile = getTileFromDirection(agent.getAgentPosition(), direction);
+
+                changeTiles(agent, fromTile, toTile);
+            }
         }
         else{
             Tile fromTile = agent.getAgentPosition();
