@@ -56,7 +56,7 @@ public class FrontierBasedExploration {
         updateExploredTiles(visibleTiles);
         adjacencyList.addNodes(visibleTiles);
         updateFrontiers(visibleTiles);
-        Tile tile = findFrontiers(guard);
+        Tile tile = findFrontiers(guard).get(1);
         DirectionEnum dir = findNextMoveDirection(guard, tile);
         return dir;
     }
@@ -82,7 +82,7 @@ public class FrontierBasedExploration {
         return frontierQueue;
     }
 
-    public Tile findFrontiers(Guard guard) {
+    public LinkedList<Tile> findFrontiers(Guard guard) {
         Tile curTile = guard.getAgentPosition();
         if(DEBUG)
             System.out.println("Guard pos at start of Frontier: " + curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
@@ -109,18 +109,34 @@ public class FrontierBasedExploration {
         }
 
         curTile = guard.getAgentPosition();
-        BFSQueue = new LinkedList<>();
-        BFSQueue.add(curTile);
-        tilesSeen = new LinkedList<>();
-        while(!BFSQueue.isEmpty()) {
-            curTile = BFSQueue.remove();
+        Queue<LinkedList<Tile>> queue = new LinkedList<>();
+        LinkedList<Tile> path = new LinkedList<>();
+        path.add(curTile);
+        queue.add(path);
+        while(!queue.isEmpty()) {
+            path = queue.poll();
+            Tile lastTile = path.getLast();
+            if (lastTile.isWalkable() && isFrontier(adjacencyList.get(lastTile)) && frontierQueue.contains(lastTile)) {
+                return path;
+            }
+
+            LinkedList<Tile> curAdjacencyList = adjacencyList.get(lastTile);
+            for (Tile tile : curAdjacencyList) {
+                if (!path.contains(tile)) {
+                    LinkedList<Tile> newPath = new LinkedList<>(path);
+                    newPath.add(tile);
+                    queue.offer(newPath);
+                }
+            }
+
+            /*curTile = BFSQueue.remove();
             tilesSeen.add(curTile);
             int curTileIndex = adjacencyList.getTileIndex(curTile);
             if(DEBUG)
                 System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(curTile);
             if(DEBUG)
-                System.out.print("Tiles adjacent to tile " + curTileIndex + " ");
+                System.out.println("Tiles adjacent to tile " + curTileIndex + curAdjacencyList);
             for(Tile tile : curAdjacencyList) {
                 int tileIndex = adjacencyList.getTileIndex(tile);
                 if(DEBUG)
@@ -138,7 +154,7 @@ public class FrontierBasedExploration {
                         System.out.println("Frontier detection returning tile: " + adjacencyList.getTileIndex(tile));
                     return tile;
                 }
-            }
+            }*/
         }
         printQueue(frontierQueue);
         return null;
