@@ -17,6 +17,7 @@ public abstract class Agent{
     double baseSpeed;
     public Map ownMap;
     private ArrayList<Tile> visibleTiles = new ArrayList<>();
+    private Marker[] marker = new Marker[5]; // 5 types of markers
     private Tile agentPosition;
 
     public Agent(int x_position, int y_position)
@@ -77,6 +78,11 @@ public abstract class Agent{
 
     public void setAgentPosition(Tile tile){
         agentPosition = tile;
+    }
+    
+    public void createMarkers(int number_markers, int distance) {
+        for(int i=0;i<5;i++)
+            marker[i].setSpecifics(number_markers,distance);
     }
 
     public Tile getAgentPosition(){
