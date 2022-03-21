@@ -5,6 +5,7 @@ import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import javafx.scene.paint.Color;
+import utils.DirectionEnum;
 import utils.Utils;
 
 import java.awt.geom.Point2D;
@@ -20,6 +21,10 @@ public abstract class Agent{
     private Marker[] marker = new Marker[5]; // 5 types of markers
     private Tile agentPosition;
 
+    /*
+     * The agent class
+     * An agent tracks it's own position relative to its starting position.
+     */
     public Agent(int x_position, int y_position)
     {
         this.x_position = x_position;
@@ -27,7 +32,7 @@ public abstract class Agent{
         this.a_name = "Agent";
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
-        angle=Utils.getRandomNumber(0,4)*90;
+        angle= DirectionEnum.getAngleFromDirection(Utils.getRandomDirection());
     }
 
 
@@ -63,8 +68,6 @@ public abstract class Agent{
 
     public void computeVisibleTiles(Map map){
         this.visibleTiles = map.computeVisibleTiles(this);
-
-        //Todo: temp just for visualisation
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
             ownMap.setTile(tile.clone());

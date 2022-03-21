@@ -1,7 +1,6 @@
 package utils;
 
 import controller.Map.tiles.Tile;
-import controller.Scenario;
 
 public class Utils {
     public static int TransFormIntoValidAngle(int angle){

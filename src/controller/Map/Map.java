@@ -13,7 +13,10 @@ import utils.DirectionEnum;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
+/*
+ * EVERYTHING that is directly involved with the map.
+ * Messy right now, will require cleaning up in phase 2.
+ */
 public class Map {
     private Tile[][] tiles;
     private Agent agent;

@@ -97,11 +97,10 @@ public class GameRunner {
             while(!ref.explored){
                 step();
                 ref.explored = map.isExplored();
-                //if(config.DEBUG){
+                if(config.DEBUG){
                     System.out.println(map.explored() + " of map has been explored");
                     System.out.println(this.t);
-                    guards.get(0).ownMap.printMap();
-                //}
+                }
 
             }});
         t.start();

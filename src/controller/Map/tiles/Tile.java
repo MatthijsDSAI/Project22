@@ -5,9 +5,12 @@ import controller.Scenario;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
 
 
+/*
+ * Abstract class that all the tiles are based on. Contains mostly booleans that are important for logic.
+ * Also contains a color, for GUI. If an agent is present on the tile, the tile also holds a reference to it.
+ */
 public abstract class Tile {
 
     private boolean exploredByDefault;
