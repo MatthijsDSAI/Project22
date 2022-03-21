@@ -76,7 +76,7 @@ public abstract class Tile {
         if(hasAgent()){
             return Scenario.config.getAgentColor();
         }
-        if(explored){
+        if(explored && this.toString().equals("Floor")){
             return Color.TAN;
         }
         return c;

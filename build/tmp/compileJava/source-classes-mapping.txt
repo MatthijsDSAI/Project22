@@ -1,29 +1,28 @@
+GUI/StartScreen.java
+ GUI.StartScreen
+utils/Position.java
+ utils.Position
 exploration/Baseline.java
  exploration.Baseline
-controller/GameMode.java
- controller.GameMode
-utils/DirectionEnum.java
- utils.DirectionEnum
 exploration/RandomExploration.java
  exploration.RandomExploration
-controller/Area.java
- controller.Area
+controller/TelePortal.java
+ controller.TelePortal
+utils/DirectionEnum.java
+ utils.DirectionEnum
+utils/Utils.java
+ utils.Utils
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
 mapgenerator/SimpleMapReader.java
  mapgenerator.SimpleMapReader
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
-controller/TelePortal.java
- controller.TelePortal
-utils/Position.java
- utils.Position
-utils/Config.java
- utils.Config
-controller/Scenario.java
- controller.Scenario
-utils/Utils.java
- utils.Utils
-GUI/StartScreen.java
- GUI.StartScreen
+controller/Area.java
+ controller.Area
+controller/GameMode.java
+ controller.GameMode
 controller/GameRunner.java
  controller.GameRunner
  controller.GameRunner$1
@@ -44,6 +43,10 @@ controller/GraphicsConnector.java
  controller.GraphicsConnector
 controller/Map/tiles/TeleportalTile.java
  controller.Map.tiles.TeleportalTile
+utils/Config.java
+ utils.Config
+controller/Scenario.java
+ controller.Scenario
 controller/Map/tiles/TargetArea.java
  controller.Map.tiles.TargetArea
 controller/Map/tiles/Shaded.java
@@ -56,9 +59,6 @@ controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
 utils/AdjacencyList.java
  utils.AdjacencyList
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
 Explorer.java
  Explorer
 controller/Map/tiles/Floor.java

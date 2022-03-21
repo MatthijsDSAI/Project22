@@ -12,6 +12,10 @@ import utils.Utils;
 
 import java.util.ArrayList;
 
+/*
+* Main class which stores and runs everything.
+* Contains the agents and the map.
+ */
 public class GameRunner {
     private Map map;
     private final Config config = Scenario.config;
@@ -23,6 +27,11 @@ public class GameRunner {
     private int t;
     private boolean isGameMode1;
 
+
+    /*
+    *Created off of a Scenario. The map is read in through scenario and the data is transfered through to gamerunner.
+    * A Map class is then made based off of this, the scenario is not used further
+     */
     public GameRunner(Scenario scenario) {
         this.scenario = scenario;
         isGameMode1 = (scenario.getGameMode() == 1);
@@ -38,8 +47,15 @@ public class GameRunner {
                 System.out.println("There has been an issue with the initialization of the GUI");
             }
         }
+        else{
+            run();
+        }
 
     }
+
+    /*
+    *Initialize the map, the agents, and their algorithms.
+     */
     public void init(){
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
         map.loadMap(scenario);
@@ -56,6 +72,10 @@ public class GameRunner {
         t = 0;
     }
 
+
+    /*
+    * The agent movement is done here
+     */
     public void step(){
         for(int j=0; j<Scenario.config.getBASESPEEDGUARD(); j++) {
             Utils.sleep(Scenario.config.getSleep());
@@ -65,7 +85,9 @@ public class GameRunner {
         t++;
     }
 
-
+    /*
+    * main while loop, one iteration = one timestep. When explored (== 100% covered), stop.
+     */
     public void run(){
         var ref = new Object() {
             boolean explored = false;
@@ -75,16 +97,20 @@ public class GameRunner {
             while(!ref.explored){
                 step();
                 ref.explored = map.isExplored();
-                if(config.DEBUG){
+                //if(config.DEBUG){
                     System.out.println(map.explored() + " of map has been explored");
                     System.out.println(this.t);
-                }
+                    guards.get(0).ownMap.printMap();
+                //}
 
             }});
         t.start();
 
     }
 
+    /*
+    * Call made to algorithm to rotate the agents to a certain direction.
+     */
     private void moveGuards() {
         for (int i = 0; i < guards.size(); i++) {
             Guard guard = guards.get(i);
@@ -104,11 +130,14 @@ public class GameRunner {
         }
     }
 
+    /*
+    * Initialization of guards, including putting them on the map.
+     */
     public void initGuards() { // "loadGuards" and "loadIntruders" can later be combined if either of them doesn't need any additional code
         for (Guard guard: guards) {
             int x = guard.getX_position();
             int y = guard.getY_position();
-            map.addAgent(new TestAgent(x,y), x, y);
+            map.addAgent(guard, x, y);
             guard.setAgentPosition(map.getTile(x,y));
             guard.initializeEmptyMap(map);
             guard.computeVisibleTiles(map);
@@ -119,7 +148,7 @@ public class GameRunner {
         for (Intruder intruder: intruders) {
             int x = intruder.getX_position();
             int y = intruder.getY_position();
-            map.addAgent(new TestAgent(x, y), x, y);
+            map.addAgent(intruder, x, y);
             intruder.setAgentPosition(map.getTile(x,y));
             intruder.initializeEmptyMap(map);
             intruder.computeVisibleTiles(map);
