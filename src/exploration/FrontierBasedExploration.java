@@ -40,12 +40,12 @@ public class FrontierBasedExploration {
         System.out.println(result);
     }
 
-    private void printTilesLL(LinkedList<Tile> tiles) {
+    private String tilesLLtoString(LinkedList<Tile> tiles) {
         String result = "";
         for(Tile tile : tiles) {
             result += adjacencyList.getTileIndex(tile) + ", ";
         }
-        System.out.println(result);
+        return result;
     }
 
     public DirectionEnum step(Guard guard) {
@@ -83,6 +83,7 @@ public class FrontierBasedExploration {
     }
 
     public LinkedList<Tile> findFrontiers(Guard guard) {
+        System.out.println("Searching for frontier");
         Tile curTile = guard.getAgentPosition();
         if(DEBUG)
             System.out.println("Guard pos at start of Frontier: " + curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
@@ -117,6 +118,9 @@ public class FrontierBasedExploration {
             path = queue.poll();
             Tile lastTile = path.getLast();
             if (lastTile.isWalkable() && isFrontier(adjacencyList.get(lastTile)) && frontierQueue.contains(lastTile)) {
+                System.out.println("Cur guard pos: " + lastTile.getX() + ", " + lastTile.getY());
+                System.out.println("Tile found pos: " + path.get(1).getX() + ", " + path.get(1).getY());
+                System.out.println("Found path: " + tilesLLtoString(path));
                 return path;
             }
 
@@ -169,7 +173,7 @@ public class FrontierBasedExploration {
         if(DEBUG)
             System.out.print("Direction for that tile is: ");
         if(Math.abs((curX-goalX) + (curY-goalY)) == 1 ) {
-            frontierQueue.remove();
+            frontierQueue.remove(nextTile);
         }
 
         ArrayList<DirectionEnum> dirs = new ArrayList<>();

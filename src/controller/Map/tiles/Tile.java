@@ -77,7 +77,12 @@ public abstract class Tile {
             return Scenario.config.getAgentColor();
         }
         if(explored){
-            return Color.TAN;
+            if(walkable) {
+                return Color.TAN;
+            }
+            else {
+                return Color.CORAL;
+            }
         }
         return c;
     }
