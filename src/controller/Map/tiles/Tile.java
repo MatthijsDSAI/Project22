@@ -14,6 +14,7 @@ public abstract class Tile {
     private boolean walkable;
     private boolean seeThrough;
     private boolean explored;
+    private boolean hasMarker;
     private Color c;
     private Tile type;
     private Agent agent;
@@ -30,7 +31,11 @@ public abstract class Tile {
         this.c = c;
         this.type = type;
         this.agent = agent;
+        this.hasMarker=false;
     }
+
+    public void setHasMarker(Boolean t){ this.hasMarker=t; }
+    public boolean getHasMarker(){return  hasMarker;}
 
     public void setExploredByDefault(boolean exploredByDefault) {this.exploredByDefault = exploredByDefault;}
     public boolean isExploredByDefault() {
@@ -56,12 +61,13 @@ public abstract class Tile {
 
     public abstract String toString();
 
-
     public Agent getAgent() { // should agent part be abstracted?
         if (agent != null)
             return agent;
         else return null;
     }
+
+
     public void addAgent(Agent agent) {
         this.agent = agent;
     }
