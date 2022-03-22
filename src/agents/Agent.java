@@ -87,6 +87,10 @@ public abstract class Agent{
         for(int i=0;i<5;i++)
             marker[i].setSpecifics(number_markers,distance);
     }
+    
+    public void addMarkers(int i){
+        marker[i].addMarker(this, i);
+    }
 
     public Tile getAgentPosition(){
         return agentPosition;
