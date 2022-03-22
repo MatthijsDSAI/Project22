@@ -84,7 +84,8 @@ public class FrontierBasedExploration {
     }
 
     public Path findFrontiers(Guard guard) {
-        System.out.println("!Searching for frontier!");
+        if(DEBUG)
+            System.out.println("!Searching for frontier!");
         Tile curTile = guard.getAgentPosition();
         if(DEBUG)
             System.out.println("Guard pos at start of Frontier: " + curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
@@ -109,8 +110,8 @@ public class FrontierBasedExploration {
                 }
             }
         }
-
-        System.out.println("Starting second frontier search");
+        if(DEBUG)
+            System.out.println("Starting second frontier search");
         printQueue(frontierQueue);
 
         curTile = guard.getAgentPosition();
@@ -171,7 +172,8 @@ public class FrontierBasedExploration {
         int curY = curTile.getY();
         int goalX = nextTile.getX();
         int goalY = nextTile.getY();
-        System.out.println("Found frontier: " + goalX + ", " + goalY + " --- " + adjacencyList.getTileIndex(curTile));
+        if(DEBUG)
+            System.out.println("Found frontier: " + goalX + ", " + goalY + " --- " + adjacencyList.getTileIndex(curTile));
         if(DEBUG)
             System.out.print("Direction for that tile is: ");
         if(adjacencyList.get(nextTile).size() == 4) {

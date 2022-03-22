@@ -96,19 +96,20 @@ public class GameRunner {
         Thread t = new Thread(() ->{
             while(!ref.explored){
                 step();
-                ref.explored = map.isExplored();
-                if(config.DEBUG){
-                    System.out.println(map.explored() + " of map has been explored");
-                    System.out.println(this.t);
-                }
 
+                //if(config.DEBUG){
+                    System.out.println("Timestep: "+ this.t);
+                    System.out.println(100*map.explored() + "% of map has been explored");
+
+                //}
+                ref.explored = map.isExplored();
             }});
         t.start();
 
     }
 
     /*
-    * Call made to algorithm to rotate the agents to a certain direction.
+    * Call made to algorithm to rotate the agents to a certain direction.@a
      */
     private void moveGuards() {
         for (int i = 0; i < guards.size(); i++) {

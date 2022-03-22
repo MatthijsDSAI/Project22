@@ -29,7 +29,7 @@ public class Area {
         bottomBoundary=1;
     }
 
-    public Area(int x1, int x2, int y1, int y2, String type){
+    public Area(int x1, int y1, int x2, int y2, String type){
         this.type = type;
         leftBoundary=Math.min(x1,x2);
         rightBoundary=Math.max(x1,x2);

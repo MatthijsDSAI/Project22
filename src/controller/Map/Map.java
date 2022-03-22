@@ -25,6 +25,7 @@ public class Map {
     private ArrayList<Intruder> intruders = new ArrayList<>();
     private int horizontalSize;
     private int verticalSize;
+    private boolean isExplored = false;
 
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
@@ -115,14 +116,7 @@ public class Map {
 
 
     public boolean isExplored() {
-        for(Tile[] tiles : tiles){
-            for(Tile tile : tiles){
-                if(!tile.isExploredByDefault()){
-                    return false;
-                }
-            }
-        }
-        return true;
+        return isExplored;
     }
 
     public double explored(){
@@ -143,6 +137,9 @@ public class Map {
                 }
 
             }
+        }
+        if(explored/(notExplored+explored) > 0.9999999999999999 ){
+            isExplored = true;
         }
         return explored/(notExplored+explored);
     }

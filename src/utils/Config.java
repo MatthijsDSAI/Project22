@@ -10,8 +10,8 @@ public class Config {
     private double SPRINTSTEEDINTRUDER;
     private Color agentColor = Color.CYAN;
     public boolean GUI = true;
-    public boolean DEBUG = true;
-    public long sleep = 150;
+    public boolean DEBUG = false;
+    public long sleep = 200;
 
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
