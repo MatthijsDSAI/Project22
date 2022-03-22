@@ -5,6 +5,7 @@ import controller.Map.tiles.Tile;
 import controller.Scenario;
 import utils.AdjacencyList;
 import utils.DirectionEnum;
+import utils.Path;
 import utils.Position;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class FrontierBasedExploration {
         return frontierQueue;
     }
 
-    public LinkedList<Tile> findFrontiers(Guard guard) {
+    public Path findFrontiers(Guard guard) {
         System.out.println("!Searching for frontier!");
         Tile curTile = guard.getAgentPosition();
         if(DEBUG)
@@ -113,13 +114,14 @@ public class FrontierBasedExploration {
         printQueue(frontierQueue);
 
         curTile = guard.getAgentPosition();
-        Queue<LinkedList<Tile>> queue = new LinkedList<>();
-        LinkedList<Tile> path = new LinkedList<>();
+        LinkedList<Path> queue = new LinkedList<>();
+        LinkedList<Integer> distances = new LinkedList<>();
+        Path path = new Path();
         path.add(curTile);
         queue.add(path);
         tilesSeen = new LinkedList<>();
         while(!queue.isEmpty()) {
-            path = queue.poll();
+            path = queue.remove(findShortestPath(queue, frontierQueue));
             //System.out.println("Current path: " + tilesLLtoString(path));
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
@@ -137,40 +139,27 @@ public class FrontierBasedExploration {
                     continue;
                 }
                 if (!path.contains(tile) && tile.isWalkable()) {
-                    LinkedList<Tile> newPath = new LinkedList<>(path);
+                    Path newPath = new Path(path);
                     newPath.add(tile);
                     queue.offer(newPath);
                 }
             }
-
-            /*curTile = BFSQueue.remove();
-            tilesSeen.add(curTile);
-            int curTileIndex = adjacencyList.getTileIndex(curTile);
-            if(DEBUG)
-                System.out.println("Removing " + curTileIndex + " from BFSQueue and looping through adjacent tiles.");
-            LinkedList<Tile> curAdjacencyList = adjacencyList.get(curTile);
-            if(DEBUG)
-                System.out.println("Tiles adjacent to tile " + curTileIndex + curAdjacencyList);
-            for(Tile tile : curAdjacencyList) {
-                int tileIndex = adjacencyList.getTileIndex(tile);
-                if(DEBUG)
-                    System.out.println("Looking at adjacent tile " + tileIndex);
-                if(BFSQueue.contains(tile) || tilesSeen.contains(tile)) {
-                    if(DEBUG)
-                        System.out.println("Tile " + tileIndex + " skipped because it was already explored.");
-                    continue;
-                }
-                if(DEBUG)
-                    System.out.println("Adding adjacent tile " + tileIndex + " toBFSQueue.");
-                BFSQueue.add(tile);
-                if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && frontierQueue.contains(tile)) {
-                    if(DEBUG)
-                        System.out.println("Frontier detection returning tile: " + adjacencyList.getTileIndex(tile));
-                    return tile;
-                }
-            }*/
         }
         return null;
+    }
+
+    private int findShortestPath(LinkedList<Path> paths, Queue<Tile> frontiers) {
+        int shortestDist = Integer.MAX_VALUE;
+        int bestPathIndex = -1;
+        for(int i = 0; i < paths.size(); i++) {
+            Path path = paths.get(i);
+            int curDist = path.updateDist(frontiers);
+            if(curDist < shortestDist) {
+                shortestDist = curDist;
+                bestPathIndex = i;
+            }
+        }
+        return bestPathIndex;
     }
 
     public DirectionEnum findNextMoveDirection(Guard guard, Tile nextTile) {
@@ -179,6 +168,7 @@ public class FrontierBasedExploration {
         int curY = curTile.getY();
         int goalX = nextTile.getX();
         int goalY = nextTile.getY();
+        System.out.println("Found frontier: " + goalX + ", " + goalY + " --- " + adjacencyList.getTileIndex(curTile));
         if(DEBUG)
             System.out.print("Direction for that tile is: ");
         if(Math.abs((curX-goalX) + (curY-goalY)) == 1 ) {

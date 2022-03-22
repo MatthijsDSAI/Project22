@@ -90,6 +90,12 @@ public abstract class Tile {
         }
         return c;
     }
+
+    // calculates the Manhattan distance between this and other
+    public int manhattanDist(Tile other) {
+        return (Math.abs(this.getX() - other.getX()) + Math.abs(this.getY() - other.getY()));
+    }
+
     public void setColor(Color c) {this.c = c;}
 
     public Tile clone(){
