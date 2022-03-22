@@ -10,7 +10,7 @@ public class Config {
     private double SPRINTSTEEDINTRUDER;
     private Color agentColor = Color.CYAN;
     public boolean GUI = true;
-    public boolean DEBUG = false;
+    public boolean DEBUG = true;
     public long sleep = 150;
 
     //store an instance of this in our main gamerunner class eventually

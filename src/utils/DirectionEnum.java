@@ -20,9 +20,10 @@ public enum DirectionEnum {
 
 
 
-    public static String getDirection(){
+    public String getDirection(){
         return direction;
     }
+
     public int getAngle(){return angle;}
 
     public static int getAngleFromDirection(DirectionEnum directionEnum){

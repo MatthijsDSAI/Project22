@@ -83,8 +83,7 @@ public class FrontierBasedExploration {
     }
 
     public LinkedList<Tile> findFrontiers(Guard guard) {
-        if(DEBUG)
-            System.out.println("Searching for frontier");
+        System.out.println("!Searching for frontier!");
         Tile curTile = guard.getAgentPosition();
         if(DEBUG)
             System.out.println("Guard pos at start of Frontier: " + curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
@@ -110,26 +109,34 @@ public class FrontierBasedExploration {
             }
         }
 
+        System.out.println("Starting second frontier search");
+        printQueue(frontierQueue);
+
         curTile = guard.getAgentPosition();
         Queue<LinkedList<Tile>> queue = new LinkedList<>();
         LinkedList<Tile> path = new LinkedList<>();
         path.add(curTile);
         queue.add(path);
+        tilesSeen = new LinkedList<>();
         while(!queue.isEmpty()) {
             path = queue.poll();
+            //System.out.println("Current path: " + tilesLLtoString(path));
             Tile lastTile = path.getLast();
+            tilesSeen.add(lastTile);
+            //System.out.println("Looking at tile: " + lastTile.getX() + ", " + lastTile.getY() + "--- tile: " + adjacencyList.getTileIndex(lastTile));
             if (lastTile.isWalkable() && isFrontier(adjacencyList.get(lastTile)) && frontierQueue.contains(lastTile)) {
-                if(DEBUG) {
-                    System.out.println("Cur guard pos: " + lastTile.getX() + ", " + lastTile.getY());
-                    System.out.println("Tile found pos: " + path.get(1).getX() + ", " + path.get(1).getY());
-                    System.out.println("Found path: " + tilesLLtoString(path));
-                }
+                //System.out.println("Cur guard pos: " + guard.getAgentPosition().getX() + ", " + guard.getAgentPosition().getY() + " --- tile: " + adjacencyList.getTileIndex(lastTile));
+                //System.out.println("Tile found pos: " + path.get(1).getX() + ", " + path.get(1).getY() + "--- tile: " + adjacencyList.getTileIndex(path.get(1)));
+                //System.out.println("Found path: " + tilesLLtoString(path));
                 return path;
             }
 
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(lastTile);
             for (Tile tile : curAdjacencyList) {
-                if (!path.contains(tile)) {
+                if(path.contains(tile) || tilesSeen.contains(tile)) {
+                    continue;
+                }
+                if (!path.contains(tile) && tile.isWalkable()) {
                     LinkedList<Tile> newPath = new LinkedList<>(path);
                     newPath.add(tile);
                     queue.offer(newPath);
@@ -163,7 +170,6 @@ public class FrontierBasedExploration {
                 }
             }*/
         }
-        printQueue(frontierQueue);
         return null;
     }
 
