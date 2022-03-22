@@ -1,7 +1,6 @@
 package utils;
-
+    //Enum that handles angles and directions and makes switching between the two very easy.
 public enum DirectionEnum {
-    //right is 0 degrees, like unit circle
     WEST("west", 90),
     EAST("east", 270),
     NORTH("north", 0),
@@ -21,11 +20,14 @@ public enum DirectionEnum {
 
 
 
-    public String getDirection(){
+    public static String getDirection(){
         return direction;
     }
     public int getAngle(){return angle;}
 
+    public static int getAngleFromDirection(DirectionEnum directionEnum){
+        return directionEnum.getAngle();
+    }
 
     //i think this should work, but might require debugging
     public static DirectionEnum getDirection(double angle) {

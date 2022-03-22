@@ -1,21 +1,18 @@
 package controller;
 
 import GUI.MapGui;
-import agents.Agent;
 import agents.Guard;
 import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import javafx.scene.paint.Color;
 
-import javax.imageio.ImageIO;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
+/*
+* Forms the bridge between the backend and the GUI.
+* Not much going on now, but with the advanced GUI in phase 2 we will have a lot more here.
+ */
 public class GraphicsConnector {
     private Map map;
     private Tile[][] tiles;
@@ -23,6 +20,7 @@ public class GraphicsConnector {
     private ArrayList<Guard> guards;
     private ArrayList<Intruder> intruders;
     private MapGui gui;
+
     public GraphicsConnector(GameRunner gameRunner) {
         this.gameRunner = gameRunner;
         map = gameRunner.getMap();

@@ -5,15 +5,19 @@ import controller.Scenario;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
 
 
+/*
+ * Abstract class that all the tiles are based on. Contains mostly booleans that are important for logic.
+ * Also contains a color, for GUI. If an agent is present on the tile, the tile also holds a reference to it.
+ */
 public abstract class Tile {
 
     private boolean exploredByDefault;
     private boolean walkable;
     private boolean seeThrough;
     private boolean explored;
+    private boolean hasMarker;
     private Color c;
     private Tile type;
     private Agent agent;
@@ -30,7 +34,11 @@ public abstract class Tile {
         this.c = c;
         this.type = type;
         this.agent = agent;
+        this.hasMarker=false;
     }
+
+    public void setHasMarker(Boolean t){ this.hasMarker=t; }
+    public boolean getHasMarker(){return  hasMarker;}
 
     public void setExploredByDefault(boolean exploredByDefault) {this.exploredByDefault = exploredByDefault;}
     public boolean isExploredByDefault() {
@@ -56,12 +64,13 @@ public abstract class Tile {
 
     public abstract String toString();
 
-
     public Agent getAgent() { // should agent part be abstracted?
         if (agent != null)
             return agent;
         else return null;
     }
+
+
     public void addAgent(Agent agent) {
         this.agent = agent;
     }
@@ -76,13 +85,8 @@ public abstract class Tile {
         if(hasAgent()){
             return Scenario.config.getAgentColor();
         }
-        if(explored){
-            if(walkable) {
-                return Color.TAN;
-            }
-            else {
-                return Color.CORAL;
-            }
+        if(explored && this.toString().equals("Floor")){
+            return Color.TAN;
         }
         return c;
     }

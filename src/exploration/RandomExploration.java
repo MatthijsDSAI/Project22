@@ -1,18 +1,86 @@
 package exploration;
 
-import static java.lang.Math.*;
+import controller.Map.Map;
+import controller.Map.tiles.Tile;
+import utils.DirectionEnum;
 
-public class RandomExploration {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-    public static int randomMove() {
-        int randomMove = (int) (Math.random() * 360);
-        if (randomMove < 90) {
-            return 0;
-        } else if (randomMove < 180) {
-            return 90;
-        } else if (randomMove < 270) {
-            return 180;
-        } else return 270;
+public class RandomExploration extends Exploration {
+
+    int x,y;
+    Map map;
+    Tile tile;
+    Random r = new Random();
+
+    //Constructor
+    public RandomExploration() { }
+
+    //Constructor
+    public RandomExploration(Tile tile) {
+        this.tile = tile;
+        this.x = tile.getX();
+        this.y = tile.getY();
     }
 
+    public RandomExploration(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public List<DirectionEnum> checkTile(){
+        List<DirectionEnum> validMove= new ArrayList<>();
+        if (map.getTiles()[x + 1][y].isWalkable()){
+            validMove.add(DirectionEnum.EAST);
+        }
+        if (map.getTiles()[x - 1][y].isWalkable()){
+           validMove.add(DirectionEnum.WEST);
+        }
+        if (map.getTiles()[x][y-1].isWalkable()){
+            validMove.add(DirectionEnum.NORTH);
+        }
+        if (map.getTiles()[x][y+1].isWalkable()){
+            validMove.add(DirectionEnum.SOUTH);
+        }
+        return validMove;
+    }
+
+//    public DirectionEnum randomDirection(){
+//        int randomMove = (int) (Math.random()*3);
+//        return switch (randomMove) {
+//            case 0 -> DirectionEnum.WEST;
+//            case 1 -> DirectionEnum.EAST;
+//            case 2 -> DirectionEnum.NORTH;
+//            default -> DirectionEnum.SOUTH;
+//        };
+//    }
+
+    @Override
+    public DirectionEnum makeMove() {
+        List<DirectionEnum> l = checkTile();
+        return l.get(r.nextInt(l.size()));
+    }
+
+    @Override
+    public String getExplorationName() {
+        return "RandomExploration";
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }

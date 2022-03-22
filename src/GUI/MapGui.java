@@ -1,7 +1,5 @@
 package GUI;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import controller.GameRunner;
 import controller.GraphicsConnector;
 import controller.Scenario;
 import javafx.animation.KeyFrame;
@@ -11,35 +9,22 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import utils.Utils;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class MapGui extends Application {
 
-    private Scenario scenario;
-    private int mapHeight;
-    private int mapWidth;
     private int col;
     private int row;
-    private double scaling;
-    private GameRunner gr;
     private Color[][] map;
     private static GraphicsConnector graphicsConnector;
     private Timeline t;
     private BorderPane mapPane;
-    private BorderPane root;
     private BorderPane p;
     private Stage stage;
     private double width;
