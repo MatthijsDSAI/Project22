@@ -82,7 +82,7 @@ public class Map {
     }
 
     public void changeTiles(Agent agent, Tile fromTile, Tile toTile){
-        if(fromTile.isWalkable()) {
+        if(toTile.isWalkable()) {
             getTile(fromTile.getX(),fromTile.getY()).removeAgent();
             getTile(toTile.getX(),toTile.getY()).addAgent(agent);
             agent.setAgentPosition(toTile);
