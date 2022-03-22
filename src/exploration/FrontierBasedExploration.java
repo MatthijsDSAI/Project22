@@ -159,6 +159,9 @@ public class FrontierBasedExploration {
                 bestPathIndex = i;
             }
         }
+        if(bestPathIndex == -1) {
+            throw new RuntimeException("Game is done");
+        }
         return bestPathIndex;
     }
 
@@ -171,7 +174,7 @@ public class FrontierBasedExploration {
         System.out.println("Found frontier: " + goalX + ", " + goalY + " --- " + adjacencyList.getTileIndex(curTile));
         if(DEBUG)
             System.out.print("Direction for that tile is: ");
-        if(Math.abs((curX-goalX) + (curY-goalY)) == 1 ) {
+        if(adjacencyList.get(nextTile).size() == 4) {
             frontierQueue.remove(nextTile);
         }
 
