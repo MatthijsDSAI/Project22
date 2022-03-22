@@ -81,6 +81,8 @@ public class Map {
             toTile = getTile(teleportalTile.getTargetX(), teleportalTile.getTargetY());
             changeTiles(agent, fromTile, toTile);
             agent.setAngle((int) teleportalTile.getAngle());
+            ((Guard)agent).enterTeleportal=false;
+            ((Guard)agent).enteredTeleportal=true;
         }
         return agent;
     }

@@ -3,13 +3,11 @@ package controller;
 import GUI.MapGui;
 import agents.Guard;
 import agents.Intruder;
-import agents.TestAgent;
 import controller.Map.Map;
 import exploration.FrontierBasedExploration;
 import utils.Config;
 import utils.DirectionEnum;
-import utils.Utils;
-
+import java.util.Calendar;
 import java.util.ArrayList;
 
 /*
@@ -78,7 +76,7 @@ public class GameRunner {
      */
     public void step(){
         for(int j=0; j<Scenario.config.getBASESPEEDGUARD(); j++) {
-            Utils.sleep(Scenario.config.getSleep());
+            //Utils.sleep(Scenario.config.getSleep());
             moveGuards();
             moveIntruders();
         }
@@ -98,7 +96,7 @@ public class GameRunner {
                 step();
 
                 //if(config.DEBUG){
-                    System.out.println("Timestep: "+ this.t);
+                    System.out.println("Timestep: "+ this.t + " at: " + Calendar.getInstance().getTime());
                     System.out.println(100*map.explored() + "% of map has been explored");
 
                 //}
@@ -115,11 +113,22 @@ public class GameRunner {
         for (int i = 0; i < guards.size(); i++) {
             Guard guard = guards.get(i);
             FrontierBasedExploration explorer = explorers.get(i);
-            DirectionEnum dir = explorer.step(guard);
-            guard = (Guard) map.moveAgent(guard, dir);
-            guard.computeVisibleTiles(map);
+            DirectionEnum dir = null;
+            if(t>320){
+                if(guard.firstAgent){
+                    dir = explorer.step(guard);
+                    guard = (Guard) map.moveAgent(guard, dir);
+                    guard.computeVisibleTiles(map);
+                }
+            }
+            else{
+                    dir = explorer.step(guard);
+                    guard = (Guard) map.moveAgent(guard, dir);
+                    guard.computeVisibleTiles(map);
+            }
         }
     }
+
 
     private void moveIntruders() {
         if (isGameMode1) {
