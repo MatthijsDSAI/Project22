@@ -7,7 +7,7 @@ public class Explorer {
 
 
     public static void main(String[] args){
-        String mapD="testmap.txt";
+        String mapD="testmap2.txt";
         Scenario scenario = new Scenario(mapD);
         GameRunner gr = new GameRunner(scenario);
     }
