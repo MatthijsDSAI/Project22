@@ -6,10 +6,11 @@ import utils.DirectionEnum;
 import java.util.ArrayList;
 
 public enum Marker{
-    Marker1("Red Marker", DirectionEnum.getDirection(270)),
-    Marker2("Orange Marker", DirectionEnum.getDirection(0)),
-    Marker3("Green Marker", DirectionEnum.getDirection(180)),
-    Marker4("White Marker", DirectionEnum.getDirection(90));
+    Marker1("Red", DirectionEnum.getDirection(270)),
+    Marker2("Orange", DirectionEnum.getDirection(0)),
+    Marker3("Green", DirectionEnum.getDirection(180)),
+    Marker4("White", DirectionEnum.getDirection(90)),
+    Marker5("Pheromone", null);
 
     private String s;
     private DirectionEnum direction;
@@ -32,10 +33,12 @@ public enum Marker{
     }
 
     public void addMarker(Agent agent, int i){
-        if(isVisual==true)
+        if(i<4)
         {
             agent.ownMap.getTile(agent.getX_position(), agent.getY_position()).setColor(c[i]);
         }
+        if(i==4)
+            isVisual=false;
         agent.ownMap.getTile(agent.getX_position(), agent.getY_position()).setHasMarker(true);
         tile.add(agent.ownMap.getTile(agent.getX_position(), agent.getY_position()));
         number_markers--;
@@ -63,6 +66,26 @@ public enum Marker{
             }
         }
         return false;
+    }
+
+    public DirectionEnum performAction(Agent agent){
+        double initialAngle = agent.getAngle();
+        if(isVisual==true){
+            if(isInArea(agent)==true)
+                if(getName().equals("Red"))
+                    //Go east
+                    return DirectionEnum.getDirection(270);
+            if(getName().equals("Orange"))
+                //Go north
+                return DirectionEnum.getDirection(0);
+            //Go south
+            if(getName().equals("Green"))
+                return DirectionEnum.getDirection(180);
+            //Go west
+            if(getName().equals("White"))
+                return DirectionEnum.getDirection(90);
+        }
+        return DirectionEnum.getDirection(agent.angle);
     }
 
     public String getName() {return s;}
