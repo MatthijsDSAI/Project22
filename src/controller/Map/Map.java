@@ -20,7 +20,6 @@ import java.util.Arrays;
 public class Map {
     private Tile[][] tiles;
     private Agent agent;
-    private GraphicsConnector graphicsConnector;
     private ArrayList<Guard> guards = new ArrayList<>();
     private ArrayList<Intruder> intruders = new ArrayList<>();
     private int horizontalSize;
@@ -563,14 +562,6 @@ public class Map {
 
     public void setTile(Tile tile){
         tiles[tile.getY()][tile.getX()] = tile;
-    }
-
-    public GraphicsConnector getGraphicsConnector() {
-        return graphicsConnector;
-    }
-
-    public void setGraphicsConnector(GraphicsConnector graphicsConnector) {
-        this.graphicsConnector = graphicsConnector;
     }
 
     public ArrayList<Guard> getGuards() {return guards;}

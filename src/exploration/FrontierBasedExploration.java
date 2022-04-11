@@ -1,4 +1,5 @@
 package exploration;
+import agents.Agent;
 import agents.Guard;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class FrontierBasedExploration {
+public class FrontierBasedExploration extends Exploration{
     //no prior information about the map
     Tile[][] map;
     private ArrayList<Tile> visibleTiles;
@@ -49,7 +50,9 @@ public class FrontierBasedExploration {
         return result;
     }
 
-    public DirectionEnum step(Guard guard) {
+    @Override
+    public DirectionEnum makeMove(Agent agent) {
+        Guard guard = (Guard)agent;
         Tile curTile = guard.getAgentPosition();
         int curX = curTile.getX();
         int curY = curTile.getY();

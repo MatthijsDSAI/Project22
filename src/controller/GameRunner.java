@@ -1,9 +1,11 @@
 package controller;
 
 import GUI.MapGui;
+import agents.Agent;
 import agents.Guard;
 import agents.Intruder;
 import controller.Map.Map;
+import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import utils.Config;
 import utils.DirectionEnum;
@@ -19,7 +21,7 @@ public class GameRunner {
     private final Config config = Scenario.config;
     private ArrayList<Guard> guards;
     private ArrayList<Intruder> intruders;
-    private ArrayList<FrontierBasedExploration> explorers;
+    private ArrayList<Exploration> explorers;
     private MapGui gui;
     private Scenario scenario;
     private int t;
@@ -33,12 +35,11 @@ public class GameRunner {
     public GameRunner(Scenario scenario) {
         this.scenario = scenario;
         isGameMode1 = (scenario.getGameMode() == 1);
-        init();
-        GraphicsConnector graphicsConnector = new GraphicsConnector(this);
-        gui = new MapGui();
-        map.setGraphicsConnector(graphicsConnector);
+        initMap();
         if(Scenario.config.GUI){
             try{
+                GraphicsConnector graphicsConnector = new GraphicsConnector(this);
+                gui = new MapGui();
                 gui.launchGUI(graphicsConnector);
             }
             catch(IllegalStateException e ){
@@ -53,15 +54,18 @@ public class GameRunner {
 
     /*
     *Initialize the map, the agents, and their algorithms.
-     */
-    public void init(){
+    */
+    public void initMap(){
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
         map.loadMap(scenario);
+    }
+
+    public void init(String exploration){
         guards = map.getGuards();
         intruders = map.getIntruders();
         explorers = new ArrayList<>();
         for(int i = 0; i < guards.size(); i++) {
-            explorers.add(new FrontierBasedExploration(guards.get(i), map.getTiles()));
+            explorers.add(Agent.getExploration(exploration, guards.get(i), map.getTiles()));
         }
         initGuards();
         if (isGameMode1) {
@@ -112,17 +116,17 @@ public class GameRunner {
     private void moveGuards() {
         for (int i = 0; i < guards.size(); i++) {
             Guard guard = guards.get(i);
-            FrontierBasedExploration explorer = explorers.get(i);
+            Exploration explorer = explorers.get(i);
             DirectionEnum dir = null;
             if(t>320){
                 if(guard.firstAgent){
-                    dir = explorer.step(guard);
+                    dir = explorer.makeMove(guard);
                     guard = (Guard) map.moveAgent(guard, dir);
                     guard.computeVisibleTiles(map);
                 }
             }
             else{
-                    dir = explorer.step(guard);
+                    dir = explorer.makeMove(guard);
                     guard = (Guard) map.moveAgent(guard, dir);
                     guard.computeVisibleTiles(map);
             }
