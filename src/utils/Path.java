@@ -8,14 +8,22 @@ import java.util.Queue;
 public class Path extends LinkedList<Tile>{
 
     public int dist;
-    public Tile src;
+    public int cost;
 
     public Path() {
         super();
+        this.cost = 0;
     }
 
     public Path(Path other) {
         super(other);
+    }
+
+    @Override
+    public boolean add(Tile tile) {
+        cost++;
+        System.out.println("Cur cost: " + cost);
+        return super.add(tile);
     }
 
     public int updateDist(Queue<Tile> frontiers) {
@@ -26,7 +34,7 @@ public class Path extends LinkedList<Tile>{
                 if(curDist < smallestDist) smallestDist = curDist;
             }
             this.dist = smallestDist;
-            return smallestDist;
+            return cost + smallestDist;
         }
         return Integer.MAX_VALUE;
     }
