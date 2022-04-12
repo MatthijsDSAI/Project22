@@ -20,11 +20,11 @@ import java.util.Arrays;
 public class Map {
     private Tile[][] tiles;
     private Agent agent;
-    private GraphicsConnector graphicsConnector;
     private ArrayList<Guard> guards = new ArrayList<>();
     private ArrayList<Intruder> intruders = new ArrayList<>();
     private int horizontalSize;
     private int verticalSize;
+    private boolean isExplored = false;
 
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
@@ -80,6 +80,8 @@ public class Map {
             toTile = getTile(teleportalTile.getTargetX(), teleportalTile.getTargetY());
             changeTiles(agent, fromTile, toTile);
             agent.setAngle((int) teleportalTile.getAngle());
+            ((Guard)agent).enterTeleportal=false;
+            ((Guard)agent).enteredTeleportal=true;
         }
         return agent;
     }
@@ -115,14 +117,7 @@ public class Map {
 
 
     public boolean isExplored() {
-        for(Tile[] tiles : tiles){
-            for(Tile tile : tiles){
-                if(!tile.isExploredByDefault()){
-                    return false;
-                }
-            }
-        }
-        return true;
+        return isExplored;
     }
 
     public double explored(){
@@ -143,6 +138,9 @@ public class Map {
                 }
 
             }
+        }
+        if(explored/(notExplored+explored) > 0.9999999999999999 ){
+            isExplored = true;
         }
         return explored/(notExplored+explored);
     }
@@ -564,14 +562,6 @@ public class Map {
 
     public void setTile(Tile tile){
         tiles[tile.getY()][tile.getX()] = tile;
-    }
-
-    public GraphicsConnector getGraphicsConnector() {
-        return graphicsConnector;
-    }
-
-    public void setGraphicsConnector(GraphicsConnector graphicsConnector) {
-        this.graphicsConnector = graphicsConnector;
     }
 
     public ArrayList<Guard> getGuards() {return guards;}

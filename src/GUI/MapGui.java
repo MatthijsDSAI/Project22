@@ -83,9 +83,10 @@ public class MapGui extends Application {
         map[r.nextInt(map.length)][r.nextInt(map[0].length)] = Color.BLACK;
     }
 
-    public void startExploration() {
+    public void startExploration(String exploration) {
         mapPane = createPane();
         stage.getScene().setRoot(mapPane);
+        graphicsConnector.initGameRunner(exploration);
         graphicsConnector.run();
         initTimeLine(mapPane);
         stage.setOnCloseRequest(e -> {

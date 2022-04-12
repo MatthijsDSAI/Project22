@@ -44,6 +44,10 @@ public class GraphicsConnector {
     public void run(){
         gameRunner.run();
     }
+
+    public void initGameRunner(String exploration){
+        gameRunner.init(exploration);
+    }
     public void setGui(MapGui gui) {
         this.gui = gui;
     }

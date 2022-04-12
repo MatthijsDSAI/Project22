@@ -4,6 +4,9 @@ import controller.Area;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
+import exploration.Exploration;
+import exploration.FrontierBasedExploration;
+import exploration.RandomExploration;
 import javafx.scene.paint.Color;
 import utils.DirectionEnum;
 import utils.Utils;
@@ -33,6 +36,16 @@ public abstract class Agent{
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
         angle= DirectionEnum.getAngleFromDirection(Utils.getRandomDirection());
+    }
+
+    public static Exploration getExploration(String exploration, Guard guard, Tile[][] tiles) {
+        switch (exploration){
+            case "FrontierBasedExploration":
+                return new FrontierBasedExploration(guard, tiles);
+            case "RandomExploration":
+                return new RandomExploration(guard, tiles);
+        }
+        throw new RuntimeException("Invalid Algorithm passed");
     }
 
 

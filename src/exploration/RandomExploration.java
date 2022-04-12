@@ -1,5 +1,6 @@
 package exploration;
 
+import agents.Agent;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import utils.DirectionEnum;
@@ -10,22 +11,22 @@ import java.util.Random;
 
 public class RandomExploration extends Exploration {
 
+    private final Agent agent;
     int x,y;
     Map map;
     Tile tile;
     Random r = new Random();
 
-    //Constructor
-    public RandomExploration() { }
 
     //Constructor
-    public RandomExploration(Tile tile) {
-        this.tile = tile;
-        this.x = tile.getX();
-        this.y = tile.getY();
+    public RandomExploration(Agent agent, Tile[][] tiles) {
+        this.agent = agent;
+//        this.x = tile.getX();
+//        this.y = tile.getY();
     }
 
-    public RandomExploration(int x, int y) {
+    public RandomExploration(Agent agent, int x, int y) {
+        this.agent = agent;
         this.x = x;
         this.y = y;
     }
@@ -56,14 +57,13 @@ public class RandomExploration extends Exploration {
 //            default -> DirectionEnum.SOUTH;
 //        };
 //    }
-
     @Override
-    public DirectionEnum makeMove() {
+    public DirectionEnum makeMove(Agent agent) {
         List<DirectionEnum> l = checkTile();
         return l.get(r.nextInt(l.size()));
     }
 
-    @Override
+
     public String getExplorationName() {
         return "RandomExploration";
     }
