@@ -21,7 +21,6 @@ public class FrontierBasedExploration extends Exploration{
     private LinkedList<Tile> exploredTiles;
     private Queue<Tile> frontierQueue;
     private Queue<Tile> BFSQueue;
-    private Tile nextTile;
     private boolean DEBUG = Scenario.config.DEBUG;
 
     //Constructor -> tells which is the position of the robot and the angle
@@ -88,10 +87,6 @@ public class FrontierBasedExploration extends Exploration{
                 exploredTiles.add(tile);
             }
         }
-    }
-
-    public Tile getNextTile() {
-        return nextTile;
     }
 
     public Queue<Tile> updateFrontiers(ArrayList<Tile> visibleTiles) {
