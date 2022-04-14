@@ -2,8 +2,10 @@ package agents;
 
 import controller.Area;
 import controller.Map.Map;
+import controller.Map.MapUpdater;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
+import controller.Visibility.Visibility;
 import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import exploration.RandomExploration;
@@ -80,7 +82,7 @@ public abstract class Agent{
     }
 
     public void computeVisibleTiles(Map map){
-        this.visibleTiles = map.computeVisibleTiles(this);
+        this.visibleTiles = Visibility.computeVisibleTiles(map, this);
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
             ownMap.setTile(tile.clone());

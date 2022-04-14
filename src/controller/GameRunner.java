@@ -5,6 +5,7 @@ import agents.Agent;
 import agents.Guard;
 import agents.Intruder;
 import controller.Map.Map;
+import controller.Map.MapUpdater;
 import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import utils.Config;
@@ -27,6 +28,7 @@ public class GameRunner {
     private int t;
     private boolean isGameMode1;
 
+    private Map[] pastMaps;
 
     /*
     *Created off of a Scenario. The map is read in through scenario and the data is transfered through to gamerunner.
@@ -57,7 +59,7 @@ public class GameRunner {
     */
     public void initMap(){
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
-        map.loadMap(scenario);
+        MapUpdater.loadMap(map, scenario);
     }
 
     public void init(String exploration){
@@ -67,9 +69,9 @@ public class GameRunner {
         for(int i = 0; i < guards.size(); i++) {
             explorers.add(Agent.getExploration(exploration, guards.get(i), map.getTiles()));
         }
-        initGuards();
+        MapUpdater.initGuards(map, guards);
         if (isGameMode1) {
-            initIntruders();
+            MapUpdater.initIntruders(map, intruders);
         }
         t = 0;
     }
@@ -98,13 +100,11 @@ public class GameRunner {
         Thread t = new Thread(() ->{
             while(!ref.explored){
                 step();
-
-                //if(config.DEBUG){
+                if(config.DEBUG){
                     System.out.println("Timestep: "+ this.t + " at: " + Calendar.getInstance().getTime());
-                    System.out.println(100*map.explored() + "% of map has been explored");
-
-                //}
-                ref.explored = map.isExplored();
+                    System.out.println(100*Map.explored(map) + "% of map has been explored");
+                }
+                ref.explored = Map.isExplored(map);
             }});
         t.start();
 
@@ -121,13 +121,13 @@ public class GameRunner {
             if(t>320){
                 if(guard.firstAgent){
                     dir = explorer.makeMove(guard);
-                    guard = (Guard) map.moveAgent(guard, dir);
+                    guard = (Guard) MapUpdater.moveAgent(map, guard, dir);
                     guard.computeVisibleTiles(map);
                 }
             }
             else{
                     dir = explorer.makeMove(guard);
-                    guard = (Guard) map.moveAgent(guard, dir);
+                    guard = (Guard) MapUpdater.moveAgent(map, guard, dir);
                     guard.computeVisibleTiles(map);
             }
         }
@@ -137,36 +137,12 @@ public class GameRunner {
     private void moveIntruders() {
         if (isGameMode1) {
             for (Intruder intruder : intruders) {
-                map.moveAgent(intruder, DirectionEnum.EAST);
+                MapUpdater.moveAgent(map, intruder, DirectionEnum.EAST);
                 intruder.computeVisibleTiles(map);
             }
         }
     }
 
-    /*
-    * Initialization of guards, including putting them on the map.
-     */
-    public void initGuards() { // "loadGuards" and "loadIntruders" can later be combined if either of them doesn't need any additional code
-        for (Guard guard: guards) {
-            int x = guard.getX_position();
-            int y = guard.getY_position();
-            map.addAgent(guard, x, y);
-            guard.setAgentPosition(map.getTile(x,y));
-            guard.initializeEmptyMap(map);
-            guard.computeVisibleTiles(map);
-        }
-    }
-
-    public void initIntruders() {
-        for (Intruder intruder: intruders) {
-            int x = intruder.getX_position();
-            int y = intruder.getY_position();
-            map.addAgent(intruder, x, y);
-            intruder.setAgentPosition(map.getTile(x,y));
-            intruder.initializeEmptyMap(map);
-            intruder.computeVisibleTiles(map);
-        }
-    }
 
 
     public Map getMap() {
