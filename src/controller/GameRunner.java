@@ -83,7 +83,7 @@ public class GameRunner {
     * The agent movement is done here
      */
     public void step(){
-        for(int j=0; j<Scenario.config.getBASESPEEDGUARD(); j++) {
+        for(int j=0; j<Scenario.config.getTimeStepSize(); j++) {
             Utils.sleep(Scenario.config.getSleep());
             moveGuards();
             moveIntruders();

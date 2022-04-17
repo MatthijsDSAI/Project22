@@ -56,4 +56,15 @@ public class Utils {
         }
         return angle;
     }
+
+    public static int gcd(int a, int b){
+        return b == 0 ? a:gcd(b, a%b);
+    }
+
+    public static int LcmArray(int[] list, int n){
+        if(n==list.length-1){
+            return list[n];
+        }
+        return (list[n]*LcmArray(list, n+1)/gcd(list[n], LcmArray(list,n+1)));
+    }
 }

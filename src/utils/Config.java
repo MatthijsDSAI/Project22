@@ -66,4 +66,8 @@ public class Config {
     public void setCenterOfTargetArea(int[] centerOfTargetArea) {
         this.centerOfTargetArea = centerOfTargetArea;
     }
+
+    public int getTimeStepSize(){
+        return Utils.LcmArray(new int[]{(int) getBASESPEEDGUARD(), (int) getBASESPEEDINTRUDER(), (int) getSPRINTSTEEDINTRUDER()}, 0);
+    }
 }
