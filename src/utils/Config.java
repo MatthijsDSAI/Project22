@@ -12,6 +12,7 @@ public class Config {
     public boolean GUI = true;
     public boolean DEBUG = false;
     public long sleep = 200;
+    private int[] centerOfTargetArea;
 
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
@@ -56,5 +57,13 @@ public class Config {
 
     public long getSleep() {
         return sleep;
+    }
+
+    public int[] getCenterOfTargetArea(){
+        return centerOfTargetArea;
+    }
+
+    public void setCenterOfTargetArea(int[] centerOfTargetArea) {
+        this.centerOfTargetArea = centerOfTargetArea;
     }
 }

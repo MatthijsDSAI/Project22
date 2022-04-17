@@ -8,6 +8,7 @@ import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
 import utils.DirectionEnum;
+import utils.Utils;
 
 import java.util.ArrayList;
 
@@ -168,7 +169,7 @@ public class MapUpdater {
                 MapUpdater.spawnGuard(map, scenario.getSpawnAreaGuards());
             }
             for (int i = 0; i < scenario.getNumIntruders(); i++) {
-                MapUpdater.spawnGuard(map, scenario.getSpawnAreaIntruders());
+                MapUpdater.spawnIntruder(map, scenario.getSpawnAreaIntruders());
             }
         }
     }
@@ -185,7 +186,8 @@ public class MapUpdater {
     public static void spawnIntruder(Map map, Area givenArea){
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
-        Intruder tempAgent = new Intruder(rand1, rand2);
+        Intruder tempAgent = new Intruder(rand1, rand2, Utils.findAngleToTargetArea(rand1, rand2));
+        System.out.println(tempAgent.angleOfTarget);
         tempAgent.setAgentPosition(map.getTile(rand1,rand2));
         map.getIntruders().add(tempAgent);
         map.getTile(rand1, rand2).addAgent(tempAgent);

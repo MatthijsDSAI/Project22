@@ -1,6 +1,7 @@
 package utils;
 
 import controller.Map.tiles.Tile;
+import controller.Scenario;
 
 public class Utils {
     public static int TransFormIntoValidAngle(int angle){
@@ -39,5 +40,20 @@ public class Utils {
         catch(InterruptedException e){
             System.out.println("Threading issue");
         }
+    }
+
+    public static double findAngleToTargetArea(int x1, int y1) {
+        int x2 = Scenario.config.getCenterOfTargetArea()[0];
+        int y2 = Scenario.config.getCenterOfTargetArea()[1];
+        System.out.println(x2 + " " + y2);
+        return findAngleFromTileToTile(x1, y1, x2, y2);
+    }
+
+    public static double findAngleFromTileToTile(int x1, int y1, int x2, int y2){
+        double angle = Math.toDegrees(Math.atan2(y2-y1, x2-x1))+90;
+        if(angle<0){
+            angle+=360;
+        }
+        return angle;
     }
 }

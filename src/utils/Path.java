@@ -1,6 +1,7 @@
 package utils;
 
 import controller.Map.tiles.Tile;
+import controller.Scenario;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -22,7 +23,8 @@ public class Path extends LinkedList<Tile>{
     @Override
     public boolean add(Tile tile) {
         cost++;
-        System.out.println("Cur cost: " + cost);
+        if(Scenario.config.DEBUG)
+            System.out.println("Cur cost: " + cost);
         return super.add(tile);
     }
 

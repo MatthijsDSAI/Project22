@@ -123,6 +123,10 @@ public class Scenario {
                         break;
                     case "targetArea":
                         areas.add(new Area(Integer.parseInt(items[0]),Integer.parseInt(items[1]),Integer.parseInt(items[2]),Integer.parseInt(items[3]), "targetArea"));
+                        this.targetArea = new Area(Integer.parseInt(items[0]),Integer.parseInt(items[1]),Integer.parseInt(items[2]),Integer.parseInt(items[3]), "targetArea");
+                        int middleX = (targetArea.getLeftBoundary()+targetArea.getRightBoundary())/2;
+                        int middleY = (targetArea.getTopBoundary()+targetArea.getBottomBoundary())/2;
+                        config.setCenterOfTargetArea(new int[]{middleX, middleY});
                         break;
                     case "spawnAreaIntruders":
                         spawnAreaIntruders = new Area(Integer.parseInt(items[0]),Integer.parseInt(items[1]),Integer.parseInt(items[2]),Integer.parseInt(items[3]), "spawnAreaIntruders");

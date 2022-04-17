@@ -10,6 +10,8 @@ import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import utils.Config;
 import utils.DirectionEnum;
+import utils.Utils;
+
 import java.util.Calendar;
 import java.util.ArrayList;
 
@@ -26,7 +28,7 @@ public class GameRunner {
     private MapGui gui;
     private Scenario scenario;
     private int t;
-    private boolean isGameMode1;
+    private int gameMode;
 
     private Map[] pastMaps;
 
@@ -36,7 +38,7 @@ public class GameRunner {
      */
     public GameRunner(Scenario scenario) {
         this.scenario = scenario;
-        isGameMode1 = (scenario.getGameMode() == 1);
+        gameMode = scenario.getGameMode();
         initMap();
         if(Scenario.config.GUI){
             try{
@@ -70,7 +72,7 @@ public class GameRunner {
             explorers.add(Agent.getExploration(exploration, guards.get(i), map.getTiles()));
         }
         MapUpdater.initGuards(map, guards);
-        if (isGameMode1) {
+        if (gameMode == 1) {
             MapUpdater.initIntruders(map, intruders);
         }
         t = 0;
@@ -82,7 +84,7 @@ public class GameRunner {
      */
     public void step(){
         for(int j=0; j<Scenario.config.getBASESPEEDGUARD(); j++) {
-            //Utils.sleep(Scenario.config.getSleep());
+            Utils.sleep(Scenario.config.getSleep());
             moveGuards();
             moveIntruders();
         }
@@ -99,6 +101,7 @@ public class GameRunner {
 
         Thread t = new Thread(() ->{
             while(!ref.explored){
+
                 step();
                 if(config.DEBUG){
                     System.out.println("Timestep: "+ this.t + " at: " + Calendar.getInstance().getTime());
@@ -117,16 +120,16 @@ public class GameRunner {
         for (int i = 0; i < guards.size(); i++) {
             Guard guard = guards.get(i);
             Exploration explorer = explorers.get(i);
-            DirectionEnum dir = null;
+            DirectionEnum dir = DirectionEnum.EAST;
             if(t>320){
                 if(guard.firstAgent){
-                    dir = explorer.makeMove(guard);
+                    //dir = explorer.makeMove(guard);
                     guard = (Guard) MapUpdater.moveAgent(map, guard, dir);
                     guard.computeVisibleTiles(map);
                 }
             }
             else{
-                    dir = explorer.makeMove(guard);
+                    //dir = explorer.makeMove(guard);
                     guard = (Guard) MapUpdater.moveAgent(map, guard, dir);
                     guard.computeVisibleTiles(map);
             }
@@ -135,7 +138,7 @@ public class GameRunner {
 
 
     private void moveIntruders() {
-        if (isGameMode1) {
+        if (gameMode == 1) {
             for (Intruder intruder : intruders) {
                 MapUpdater.moveAgent(map, intruder, DirectionEnum.EAST);
                 intruder.computeVisibleTiles(map);
@@ -153,6 +156,7 @@ public class GameRunner {
 
     public ArrayList<Intruder> getIntruders() {return intruders;}
 
-    public boolean isGameMode1() {return isGameMode1;}
-
+    public int getGameMode() {
+        return gameMode;
+    }
 }

@@ -26,7 +26,7 @@ public class GraphicsConnector {
         map = gameRunner.getMap();
         tiles = map.getTiles();
         guards = gameRunner.getGuards();
-        if (gameRunner.isGameMode1()) {
+        if (gameRunner.getGameMode()==1) {
             intruders = gameRunner.getIntruders();
         }
     }
