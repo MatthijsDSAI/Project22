@@ -63,20 +63,6 @@ public class FrontierBasedExploration extends Exploration{
         if(frontierQueue.isEmpty()){
             return null;
         }
-        if(guard.enterTeleportal){
-            for(int i=0; i<guard.ownMap.getTiles()[0].length; i++){
-                for(int j=0; j<guard.ownMap.getTiles().length; j++){
-                    if(guard.ownMap.getTile(i,j)!= null && guard.ownMap.getTile(i,j).toString().equals("TelePortal")){
-                        tile = guard.ownMap.getTile(i,j);
-                        break;
-                    }
-                }
-            }
-        }
-        if(guard.enteredTeleportal){
-            frontierQueue.clear();
-            guard.enteredTeleportal = false;
-        }
         DirectionEnum dir = findNextMoveDirection(guard, tile);
         return dir;
     }

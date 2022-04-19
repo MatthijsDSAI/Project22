@@ -119,19 +119,12 @@ public class GameRunner {
     private void moveGuards() {
         for (int i = 0; i < guards.size(); i++) {
             Guard guard = guards.get(i);
-            Exploration explorer = explorers.get(i);
-            DirectionEnum dir = DirectionEnum.EAST;
-            if(t>320){
-                if(guard.firstAgent){
-                    //dir = explorer.makeMove(guard);
-                    guard = (Guard) MapUpdater.moveAgent(map, guard, dir);
-                    guard.computeVisibleTiles(map);
-                }
-            }
-            else{
-                    //dir = explorer.makeMove(guard);
-                    guard = (Guard) MapUpdater.moveAgent(map, guard, dir);
-                    guard.computeVisibleTiles(map);
+            if(guard.getSpeed()%i==0){
+                Exploration explorer = explorers.get(i);
+                DirectionEnum dir = DirectionEnum.EAST;
+                //dir = explorer.makeMove(guard);
+                guard = (Guard) MapUpdater.moveAgent(map, guard, dir);
+                guard.computeVisibleTiles(map);
             }
         }
     }

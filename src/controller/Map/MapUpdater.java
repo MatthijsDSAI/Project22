@@ -44,8 +44,6 @@ public class MapUpdater {
             toTile = map.getTile(teleportalTile.getTargetX(), teleportalTile.getTargetY());
             changeTiles(map, agent, fromTile, toTile);
             agent.setAngle((int) teleportalTile.getAngle());
-            ((Guard)agent).enterTeleportal=false;
-            ((Guard)agent).enteredTeleportal=true;
         }
         return agent;
     }

@@ -35,7 +35,6 @@ public abstract class Agent{
         this.x_position = x_position;
         this.y_position = y_position;
         this.a_name = "Agent";
-        this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
         this.audiostdeviation=10;
         angle= DirectionEnum.getAngleFromDirection(Utils.getRandomDirection());
     }
@@ -119,4 +118,7 @@ public abstract class Agent{
         return y_position;
     }
 
+    public int getSpeed() {
+        return (int) baseSpeed;
+    }
 }
