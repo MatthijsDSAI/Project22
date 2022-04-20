@@ -86,7 +86,6 @@ public abstract class Agent{
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
         }
-
     }
 
     public ArrayList<Tile> getVisibleTiles() {

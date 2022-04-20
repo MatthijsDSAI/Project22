@@ -45,7 +45,6 @@ public class Utils {
     public static double findAngleToTargetArea(int x1, int y1) {
         int x2 = Scenario.config.getCenterOfTargetArea()[0];
         int y2 = Scenario.config.getCenterOfTargetArea()[1];
-        System.out.println(x2 + " " + y2);
         return findAngleFromTileToTile(x1, y1, x2, y2);
     }
 

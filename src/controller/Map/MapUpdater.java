@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class MapUpdater {
 
-    public static Agent moveAgent(Map map, Agent agent, DirectionEnum direction){
+    public static void moveAgent(Map map, Agent agent, DirectionEnum direction){
         if(Scenario.config.DEBUG){
             System.out.println("Agent movement initialized");
             System.out.println("Current angle: " + agent.getAngle());
@@ -45,7 +45,6 @@ public class MapUpdater {
             changeTiles(map, agent, fromTile, toTile);
             agent.setAngle((int) teleportalTile.getAngle());
         }
-        return agent;
     }
 
     public static void changeTiles(Map map, Agent agent, Tile fromTile, Tile toTile){
@@ -185,7 +184,6 @@ public class MapUpdater {
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
         Intruder tempAgent = new Intruder(rand1, rand2, Utils.findAngleToTargetArea(rand1, rand2));
-        System.out.println(tempAgent.angleOfTarget);
         tempAgent.setAgentPosition(map.getTile(rand1,rand2));
         map.getIntruders().add(tempAgent);
         map.getTile(rand1, rand2).addAgent(tempAgent);

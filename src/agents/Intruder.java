@@ -12,7 +12,6 @@ public class Intruder extends Agent{
         this.angleOfTarget = angleOfTarget;
         this.baseSpeed = Scenario.config.getBASESPEEDINTRUDER();
         this.sprintSpeed = Scenario.config.getSPRINTSTEEDINTRUDER();
-
         this.sprinting = false;
     }
 
@@ -25,18 +24,23 @@ public class Intruder extends Agent{
     }
 
     public void sprint(){
-        this.sprinting = true;
-        stamina--;
+        if(stamina>4){
+            this.sprinting = true;
+        }
+        checkStamina();
     }
 
     public void checkStamina(){
-        if(stamina==0){
+        if(stamina<=0){
             sprinting = false;
+        }
+        if(sprinting){
+            stamina--;
         }
     }
 
-    public void resting(){
-        if(!sprinting){
+    public void handleRest(){
+        if(!sprinting && stamina<5){
             stamina++;
         }
     }
