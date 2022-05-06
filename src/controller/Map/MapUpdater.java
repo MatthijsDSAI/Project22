@@ -61,8 +61,9 @@ public class MapUpdater {
     /*
      * Initialization of guards, including putting them on the map.
      */
-    public static void initGuards(Map map, ArrayList<Guard> guards) { // "loadGuards" and "loadIntruders" can later be combined if either of them doesn't need any additional code
+    public static void initGuards(Map map, ArrayList<Guard> guards, String guardAlgorithm) { // "loadGuards" and "loadIntruders" can later be combined if either of them doesn't need any additional code
         for (Guard guard: guards) {
+            guard.createExplorationAlgorithm(guardAlgorithm, map.getTiles());
             int x = guard.getX_position();
             int y = guard.getY_position();
             Map.addAgent(map, guard, x, y);
@@ -72,8 +73,9 @@ public class MapUpdater {
         }
     }
 
-    public static void initIntruders(Map map, ArrayList<Intruder> intruders) {
+    public static void initIntruders(Map map, ArrayList<Intruder> intruders, String intruderAlgorithm) {
         for (Intruder intruder: intruders) {
+            intruder.createExplorationAlgorithm(intruderAlgorithm, map.getTiles());
             int x = intruder.getX_position();
             int y = intruder.getY_position();
             Map.addAgent(map, intruder, x, y);

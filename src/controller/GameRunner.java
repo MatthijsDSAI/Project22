@@ -64,13 +64,14 @@ public class GameRunner {
         MapUpdater.loadMap(map, scenario);
     }
 
-    public void init(String exploration){
+    public void init(String guardAlgorithm, String intruderAlgorithm){
         Scenario.config.computeStepSize();
         guards = map.getGuards();
         intruders = map.getIntruders();
-        MapUpdater.initGuards(map, guards);
+
+        MapUpdater.initGuards(map, guards, guardAlgorithm);
         if (gameMode == 1) {
-            MapUpdater.initIntruders(map, intruders);
+            MapUpdater.initIntruders(map, intruders, intruderAlgorithm);
         }
         t = 0;
     }
@@ -134,7 +135,9 @@ public class GameRunner {
             for (Intruder intruder : intruders) {
                 if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
                     Utils.sleep(100);
-                    MapUpdater.moveAgent(map, intruder, DirectionEnum.EAST);
+                    Exploration explorer = intruder.getExploration();
+                    DirectionEnum dir = explorer.makeMove(intruder);
+                    MapUpdater.moveAgent(map, intruder, dir);
                     intruder.computeVisibleTiles(map);
                     intruderCount++;
                     intruder.sprint();

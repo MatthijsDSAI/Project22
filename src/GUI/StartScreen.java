@@ -16,8 +16,8 @@ public class StartScreen extends BorderPane {
         setCenter(playerSelection);
     }
 
-    public void startExploration(String exploration, String intruder){
-        mapGui.startExploration(exploration);
+    public void startExploration(String guard, String intruder){
+        mapGui.startExploration(guard, intruder);
     }
 
     public StartButton getStartButton(){

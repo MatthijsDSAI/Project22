@@ -19,6 +19,7 @@ public class Intruder extends Agent{
         this.sprinting = false;
     }
 
+
     @Override
     public int getSpeed(){
         if(sprinting){
@@ -52,11 +53,15 @@ public class Intruder extends Agent{
         return angleOfTarget;
     }
 
-    public Exploration createExplorationAlgorithm(String exploration, Tile[][] tiles) {
+    @Override
+    public void createExplorationAlgorithm(String exploration, Tile[][] tiles) {
         switch (exploration){
             case "RandomExploration":
-                return new RandomExploration(this, tiles);
+                this.exploration = new RandomExploration(this, tiles);
+                break;
+            default:
+                throw new RuntimeException("Invalid Algorithm passed");
         }
-        throw new RuntimeException("Invalid Algorithm passed");
+
     }
 }

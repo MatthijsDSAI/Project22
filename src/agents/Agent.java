@@ -25,7 +25,7 @@ public abstract class Agent{
     private ArrayList<Tile> visibleTiles = new ArrayList<>();
     private Marker[] marker = new Marker[5]; // 5 types of markers
     private Tile agentPosition;
-    private Exploration exploration;
+    public Exploration exploration;
 
     /*
      * The agent class
@@ -40,16 +40,7 @@ public abstract class Agent{
         angle= DirectionEnum.getAngleFromDirection(Utils.getRandomDirection());
     }
 
-    public static Exploration getExploration(String exploration, Guard guard, Tile[][] tiles) {
-        switch (exploration){
-            case "FrontierBasedExploration":
-                return new FrontierBasedExploration(guard, tiles);
-            case "RandomExploration":
-                return new RandomExploration(guard, tiles);
-        }
-        throw new RuntimeException("Invalid Algorithm passed");
-    }
-
+    public abstract void createExplorationAlgorithm(String exploration, Tile[][] tiles);
 
     public void rotate(int angle){
         this.angle = this.angle + angle;

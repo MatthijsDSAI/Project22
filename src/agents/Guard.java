@@ -15,13 +15,19 @@ public class Guard extends Agent{
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
     }
 
-    public Exploration createExplorationAlgorithm(String exploration, Tile[][] tiles) {
-        switch (exploration){
+    @Override
+    public void createExplorationAlgorithm(String exploration, Tile[][] tiles) {
+        System.out.println(exploration);
+        switch (exploration) {
             case "FrontierBasedExploration":
-                return new FrontierBasedExploration(this, tiles);
+                this.exploration = new FrontierBasedExploration(this, tiles);
+                break;
             case "RandomExploration":
-                return new RandomExploration(this, tiles);
+                this.exploration = new RandomExploration(this, tiles);
+                break;
+            default:
+                throw new RuntimeException("Invalid Algorithm passed");
+
         }
-        throw new RuntimeException("Invalid Algorithm passed");
     }
 }
