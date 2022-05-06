@@ -1,6 +1,10 @@
 package agents;
 
+import controller.Map.tiles.Tile;
 import controller.Scenario;
+import exploration.Exploration;
+import exploration.FrontierBasedExploration;
+import exploration.RandomExploration;
 
 public class Intruder extends Agent{
     public double angleOfTarget;
@@ -46,5 +50,13 @@ public class Intruder extends Agent{
     }
     public double getAngleOfTarget() {
         return angleOfTarget;
+    }
+
+    public Exploration createExplorationAlgorithm(String exploration, Tile[][] tiles) {
+        switch (exploration){
+            case "RandomExploration":
+                return new RandomExploration(this, tiles);
+        }
+        throw new RuntimeException("Invalid Algorithm passed");
     }
 }

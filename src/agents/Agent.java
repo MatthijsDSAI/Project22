@@ -25,6 +25,7 @@ public abstract class Agent{
     private ArrayList<Tile> visibleTiles = new ArrayList<>();
     private Marker[] marker = new Marker[5]; // 5 types of markers
     private Tile agentPosition;
+    private Exploration exploration;
 
     /*
      * The agent class
@@ -119,5 +120,9 @@ public abstract class Agent{
 
     public int getSpeed() {
         return (int) baseSpeed;
+    }
+
+    public Exploration getExploration() {
+        return exploration;
     }
 }

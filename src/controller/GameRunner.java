@@ -24,7 +24,6 @@ public class GameRunner {
     private final Config config = Scenario.config;
     private ArrayList<Guard> guards;
     private ArrayList<Intruder> intruders;
-    private ArrayList<Exploration> explorers;
     private MapGui gui;
     private Scenario scenario;
     private int t;
@@ -69,10 +68,6 @@ public class GameRunner {
         Scenario.config.computeStepSize();
         guards = map.getGuards();
         intruders = map.getIntruders();
-        explorers = new ArrayList<>();
-        for (Guard guard : guards) {
-            explorers.add(Agent.getExploration(exploration, guard, map.getTiles()));
-        }
         MapUpdater.initGuards(map, guards);
         if (gameMode == 1) {
             MapUpdater.initIntruders(map, intruders);
@@ -124,9 +119,8 @@ public class GameRunner {
             Guard guard = guards.get(i);
             if(j==0 || j%(Scenario.config.getTimeStepSize()/guard.getSpeed())==0){
                 Utils.sleep(100);
-                Exploration explorer = explorers.get(i);
-                DirectionEnum dir = DirectionEnum.EAST;
-                //dir = explorer.makeMove(guard);
+                Exploration explorer = guard.getExploration();
+                DirectionEnum dir = explorer.makeMove(guard);
                 MapUpdater.moveAgent(map, guard, dir);
                 guard.computeVisibleTiles(map);
                 guardCount++;
