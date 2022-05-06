@@ -1,0 +1,12 @@
+height = 20
+width = 20
+gameMode = 1
+numIntruders = 1
+baseSpeedGuard = 11
+baseSpeedIntruder = 20
+sprintSpeedIntruder = 1
+distanceViewing = 5
+numberMarkers = 5
+smellingDistance = 5
+targetArea = 10 10 15 15
+spawnAreaIntruders = 2 2 3 3

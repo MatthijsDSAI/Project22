@@ -14,6 +14,7 @@ public class Config {
     public long sleep = 200;
     private int[] centerOfTargetArea;
     private int timeStepSize;
+    private boolean MOVE = true;
 
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
@@ -74,5 +75,8 @@ public class Config {
 
     public void computeStepSize(){
         this.timeStepSize = Utils.LcmArray(new int[]{(int) getBASESPEEDGUARD(), (int) getBASESPEEDINTRUDER(), (int) getSPRINTSTEEDINTRUDER()}, 0);
+    }
+    public boolean isMOVE() {
+        return MOVE;
     }
 }

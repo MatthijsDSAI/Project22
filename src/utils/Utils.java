@@ -53,7 +53,7 @@ public class Utils {
         if(angle<0){
             angle+=360;
         }
-        return angle;
+        return 360-angle;
     }
 
     public static int gcd(int a, int b){
@@ -65,5 +65,21 @@ public class Utils {
             return list[n];
         }
         return (list[n]*LcmArray(list, n+1)/gcd(list[n], LcmArray(list,n+1)));
+    }
+
+    public static DirectionEnum findClosestDirection(double angle){
+        if((angle>=0 && angle<=45) || (angle<= 360 && angle>=315)){
+            return DirectionEnum.NORTH;
+        }
+        if((angle>=90 && angle<=135) || (angle<= 90 && angle>=45)){
+            return DirectionEnum.WEST;
+        }
+        if((angle>=180 && angle<=225) || (angle<= 180 && angle>=135)){
+            return DirectionEnum.SOUTH;
+        }
+        if((angle>=270 && angle<=315) || (angle<= 270 && angle>=225)){
+            return DirectionEnum.EAST;
+        }
+        return null;
     }
 }

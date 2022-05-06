@@ -44,4 +44,7 @@ public class Intruder extends Agent{
             stamina++;
         }
     }
+    public double getAngleOfTarget() {
+        return angleOfTarget;
+    }
 }
