@@ -12,7 +12,9 @@ public class PlayerSelectionComboBox extends HBox {
         this.playerSelection = playerSelection;
         setPadding(new Insets(20,10,20,10));
         setAlignment(Pos.CENTER);
+
         this.guard = new PlayerChoiceBox(this, "guard");
+        guard.getItems().add("guard");
         this.intruder = new PlayerChoiceBox(this, "intruder");
         getChildren().addAll(guard, intruder);
     }

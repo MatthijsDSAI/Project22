@@ -109,6 +109,7 @@ public class Scenario {
                     case "distanceViewing":
                         distanceViewing = Integer.parseInt(value);
                         config.setDistanceViewing(distanceViewing);
+                        break;
                     case "baseSpeedIntruder":
                         baseSpeedIntruder = Double.parseDouble(value);
                         config.setBASESPEEDINTRUDER(baseSpeedIntruder);

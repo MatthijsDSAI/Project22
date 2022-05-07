@@ -38,8 +38,6 @@ controller/GameMode.java
  controller.GameMode
 agents/Intruder.java
  agents.Intruder
-agents/TestAgent.java
- agents.TestAgent
 utils/AdjacencyList.java
  utils.AdjacencyList
 GUI/StartButton.java

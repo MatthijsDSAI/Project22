@@ -13,16 +13,17 @@ public class RandomExploration extends Exploration {
 
     private final Agent agent;
     int x,y;
-    Map map;
-    Tile tile;
+    Tile[][] tiles;
     Random r = new Random();
 
 
     //Constructor
     public RandomExploration(Agent agent, Tile[][] tiles) {
         this.agent = agent;
-//        this.x = tile.getX();
-//        this.y = tile.getY();
+        this.tiles = tiles;
+
+        this.x = agent.getX_position();
+        this.y = agent.getY_position();
     }
 
     public RandomExploration(Agent agent, int x, int y) {
@@ -33,18 +34,20 @@ public class RandomExploration extends Exploration {
 
     public List<DirectionEnum> checkTile(){
         List<DirectionEnum> validMove= new ArrayList<>();
-        if (map.getTiles()[x + 1][y].isWalkable()){
+        if (tiles[x + 1][y].isWalkable()){
             validMove.add(DirectionEnum.EAST);
         }
-        if (map.getTiles()[x - 1][y].isWalkable()){
+        if (tiles[x - 1][y].isWalkable()){
            validMove.add(DirectionEnum.WEST);
         }
-        if (map.getTiles()[x][y-1].isWalkable()){
+        if (tiles[x][y-1].isWalkable()){
+            System.out.println(tiles[x][y-1]);
             validMove.add(DirectionEnum.NORTH);
         }
-        if (map.getTiles()[x][y+1].isWalkable()){
+        if (tiles[x][y+1].isWalkable()){
             validMove.add(DirectionEnum.SOUTH);
         }
+        System.out.println(validMove);
         return validMove;
     }
 
@@ -60,7 +63,24 @@ public class RandomExploration extends Exploration {
     @Override
     public DirectionEnum makeMove(Agent agent) {
         List<DirectionEnum> l = checkTile();
-        return l.get(r.nextInt(l.size()));
+        DirectionEnum dir = l.get(r.nextInt(l.size()));
+        changePosition(dir);
+        return dir;
+    }
+
+    private void changePosition(DirectionEnum dir) {
+        if(dir == DirectionEnum.NORTH){
+            y--;
+        }
+        if(dir == DirectionEnum.EAST){
+            x++;
+        }
+        if(dir == DirectionEnum.SOUTH){
+            y++;
+        }
+        if(dir == DirectionEnum.WEST){
+            x--;
+        }
     }
 
 

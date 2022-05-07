@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class MapUpdater {
 
-    public static Agent moveAgent(Map map, Agent agent, DirectionEnum direction){
+    public static void moveAgent(Map map, Agent agent, DirectionEnum direction){
         if(Scenario.config.DEBUG){
             System.out.println("Agent movement initialized");
             System.out.println("Current angle: " + agent.getAngle());
@@ -45,7 +45,6 @@ public class MapUpdater {
             changeTiles(map, agent, fromTile, toTile);
             agent.setAngle((int) teleportalTile.getAngle());
         }
-        return agent;
     }
 
     public static void changeTiles(Map map, Agent agent, Tile fromTile, Tile toTile){
@@ -62,8 +61,9 @@ public class MapUpdater {
     /*
      * Initialization of guards, including putting them on the map.
      */
-    public static void initGuards(Map map, ArrayList<Guard> guards) { // "loadGuards" and "loadIntruders" can later be combined if either of them doesn't need any additional code
+    public static void initGuards(Map map, ArrayList<Guard> guards, String guardAlgorithm) { // "loadGuards" and "loadIntruders" can later be combined if either of them doesn't need any additional code
         for (Guard guard: guards) {
+            guard.createExplorationAlgorithm(guardAlgorithm, map.getTiles());
             int x = guard.getX_position();
             int y = guard.getY_position();
             Map.addAgent(map, guard, x, y);
@@ -73,8 +73,9 @@ public class MapUpdater {
         }
     }
 
-    public static void initIntruders(Map map, ArrayList<Intruder> intruders) {
+    public static void initIntruders(Map map, ArrayList<Intruder> intruders, String intruderAlgorithm) {
         for (Intruder intruder: intruders) {
+            intruder.createExplorationAlgorithm(intruderAlgorithm, map.getTiles());
             int x = intruder.getX_position();
             int y = intruder.getY_position();
             Map.addAgent(map, intruder, x, y);
@@ -185,7 +186,6 @@ public class MapUpdater {
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
         Intruder tempAgent = new Intruder(rand1, rand2, Utils.findAngleToTargetArea(rand1, rand2));
-        System.out.println(tempAgent.angleOfTarget);
         tempAgent.setAgentPosition(map.getTile(rand1,rand2));
         map.getIntruders().add(tempAgent);
         map.getTile(rand1, rand2).addAgent(tempAgent);

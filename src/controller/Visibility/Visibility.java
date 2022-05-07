@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class Visibility {
     public static ArrayList<Tile> computeVisibleTiles(Map map, Agent agent) {
+
         int d = Scenario.config.getDistanceViewing();
         double angle = agent.getAngle();
         int agentX = agent.getAgentPosition().getX();
