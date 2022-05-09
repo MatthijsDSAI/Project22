@@ -14,9 +14,6 @@ public class Scenario {
 
     public static Config config;
 
-
-
-
     protected double baseSpeedIntruder;
     protected double sprintSpeedIntruder;
     protected double baseSpeedGuard;
@@ -41,6 +38,8 @@ public class Scenario {
     protected ArrayList<Area> areas;
     protected ArrayList<Agent> agents;
     private int distanceViewing;
+    private int distanceHearingWalking, distanceHearingSprinting;
+    private int distanceSmelling;
 
     public Scenario(String mapFile){
         // set parameters
@@ -110,6 +109,18 @@ public class Scenario {
                         distanceViewing = Integer.parseInt(value);
                         config.setDistanceViewing(distanceViewing);
                         break;
+                    case "distanceSmelling":
+                        distanceSmelling = Integer.parseInt(value);
+                        config.setDistanceViewing(distanceSmelling);
+                        break;
+                    case "distanceHearingWalking":
+                        distanceHearingWalking = Integer.parseInt(value);
+                        config.setDistanceViewing(distanceHearingWalking);
+                        break;
+                    case "distanceHearingSprinting":
+                        distanceHearingSprinting = Integer.parseInt(value);
+                        config.setDistanceViewing(distanceHearingSprinting);
+                        break;
                     case "baseSpeedIntruder":
                         baseSpeedIntruder = Double.parseDouble(value);
                         config.setBASESPEEDINTRUDER(baseSpeedIntruder);
@@ -165,8 +176,20 @@ public class Scenario {
 
     public ArrayList<Area> getAreas() {return areas;}
 
+    public int getDistanceHearingWalking() {
+        return distanceHearingWalking;
+    }
+
+    public int getDistanceHearingSprinting(){
+        return  distanceHearingSprinting;
+    }
+
     public int getNumGuards(){
         return numGuards;
+    }
+
+    public int getDistanceSmelling(){
+        return  distanceSmelling;
     }
 
     public String getGameFile(){
