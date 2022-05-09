@@ -5,14 +5,23 @@ import controller.Scenario;
 import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import exploration.RandomExploration;
+import javafx.scene.paint.Color;
 import utils.DirectionEnum;
 import utils.Utils;
 
 public class Guard extends Agent{
 
+    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, null};
+    int i = 0;
+
     public Guard(int x, int y){
         super(x,y);
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
+    }
+
+    @Override
+    public void addMarkers(int i, Color c) {
+        super.addMarkers(i, c);
     }
 
     @Override

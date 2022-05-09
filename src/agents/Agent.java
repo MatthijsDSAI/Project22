@@ -21,11 +21,13 @@ public abstract class Agent{
     int x_position,y_position, angle;
     public String a_name;
     double baseSpeed;
+    double soundproduced;
     public Map ownMap;
     private ArrayList<Tile> visibleTiles = new ArrayList<>();
     private Marker[] marker = new Marker[5]; // 5 types of markers
     private Tile agentPosition;
     public Exploration exploration;
+    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK}; // color vector for markers
 
     /*
      * The agent class
@@ -38,6 +40,7 @@ public abstract class Agent{
         this.a_name = "Agent";
         this.audiostdeviation=10;
         angle= DirectionEnum.getAngleFromDirection(Utils.getRandomDirection());
+        produceSound();
     }
 
     public abstract void createExplorationAlgorithm(String exploration, Tile[][] tiles);
@@ -58,6 +61,27 @@ public abstract class Agent{
         if(rand%2==0)
             return agent1;
         return agent2;
+    }
+
+    public void computeSound(Map map) {
+        this.visibleTiles = Visibility.computeVisibleTiles(map, this);
+        for(Tile tile : visibleTiles)
+            agentPosition.manhattanDist(tile);
+    }
+
+    public void produceSound(){
+        //if agent is resting
+        if(baseSpeed == 0)
+            //number of tiles
+            soundproduced = 0.0;
+        //if agent is sprinting
+        if(baseSpeed > 15)
+            //number of tiles
+            soundproduced = 10;
+            //if agent walks
+            //number of tiles
+        else soundproduced = 5;
+        //return soundproduced;
     }
 
     public double getAngle(){
@@ -93,8 +117,9 @@ public abstract class Agent{
             marker[i].setSpecifics(number_markers,distance);
     }
     
-    public void addMarkers(int i){
-        marker[i].addMarker(this, i);
+    public void addMarkers(int i, Color c){
+        marker[i].addMarker(this, c);
+        marker[i].setNumber_markers(marker[i].getNumber_markers()-1);
     }
 
     public Tile getAgentPosition(){

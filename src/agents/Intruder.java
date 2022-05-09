@@ -5,12 +5,16 @@ import controller.Scenario;
 import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import exploration.RandomExploration;
+import javafx.scene.paint.Color;
 
 public class Intruder extends Agent{
     public double angleOfTarget;
     private double sprintSpeed;
     private boolean sprinting;
     private int stamina = 5;
+    Color[] c = {Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK, null};
+    int i = 0;
+
     public Intruder(int x, int y, double angleOfTarget){
         super(x,y);
         this.angleOfTarget = angleOfTarget;
@@ -19,6 +23,10 @@ public class Intruder extends Agent{
         this.sprinting = false;
     }
 
+    @Override
+    public void addMarkers(int i, Color c) {
+        super.addMarkers(i, c);
+    }
 
     @Override
     public int getSpeed(){
