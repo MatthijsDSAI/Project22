@@ -6,20 +6,19 @@ import utils.DirectionEnum;
 import java.util.ArrayList;
 
 public enum Marker{
-    Marker1("Red", DirectionEnum.getDirection(270)),
-    Marker2("Orange", DirectionEnum.getDirection(0)),
-    Marker3("Green", DirectionEnum.getDirection(180)),
-    Marker4("White", DirectionEnum.getDirection(90)),
-    Marker5("Pheromone", null);
+    Marker1(1, DirectionEnum.getDirection(270)),
+    Marker2(2, DirectionEnum.getDirection(0)),
+    Marker3(3, DirectionEnum.getDirection(180)),
+    Marker4(4, DirectionEnum.getDirection(90)),
+    Marker5(5, null);
 
-    private String s;
+    private int s;
     private DirectionEnum direction;
     private int number_markers, distance;
     boolean isVisual = true;
     ArrayList<Tile> tile = new ArrayList<Tile>();
-    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE};
 
-    Marker(String s, DirectionEnum d)
+    Marker(int s, DirectionEnum d)
     {
         this.s = s;
         this.direction =d;
@@ -28,16 +27,17 @@ public enum Marker{
     public void setSpecifics(int number_markers, int distance){
         this.number_markers=number_markers;
         this.distance = distance;
-//        this.isVisual=visual;
-
     }
 
-    public void addMarker(Agent agent, int i){
-        if(i<4)
+    public void setNumber_markers(int n){this.number_markers=n;}
+
+    public void addMarker(Agent agent, Color c){
+        if(c != null)
         {
-            agent.ownMap.getTile(agent.getX_position(), agent.getY_position()).setColor(c[i]);
+            isVisual=true;
+            agent.ownMap.getTile(agent.getX_position(), agent.getY_position()).setColor(c);
         }
-        if(i==4)
+        else
             isVisual=false;
         agent.ownMap.getTile(agent.getX_position(), agent.getY_position()).setHasMarker(true);
         tile.add(agent.ownMap.getTile(agent.getX_position(), agent.getY_position()));
@@ -68,27 +68,6 @@ public enum Marker{
         return false;
     }
 
-    public DirectionEnum performAction(Agent agent){
-        double initialAngle = agent.getAngle();
-        if(isVisual==true){
-            if(isInArea(agent)==true)
-                if(getName().equals("Red"))
-                    //Go east
-                    return DirectionEnum.getDirection(270);
-            if(getName().equals("Orange"))
-                //Go north
-                return DirectionEnum.getDirection(0);
-            //Go south
-            if(getName().equals("Green"))
-                return DirectionEnum.getDirection(180);
-            //Go west
-            if(getName().equals("White"))
-                return DirectionEnum.getDirection(90);
-        }
-        return DirectionEnum.getDirection(agent.angle);
-    }
-
-    public String getName() {return s;}
     public DirectionEnum getDirection(){return direction;}
     public int getNumber_markers(){return number_markers;}
     public int getDistance() {return distance;}

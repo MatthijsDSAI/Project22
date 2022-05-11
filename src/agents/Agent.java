@@ -1,6 +1,7 @@
 package agents;
 
 import controller.Area;
+import controller.Hearing.Hearing;
 import controller.Map.Map;
 import controller.Map.MapUpdater;
 import controller.Map.tiles.Tile;
@@ -21,11 +22,15 @@ public abstract class Agent{
     int x_position,y_position, angle;
     public String a_name;
     double baseSpeed;
+    double soundproduced;
+    boolean isSprinting;
     public Map ownMap;
     private ArrayList<Tile> visibleTiles = new ArrayList<>();
     private Marker[] marker = new Marker[5]; // 5 types of markers
     private Tile agentPosition;
     public Exploration exploration;
+    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK}; // color vector for markers
+    private ArrayList<Tile> hearingTiles;
 
     /*
      * The agent class
@@ -58,6 +63,28 @@ public abstract class Agent{
         if(rand%2==0)
             return agent1;
         return agent2;
+    }
+
+    public boolean canHearSound(Map map) {
+        this.hearingTiles = Hearing.computeHearingTiles(map, this);
+        boolean canHear = false;
+        for(Tile tile : hearingTiles)
+        {
+            if(tile.getSound()!= false)
+            {
+                canHear=true;
+                break;
+            }
+        }
+        return canHear;
+    }
+
+    public void produceSound(Map map){
+        this.hearingTiles = Hearing.computeHearingTiles(map, this);
+        for(Tile tile : hearingTiles)
+        {
+            tile.setSound(true);
+        }
     }
 
     public double getAngle(){
@@ -93,8 +120,9 @@ public abstract class Agent{
             marker[i].setSpecifics(number_markers,distance);
     }
     
-    public void addMarkers(int i){
-        marker[i].addMarker(this, i);
+    public void addMarkers(int i, Color c){
+        marker[i].addMarker(this, c);
+        marker[i].setNumber_markers(marker[i].getNumber_markers()-1);
     }
 
     public Tile getAgentPosition(){
@@ -112,6 +140,10 @@ public abstract class Agent{
     public int getSpeed() {
         return (int) baseSpeed;
     }
+
+    public void setSprinting(boolean sprint){this.isSprinting=sprint;}
+
+    public boolean getIsSprinting(){return isSprinting;}
 
     public Exploration getExploration() {
         return exploration;

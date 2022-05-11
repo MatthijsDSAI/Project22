@@ -5,6 +5,9 @@ import javafx.scene.paint.Color;
 
 public class Config {
     private int VISION = 5;
+    private int HEARINGWALKING = 5;
+    private int HEARINGSPRINT = 6;
+    private int SMELL = 5;
     private double BASESPEEDINTRUDER;
     private double BASESPEEDGUARD;
     private double SPRINTSTEEDINTRUDER;
@@ -28,6 +31,18 @@ public class Config {
     public void setDistanceViewing(int VISION) {
         this.VISION = VISION;
     }
+
+    public int getDistanceHearingWalk() {return HEARINGWALKING;}
+
+    public void setDistanceHearingWalk(int HEARINGWALKING) { this.HEARINGWALKING = HEARINGWALKING; }
+
+    public int getDistanceHearingSprint() {return HEARINGSPRINT;}
+
+    public void setDistanceHearingSprint(int HEARINGSPRINT) { this.HEARINGSPRINT = HEARINGSPRINT; }
+
+    public int getDistanceSmell(){return SMELL;}
+
+    public void setDistanceSmell(int smell){this.SMELL=smell;}
 
     public double getBASESPEEDINTRUDER() {
         return BASESPEEDINTRUDER;
