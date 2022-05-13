@@ -42,7 +42,8 @@ public class GraphicsConnector {
     }
 
     public void run(){
-        gameRunner.run();
+        if(Scenario.config.isMOVE())
+            gameRunner.run();
     }
 
     public void initGameRunner(String guard, String intruder){

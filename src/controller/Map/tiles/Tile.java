@@ -23,6 +23,7 @@ public abstract class Tile {
     private Agent agent;
     private int x;
     private int y;
+    private double sound;
 
     protected Tile(){}
 
@@ -108,5 +109,17 @@ public abstract class Tile {
 
     public boolean getExplored() {
         return explored;
+    }
+
+    public boolean hasSound(){
+        return sound!=0;
+    }
+
+    public double getSound(){
+        return sound;
+    }
+
+    public void setSound(double sound){
+        this.sound = sound;
     }
 }

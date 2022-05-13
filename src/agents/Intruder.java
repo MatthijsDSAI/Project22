@@ -1,7 +1,9 @@
 package agents;
 
+import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
+import exploration.BaseLineIntruder;
 import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import exploration.RandomExploration;
@@ -14,9 +16,10 @@ public class Intruder extends Agent{
     private int stamina = 5;
     Color[] c = {Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK, null};
     int i = 0;
-
-    public Intruder(int x, int y, double angleOfTarget){
+    public Map testmap;
+    public Intruder(int x, int y, double angleOfTarget, Map testmap){
         super(x,y);
+        this.testmap = testmap;
         this.angleOfTarget = angleOfTarget;
         this.baseSpeed = Scenario.config.getBASESPEEDINTRUDER();
         this.sprintSpeed = Scenario.config.getSPRINTSTEEDINTRUDER();
@@ -24,8 +27,8 @@ public class Intruder extends Agent{
     }
 
     @Override
-    public void addMarkers(int i, Color c) {
-        super.addMarkers(i, c);
+    public void addMarkers(int i, Color c, Map map) {
+        super.addMarkers(i, c, map);
     }
 
     @Override
@@ -66,6 +69,9 @@ public class Intruder extends Agent{
         switch (exploration){
             case "RandomExploration":
                 this.exploration = new RandomExploration(this, tiles);
+                break;
+            case "BaseLineIntruder":
+                this.exploration = new BaseLineIntruder(this, tiles);
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");

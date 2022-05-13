@@ -1,5 +1,6 @@
 package agents;
 
+import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import exploration.Exploration;
@@ -20,8 +21,8 @@ public class Guard extends Agent{
     }
 
     @Override
-    public void addMarkers(int i, Color c) {
-        super.addMarkers(i, c);
+    public void addMarkers(int i, Color c, Map map) {
+        super.addMarkers(i, c, map);
     }
 
     @Override

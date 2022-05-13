@@ -1,10 +1,10 @@
 height = 100
 width = 200
 gameMode = 1
-numGuards = 1
+numGuards = 0
 numIntruders = 1
 baseSpeedGuard = 11
-baseSpeedIntruder = 20
+baseSpeedIntruder = 1
 sprintSpeedIntruder = 1
 distanceViewing = 10
 numberMarkers = 5

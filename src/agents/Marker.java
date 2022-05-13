@@ -1,4 +1,5 @@
 package agents;
+import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import javafx.scene.paint.Color;
 import utils.DirectionEnum;
@@ -31,11 +32,12 @@ public enum Marker{
 
     public void setNumber_markers(int n){this.number_markers=n;}
 
-    public void addMarker(Agent agent, Color c){
+    public void addMarker(Agent agent, Color c, Map map){
         if(c != null)
         {
             isVisual=true;
             agent.ownMap.getTile(agent.getX_position(), agent.getY_position()).setColor(c);
+            map.getTile(agent.getX_position(), agent.getY_position()).setColor(c);
         }
         else
             isVisual=false;

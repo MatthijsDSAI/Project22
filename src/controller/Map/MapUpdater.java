@@ -185,7 +185,7 @@ public class MapUpdater {
     public static void spawnIntruder(Map map, Area givenArea){
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
-        Intruder tempAgent = new Intruder(rand1, rand2, Utils.findAngleToTargetArea(rand1, rand2));
+        Intruder tempAgent = new Intruder(rand1, rand2, Utils.findAngleToTargetArea(rand1, rand2), map);
         tempAgent.setAgentPosition(map.getTile(rand1,rand2));
         map.getIntruders().add(tempAgent);
         map.getTile(rand1, rand2).addAgent(tempAgent);

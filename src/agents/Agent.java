@@ -32,6 +32,7 @@ public abstract class Agent{
     Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK}; // color vector for markers
     private ArrayList<Tile> hearingTiles;
 
+
     /*
      * The agent class
      * An agent tracks it's own position relative to its starting position.
@@ -70,7 +71,7 @@ public abstract class Agent{
         boolean canHear = false;
         for(Tile tile : hearingTiles)
         {
-            if(tile.getSound()!= false)
+            if(tile.hasSound()!= false)
             {
                 canHear=true;
                 break;
@@ -83,7 +84,15 @@ public abstract class Agent{
         this.hearingTiles = Hearing.computeHearingTiles(map, this);
         for(Tile tile : hearingTiles)
         {
-            tile.setSound(true);
+            //Changed this so that we set a value instead of a boolean
+            //Not exactly sure on implementation as I've seen that you've done some stuff on this already
+            //Easiest option would be to find the distance to the origin and scale linearly. Because we can access
+            //coordinates of the tiles, we can simply say that sqrt((x2-x1)^2+(y2-y1^2)) = distance to the origin of
+            //the sound. Then we decide on a range the sound has, and scale linearly to get the value on each tile.
+
+
+            //TODO: implement this
+            //tile.setSound();
         }
     }
 
@@ -120,8 +129,8 @@ public abstract class Agent{
             marker[i].setSpecifics(number_markers,distance);
     }
     
-    public void addMarkers(int i, Color c){
-        marker[i].addMarker(this, c);
+    public void addMarkers(int i, Color c, Map map){
+        marker[i].addMarker(this, c, map);
         marker[i].setNumber_markers(marker[i].getNumber_markers()-1);
     }
 

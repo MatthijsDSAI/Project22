@@ -14,8 +14,11 @@ public class PlayerSelectionComboBox extends HBox {
         setAlignment(Pos.CENTER);
 
         this.guard = new PlayerChoiceBox(this, "guard");
-        guard.getItems().add("guard");
+        guard.getItems().add("FrontierBasedExploration");
+        guard.getItems().add("RandomExploration");
         this.intruder = new PlayerChoiceBox(this, "intruder");
+        intruder.getItems().add("RandomExploration");
+        intruder.getItems().add("BaseLineIntruder");
         getChildren().addAll(guard, intruder);
     }
 

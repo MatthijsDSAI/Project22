@@ -9,8 +9,6 @@ public class PlayerChoiceBox extends ChoiceBox<String> {
     public PlayerChoiceBox(PlayerSelectionComboBox playerSelectionComboBox, String type) {
         this.playerSelectionComboBox = playerSelectionComboBox;
         this.type = type;
-        getItems().add("FrontierBasedExploration");
-        getItems().add("RandomExploration");
         setOnAction(event -> {
             playerSelectionComboBox.setAlgorithm(type, getSelectionModel().getSelectedItem());
         });
