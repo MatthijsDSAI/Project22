@@ -15,8 +15,8 @@ public class Guard extends Agent{
     Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, null};
     int i = 0;
 
-    public Guard(int x, int y){
-        super(x,y);
+    public Guard(Tile tile){
+        super(tile);
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
     }
 
@@ -26,14 +26,18 @@ public class Guard extends Agent{
     }
 
     @Override
-    public void createExplorationAlgorithm(String exploration, Tile[][] tiles) {
-        System.out.println(exploration);
+    public String getType() {
+        return "Guard";
+    }
+
+    @Override
+    public void createExplorationAlgorithm(String exploration, Map map) {
         switch (exploration) {
             case "FrontierBasedExploration":
-                this.exploration = new FrontierBasedExploration(this, tiles);
+                this.exploration = new FrontierBasedExploration(this, map);
                 break;
             case "RandomExploration":
-                this.exploration = new RandomExploration(this, tiles);
+                this.exploration = new RandomExploration(this, map);
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");

@@ -63,7 +63,7 @@ public class MapUpdater {
      */
     public static void initGuards(Map map, ArrayList<Guard> guards, String guardAlgorithm) { // "loadGuards" and "loadIntruders" can later be combined if either of them doesn't need any additional code
         for (Guard guard: guards) {
-            guard.createExplorationAlgorithm(guardAlgorithm, map.getTiles());
+            guard.createExplorationAlgorithm(guardAlgorithm, map);
             int x = guard.getX_position();
             int y = guard.getY_position();
             Map.addAgent(map, guard, x, y);
@@ -75,7 +75,7 @@ public class MapUpdater {
 
     public static void initIntruders(Map map, ArrayList<Intruder> intruders, String intruderAlgorithm) {
         for (Intruder intruder: intruders) {
-            intruder.createExplorationAlgorithm(intruderAlgorithm, map.getTiles());
+            intruder.createExplorationAlgorithm(intruderAlgorithm, map);
             int x = intruder.getX_position();
             int y = intruder.getY_position();
             Map.addAgent(map, intruder, x, y);
@@ -176,18 +176,18 @@ public class MapUpdater {
     public static void spawnGuard(Map map, Area givenArea){
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
-        Guard tempAgent = new Guard(rand1, rand2);
-        tempAgent.setAgentPosition(map.getTile(rand1,rand2));
+        Guard tempAgent = new Guard(map.getTile(rand1, rand2));
         map.getGuards().add(tempAgent);
+        map.allGuards.add(tempAgent);
         map.getTile(rand1, rand2).addAgent(tempAgent);
     }
 
     public static void spawnIntruder(Map map, Area givenArea){
         int rand1 = (int) (Math.random() * (givenArea.getRightBoundary() - givenArea.getLeftBoundary())) + givenArea.getLeftBoundary();
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
-        Intruder tempAgent = new Intruder(rand1, rand2, Utils.findAngleToTargetArea(rand1, rand2), map);
-        tempAgent.setAgentPosition(map.getTile(rand1,rand2));
+        Intruder tempAgent = new Intruder(map.getTile(rand1, rand2), Utils.findAngleToTargetArea(rand1, rand2));
         map.getIntruders().add(tempAgent);
+        map.allintruders.add(tempAgent);
         map.getTile(rand1, rand2).addAgent(tempAgent);
     }
 

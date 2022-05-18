@@ -16,10 +16,11 @@ public class Intruder extends Agent{
     private int stamina = 5;
     Color[] c = {Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK, null};
     int i = 0;
-    public Map testmap;
-    public Intruder(int x, int y, double angleOfTarget, Map testmap){
-        super(x,y);
-        this.testmap = testmap;
+    private int numberOfTargetAreaEntries = 0;
+    private int tOfLastEntry=-1;
+    private int numOfTimestepsInTargetArea = 0;
+    public Intruder(Tile tile, double angleOfTarget){
+        super(tile);
         this.angleOfTarget = angleOfTarget;
         this.baseSpeed = Scenario.config.getBASESPEEDINTRUDER();
         this.sprintSpeed = Scenario.config.getSPRINTSTEEDINTRUDER();
@@ -37,6 +38,11 @@ public class Intruder extends Agent{
             return (int) sprintSpeed;
         }
         return (int) baseSpeed;
+    }
+
+    @Override
+    public String getType() {
+        return "Intruder";
     }
 
     public void sprint(){
@@ -65,17 +71,33 @@ public class Intruder extends Agent{
     }
 
     @Override
-    public void createExplorationAlgorithm(String exploration, Tile[][] tiles) {
+    public void createExplorationAlgorithm(String exploration, Map map) {
         switch (exploration){
             case "RandomExploration":
-                this.exploration = new RandomExploration(this, tiles);
+                this.exploration = new RandomExploration(this, map);
                 break;
             case "BaseLineIntruder":
-                this.exploration = new BaseLineIntruder(this, tiles);
+                this.exploration = new BaseLineIntruder(this, map);
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");
         }
 
+    }
+    public boolean completedObjective(){
+        numOfTimestepsInTargetArea++;
+        return (numberOfTargetAreaEntries>1) || (numOfTimestepsInTargetArea>2);
+
+    }
+
+    public void incrementTargetEntries(int t){
+        if(t-tOfLastEntry>2 || tOfLastEntry==-1)
+            numberOfTargetAreaEntries++;
+        tOfLastEntry = t;
+
+    }
+
+    public void resetCounter(){
+        numOfTimestepsInTargetArea=0;
     }
 }

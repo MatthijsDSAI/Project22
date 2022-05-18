@@ -8,57 +8,52 @@ import controller.Map.tiles.Tile;
 import javafx.scene.paint.Color;
 import utils.AdjacencyList;
 import utils.DirectionEnum;
+import utils.Utils;
 
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class BaseLineIntruder extends FrontierBasedExploration {
-    private ArrayList<Tile> visibleTiles;
-    private AdjacencyList adjacencyList;
-    private LinkedList<Tile> exploredTiles;
-    private Queue<Tile> frontierQueue;
-    private Queue<Tile> BFSQueue;
-    private Map testMap;
-    public BaseLineIntruder(Agent agent, Tile[][] map) {
+
+    public BaseLineIntruder(Agent agent, Map map) {
         super(agent, map);
-        visibleTiles = agent.getVisibleTiles();
-        adjacencyList = new AdjacencyList(map, visibleTiles);
-        frontierQueue = new LinkedList<>();
-        BFSQueue = new LinkedList<>();
-        exploredTiles = new LinkedList<>();
     }
 
     @Override
     public DirectionEnum makeMove(Agent agent) {
         Intruder intruder = (Intruder) agent;
+        Tile tile = null;
+        if(intruder.hasFoundTargetArea()){
+            tile = intruder.getTargetArea();
+        }
+        else{
         Tile curTile = intruder.getAgentPosition();
         visibleTiles = intruder.getVisibleTiles();
-        System.out.println(visibleTiles);
         updateExploredTiles(visibleTiles);
         adjacencyList.addNodes(visibleTiles);
         updateFrontiers(visibleTiles);
-        colourFrontiers(intruder);
-        Tile tile = findFrontiers(intruder).get(1);
+        findFrontiers(intruder);
         if(frontierQueue.isEmpty()){
             return null;
+        }
+        tile = findBestFrontier(frontierQueue, intruder);
         }
         DirectionEnum dir = findNextMoveDirection(intruder, tile);
         return dir;
     }
 
-    public void colourFrontiers(Intruder intruder){
-        testMap = intruder.testmap;
-        System.out.println(frontierQueue);
+    private Tile findBestFrontier(Queue<Tile> frontierQueue, Intruder intruder) {
+        Tile bestFrontier = null;
+        double optimalFrontier = 360;
         for(Tile tile : frontierQueue){
-            for(int i=0; i<testMap.getHorizontalSize(); i++){
-                for(int j=0; j<testMap.getVerticalSize(); j++){
-                    if(i==tile.getX() && j==tile.getY()){
-                        testMap.getTile(i,j).setColor(Color.YELLOW);
-                    }
-                }
+            double angleFromStart = Utils.findAngleFromStartingPosition(intruder, tile);
+            double differenceToOptimalAngle = Utils.differenceBetweenAngles(angleFromStart, intruder.angleOfTarget);
+            if(differenceToOptimalAngle<optimalFrontier){
+                bestFrontier = tile;
+                optimalFrontier = differenceToOptimalAngle;
             }
         }
+        return bestFrontier;
     }
+
 }

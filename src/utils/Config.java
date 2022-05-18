@@ -18,6 +18,7 @@ public class Config {
     private int[] centerOfTargetArea;
     private int timeStepSize;
     private boolean MOVE = true;
+    private int gameMode = 1;
 
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
@@ -93,5 +94,13 @@ public class Config {
     }
     public boolean isMOVE() {
         return MOVE;
+    }
+
+    public void setGameMode(int gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public int getGameMode(){
+        return gameMode;
     }
 }

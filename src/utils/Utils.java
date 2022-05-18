@@ -1,7 +1,11 @@
 package utils;
 
+import agents.Agent;
+import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
+
+import java.util.ArrayList;
 
 public class Utils {
     public static int TransFormIntoValidAngle(int angle){
@@ -45,7 +49,7 @@ public class Utils {
     public static double findAngleToTargetArea(int x1, int y1) {
         int x2 = Scenario.config.getCenterOfTargetArea()[0];
         int y2 = Scenario.config.getCenterOfTargetArea()[1];
-        return findAngleFromTileToTile(x1, y1, x2, y2);
+        return findAngleFromTileToTile(x2, y2, x1, y1);
     }
 
     public static double findAngleFromTileToTile(int x1, int y1, int x2, int y2){
@@ -56,6 +60,24 @@ public class Utils {
         return 360-angle;
     }
 
+    public static double findAngleFromStartingPosition(Agent agent){
+        Tile tile1 = agent.getAgentPosition();
+        Tile tile2 = agent.getStartingTile();
+        int x1 = tile1.getX();
+        int y1 = tile1.getY();
+        int x2 = tile2.getX();
+        int y2 = tile2.getY();
+        return findAngleFromTileToTile(x1,y1,x2,y2);
+    }
+    public static double findAngleFromStartingPosition(Agent agent, Tile potentialTile){
+        Tile tile1 = potentialTile;
+        Tile tile2 = agent.getStartingTile();
+        int x1 = tile1.getX();
+        int y1 = tile1.getY();
+        int x2 = tile2.getX();
+        int y2 = tile2.getY();
+        return findAngleFromTileToTile(x1,y1,x2,y2);
+    }
     public static int gcd(int a, int b){
         return b == 0 ? a:gcd(b, a%b);
     }
@@ -81,5 +103,35 @@ public class Utils {
             return DirectionEnum.EAST;
         }
         return null;
+    }
+
+    public static double differenceBetweenAngles(double alpha, double beta){
+        if(alpha<beta){
+            double temp = alpha;
+            alpha = beta;
+            beta = temp;
+        }
+        if(Math.abs(alpha-beta)<180){
+            return Math.abs(alpha-beta);
+        }
+        return beta + 360-alpha;
+    }
+
+    public static double distanceBetweenTiles(Tile tile1, Tile tile2){
+        return Math.sqrt(Math.pow(tile1.getX()-tile2.getX(), 2) + Math.pow(tile1.getY()-tile2.getY(), 2));
+    }
+
+    public static ArrayList<Tile> getSurroundingTiles(Map map, Tile tile) {
+        ArrayList<Tile> surroundingTiles = new ArrayList<>();
+        surroundingTiles.add(map.getTile(tile.getX()-1, tile.getY()));
+        surroundingTiles.add(map.getTile(tile.getX()-1, tile.getY()+1));
+        surroundingTiles.add(map.getTile(tile.getX(), tile.getY()+1));
+        surroundingTiles.add(map.getTile(tile.getX()+1, tile.getY()+1));
+        surroundingTiles.add(map.getTile(tile.getX()+1, tile.getY()));
+        surroundingTiles.add(map.getTile(tile.getX()+1, tile.getY()-1));
+        surroundingTiles.add(map.getTile(tile.getX(), tile.getY()-1));
+        surroundingTiles.add(map.getTile(tile.getX()-1, tile.getY()-1));
+        return surroundingTiles;
+
     }
 }

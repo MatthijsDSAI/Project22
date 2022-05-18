@@ -21,8 +21,7 @@ public class Visibility {
         if(angle==0){
             int topLimit = Math.max(0, agentY-d+1);
             int leftLimit = 0;
-            int rightLimit = map.getVerticalSize()-1;
-
+            int rightLimit = map.getHorizontalSize()-1;
             for(int j = agentY; j>=topLimit && (middleLane || rightLane || leftLane); j--){
                 if((agentX+1)<=rightLimit && rightLane){
                     visibleTiles.add(map.getTile(agentX+1, j));
@@ -88,7 +87,7 @@ public class Visibility {
 
         if(angle==90.0){
             int topLimit = 0;
-            int bottomLimit = map.getHorizontalSize()-1;
+            int bottomLimit = map.getVerticalSize()-1;
             int leftLimit = Math.max(0, agentX - d + 1);
             for(int i = agentX; i>=leftLimit && (middleLane || rightLane || leftLane); i--){
                 if((agentY +1)<=bottomLimit && leftLane){
@@ -153,7 +152,7 @@ public class Visibility {
         }
 
         if(angle==180){
-            int bottomLimit = Math.min(map.getHorizontalSize()-1, agentY+d-1);
+            int bottomLimit = Math.min(map.getVerticalSize()-1, agentY+d-1);
             int leftLimit = 0;
             int rightLimit = map.getVerticalSize()-1;
             for(int j = agentY; j<=bottomLimit && (middleLane || rightLane || leftLane); j++){
@@ -180,8 +179,8 @@ public class Visibility {
         }
 
         if(angle==225){
-            int bottomLimit = Math.min(map.getHorizontalSize()-1, agentY + d - 1);
-            int rightLimit = Math.min(map.getVerticalSize(), agentX + d - 1);
+            int bottomLimit = Math.min(map.getVerticalSize()-1, agentY + d - 1);
+            int rightLimit = Math.min(map.getHorizontalSize()-1, agentX + d - 1);
             int finalI = 0;
             int finalJ = 0;
             for (int i = agentX, j=agentY; i <= rightLimit && j <= bottomLimit && (middleLane || rightLane || leftLane); i++, j++) {
@@ -220,8 +219,8 @@ public class Visibility {
 
         if(angle==270.0){
             int topLimit = 0;
-            int bottomLimit = map.getHorizontalSize()-1;
-            int rightLimit = Math.min(map.getVerticalSize()-1, agentX + d - 1);
+            int bottomLimit = map.getVerticalSize()-1;
+            int rightLimit = Math.min(map.getHorizontalSize()-1, agentX + d - 1);
             for(int i = agentX; i<=rightLimit && (middleLane || rightLane || leftLane); i++){
                 if((agentY +1)<=bottomLimit && rightLane){
                     visibleTiles.add(map.getTile(i, agentY +1));
@@ -246,7 +245,7 @@ public class Visibility {
         }
         if(angle==315.0) {
             int topLimit = Math.max(0, agentY - d + 1);
-            int rightLimit = Math.min(map.getVerticalSize(), agentX + d - 1);
+            int rightLimit = Math.min(map.getHorizontalSize(), agentX + d - 1);
             int finalI = 0;
             int finalJ = 0;
             for (int i = agentX, j=agentY; i <= rightLimit && j >= topLimit && (middleLane || rightLane || leftLane); i++, j--) {

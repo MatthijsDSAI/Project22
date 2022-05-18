@@ -1,13 +1,12 @@
 package controller;
 
 import GUI.MapGui;
-import agents.Agent;
 import agents.Guard;
 import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.MapUpdater;
+import controller.Map.tiles.Tile;
 import exploration.Exploration;
-import exploration.FrontierBasedExploration;
 import utils.Config;
 import utils.DirectionEnum;
 import utils.Utils;
@@ -51,7 +50,7 @@ public class GameRunner {
             }
         }
         else{
-            run();
+            run(gameMode);
         }
 
     }
@@ -85,31 +84,48 @@ public class GameRunner {
             moveGuards(j);
             moveIntruders(j);
         }
-        System.out.println(guardCount);
-        System.out.println(intruderCount);
         guardCount = 0;
         intruderCount = 0;
-        t++;
     }
+
 
     /*
     * main while loop, one iteration = one timestep. When explored (== 100% covered), stop.
      */
-    public void run(){
-        var ref = new Object() {
-            boolean explored = false;
-        };
-        Thread t = new Thread(() ->{
-            while(!ref.explored){
-                step();
-                if(config.DEBUG){
-                    System.out.println("Timestep: "+ this.t + " at: " + Calendar.getInstance().getTime());
-                    System.out.println(100*Map.explored(map) + "% of map has been explored");
+    public void run(int gameMode){
+        if(gameMode == 0) {
+            var ref = new Object() {
+                boolean explored = false;
+            };
+            Thread t = new Thread(() -> {
+                while (!ref.explored) {
+                    step();
+                    if (config.DEBUG) {
+                        System.out.println("Timestep: " + this.t + " at: " + Calendar.getInstance().getTime());
+                        System.out.println(100 * Map.explored(map) + "% of map has been explored");
+                    }
+                    ref.explored = Map.isExplored(map);
                 }
-                ref.explored = Map.isExplored(map);
-            }});
-        t.start();
-
+            });
+            t.start();
+        }
+        else if(gameMode==1){
+            var intruderWin = new Object() {
+                boolean areaReached = false;
+            };
+            var guardWin = new Object() {
+                boolean noIntrudersLeft = false;
+            };
+            Thread t = new Thread(() -> {
+                while (!intruderWin.areaReached || guardWin.noIntrudersLeft) {
+                    step();
+                    intruderWin.areaReached = Map.checkTargetArea(map, this.t);
+                    guardWin.noIntrudersLeft = Map.noIntrudersLeft(map);
+                    this.t++;
+                }
+            });
+            t.start();
+        }
     }
 
     /*
@@ -124,6 +140,7 @@ public class GameRunner {
                 DirectionEnum dir = explorer.makeMove(guard);
                 MapUpdater.moveAgent(map, guard, dir);
                 guard.computeVisibleTiles(map);
+                checkIntruderCapture(guard);
                 guardCount++;
             }
         }
@@ -140,8 +157,7 @@ public class GameRunner {
                     MapUpdater.moveAgent(map, intruder, dir);
                     intruder.computeVisibleTiles(map);
                     intruderCount++;
-                    intruder.sprint();
-                    intruder.handleRest();
+                    checkIntruderCapture(intruder);
                 }
             }
         }
@@ -159,5 +175,25 @@ public class GameRunner {
 
     public int getGameMode() {
         return gameMode;
+    }
+
+    private void checkIntruderCapture(Guard guard) {
+        ArrayList<Tile> tiles = guard.getVisibleTiles();
+        for(Tile tile: tiles){
+            if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
+                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<1){
+                    intruders.remove(tile.getAgent());
+                }
+            }
+        }
+    }
+
+    private void checkIntruderCapture(Intruder intruder) {
+        ArrayList<Tile> tiles = Utils.getSurroundingTiles(map, intruder.getAgentPosition());
+        for(Tile tile : tiles){
+            if(tile.hasAgent() && tile.getAgent().getType().equals("Guard")){
+                checkIntruderCapture((Guard)tile.getAgent());
+            }
+        }
     }
 }

@@ -31,22 +31,26 @@ public abstract class Agent{
     public Exploration exploration;
     Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK}; // color vector for markers
     private ArrayList<Tile> hearingTiles;
-
+    public Tile startingTile;
+    public boolean hasFoundTargetArea = false;
+    public Tile targetArea;
 
     /*
      * The agent class
      * An agent tracks it's own position relative to its starting position.
      */
-    public Agent(int x_position, int y_position)
+    public Agent(Tile tile)
     {
-        this.x_position = x_position;
-        this.y_position = y_position;
+        this.x_position = tile.getX();
+        this.y_position = tile.getY();
         this.a_name = "Agent";
         this.audiostdeviation=10;
         angle= DirectionEnum.getAngleFromDirection(Utils.getRandomDirection());
+        startingTile = tile;
+        agentPosition = tile;
     }
 
-    public abstract void createExplorationAlgorithm(String exploration, Tile[][] tiles);
+    public abstract void createExplorationAlgorithm(String exploration, Map map);
 
     public void rotate(int angle){
         this.angle = this.angle + angle;
@@ -157,4 +161,26 @@ public abstract class Agent{
     public Exploration getExploration() {
         return exploration;
     }
+
+    public Tile getStartingTile(){
+        return startingTile;
+    }
+
+    public boolean hasFoundTargetArea(){
+        if(!hasFoundTargetArea){
+            for(Tile tile : visibleTiles){
+                if(tile.toString().equals("TargetArea")){
+                    hasFoundTargetArea = true;
+                    targetArea = tile;
+                }
+            }
+        }
+        return hasFoundTargetArea;
+    }
+
+    public Tile getTargetArea(){
+        return  targetArea;
+    }
+
+    public abstract Object getType();
 }

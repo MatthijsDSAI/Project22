@@ -89,6 +89,7 @@ public class Scenario {
                         break;
                     case "gameMode":
                         gameMode = Integer.parseInt(value); // 0 is exploration, 1 evasion pursuit game
+                        Scenario.config.setGameMode(gameMode);
                         break;
                     case "scaling":
                         scaling = Double.parseDouble(value);

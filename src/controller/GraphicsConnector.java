@@ -43,7 +43,7 @@ public class GraphicsConnector {
 
     public void run(){
         if(Scenario.config.isMOVE())
-            gameRunner.run();
+            gameRunner.run(Scenario.config.getGameMode());
     }
 
     public void initGameRunner(String guard, String intruder){

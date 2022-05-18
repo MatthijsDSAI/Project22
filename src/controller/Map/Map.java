@@ -22,6 +22,8 @@ public class Map {
     private Agent agent;
     private ArrayList<Guard> guards = new ArrayList<>();
     private ArrayList<Intruder> intruders = new ArrayList<>();
+    public ArrayList<Guard> allGuards;
+    public ArrayList<Intruder> allintruders;
     private int horizontalSize;
     private int verticalSize;
     private boolean isExplored = false;
@@ -97,6 +99,25 @@ public class Map {
             map.isExplored = true;
         }
         return explored/(notExplored+explored);
+    }
+
+    public static boolean checkTargetArea(Map map, int t) {
+        for(Intruder intruder : map.getIntruders()){
+            if(intruder.getAgentPosition().toString().equals("TargetArea")){
+                intruder.incrementTargetEntries(t);
+                if(intruder.completedObjective()){
+                    return true;
+                }
+            }
+            else{
+                intruder.resetCounter();
+            }
+        }
+        return false;
+    }
+
+    public static boolean noIntrudersLeft(Map map) {
+        return map.intruders.isEmpty();
     }
 
     public Tile[][] getTiles() {

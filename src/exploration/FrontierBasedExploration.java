@@ -15,19 +15,19 @@ import java.util.Queue;
 
 public class FrontierBasedExploration extends Exploration{
     //no prior information about the map
-    Tile[][] map;
-    private ArrayList<Tile> visibleTiles;
-    private AdjacencyList adjacencyList;
-    private LinkedList<Tile> exploredTiles;
-    private Queue<Tile> frontierQueue;
-    private Queue<Tile> BFSQueue;
-    private boolean DEBUG = Scenario.config.DEBUG;
+    public Map map;
+    public ArrayList<Tile> visibleTiles;
+    public AdjacencyList adjacencyList;
+    public LinkedList<Tile> exploredTiles;
+    public Queue<Tile> frontierQueue;
+    public Queue<Tile> BFSQueue;
+    public boolean DEBUG = Scenario.config.DEBUG;
 
     //Constructor -> tells which is the position of the robot and the angle
-    public FrontierBasedExploration(Agent agent, Tile[][] map) {
+    public FrontierBasedExploration(Agent agent, Map map) {
         this.map = map;
         visibleTiles = agent.getVisibleTiles();
-        adjacencyList = new AdjacencyList(map, visibleTiles);
+        adjacencyList = new AdjacencyList(map.getTiles(), visibleTiles);
         frontierQueue = new LinkedList<>();
         BFSQueue = new LinkedList<>();
         exploredTiles = new LinkedList<>();
@@ -112,11 +112,8 @@ public class FrontierBasedExploration extends Exploration{
         }
         if(DEBUG)
             System.out.println("Starting second frontier search");
-        printQueue(frontierQueue);
-
         curTile = agent.getAgentPosition();
         LinkedList<Path> queue = new LinkedList<>();
-        LinkedList<Integer> distances = new LinkedList<>();
         Path path = new Path();
         path.add(curTile);
         queue.add(path);
@@ -225,7 +222,7 @@ public class FrontierBasedExploration extends Exploration{
             System.out.println(result);
     }
 
-    private boolean isFrontier(LinkedList<Tile> adjacencyList) {
+    boolean isFrontier(LinkedList<Tile> adjacencyList) {
         if(adjacencyList.size() < 4) return true;
         return false;
     }
@@ -236,7 +233,7 @@ public class FrontierBasedExploration extends Exploration{
         //decide which frontier to explore
     }
 
-    public Tile[][] getMap(){
+    public Map getMap(){
         return map;
     }
 }

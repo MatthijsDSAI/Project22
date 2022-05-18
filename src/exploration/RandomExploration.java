@@ -18,9 +18,9 @@ public class RandomExploration extends Exploration {
 
 
     //Constructor
-    public RandomExploration(Agent agent, Tile[][] tiles) {
+    public RandomExploration(Agent agent, Map map) {
         this.agent = agent;
-        this.tiles = tiles;
+        this.tiles = map.getTiles();
 
         this.x = agent.getX_position();
         this.y = agent.getY_position();
