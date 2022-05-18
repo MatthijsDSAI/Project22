@@ -143,11 +143,11 @@ public abstract class Agent{
     }
 
     public int getX_position() {
-        return x_position;
+        return agentPosition.getX();
     }
 
     public int getY_position() {
-        return y_position;
+        return agentPosition.getY();
     }
 
     public int getSpeed() {

@@ -41,13 +41,11 @@ public class RandomExploration extends Exploration {
            validMove.add(DirectionEnum.WEST);
         }
         if (tiles[x][y-1].isWalkable()){
-            System.out.println(tiles[x][y-1]);
             validMove.add(DirectionEnum.NORTH);
         }
         if (tiles[x][y+1].isWalkable()){
             validMove.add(DirectionEnum.SOUTH);
         }
-        System.out.println(validMove);
         return validMove;
     }
 

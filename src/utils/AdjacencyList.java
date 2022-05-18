@@ -16,8 +16,8 @@ public class AdjacencyList {
     public AdjacencyList(Tile[][] tiles, ArrayList<Tile> visibleTiles) {
         this.tiles = tiles;
         this.numTiles = tiles.length*tiles[0].length;
-        addNodes(visibleTiles);
         adjacencyLists = new LinkedList<>();
+        addNodes(visibleTiles);
         for(int i = 0; i < numTiles; i++) {
             adjacencyLists.add(new LinkedList<Tile>());
         }

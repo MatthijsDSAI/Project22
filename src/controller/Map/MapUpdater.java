@@ -21,6 +21,7 @@ public class MapUpdater {
         }
         Tile fromTile = null;
         Tile toTile = null;
+
         if(agent.getAngle() != direction.getAngle()) {
             agent.rotate(direction.getAngle());
             if(agent.getAngle() == direction.getAngle()) {
@@ -178,7 +179,6 @@ public class MapUpdater {
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
         Guard tempAgent = new Guard(map.getTile(rand1, rand2));
         map.getGuards().add(tempAgent);
-        map.allGuards.add(tempAgent);
         map.getTile(rand1, rand2).addAgent(tempAgent);
     }
 
@@ -187,7 +187,6 @@ public class MapUpdater {
         int rand2 = (int) (Math.random() * (givenArea.getBottomBoundary() - givenArea.getTopBoundary())) + givenArea.getTopBoundary();
         Intruder tempAgent = new Intruder(map.getTile(rand1, rand2), Utils.findAngleToTargetArea(rand1, rand2));
         map.getIntruders().add(tempAgent);
-        map.allintruders.add(tempAgent);
         map.getTile(rand1, rand2).addAgent(tempAgent);
     }
 
@@ -195,6 +194,26 @@ public class MapUpdater {
         for (int i = 0; i < map.getTiles()[0].length; i++) {
             for (int j = 0; j < map.getTiles().length; j++) {
                 map.setTile(new Floor(i,j));
+            }
+        }
+    }
+
+    public static void checkIntruderCapture(Guard guard, Map map) {
+        ArrayList<Tile> tiles = guard.getVisibleTiles();
+        for(Tile tile: tiles){
+            if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
+                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<1){
+                    map.getIntruders().remove((Intruder)tile.getAgent());
+                }
+            }
+        }
+    }
+
+    public static void checkIntruderCapture(Intruder intruder, Map map) {
+        ArrayList<Tile> tiles = Utils.getSurroundingTiles(map, intruder.getAgentPosition());
+        for(Tile tile : tiles){
+            if(tile.hasAgent() && tile.getAgent().getType().equals("Guard")){
+                checkIntruderCapture((Guard)tile.getAgent(), map);
             }
         }
     }

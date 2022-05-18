@@ -66,11 +66,10 @@ public class MapGui extends Application {
         t = new Timeline();
         t.setCycleCount(Timeline.INDEFINITE);
 
-        KeyFrame k = new KeyFrame(Duration.millis(Scenario.config.getSleep()-50), new EventHandler<ActionEvent>() {
+        KeyFrame k = new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 drawMap(p);;
-                update();
                 graphicsConnector.getMapOfColors();
             }
         });
@@ -78,10 +77,6 @@ public class MapGui extends Application {
         t.play();
     }
 
-    public void update(){
-        Random r = new Random();
-        map[r.nextInt(map.length)][r.nextInt(map[0].length)] = Color.BLACK;
-    }
 
     public void startExploration(String guard, String intruder) {
         mapPane = createPane();

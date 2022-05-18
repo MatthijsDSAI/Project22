@@ -1,23 +1,23 @@
-mapgenerator/SimpleMapReader.java
- mapgenerator.SimpleMapReader
-controller/Area.java
- controller.Area
-utils/Position.java
- utils.Position
-utils/Config.java
- utils.Config
-controller/TelePortal.java
- controller.TelePortal
 controller/GameMode.java
  controller.GameMode
+controller/Area.java
+ controller.Area
+controller/TelePortal.java
+ controller.TelePortal
+utils/Position.java
+ utils.Position
+mapgenerator/SimpleMapReader.java
+ mapgenerator.SimpleMapReader
 utils/DirectionEnum.java
  utils.DirectionEnum
-mapgenerator/MapDrawer.java
- mapgenerator.MapDrawer
+utils/Config.java
+ utils.Config
 test/AngleTest.java
  AngleTest
 controller/Scenario.java
  controller.Scenario
+mapgenerator/MapDrawer.java
+ mapgenerator.MapDrawer
 Explorer.java
  Explorer
 GUI/StartScreen.java
@@ -26,6 +26,8 @@ controller/GameRunner.java
  controller.GameRunner
  controller.GameRunner$1
  controller.GameRunner$2
+ controller.GameRunner$3
+ controller.GameRunner$4
 controller/Visibility/Visibility.java
  controller.Visibility.Visibility
 controller/Map/tiles/Tile.java

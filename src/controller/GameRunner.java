@@ -19,18 +19,16 @@ import java.util.ArrayList;
 * Contains the agents and the map.
  */
 public class GameRunner {
-    private Map map;
+
     private final Config config = Scenario.config;
-    private ArrayList<Guard> guards;
-    private ArrayList<Intruder> intruders;
     private MapGui gui;
     private Scenario scenario;
-    private int t;
     private int gameMode;
-    static int guardCount = 0;
-    static int intruderCount = 0;
-    private Map[] pastMaps;
 
+    //Fields that change after a training
+    private boolean TRAINING = Scenario.config.getTraining();
+    private Map map;
+    private int t;
     /*
     *Created off of a Scenario. The map is read in through scenario and the data is transfered through to gamerunner.
     * A Map class is then made based off of this, the scenario is not used further
@@ -39,6 +37,7 @@ public class GameRunner {
         this.scenario = scenario;
         gameMode = scenario.getGameMode();
         initMap();
+
         if(Scenario.config.GUI){
             try{
                 GraphicsConnector graphicsConnector = new GraphicsConnector(this);
@@ -49,12 +48,47 @@ public class GameRunner {
                 System.out.println("There has been an issue with the initialization of the GUI");
             }
         }
+        else if(TRAINING){
+            trainLoop(gameMode);
+        }
         else{
             run(gameMode);
         }
 
     }
 
+    //GUI off. TRAIN on.
+    //Pass as string the names of the algorithms you want here.
+    //I can not get it to work with GUI for now. Even this was really difficult. However I believe it is quite stable.
+    //Questions: ask me.
+    public void trainLoop(int gameMode) {
+            if(!Scenario.config.GUI){
+                init("RandomExploration", "RandomExploration");
+            }
+            int count = 0;
+            while(count<8) {
+                Utils.sleep(100);
+                System.out.println("ITERATION: " + count);
+                train();
+                initMap();
+                init("RandomExploration", "RandomExploration");
+                count++;
+            }
+
+    }
+
+    public void train(){
+        var ref = new Object() {
+            boolean areaReached = false;
+            boolean noIntrudersLeft = false;
+        };
+        while ((!ref.areaReached || !ref.noIntrudersLeft) && t<3) {
+            step();
+            ref.areaReached = Map.checkTargetArea(map, this.t);
+            ref.noIntrudersLeft = Map.noIntrudersLeft(map);
+        this.t++;
+        }
+    }
     /*
     *Initialize the map, the agents, and their algorithms.
     */
@@ -65,12 +99,9 @@ public class GameRunner {
 
     public void init(String guardAlgorithm, String intruderAlgorithm){
         Scenario.config.computeStepSize();
-        guards = map.getGuards();
-        intruders = map.getIntruders();
-
-        MapUpdater.initGuards(map, guards, guardAlgorithm);
+        MapUpdater.initGuards(map, map.getGuards(), guardAlgorithm);
         if (gameMode == 1) {
-            MapUpdater.initIntruders(map, intruders, intruderAlgorithm);
+            MapUpdater.initIntruders(map, map.getIntruders(), intruderAlgorithm);
         }
         t = 0;
     }
@@ -84,13 +115,62 @@ public class GameRunner {
             moveGuards(j);
             moveIntruders(j);
         }
-        guardCount = 0;
-        intruderCount = 0;
     }
 
 
+
+
     /*
-    * main while loop, one iteration = one timestep. When explored (== 100% covered), stop.
+    * Call made to algorithm to rotate the agents to a certain direction.@a
+     */
+    private void moveGuards(int j) {
+        ArrayList<Guard> guards = map.getGuards();
+        for (Guard guard : guards) {
+            if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
+                Utils.sleep(100);
+                Exploration explorer = guard.getExploration();
+                DirectionEnum dir = explorer.makeMove(guard);
+                MapUpdater.moveAgent(map, guard, dir);
+                guard.computeVisibleTiles(map);
+                MapUpdater.checkIntruderCapture(guard, map);
+            }
+        }
+    }
+
+
+    private void moveIntruders(int j) {
+
+        if (gameMode == 1) {
+            ArrayList<Intruder> intruders = map.getIntruders();
+            for (Intruder intruder : intruders) {
+                if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
+                    Utils.sleep(100);
+                    Exploration explorer = intruder.getExploration();
+                    DirectionEnum dir = explorer.makeMove(intruder);
+                    MapUpdater.moveAgent(map, intruder, dir);
+                    intruder.computeVisibleTiles(map);
+                    MapUpdater.checkIntruderCapture(intruder, map);
+                }
+            }
+        }
+    }
+
+
+
+    public Map getMap() {
+        return map;
+    }
+
+    public ArrayList<Guard> getGuards() {return map.getGuards();}
+
+    public ArrayList<Intruder> getIntruders() {return map.getIntruders();}
+
+    public int getGameMode() {
+        return gameMode;
+    }
+
+    /*
+     * main while loop, one iteration = one timestep. When explored (== 100% covered), stop.
      */
     public void run(int gameMode){
         if(gameMode == 0) {
@@ -116,84 +196,17 @@ public class GameRunner {
             var guardWin = new Object() {
                 boolean noIntrudersLeft = false;
             };
-            Thread t = new Thread(() -> {
+            new Thread(() -> {
                 while (!intruderWin.areaReached || guardWin.noIntrudersLeft) {
                     step();
                     intruderWin.areaReached = Map.checkTargetArea(map, this.t);
                     guardWin.noIntrudersLeft = Map.noIntrudersLeft(map);
                     this.t++;
                 }
-            });
-            t.start();
+            }).start();
+
+
         }
     }
 
-    /*
-    * Call made to algorithm to rotate the agents to a certain direction.@a
-     */
-    private void moveGuards(int j) {
-        for (int i = 0; i < guards.size(); i++) {
-            Guard guard = guards.get(i);
-            if(j==0 || j%(Scenario.config.getTimeStepSize()/guard.getSpeed())==0){
-                Utils.sleep(100);
-                Exploration explorer = guard.getExploration();
-                DirectionEnum dir = explorer.makeMove(guard);
-                MapUpdater.moveAgent(map, guard, dir);
-                guard.computeVisibleTiles(map);
-                checkIntruderCapture(guard);
-                guardCount++;
-            }
-        }
-    }
-
-
-    private void moveIntruders(int j) {
-        if (gameMode == 1) {
-            for (Intruder intruder : intruders) {
-                if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
-                    Utils.sleep(100);
-                    Exploration explorer = intruder.getExploration();
-                    DirectionEnum dir = explorer.makeMove(intruder);
-                    MapUpdater.moveAgent(map, intruder, dir);
-                    intruder.computeVisibleTiles(map);
-                    intruderCount++;
-                    checkIntruderCapture(intruder);
-                }
-            }
-        }
-    }
-
-
-
-    public Map getMap() {
-        return map;
-    }
-
-    public ArrayList<Guard> getGuards() {return guards;}
-
-    public ArrayList<Intruder> getIntruders() {return intruders;}
-
-    public int getGameMode() {
-        return gameMode;
-    }
-
-    private void checkIntruderCapture(Guard guard) {
-        ArrayList<Tile> tiles = guard.getVisibleTiles();
-        for(Tile tile: tiles){
-            if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
-                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<1){
-                    intruders.remove(tile.getAgent());
-                }
-            }
-        }
-    }
-
-    private void checkIntruderCapture(Intruder intruder) {
-        ArrayList<Tile> tiles = Utils.getSurroundingTiles(map, intruder.getAgentPosition());
-        for(Tile tile : tiles){
-            if(tile.hasAgent() && tile.getAgent().getType().equals("Guard")){
-                checkIntruderCapture((Guard)tile.getAgent());
-            }
-        }
-    }
 }
