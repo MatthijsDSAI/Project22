@@ -197,12 +197,17 @@ public class GameRunner {
                 boolean noIntrudersLeft = false;
             };
             new Thread(() -> {
-                while (true) {
+                while (!intruderWin.areaReached && !guardWin.noIntrudersLeft) {
                     step();
                     intruderWin.areaReached = Map.checkTargetArea(map, this.t);
                     guardWin.noIntrudersLeft = Map.noIntrudersLeft(map);
-                    System.out.println();
                     this.t++;
+                }
+                if(intruderWin.areaReached){
+                    System.out.println("INTRUDER WIN");
+                }
+                if(guardWin.noIntrudersLeft){
+                    System.out.println("GUARD WIN");
                 }
             }).start();
         }

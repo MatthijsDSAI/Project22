@@ -93,7 +93,8 @@ public class Intruder extends Agent{
     public void incrementTargetEntries(int t){
         if(t-tOfLastEntry>2 || tOfLastEntry==-1)
             numberOfTargetAreaEntries++;
-        tOfLastEntry = t;
+        if(t-tOfLastEntry>2)
+            tOfLastEntry = t;
 
     }
 
