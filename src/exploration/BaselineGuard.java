@@ -15,19 +15,23 @@ public class BaselineGuard extends FrontierBasedExploration{
     @Override
     public DirectionEnum makeMove(Agent agent) {
         visibleTiles = agent.getVisibleTiles();
+        Tile goalTile = null;
         for(Tile tile : visibleTiles) {
-            if(tile.toString().equals("TargetArea")) {
-                Path path = findPath(agent, tile);
-                return findNextMoveDirection(agent, path.get(1));
-            }
-
             Agent agentFound = tile.getAgent();
             if(agentFound != null && agentFound.getType().equals("Intruder")) {
-                Tile goalTile = agentFound.getAgentPosition();
+                goalTile = agentFound.getAgentPosition();
                 Path path = findPath(agent, goalTile);
                 return findNextMoveDirection(agent, path.get(1));
             }
+            if(tile.toString().equals("TargetArea")) {
+                goalTile = tile;
+            }
         }
+        if(goalTile != null) {
+            Path path = findPath(agent, goalTile);
+            return findNextMoveDirection(agent, path.get(1));
+        }
+
         updateExploredTiles(visibleTiles);
         adjacencyList.addNodes(visibleTiles);
         updateFrontiers(visibleTiles);
