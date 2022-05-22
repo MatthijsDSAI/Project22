@@ -51,9 +51,6 @@ public class FrontierBasedExploration extends Exploration{
 
     @Override
     public DirectionEnum makeMove(Agent agent) {
-        Tile curTile = agent.getAgentPosition();
-        int curX = curTile.getX();
-        int curY = curTile.getY();
         visibleTiles = agent.getVisibleTiles();
         updateExploredTiles(visibleTiles);
         adjacencyList.addNodes(visibleTiles);
