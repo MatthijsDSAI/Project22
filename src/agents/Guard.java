@@ -3,6 +3,7 @@ package agents;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
+import exploration.BaselineGuard;
 import exploration.Exploration;
 import exploration.FrontierBasedExploration;
 import exploration.RandomExploration;
@@ -38,6 +39,9 @@ public class Guard extends Agent{
                 break;
             case "RandomExploration":
                 this.exploration = new RandomExploration(this, map);
+                break;
+            case "BaseLineGuard":
+                this.exploration = new BaselineGuard(this, map);
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");
