@@ -80,15 +80,15 @@ controller/GameRunner.java
  controller.GameRunner$2
  controller.GameRunner$3
  controller.GameRunner$4
-exploration/BaseLineIntruder.java
- exploration.BaseLineIntruder
-agents/Intruder.java
- agents.Intruder
-exploration/FrontierBasedExploration.java
- exploration.FrontierBasedExploration
-utils/AdjacencyList.java
- utils.AdjacencyList
 agents/Guard.java
  agents.Guard
 exploration/BaselineGuard.java
  exploration.BaselineGuard
+exploration/FrontierBasedExploration.java
+ exploration.FrontierBasedExploration
+utils/AdjacencyList.java
+ utils.AdjacencyList
+agents/Intruder.java
+ agents.Intruder
+exploration/BaseLineIntruder.java
+ exploration.BaseLineIntruder

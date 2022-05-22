@@ -18,27 +18,27 @@ public class BaseLineIntruder extends FrontierBasedExploration {
     public BaseLineIntruder(Agent agent, Map map) {
         super(agent, map);
     }
-
+    public DirectionEnum prevDir;
     @Override
     public DirectionEnum makeMove(Agent agent) {
         Intruder intruder = (Intruder) agent;
         Tile tile = null;
-        if(intruder.hasFoundTargetArea()){
-            tile = intruder.getTargetArea();
+        if(intruder.getAgentPosition().toString().equals("TargetArea")){
+            return prevDir;
         }
-        else{
         Tile curTile = intruder.getAgentPosition();
         visibleTiles = intruder.getVisibleTiles();
         updateExploredTiles(visibleTiles);
         adjacencyList.addNodes(visibleTiles);
         updateFrontiers(visibleTiles);
         findFrontiers(intruder);
-        if(frontierQueue.isEmpty()){
+        if (frontierQueue.isEmpty()) {
             return null;
         }
         tile = findBestFrontier(frontierQueue, intruder);
-        }
+
         DirectionEnum dir = findNextMoveDirection(intruder, findPath(intruder, tile).get(1));
+        prevDir = dir;
         return dir;
     }
 
