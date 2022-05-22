@@ -202,11 +202,13 @@ public class MapUpdater {
         ArrayList<Tile> tiles = guard.getVisibleTiles();
         for(Tile tile: tiles){
             if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
-                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<1){
+                System.out.println(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile));
+                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<=1){
                     map.getIntruders().remove((Intruder)tile.getAgent());
                 }
             }
         }
+        map.getIntruders().removeIf(intruder -> intruder.getAgentPosition() == guard.getAgentPosition());
     }
 
     public static void checkIntruderCapture(Intruder intruder, Map map) {
