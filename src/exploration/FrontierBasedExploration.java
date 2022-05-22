@@ -146,6 +146,37 @@ public class FrontierBasedExploration extends Exploration{
         return null;
     }
 
+    public Path findPath(Agent agent, Tile goalTile) {
+        Tile curTile = agent.getAgentPosition();
+        LinkedList<Tile> goal = new LinkedList<>();
+        goal.add(goalTile);
+        LinkedList<Path> queue = new LinkedList<>();
+        Path path = new Path();
+        path.add(curTile);
+        queue.add(path);
+        LinkedList<Tile> tilesSeen = new LinkedList<>();
+        while(!queue.isEmpty()) {
+            path = queue.remove(findShortestPath(queue, goal));
+            Tile lastTile = path.getLast();
+            tilesSeen.add(lastTile);
+            if (lastTile.isWalkable() && goal.contains(lastTile)) {
+                return path;
+            }
+            LinkedList<Tile> curAdjacencyList = adjacencyList.get(lastTile);
+            for (Tile tile : curAdjacencyList) {
+                if(path.contains(tile) || tilesSeen.contains(tile)) {
+                    continue;
+                }
+                if (!path.contains(tile) && tile.isWalkable()) {
+                    Path newPath = new Path(path);
+                    newPath.add(tile);
+                    queue.offer(newPath);
+                }
+            }
+        }
+        return null;
+    }
+
     private int findShortestPath(LinkedList<Path> paths, Queue<Tile> frontiers) {
         int shortestDist = Integer.MAX_VALUE;
         int bestPathIndex = -1;
