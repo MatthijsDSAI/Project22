@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import utils.Utils;
 
 import java.util.Random;
 
@@ -66,7 +67,7 @@ public class MapGui extends Application {
         t = new Timeline();
         t.setCycleCount(Timeline.INDEFINITE);
 
-        KeyFrame k = new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>() {
+        KeyFrame k = new KeyFrame(Duration.millis(Scenario.config.getSleep()-50), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 drawMap(p);;

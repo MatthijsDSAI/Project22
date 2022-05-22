@@ -86,7 +86,7 @@ public class GameRunner {
             step();
             ref.areaReached = Map.checkTargetArea(map, this.t);
             ref.noIntrudersLeft = Map.noIntrudersLeft(map);
-        this.t++;
+            this.t++;
         }
     }
     /*
@@ -197,15 +197,14 @@ public class GameRunner {
                 boolean noIntrudersLeft = false;
             };
             new Thread(() -> {
-                while (!intruderWin.areaReached || guardWin.noIntrudersLeft) {
+                while (true) {
                     step();
                     intruderWin.areaReached = Map.checkTargetArea(map, this.t);
                     guardWin.noIntrudersLeft = Map.noIntrudersLeft(map);
+                    System.out.println();
                     this.t++;
                 }
             }).start();
-
-
         }
     }
 

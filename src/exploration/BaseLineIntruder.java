@@ -38,7 +38,7 @@ public class BaseLineIntruder extends FrontierBasedExploration {
         }
         tile = findBestFrontier(frontierQueue, intruder);
         }
-        DirectionEnum dir = findNextMoveDirection(intruder, tile);
+        DirectionEnum dir = findNextMoveDirection(intruder, findPath(intruder, tile).get(1));
         return dir;
     }
 

@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 
 public class Config {
-    public boolean TRAINING = true;
+    public boolean TRAINING = false;
     private int VISION = 5;
     private int HEARINGWALKING = 5;
     private int HEARINGSPRINT = 6;
@@ -13,7 +13,7 @@ public class Config {
     private double BASESPEEDGUARD;
     private double SPRINTSTEEDINTRUDER;
     private Color agentColor = Color.CYAN;
-    public boolean GUI = false;
+    public boolean GUI = true;
     public boolean DEBUG = false;
     public long sleep = 200;
     private int[] centerOfTargetArea;

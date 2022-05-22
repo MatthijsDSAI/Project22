@@ -14,8 +14,8 @@ public class MapDrawer extends JFrame implements MouseListener {
     private double[] tempLine;
     private static final double HORIZONTAL_BORDER = 60;
     private static final double VERTICAL_BORDER = 100;
-    private static final double frameWidth = 120;
-    private static final double frameHeight = 80;
+    private static final double frameWidth = 200;
+    private static final double frameHeight = 100;
     private final ArrayList<Rectangle2D> walls;
     private final ArrayList<Line2D> borders;
     private double[] print;
