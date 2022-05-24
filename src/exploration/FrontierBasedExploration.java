@@ -44,7 +44,7 @@ public class FrontierBasedExploration extends Exploration{
     private String tilesLLtoString(LinkedList<Tile> tiles) {
         String result = "";
         for(Tile tile : tiles) {
-            result += adjacencyList.getTileIndex(tile) + ", ";
+            result += tile.getX() + ", " + tile.getY() + " - ";
         }
         return result;
     }
@@ -81,11 +81,8 @@ public class FrontierBasedExploration extends Exploration{
     }
 
     public Path findFrontiers(Agent agent) {
-        if(DEBUG)
-            System.out.println("!Searching for frontier!");
         Tile curTile = agent.getAgentPosition();
-        if(DEBUG)
-            System.out.println("Agent pos at start of Frontier: " + curTile.getX() + ", " + curTile.getY() + " --- " + adjacencyList.getTileIndex(curTile));
+
 
 
         BFSQueue = new LinkedList<>();
@@ -107,6 +104,8 @@ public class FrontierBasedExploration extends Exploration{
                 }
             }
         }
+
+
         if(DEBUG)
             System.out.println("Starting second frontier search");
         curTile = agent.getAgentPosition();
@@ -117,11 +116,10 @@ public class FrontierBasedExploration extends Exploration{
         tilesSeen = new LinkedList<>();
         while(!queue.isEmpty()) {
             path = queue.remove(findShortestPath(queue, frontierQueue));
-            //System.out.println("Current path: " + tilesLLtoString(path));
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
             //System.out.println("Looking at tile: " + lastTile.getX() + ", " + lastTile.getY() + "--- tile: " + adjacencyList.getTileIndex(lastTile));
-            if (lastTile.isWalkable() && isFrontier(adjacencyList.get(lastTile)) && frontierQueue.contains(lastTile)) {
+            if (lastTile.isWalkable() && isFrontier(adjacencyList.get(lastTile)) && frontierQueue.contains(lastTile) && curTile != lastTile) {
                 //System.out.println("Cur agent pos: " + agent.getAgentPosition().getX() + ", " + agent.getAgentPosition().getY() + " --- tile: " + adjacencyList.getTileIndex(lastTile));
                 //System.out.println("Tile found pos: " + path.get(1).getX() + ", " + path.get(1).getY() + "--- tile: " + adjacencyList.getTileIndex(path.get(1)));
                 //System.out.println("Found path: " + tilesLLtoString(path));
