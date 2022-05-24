@@ -1,0 +1,29 @@
+height = 80
+width = 120
+gameMode = 1
+numGuards = 0
+numIntruders = 1
+baseSpeedGuard = 1
+baseSpeedIntruder = 1
+sprintSpeedIntruder = 1
+distanceViewing = 10
+numberMarkers = 5
+smellingDistance = 5
+targetArea = 69 60 81 52
+spawnAreaGuards = 116 76 116 76
+spawnAreaIntruders = 2 2 2 2
+wall = 0 0 120 1
+wall = 119 0 120 80
+wall = 0 0 1 80
+wall = 0 79 120 80
+wall = 0 9 27 7
+wall = 27 2 27 0
+wall = 18 4 18 0
+wall = 36 26 70 24
+wall = 43 45 46 31
+wall = 11 30 24 29
+wall = 70 19 71 7
+wall = 68 42 108 40
+wall = 54 65 56 44
+
+

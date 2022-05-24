@@ -20,12 +20,12 @@ controller/Map/tiles/SpawnAreaIntruders.java
  controller.Map.tiles.SpawnAreaIntruders
 agents/Marker.java
  agents.Marker
-exploration/Qlearning.java
- exploration.Qlearning
+utils/Position.java
+ utils.Position
 utils/Path.java
  utils.Path
-mapgenerator/MapDrawer.java
- mapgenerator.MapDrawer
+controller/Area.java
+ controller.Area
 exploration/Exploration.java
  exploration.Exploration
 utils/Config.java
@@ -46,49 +46,49 @@ controller/Hearing/Hearing.java
  controller.Hearing.Hearing
 utils/DirectionEnum.java
  utils.DirectionEnum
-controller/Map/Map.java
- controller.Map.Map
 agents/Agent.java
  agents.Agent
-utils/Position.java
- utils.Position
-controller/Area.java
- controller.Area
-GUI/PlayerChoiceBox.java
- GUI.PlayerChoiceBox
-GUI/StartScreen.java
- GUI.StartScreen
-Explorer.java
- Explorer
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
-GUI/MapGui.java
- GUI.MapGui
- GUI.MapGui$1
-GUI/PlayerSelection.java
- GUI.PlayerSelection
-GUI/PlayerSelectionComboBox.java
- GUI.PlayerSelectionComboBox
-controller/GraphicsConnector.java
- controller.GraphicsConnector
-exploration/BaseLineIntruder.java
- exploration.BaseLineIntruder
-agents/Intruder.java
- agents.Intruder
-utils/AdjacencyList.java
- utils.AdjacencyList
-exploration/FrontierBasedExploration.java
- exploration.FrontierBasedExploration
-exploration/BaselineGuard.java
- exploration.BaselineGuard
-agents/Guard.java
- agents.Guard
 controller/Map/MapUpdater.java
  controller.Map.MapUpdater
+GUI/StartScreen.java
+ GUI.StartScreen
 controller/GameRunner.java
  controller.GameRunner
  controller.GameRunner$1
  controller.GameRunner$2
  controller.GameRunner$3
  controller.GameRunner$4
+agents/Guard.java
+ agents.Guard
+GUI/MapGui.java
+ GUI.MapGui
+ GUI.MapGui$1
+GUI/PlayerSelection.java
+ GUI.PlayerSelection
+exploration/FrontierBasedExploration.java
+ exploration.FrontierBasedExploration
+Explorer.java
+ Explorer
+exploration/BaselineGuard.java
+ exploration.BaselineGuard
+exploration/Qlearning.java
+ exploration.Qlearning
+GUI/PlayerChoiceBox.java
+ GUI.PlayerChoiceBox
+controller/GraphicsConnector.java
+ controller.GraphicsConnector
+GUI/PlayerSelectionComboBox.java
+ GUI.PlayerSelectionComboBox
+controller/Map/Map.java
+ controller.Map.Map
+utils/AdjacencyList.java
+ utils.AdjacencyList
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
+exploration/BaseLineIntruder.java
+ exploration.BaseLineIntruder
+agents/Intruder.java
+ agents.Intruder
+mapgenerator/MapDrawer.java
+ mapgenerator.MapDrawer

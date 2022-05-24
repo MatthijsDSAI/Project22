@@ -5,7 +5,6 @@ import agents.Guard;
 import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
-import javafx.scene.paint.Color;
 import utils.AdjacencyList;
 import utils.DirectionEnum;
 import utils.Utils;
