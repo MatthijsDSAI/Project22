@@ -15,7 +15,7 @@ public class Config {
     private Color agentColor = Color.CYAN;
     public boolean GUI = true;
     public boolean DEBUG = false;
-    public long sleep = 200;
+    public long sleep = 100;
     private int[] centerOfTargetArea;
     private int timeStepSize;
     private boolean MOVE = true;

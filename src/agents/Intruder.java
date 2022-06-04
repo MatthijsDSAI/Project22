@@ -101,4 +101,9 @@ public class Intruder extends Agent{
     public void resetCounter(){
         numOfTimestepsInTargetArea=0;
     }
+
+    @Override
+    public Color getColor(){
+        return Color.ORANGE;
+    }
 }

@@ -183,4 +183,6 @@ public abstract class Agent{
     }
 
     public abstract Object getType();
+
+    public abstract Color getColor();
 }

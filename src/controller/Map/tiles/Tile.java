@@ -5,6 +5,7 @@ import controller.Scenario;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.awt.*;
 
 
 /*
@@ -84,7 +85,7 @@ public abstract class Tile {
 
     public Color getColor() { //TODO: find a solution to this, we need 2 different type of colour here
         if(hasAgent()){
-            return Scenario.config.getAgentColor();
+            return getAgent().getColor();
         }
         if(explored && this.toString().equals("Floor")){
             return Color.TAN;

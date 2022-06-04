@@ -1,7 +1,7 @@
 height = 100
 width = 200
 gameMode = 1
-numGuards = 0
+numGuards = 1
 numIntruders = 1
 baseSpeedGuard = 11
 baseSpeedIntruder = 1

@@ -48,4 +48,9 @@ public class Guard extends Agent{
 
         }
     }
+
+    @Override
+    public Color getColor(){
+        return Color.CYAN;
+    }
 }

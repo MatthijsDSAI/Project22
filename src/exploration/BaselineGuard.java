@@ -54,7 +54,6 @@ public class BaselineGuard extends FrontierBasedExploration{
         adjacencyList.addNodes(visibleTiles);
         updateFrontiers(visibleTiles);
         Path path = findFrontiers(agent);
-        System.out.println(path);
         Tile tile = path.get(1);
         if(frontierQueue.isEmpty()){
             return null;
