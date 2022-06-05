@@ -47,7 +47,8 @@ public class GraphicsConnector {
             gameRunner.trainLoop(Scenario.config.getGameMode());
         }
         else{
-            gameRunner.run(Scenario.config.getGameMode());
+            if(Scenario.config.isMOVE())
+                gameRunner.run(Scenario.config.getGameMode());
         }
     }
 

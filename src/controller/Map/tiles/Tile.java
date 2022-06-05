@@ -87,7 +87,9 @@ public abstract class Tile {
         if(hasAgent()){
             return getAgent().getColor();
         }
-        if(explored && this.toString().equals("Floor")){
+        //TODO: remove this again
+
+        if(explored/* && this.toString().equals("Floor")*/){
             return Color.TAN;
         }
         return c;

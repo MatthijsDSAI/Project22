@@ -45,7 +45,8 @@ public abstract class Agent{
         this.y_position = tile.getY();
         this.a_name = "Agent";
         this.audiostdeviation=10;
-        angle= DirectionEnum.getAngleFromDirection(Utils.getRandomDirection());
+        //TODO: remove
+        angle= DirectionEnum.SOUTH.getAngle();//DirectionEnum.getAngleFromDirection(Utils.getRandomDirection());
         startingTile = tile;
         agentPosition = tile;
     }
