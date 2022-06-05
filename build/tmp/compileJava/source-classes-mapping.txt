@@ -86,9 +86,9 @@ controller/Hearing/Hearing.java
  controller.Hearing.Hearing
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
-Explorer.java
- Explorer
-controller/Map/tiles/Floor.java
- controller.Map.tiles.Floor
 GUI/PlayerChoiceBox.java
  GUI.PlayerChoiceBox
+controller/Map/tiles/Floor.java
+ controller.Map.tiles.Floor
+Explorer.java
+ Explorer
