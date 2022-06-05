@@ -52,10 +52,86 @@ public class MapUpdater {
         if(toTile.isWalkable()) {
             map.getTile(fromTile.getX(),fromTile.getY()).removeAgent();
             map.getTile(toTile.getX(),toTile.getY()).addAgent(agent);
+
+            removeNoises(map, map.getTile(fromTile.getX(),fromTile.getY()));
+            addNoises(map, map.getTile(toTile.getX(),toTile.getY()));
+
             agent.setAgentPosition(toTile);
         }
         else{
             throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
+        }
+    }
+
+    public static void removeNoises(Map map, Tile newTile) {
+        double numOfLoops = 2;
+        int x = newTile.getX();
+        int y = newTile.getY();
+
+        newTile.setSound(0); // set agent's current position to 1, max sound
+
+        for (int i=1; i <= numOfLoops; i++) {
+            int forX = -i;
+            int forY = 0;
+
+            while (forX != i) {
+                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                    if (map.getTile(x + forX, y + forY).isWalkable()) {
+                            map.getTile(x + forX, y + forY).setSound(0);
+                    }
+                }
+                forX ++;
+                forY --;
+            }
+
+            while (forX != -i) {
+                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                    if (map.getTile(x + forX, y + forY).isWalkable()) {
+                            map.getTile(x + forX, y + forY).setSound(0);
+                        }
+                    }
+                forX --;
+                forY ++;
+            }
+            }
+        }
+
+    public static void addNoises(Map map, Tile newTile) {
+        double numOfLoops = 2;
+        int x = newTile.getX();
+        int y = newTile.getY();
+        double decreasingVal = Scenario.config.getDistanceHearingWalk() / numOfLoops;
+
+
+        newTile.setSound(1); // set agent's current position to 1, max sound
+
+        for (int i=1; i <= numOfLoops; i++) {
+            int forX = -i;
+            int forY = 0;
+
+            while (forX != i) {
+                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                    if (map.getTile(x + forX, y + forY).isWalkable()) {
+                        if (map.getTile(x + forX, y + forY).getSound() < 1 - decreasingVal * i) { // if that tile's current sound is higher skip
+                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
+                        }
+                    }
+                }
+                forX ++;
+                forY --;
+            }
+
+            while (forX != -i) {
+                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                    if (map.getTile(x + forX, y + forY).isWalkable()) {
+                        if (map.getTile(x + forX, y + forY).getSound() < 1 - decreasingVal * i) { // if that tile's current sound is higher skip
+                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
+                        }
+                    }
+                }
+                forX --;
+                forY ++;
+            }
         }
     }
 
