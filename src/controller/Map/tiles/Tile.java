@@ -83,13 +83,12 @@ public abstract class Tile {
 
     public javafx.scene.shape.Rectangle createRec(int x, int y){return new Rectangle(x, y,10,10);}
 
-    public Color getColor() { //TODO: find a solution to this, we need 2 different type of colour here
+    public Color getColor() {
         if(hasAgent()){
             return getAgent().getColor();
         }
-        //TODO: remove this again
 
-        if(explored/* && this.toString().equals("Floor")*/){
+        if(explored && this.toString().equals("Floor")){
             return Color.TAN;
         }
         return c;
