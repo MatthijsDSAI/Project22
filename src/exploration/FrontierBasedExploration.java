@@ -43,7 +43,9 @@ public class FrontierBasedExploration extends Exploration{
     public DirectionEnum makeMove(Agent agent) {
         visibleTiles = agent.getVisibleTiles();     // update the currently visible tiles
         updateKnowledge(visibleTiles);              // update the knowledge base of the agent
-        Tile tile = findFrontiers(agent).get(1);
+        updateFrontiers(agent);
+        Path path = findPath(agent, frontierQueue);
+        Tile tile = path.get(1);
         if(frontierQueue.isEmpty()){
             return null;
         }
@@ -56,11 +58,11 @@ public class FrontierBasedExploration extends Exploration{
      * @param visibleTiles ArrayList containing the currently visible tiles
      */
     public void updateKnowledge(ArrayList<Tile> visibleTiles) {
-        adjacencyList.addNodes(visibleTiles);
-        for(Tile tile : visibleTiles) {
+        adjacencyList.addNodes(visibleTiles);           // add the currently visible tiles to the adjacency list
+        for(Tile tile : visibleTiles) {                 // loop over the visible tiles
             if(adjacencyList.get(tile).size() == 4) {
-                frontierQueue.remove(tile);
-                if(!exploredTiles.contains(tile)) exploredTiles.add(tile);
+                frontierQueue.remove(tile);             // if 4 adjacent tiles are known, remove from the frontier queue
+                if(!exploredTiles.contains(tile)) exploredTiles.add(tile); // if tile is not in explored tiles yet, add it
             }
         }
     }
@@ -98,7 +100,13 @@ public class FrontierBasedExploration extends Exploration{
         return frontierQueue;
     }
 
-    public Path findPath2(Agent agent, Queue<Tile> frontiers) {
+    /**
+     * Find the shortest path to a list of potential goal tiles using A-star search
+     * @param agent     the agent from which the starting position is decided
+     * @param goalTiles the list of potential goal tiles
+     * @return the shortest path found
+     */
+    public Path findPath(Agent agent, Queue<Tile> goalTiles) {
         Tile startTile = agent.getAgentPosition();          // Determine the starting tile
         // Create the path queue and add the first path containing the starting tile
         LinkedList<Path> pathQueue = new LinkedList<>();
@@ -109,19 +117,22 @@ public class FrontierBasedExploration extends Exploration{
 
         // loop over pathQueue until it is empty
         while(!pathQueue.isEmpty()) {
-            path = pathQueue.remove(findShortestPath(pathQueue, frontierQueue));
+            // remove the shortest path from the current pathQueue
+            path = pathQueue.remove(findShortestPath(pathQueue, goalTiles));
+            // get the last tile from the shortest path, add it to the tiles seen and check if it is a frontier
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
-            if (lastTile.isWalkable() && isFrontier(lastTile) && frontierQueue.contains(lastTile) && startTile != lastTile) {
-                return path;
+            if (lastTile.isWalkable() && isFrontier(lastTile) && goalTiles.contains(lastTile) && startTile != lastTile) {
+                return path; // if current path is a path to a frontier return that path
             }
-
+            // get the tiles adjacent to the current tile and loop over them
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(lastTile);
             for (Tile tile : curAdjacencyList) {
                 if(path.contains(tile) || tilesSeen.contains(tile)) {
-                    continue;
+                    continue; // if the tile has already been seen or is already in the path continue
                 }
                 if (!path.contains(tile) && tile.isWalkable()) {
+                    // if the tile is has not been seen yet and is walkable create a new path and add it to the queue
                     Path newPath = new Path(path);
                     newPath.add(tile);
                     pathQueue.offer(newPath);
@@ -131,59 +142,12 @@ public class FrontierBasedExploration extends Exploration{
         return null;
     }
 
-    public Path findFrontiers(Agent agent) {
-        Tile curTile = agent.getAgentPosition();
-        BFSQueue = new LinkedList<>();
-        BFSQueue.add(curTile);
-        LinkedList<Tile> tilesSeen = new LinkedList<>();
-        while(!BFSQueue.isEmpty()) {
-            curTile = BFSQueue.remove();
-            tilesSeen.add(curTile);
-            LinkedList<Tile> curAdjacencyList = adjacencyList.get(curTile);
-            for(Tile tile : curAdjacencyList) {
-                if(BFSQueue.contains(tile) || tilesSeen.contains(tile)) {
-                    continue;
-                }
-                BFSQueue.add(tile);
-                int tileIndex = adjacencyList.getTileIndex(tile);
-                if(tile.isWalkable() && isFrontier(tile) && !frontierQueue.contains(tile) && !exploredTiles.contains(tile)) {
-                    frontierQueue.add(tile);
-                }
-            }
-        }
-
-
-        if(DEBUG)
-            System.out.println("Starting second frontier search");
-        curTile = agent.getAgentPosition();
-        LinkedList<Path> queue = new LinkedList<>();
-        Path path = new Path();
-        path.add(curTile);
-        queue.add(path);
-        tilesSeen = new LinkedList<>();
-        while(!queue.isEmpty()) {
-            path = queue.remove(findShortestPath(queue, frontierQueue));
-            Tile lastTile = path.getLast();
-            tilesSeen.add(lastTile);
-            if (lastTile.isWalkable() && isFrontier(lastTile) && frontierQueue.contains(lastTile) && curTile != lastTile) {
-                return path;
-            }
-
-            LinkedList<Tile> curAdjacencyList = adjacencyList.get(lastTile);
-            for (Tile tile : curAdjacencyList) {
-                if(path.contains(tile) || tilesSeen.contains(tile)) {
-                    continue;
-                }
-                if (!path.contains(tile) && tile.isWalkable()) {
-                    Path newPath = new Path(path);
-                    newPath.add(tile);
-                    queue.offer(newPath);
-                }
-            }
-        }
-        return null;
-    }
-
+    /**
+     * Find the shortest path to a goal tiles using A-star search
+     * @param agent     the agent from which the starting position is decided
+     * @param goalTile  the goal tile
+     * @return the shortest path found
+     */
     public Path findPath(Agent agent, Tile goalTile) {
         Tile curTile = agent.getAgentPosition();
         LinkedList<Tile> goal = new LinkedList<>();
@@ -215,6 +179,12 @@ public class FrontierBasedExploration extends Exploration{
         return null;
     }
 
+    /**
+     * Perform an iteration of A-star search on a list of paths and goal tiles.
+     * @param paths         the list of paths to continue search from
+     * @param frontiers     the list of potential goal tiles
+     * @return the index of the shortest path to continue searching from
+     */
     private int findShortestPath(LinkedList<Path> paths, Queue<Tile> frontiers) {
         int shortestDist = Integer.MAX_VALUE;
         int bestPathIndex = -1;
@@ -232,6 +202,12 @@ public class FrontierBasedExploration extends Exploration{
         return bestPathIndex;
     }
 
+    /**
+     * Return the direction for the agent to move to when attempting to walk towards a specific tile.
+     * @param agent     the agent from which the starting position is decided
+     * @param nextTile  the tile the agent should move towards
+     * @return the DirectionEnum for the agent to move towards the nextTile tile
+     */
     public DirectionEnum findNextMoveDirection(Agent agent, Tile nextTile) {
         Tile curTile = agent.getAgentPosition();
         int curX = curTile.getX();
@@ -282,6 +258,11 @@ public class FrontierBasedExploration extends Exploration{
         }
     }
 
+    /**
+     * Checks if a provided tile is a frontier based on the amount of known adjacent tiles
+     * @param tile  the tile for which to check if it is a frontier
+     * @return boolean result
+     */
     boolean isFrontier(Tile tile) {
         if(adjacencyList.get(tile).size() < 4) return true;
         return false;

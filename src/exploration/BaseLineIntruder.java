@@ -18,6 +18,7 @@ public class BaseLineIntruder extends FrontierBasedExploration {
         super(agent, map);
     }
     public DirectionEnum prevDir;
+
     @Override
     public DirectionEnum makeMove(Agent agent) {
         Intruder intruder = (Intruder) agent;
@@ -28,7 +29,7 @@ public class BaseLineIntruder extends FrontierBasedExploration {
         Tile curTile = intruder.getAgentPosition();
         visibleTiles = intruder.getVisibleTiles();
         updateKnowledge(visibleTiles);
-        findFrontiers(intruder);
+        updateFrontiers(intruder);
         if (frontierQueue.isEmpty()) {
             return null;
         }
