@@ -28,7 +28,7 @@ public class FrontierBasedExploration extends Exploration{
     public FrontierBasedExploration(Agent agent, Map map) {
         this.map = map;
         visibleTiles = agent.getVisibleTiles();
-        adjacencyList = new AdjacencyList(map.getTiles(), visibleTiles);
+        adjacencyList = new AdjacencyList(map.getTiles(), agent, visibleTiles);
         frontierQueue = new LinkedList<>();
         BFSQueue = new LinkedList<>();
         exploredTiles = new LinkedList<>();
@@ -43,26 +43,30 @@ public class FrontierBasedExploration extends Exploration{
      */
     public DirectionEnum makeMove(Agent agent) {
         visibleTiles = agent.getVisibleTiles();     // update the currently visible tiles
-        updateKnowledge(visibleTiles);              // update the knowledge base of the agent
+        updateKnowledge(agent, visibleTiles);              // update the knowledge base of the agent
         boolean updated = updateFrontiers(agent);   // update the frontiers and set boolean value to whether or not there was a new frontier found
-        Tile goalTile = null;
-        if (updated || this.curPath.size() <= 1) {
-            this.curPath = findPath(agent, frontierQueue);
-        }
-        goalTile = this.curPath.remove(1);
-        if(frontierQueue.isEmpty()){
+        Tile goalTile = updateGoal(agent, updated); // update the goal tile for the agent
+        if(frontierQueue.isEmpty()) {
             return null;
         }
         DirectionEnum dir = findNextMoveDirection(agent, goalTile);
         return dir;
     }
 
+    public Tile updateGoal(Agent agent, boolean updated) {
+        if (updated || this.curPath.size() <= 1) {
+            this.curPath = findPath(agent, frontierQueue);
+        }
+        Tile goalTile = this.curPath.remove(1);
+        return goalTile;
+    }
+
     /**
      * Updates the knowledge base of the agent based on the currently visible tiles.
      * @param visibleTiles ArrayList containing the currently visible tiles
      */
-    public void updateKnowledge(ArrayList<Tile> visibleTiles) {
-        adjacencyList.addNodes(visibleTiles);           // add the currently visible tiles to the adjacency list
+    public void updateKnowledge(Agent agent, ArrayList<Tile> visibleTiles) {
+        adjacencyList.addNodes(visibleTiles, agent);           // add the currently visible tiles to the adjacency list
         for(Tile tile : visibleTiles) {                 // loop over the visible tiles
             if(adjacencyList.get(tile).size() == 4) {
                 frontierQueue.remove(tile);             // if 4 adjacent tiles are known, remove from the frontier queue

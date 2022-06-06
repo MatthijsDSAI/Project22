@@ -28,7 +28,7 @@ public class BaseLineIntruder extends FrontierBasedExploration {
         }
         Tile curTile = intruder.getAgentPosition();
         visibleTiles = intruder.getVisibleTiles();
-        updateKnowledge(visibleTiles);
+        updateKnowledge(agent, visibleTiles);
         updateFrontiers(intruder);
         if (frontierQueue.isEmpty()) {
             return null;
