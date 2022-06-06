@@ -127,10 +127,11 @@ public class GameRunner {
         ArrayList<Guard> guards = map.getGuards();
         for (Guard guard : guards) {
             if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
-                Utils.sleep(100);
+                Utils.sleep(20);
                 Exploration explorer = guard.getExploration();
                 DirectionEnum dir = explorer.makeMove(guard);
                 MapUpdater.moveAgent(map, guard, dir);
+                MapUpdater.refresh(map, guard.getVisibleTiles());
                 guard.computeVisibleTiles(map);
                 MapUpdater.checkIntruderCapture(guard, map);
             }
@@ -144,10 +145,11 @@ public class GameRunner {
             ArrayList<Intruder> intruders = map.getIntruders();
             for (Intruder intruder : intruders) {
                 if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
-                    Utils.sleep(100);
+                    Utils.sleep(20);
                     Exploration explorer = intruder.getExploration();
                     DirectionEnum dir = explorer.makeMove(intruder);
                     MapUpdater.moveAgent(map, intruder, dir);
+                    MapUpdater.refresh(map, intruder.getVisibleTiles());
                     intruder.computeVisibleTiles(map);
                     MapUpdater.checkIntruderCapture(intruder, map);
                 }
