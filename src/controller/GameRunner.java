@@ -131,6 +131,7 @@ public class GameRunner {
                 Exploration explorer = guard.getExploration();
                 DirectionEnum dir = explorer.makeMove(guard);
                 MapUpdater.moveAgent(map, guard, dir);
+                MapUpdater.refresh(map, guard.getVisibleTiles());
                 guard.computeVisibleTiles(map);
                 MapUpdater.checkIntruderCapture(guard, map);
             }
@@ -148,6 +149,7 @@ public class GameRunner {
                     Exploration explorer = intruder.getExploration();
                     DirectionEnum dir = explorer.makeMove(intruder);
                     MapUpdater.moveAgent(map, intruder, dir);
+                    MapUpdater.refresh(map, intruder.getVisibleTiles());
                     intruder.computeVisibleTiles(map);
                     MapUpdater.checkIntruderCapture(intruder, map);
                 }

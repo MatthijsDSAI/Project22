@@ -117,6 +117,7 @@ public abstract class Agent{
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
+            tile.setCurrentlyViewed(true);
         }
     }
 

@@ -370,4 +370,10 @@ public class MapUpdater {
             }
         }
     }
+
+    public static void refresh(Map map, ArrayList<Tile> visibleTiles) {
+        for(Tile tile: visibleTiles){
+            map.getTile(tile.getX(), tile.getY()).setCurrentlyViewed(false);
+        }
+    }
 }

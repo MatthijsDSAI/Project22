@@ -25,6 +25,7 @@ public abstract class Tile {
     private int x;
     private int y;
     private double sound;
+    private boolean currentlyViewed = false;
 
     protected Tile(){}
 
@@ -96,12 +97,10 @@ public abstract class Tile {
             if(hasAgent()){
                 return getAgent().getColor();
             }
-
-            if(explored && this.toString().equals("Floor")){
-                return Color.TAN;
-            }
-            return c;
+        if(currentlyViewed && this.toString().equals("Floor")){
+            return Color.TAN;
         }
+        return c;
     }
 
     // calculates the Manhattan distance between this and other
@@ -133,5 +132,9 @@ public abstract class Tile {
 
     public void setSound(double sound){ // 1 is full sound
         this.sound = sound;
+    }
+
+    public void setCurrentlyViewed(boolean b){
+        currentlyViewed = b;
     }
 }
