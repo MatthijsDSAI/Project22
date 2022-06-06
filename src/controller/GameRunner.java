@@ -85,7 +85,7 @@ public class GameRunner {
     public void train(){
         boolean areaReached = false;
         boolean noIntrudersLeft = false;
-        while ((!areaReached || !noIntrudersLeft)) {
+        while ((!areaReached && !noIntrudersLeft)) {
             step();
             areaReached = Map.checkTargetArea(map, this.t);
             noIntrudersLeft = Map.noIntrudersLeft(map);

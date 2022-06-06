@@ -95,7 +95,6 @@ public class Intruder extends Agent{
             numberOfTargetAreaEntries++;
         if(t-tOfLastEntry>2)
             tOfLastEntry = t;
-
     }
 
     public void resetCounter(){

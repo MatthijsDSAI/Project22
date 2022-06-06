@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 
 public class Config {
-    public boolean TRAINING = true;
+    public boolean TRAINING = false;
     private int VISION = 5;
     private int HEARINGWALKING = 5;
     private int HEARINGSPRINT = 6;
@@ -19,7 +19,7 @@ public class Config {
     private int[] centerOfTargetArea;
     private int timeStepSize;
     private boolean MOVE = true;
-    private int gameMode = 1;
+    private int gameMode;
 
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
