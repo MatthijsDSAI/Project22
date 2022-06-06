@@ -86,13 +86,12 @@ public abstract class Tile {
 
         if (getSound() > 0) {
             if (hasAgent()) {
-                return getAgent().getColor().darker();
-            }
-
-            if (explored && this.toString().equals("Floor")) {
-                return Color.TAN.darker();
+                return Scenario.config.getAgentColor();
             }
             return c.darker();
+//            if (explored && this.toString().equals("Floor")) {
+//                return Color.TAN.darker();
+//            }
         } else {
             if(hasAgent()){
                 return getAgent().getColor();

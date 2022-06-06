@@ -169,8 +169,8 @@ public class MapUpdater {
                 if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
 
-                        if (map.getTile(x + forX, y + forY).getSound() < 1 - decreasingVal * i) { // if that tile's current sound is higher skip
-                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
+                        if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
+                            map.getTile(x + forX, y + forY).setSound(1);
                         }
                     }
                 }
@@ -183,8 +183,8 @@ public class MapUpdater {
                 if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
 
-                        if (map.getTile(x + forX, y + forY).getSound() < 1 - decreasingVal * i) { // if that tile's current sound is higher skip
-                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
+                        if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
+                            map.getTile(x + forX, y + forY).setSound(1);
                         }
                     }
                 }
@@ -197,8 +197,8 @@ public class MapUpdater {
                 if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
 
-                        if (map.getTile(x + forX, y + forY).getSound() < 1 - decreasingVal * i) { // if that tile's current sound is higher skip
-                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
+                        if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
+                            map.getTile(x + forX, y + forY).setSound(1);
                         }
                     }
                 }
