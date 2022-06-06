@@ -41,12 +41,16 @@ public class BaselineGuard extends FrontierBasedExploration{
         }
 
         updateKnowledge(visibleTiles);
-        updateFrontiers(agent);
-        Tile tile = findPath(agent, frontierQueue).get(1);
+        boolean updated = updateFrontiers(agent);
+        goalTile = null;
+        if (updated || this.curPath.size() <= 1) {
+            this.curPath = findPath(agent, frontierQueue);
+        }
+        goalTile = this.curPath.remove(1);
         if(frontierQueue.isEmpty()){
             return null;
         }
-        DirectionEnum dir = findNextMoveDirection(agent, tile);
+        DirectionEnum dir = findNextMoveDirection(agent, goalTile);
         return dir;
     }
 }

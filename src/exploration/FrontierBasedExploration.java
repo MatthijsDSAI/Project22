@@ -46,13 +46,10 @@ public class FrontierBasedExploration extends Exploration{
         updateKnowledge(visibleTiles);              // update the knowledge base of the agent
         boolean updated = updateFrontiers(agent);   // update the frontiers and set boolean value to whether or not there was a new frontier found
         Tile goalTile = null;
-        if(!updated) {
-            goalTile = this.curPath.remove(1);
-        }
-        else {
+        if (updated || this.curPath.size() <= 1) {
             this.curPath = findPath(agent, frontierQueue);
-            goalTile = this.curPath.remove(1);
         }
+        goalTile = this.curPath.remove(1);
         if(frontierQueue.isEmpty()){
             return null;
         }
