@@ -85,23 +85,25 @@ public abstract class Tile {
 
     public Color getColor() {
 
-        if (getSound() > 0) {
+        if ((0.5 < getSound()) && (getSound() <= 1)) {
             if (hasAgent()) {
-                return Scenario.config.getAgentColor();
+                return Scenario.config.getAgentColor().darker().darker();
+            }
+            return c.darker().darker();
+        } else if ((0 < getSound()) && (getSound() <= 0.5)) {
+            if (hasAgent()) {
+                return Scenario.config.getAgentColor().darker();
             }
             return c.darker();
-//            if (explored && this.toString().equals("Floor")) {
-//                return Color.TAN.darker();
-//            }
         } else {
-            if(hasAgent()){
+            if (hasAgent()) {
                 return getAgent().getColor();
             }
-            if(currentlyViewed && this.toString().equals("Floor")){
-            return Color.TAN;
+            if (currentlyViewed && this.toString().equals("Floor")) {
+                return Color.TAN;
             }
+            return c;
         }
-        return c;
     }
 
     // calculates the Manhattan distance between this and other
