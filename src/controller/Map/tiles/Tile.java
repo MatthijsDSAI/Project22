@@ -101,14 +101,19 @@ public abstract class Tile {
             }
             boolean tan;
             if(Scenario.config.getGameMode()==1){
-               tan = currentlyViewed;
+                if (currentlyViewed && this.toString().equals("Floor")) {
+                    return Color.TAN;
+                }
             }
             else{
-                tan = explored;
+                if(currentlyViewed && this.toString().equals("Floor")){
+                    return Color.TAN.darker();
+                }
+                else if (explored && this.toString().equals("Floor")) {
+                    return Color.TAN;
+                }
             }
-            if (tan && this.toString().equals("Floor")) {
-                return Color.TAN;
-            }
+
             return c;
         }
     }
