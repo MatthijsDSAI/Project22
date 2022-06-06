@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import utils.Utils;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class MapGui extends Application {
@@ -70,8 +71,7 @@ public class MapGui extends Application {
         KeyFrame k = new KeyFrame(Duration.millis(Scenario.config.getSleep()-50), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                drawMap(p);;
-                graphicsConnector.getMapOfColors();
+                drawMap(p);
             }
         });
         t.getKeyFrames().add(k);

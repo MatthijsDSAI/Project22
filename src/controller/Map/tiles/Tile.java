@@ -97,8 +97,9 @@ public abstract class Tile {
             if(hasAgent()){
                 return getAgent().getColor();
             }
-        if(currentlyViewed && this.toString().equals("Floor")){
+            if(currentlyViewed && this.toString().equals("Floor")){
             return Color.TAN;
+            }
         }
         return c;
     }

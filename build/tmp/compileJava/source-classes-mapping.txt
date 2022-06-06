@@ -8,66 +8,66 @@ controller/TelePortal.java
  controller.TelePortal
 controller/GameMode.java
  controller.GameMode
-controller/Scenario.java
- controller.Scenario
-utils/Config.java
- utils.Config
+exploration/Exploration.java
+ exploration.Exploration
+utils/AdjacencyList.java
+ utils.AdjacencyList
 test/AngleTest.java
  AngleTest
 mapgenerator/MapDrawer.java
  mapgenerator.MapDrawer
 utils/Position.java
  utils.Position
-controller/Map/tiles/TeleportalTile.java
- controller.Map.tiles.TeleportalTile
-controller/Map/tiles/Floor.java
- controller.Map.tiles.Floor
-controller/Visibility/Visibility.java
- controller.Visibility.Visibility
-controller/Map/tiles/Tile.java
- controller.Map.tiles.Tile
-exploration/RandomExploration.java
- exploration.RandomExploration
-controller/Map/tiles/SpawnAreaGuards.java
- controller.Map.tiles.SpawnAreaGuards
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
-utils/Utils.java
- utils.Utils
-controller/Map/tiles/SpawnAreaIntruders.java
- controller.Map.tiles.SpawnAreaIntruders
+agents/Agent.java
+ agents.Agent
 agents/Marker.java
  agents.Marker
 exploration/Qlearning.java
  exploration.Qlearning
 exploration/BaseLineIntruder.java
  exploration.BaseLineIntruder
-exploration/BaselineGuard.java
- exploration.BaselineGuard
-exploration/Exploration.java
- exploration.Exploration
-controller/Map/tiles/TargetArea.java
- controller.Map.tiles.TargetArea
-utils/Path.java
- utils.Path
-agents/Intruder.java
- agents.Intruder
-utils/AdjacencyList.java
- utils.AdjacencyList
 controller/Map/tiles/Shaded.java
  controller.Map.tiles.Shaded
+controller/Map/tiles/TargetArea.java
+ controller.Map.tiles.TargetArea
 controller/Map/Map.java
  controller.Map.Map
-agents/Agent.java
- agents.Agent
+controller/Map/tiles/TeleportalTile.java
+ controller.Map.tiles.TeleportalTile
+exploration/BaselineGuard.java
+ exploration.BaselineGuard
+exploration/RandomExploration.java
+ exploration.RandomExploration
+controller/Map/tiles/SpawnAreaGuards.java
+ controller.Map.tiles.SpawnAreaGuards
+controller/Map/tiles/Floor.java
+ controller.Map.tiles.Floor
+controller/Map/tiles/SpawnAreaIntruders.java
+ controller.Map.tiles.SpawnAreaIntruders
 controller/Map/MapUpdater.java
  controller.Map.MapUpdater
+utils/Config.java
+ utils.Config
+controller/Scenario.java
+ controller.Scenario
 agents/Guard.java
  agents.Guard
+controller/Visibility/Visibility.java
+ controller.Visibility.Visibility
+controller/Map/tiles/Tile.java
+ controller.Map.tiles.Tile
 controller/Hearing/Hearing.java
  controller.Hearing.Hearing
+agents/Intruder.java
+ agents.Intruder
 exploration/FrontierBasedExploration.java
  exploration.FrontierBasedExploration
+utils/Utils.java
+ utils.Utils
+utils/Path.java
+ utils.Path
 GUI/StartScreen.java
  GUI.StartScreen
 controller/GameRunner.java
@@ -75,7 +75,6 @@ controller/GameRunner.java
  controller.GameRunner$1
  controller.GameRunner$2
  controller.GameRunner$3
- controller.GameRunner$4
 GUI/PlayerSelectionComboBox.java
  GUI.PlayerSelectionComboBox
 GUI/MapGui.java
