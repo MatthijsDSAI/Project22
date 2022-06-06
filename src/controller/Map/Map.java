@@ -52,7 +52,7 @@ public class Map {
         map.getTile(x,y).addAgent(agent);
 
     }
-    
+
     static Tile getTileFromDirection(Map map, Tile agentPosition, DirectionEnum direction) {
         int x = agentPosition.getX();
         int y = agentPosition.getY();

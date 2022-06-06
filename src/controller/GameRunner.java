@@ -24,7 +24,7 @@ public class GameRunner {
     private MapGui gui;
     private Scenario scenario;
     private int gameMode;
-
+    private GraphicsConnector gc;
     //Fields that change after a training
     private boolean TRAINING = Scenario.config.getTraining();
     private Map map;
@@ -41,6 +41,7 @@ public class GameRunner {
         if(Scenario.config.GUI){
             try{
                 GraphicsConnector graphicsConnector = new GraphicsConnector(this);
+                this.gc = graphicsConnector;
                 gui = new MapGui();
                 gui.launchGUI(graphicsConnector);
             }
@@ -48,7 +49,7 @@ public class GameRunner {
                 System.out.println("There has been an issue with the initialization of the GUI");
             }
         }
-        else if(TRAINING){
+        if(TRAINING){
             trainLoop(gameMode);
         }
         else{
@@ -65,27 +66,29 @@ public class GameRunner {
             if(!Scenario.config.GUI){
                 init("RandomExploration", "RandomExploration");
             }
-            int count = 0;
-            while(count<8) {
-                Utils.sleep(100);
-                System.out.println("ITERATION: " + count);
-                train();
-                initMap();
-                init("RandomExploration", "RandomExploration");
-                count++;
-            }
-
+            Thread t = new Thread(() -> {
+                int count = 0;
+                while(count<5) {
+                    Utils.sleep(20);
+                    System.out.println("ITERATION: " + count);
+                    train();
+                    System.out.println("INIT MAP");
+                    initMap();
+                    init("RandomExploration", "RandomExploration");
+                    gc.setMap(map);
+                    count++;
+                }
+            });
+        t.start();
     }
 
     public void train(){
-        var ref = new Object() {
-            boolean areaReached = false;
-            boolean noIntrudersLeft = false;
-        };
-        while ((!ref.areaReached || !ref.noIntrudersLeft) && t<3) {
+        boolean areaReached = false;
+        boolean noIntrudersLeft = false;
+        while ((!areaReached || !noIntrudersLeft)) {
             step();
-            ref.areaReached = Map.checkTargetArea(map, this.t);
-            ref.noIntrudersLeft = Map.noIntrudersLeft(map);
+            areaReached = Map.checkTargetArea(map, this.t);
+            noIntrudersLeft = Map.noIntrudersLeft(map);
             this.t++;
         }
     }
@@ -95,6 +98,7 @@ public class GameRunner {
     public void initMap(){
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
         MapUpdater.loadMap(map, scenario);
+
     }
 
     public void init(String guardAlgorithm, String intruderAlgorithm){

@@ -73,7 +73,6 @@ public abstract class Tile {
         else return null;
     }
 
-
     public void addAgent(Agent agent) {
         this.agent = agent;
     }
@@ -85,17 +84,26 @@ public abstract class Tile {
     public javafx.scene.shape.Rectangle createRec(int x, int y){return new Rectangle(x, y,10,10);}
 
     public Color getColor() {
-        if(hasAgent()){
-            return getAgent().getColor();
+
+        if ((0.5 < getSound()) && (getSound() <= 1)) {
+            if (hasAgent()) {
+                return Scenario.config.getAgentColor().darker().darker();
+            }
+            return c.darker().darker();
+        } else if ((0 < getSound()) && (getSound() <= 0.5)) {
+            if (hasAgent()) {
+                return Scenario.config.getAgentColor().darker();
+            }
+            return c.darker();
+        } else {
+            if (hasAgent()) {
+                return getAgent().getColor();
+            }
+            if (currentlyViewed && this.toString().equals("Floor")) {
+                return Color.TAN;
+            }
+            return c;
         }
-
-
-        if(currentlyViewed && this.toString().equals("Floor")){
-            return Color.TAN;
-        }
-
-
-        return c;
     }
 
     // calculates the Manhattan distance between this and other
@@ -125,7 +133,7 @@ public abstract class Tile {
         return sound;
     }
 
-    public void setSound(double sound){
+    public void setSound(double sound){ // 1 is full sound
         this.sound = sound;
     }
 

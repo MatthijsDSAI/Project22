@@ -58,4 +58,9 @@ public class GraphicsConnector {
     public void setGui(MapGui gui) {
         this.gui = gui;
     }
+
+    public void setMap(Map map){
+        this.map = map;
+        this.tiles = map.getTiles();
+    }
 }
