@@ -33,28 +33,16 @@ public class FrontierBasedExploration extends Exploration{
         exploredTiles = new LinkedList<>();
     }
 
-    private void printTiles(ArrayList<Tile> tiles) {
-        String result = "";
-        for(Tile tile : tiles) {
-            result += adjacencyList.getTileIndex(tile) + ", ";
-        }
-        System.out.println(result);
-    }
-
-    private String tilesLLtoString(LinkedList<Tile> tiles) {
-        String result = "";
-        for(Tile tile : tiles) {
-            result += tile.getX() + ", " + tile.getY() + " - ";
-        }
-        return result;
-    }
-
     @Override
+    /**
+     * Determines the next move for the agent based on its current information.
+     *
+     * @param agent the agent for which to determine the next move
+     * @return the DirectionEnum to move towards
+     */
     public DirectionEnum makeMove(Agent agent) {
-        visibleTiles = agent.getVisibleTiles();
-        updateExploredTiles(visibleTiles);
-        adjacencyList.addNodes(visibleTiles);
-        updateFrontiers(visibleTiles);
+        visibleTiles = agent.getVisibleTiles();     // update the currently visible tiles
+        updateKnowledge(visibleTiles);              // update the knowledge base of the agent
         Tile tile = findFrontiers(agent).get(1);
         if(frontierQueue.isEmpty()){
             return null;
@@ -63,30 +51,89 @@ public class FrontierBasedExploration extends Exploration{
         return dir;
     }
 
-    public void updateExploredTiles(ArrayList<Tile> visibleTiles) {
+    /**
+     * Updates the knowledge base of the agent based on the currently visible tiles.
+     * @param visibleTiles ArrayList containing the currently visible tiles
+     */
+    public void updateKnowledge(ArrayList<Tile> visibleTiles) {
+        adjacencyList.addNodes(visibleTiles);
         for(Tile tile : visibleTiles) {
-            if(!exploredTiles.contains(tile) && adjacencyList.get(tile).size() == 4) {
-                exploredTiles.add(tile);
+            if(adjacencyList.get(tile).size() == 4) {
+                frontierQueue.remove(tile);
+                if(!exploredTiles.contains(tile)) exploredTiles.add(tile);
             }
         }
     }
 
-    public Queue<Tile> updateFrontiers(ArrayList<Tile> visibleTiles) {
-        for(Tile tile : visibleTiles) {
-            if(adjacencyList.get(tile).size() == 4 && frontierQueue.contains(tile)) {
-                frontierQueue.remove(tile);
+    /**
+     * Updates the frontierQueue based on a Bread First Search performed from the current agent position.
+     * @param agent the agent from which the starting position is decided
+     */
+    public Queue<Tile> updateFrontiers(Agent agent) {
+        Tile startTile = agent.getAgentPosition();          // Determine the starting tile
+        // Create the queue for the BFS search and add the starting tile to it
+        BFSQueue = new LinkedList<>();
+        BFSQueue.add(startTile);
+        LinkedList<Tile> tilesSeen = new LinkedList<>();    // List containing the tiles which have already been seen in search
+
+        // Loop over BFSQueue until it is empty
+        while(!BFSQueue.isEmpty()) {
+            // Get tile from queue to perform BFS search from and add it to the list of tiles seen
+            Tile curTile = BFSQueue.remove();
+            tilesSeen.add(curTile);
+            // Get the tiles adjacent to the current tile and loop over them
+            LinkedList<Tile> curAdjacencyList = adjacencyList.get(curTile);
+            for(Tile tile : curAdjacencyList) {
+                // if the adjacent tile is already in the queue or was already checked skip this loop
+                if(BFSQueue.contains(tile) || tilesSeen.contains(tile)) {
+                    continue;
+                }
+                // else add it to the BFS queue and if it is a frontier add it to the frontier queue
+                BFSQueue.add(tile);
+                if(tile.isWalkable() && isFrontier(tile) && !frontierQueue.contains(tile) && !exploredTiles.contains(tile)) {
+                    frontierQueue.add(tile);
+                }
             }
         }
         return frontierQueue;
     }
 
+    public Path findPath2(Agent agent, Queue<Tile> frontiers) {
+        Tile startTile = agent.getAgentPosition();          // Determine the starting tile
+        // Create the path queue and add the first path containing the starting tile
+        LinkedList<Path> pathQueue = new LinkedList<>();
+        Path path = new Path();
+        path.add(startTile);
+        pathQueue.add(path);
+        LinkedList<Tile> tilesSeen = new LinkedList<>(); // List containing the tiles which have already been seen in search
+
+        // loop over pathQueue until it is empty
+        while(!pathQueue.isEmpty()) {
+            path = pathQueue.remove(findShortestPath(pathQueue, frontierQueue));
+            Tile lastTile = path.getLast();
+            tilesSeen.add(lastTile);
+            if (lastTile.isWalkable() && isFrontier(lastTile) && frontierQueue.contains(lastTile) && startTile != lastTile) {
+                return path;
+            }
+
+            LinkedList<Tile> curAdjacencyList = adjacencyList.get(lastTile);
+            for (Tile tile : curAdjacencyList) {
+                if(path.contains(tile) || tilesSeen.contains(tile)) {
+                    continue;
+                }
+                if (!path.contains(tile) && tile.isWalkable()) {
+                    Path newPath = new Path(path);
+                    newPath.add(tile);
+                    pathQueue.offer(newPath);
+                }
+            }
+        }
+        return null;
+    }
+
     public Path findFrontiers(Agent agent) {
         Tile curTile = agent.getAgentPosition();
-
-
-
         BFSQueue = new LinkedList<>();
-
         BFSQueue.add(curTile);
         LinkedList<Tile> tilesSeen = new LinkedList<>();
         while(!BFSQueue.isEmpty()) {
@@ -99,7 +146,7 @@ public class FrontierBasedExploration extends Exploration{
                 }
                 BFSQueue.add(tile);
                 int tileIndex = adjacencyList.getTileIndex(tile);
-                if(tile.isWalkable() && isFrontier(adjacencyList.get(tile)) && !frontierQueue.contains(tile) && !exploredTiles.contains(tile)) {
+                if(tile.isWalkable() && isFrontier(tile) && !frontierQueue.contains(tile) && !exploredTiles.contains(tile)) {
                     frontierQueue.add(tile);
                 }
             }
@@ -118,11 +165,7 @@ public class FrontierBasedExploration extends Exploration{
             path = queue.remove(findShortestPath(queue, frontierQueue));
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
-            //System.out.println("Looking at tile: " + lastTile.getX() + ", " + lastTile.getY() + "--- tile: " + adjacencyList.getTileIndex(lastTile));
-            if (lastTile.isWalkable() && isFrontier(adjacencyList.get(lastTile)) && frontierQueue.contains(lastTile) && curTile != lastTile) {
-                //System.out.println("Cur agent pos: " + agent.getAgentPosition().getX() + ", " + agent.getAgentPosition().getY() + " --- tile: " + adjacencyList.getTileIndex(lastTile));
-                //System.out.println("Tile found pos: " + path.get(1).getX() + ", " + path.get(1).getY() + "--- tile: " + adjacencyList.getTileIndex(path.get(1)));
-                //System.out.println("Found path: " + tilesLLtoString(path));
+            if (lastTile.isWalkable() && isFrontier(lastTile) && frontierQueue.contains(lastTile) && curTile != lastTile) {
                 return path;
             }
 
@@ -239,24 +282,9 @@ public class FrontierBasedExploration extends Exploration{
         }
     }
 
-    private void printQueue(Queue<Tile> queue) {
-        String result = "frontierQueue: ";
-        for(Tile tile : queue) {
-            result += adjacencyList.getTileIndex(tile) + ", ";
-        }
-        if(DEBUG)
-            System.out.println(result);
-    }
-
-    boolean isFrontier(LinkedList<Tile> adjacencyList) {
-        if(adjacencyList.size() < 4) return true;
+    boolean isFrontier(Tile tile) {
+        if(adjacencyList.get(tile).size() < 4) return true;
         return false;
-    }
-
-    public void explore(){
-        //check vision field
-        //update map
-        //decide which frontier to explore
     }
 
     public Map getMap(){
