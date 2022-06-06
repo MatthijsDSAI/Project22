@@ -21,6 +21,7 @@ public class FrontierBasedExploration extends Exploration{
     public LinkedList<Tile> exploredTiles;
     public Queue<Tile> frontierQueue;
     public Queue<Tile> BFSQueue;
+    public Path curPath;
     public boolean DEBUG = Scenario.config.DEBUG;
 
     //Constructor -> tells which is the position of the robot and the angle
@@ -43,13 +44,19 @@ public class FrontierBasedExploration extends Exploration{
     public DirectionEnum makeMove(Agent agent) {
         visibleTiles = agent.getVisibleTiles();     // update the currently visible tiles
         updateKnowledge(visibleTiles);              // update the knowledge base of the agent
-        updateFrontiers(agent);
-        Path path = findPath(agent, frontierQueue);
-        Tile tile = path.get(1);
+        boolean updated = updateFrontiers(agent);   // update the frontiers and set boolean value to whether or not there was a new frontier found
+        Tile goalTile = null;
+        if(!updated) {
+            goalTile = this.curPath.remove(1);
+        }
+        else {
+            this.curPath = findPath(agent, frontierQueue);
+            goalTile = this.curPath.remove(1);
+        }
         if(frontierQueue.isEmpty()){
             return null;
         }
-        DirectionEnum dir = findNextMoveDirection(agent, tile);
+        DirectionEnum dir = findNextMoveDirection(agent, goalTile);
         return dir;
     }
 
@@ -71,7 +78,8 @@ public class FrontierBasedExploration extends Exploration{
      * Updates the frontierQueue based on a Bread First Search performed from the current agent position.
      * @param agent the agent from which the starting position is decided
      */
-    public Queue<Tile> updateFrontiers(Agent agent) {
+    public boolean updateFrontiers(Agent agent) {
+        boolean frontierFound = false;
         Tile startTile = agent.getAgentPosition();          // Determine the starting tile
         // Create the queue for the BFS search and add the starting tile to it
         BFSQueue = new LinkedList<>();
@@ -94,10 +102,11 @@ public class FrontierBasedExploration extends Exploration{
                 BFSQueue.add(tile);
                 if(tile.isWalkable() && isFrontier(tile) && !frontierQueue.contains(tile) && !exploredTiles.contains(tile)) {
                     frontierQueue.add(tile);
+                    frontierFound = true;
                 }
             }
         }
-        return frontierQueue;
+        return frontierFound;
     }
 
     /**
@@ -143,7 +152,8 @@ public class FrontierBasedExploration extends Exploration{
     }
 
     /**
-     * Find the shortest path to a goal tiles using A-star search
+     * Find the shortest path to a goal tiles using A-star search (refer to the other findPath implementation for more
+     *                                                             detailed comments on how this works)
      * @param agent     the agent from which the starting position is decided
      * @param goalTile  the goal tile
      * @return the shortest path found
