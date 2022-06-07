@@ -32,12 +32,21 @@ public class Path extends LinkedList<Tile>{
         if(this.size() > 0) {
             int smallestDist = Integer.MAX_VALUE;
             for(Tile tile : frontiers) {
-                int curDist = this.getLast().manhattanDist(tile);
+                int curDist = cost + this.getLast().manhattanDist(tile);
                 if(curDist < smallestDist) smallestDist = curDist;
             }
             this.dist = smallestDist;
-            return cost + smallestDist;
+            return smallestDist;
         }
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        for(Tile tile : this) {
+            result += tile.getCoordinates() + ", ";
+        }
+        return result;
     }
 }

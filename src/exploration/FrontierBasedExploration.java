@@ -4,14 +4,10 @@ import agents.Agent;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
-import utils.AdjacencyList;
-import utils.DirectionEnum;
-import utils.Path;
-import utils.Position;
+import javafx.scene.paint.Color;
+import utils.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class FrontierBasedExploration extends Exploration{
     //no prior information about the map
@@ -22,6 +18,7 @@ public class FrontierBasedExploration extends Exploration{
     public Queue<Tile> frontierQueue;
     public Queue<Tile> BFSQueue;
     public Path curPath;
+    //public ArrayList<Tile> curPath;
     public boolean DEBUG = Scenario.config.DEBUG;
 
     //Constructor -> tells which is the position of the robot and the angle
@@ -43,19 +40,25 @@ public class FrontierBasedExploration extends Exploration{
      */
     public DirectionEnum makeMove(Agent agent) {
         visibleTiles = agent.getVisibleTiles();     // update the currently visible tiles
-        updateKnowledge(agent, visibleTiles);              // update the knowledge base of the agent
-        boolean updated = updateFrontiers(agent);   // update the frontiers and set boolean value to whether or not there was a new frontier found
-        Tile goalTile = updateGoal(agent, updated); // update the goal tile for the agent
+        boolean updated = updateKnowledge(agent, visibleTiles);              // update the knowledge base of the agent
+        //boolean updated = updateFrontiers(agent);   // update the frontiers and set boolean value to whether or not there was a new frontier found
+        System.out.println(frontierQueue);
         if(frontierQueue.isEmpty()) {
             return null;
         }
+        Tile goalTile = updateGoal(agent, updated); // update the goal tile for the agent
         DirectionEnum dir = findNextMoveDirection(agent, goalTile);
+        //Utils.sleep(100);
         return dir;
     }
 
     public Tile updateGoal(Agent agent, boolean updated) {
         if (updated || this.curPath.size() <= 1) {
+            System.out.println("Recalculating path");
             this.curPath = findPath(agent, frontierQueue);
+        }
+        else {
+            System.out.println("Not recalculating path");
         }
         Tile goalTile = this.curPath.remove(1);
         return goalTile;
@@ -65,14 +68,23 @@ public class FrontierBasedExploration extends Exploration{
      * Updates the knowledge base of the agent based on the currently visible tiles.
      * @param visibleTiles ArrayList containing the currently visible tiles
      */
-    public void updateKnowledge(Agent agent, ArrayList<Tile> visibleTiles) {
+    public boolean updateKnowledge(Agent agent, ArrayList<Tile> visibleTiles) {
+        System.out.println("updateKnowledge()");
+        boolean updated = false;
         adjacencyList.addNodes(visibleTiles, agent);           // add the currently visible tiles to the adjacency list
         for(Tile tile : visibleTiles) {                 // loop over the visible tiles
             if(adjacencyList.get(tile).size() == 4) {
                 frontierQueue.remove(tile);             // if 4 adjacent tiles are known, remove from the frontier queue
-                if(!exploredTiles.contains(tile)) exploredTiles.add(tile); // if tile is not in explored tiles yet, add it
+                if (!exploredTiles.contains(tile))
+                    exploredTiles.add(tile); // if tile is not in explored tiles yet, add it
+            }
+            else if (!frontierQueue.contains(tile) && tile.isWalkable()){
+                frontierQueue.add(tile);
+                System.out.println("Found new frontier");
+                updated = true;
             }
         }
+        return updated;
     }
 
     /**
@@ -80,6 +92,7 @@ public class FrontierBasedExploration extends Exploration{
      * @param agent the agent from which the starting position is decided
      */
     public boolean updateFrontiers(Agent agent) {
+        System.out.println("updateFrontiers()");
         boolean frontierFound = false;
         Tile startTile = agent.getAgentPosition();          // Determine the starting tile
         // Create the queue for the BFS search and add the starting tile to it
@@ -107,6 +120,7 @@ public class FrontierBasedExploration extends Exploration{
                 }
             }
         }
+        System.out.println("frontierFound = " + frontierFound);
         return frontierFound;
     }
 
@@ -117,7 +131,9 @@ public class FrontierBasedExploration extends Exploration{
      * @return the shortest path found
      */
     public Path findPath(Agent agent, Queue<Tile> goalTiles) {
+        //System.out.println("findPath()");
         Tile startTile = agent.getAgentPosition();          // Determine the starting tile
+        System.out.println("Starting tile coordinates: " + startTile.getCoordinates());
         // Create the path queue and add the first path containing the starting tile
         LinkedList<Path> pathQueue = new LinkedList<>();
         Path path = new Path();
@@ -129,6 +145,7 @@ public class FrontierBasedExploration extends Exploration{
         while(!pathQueue.isEmpty()) {
             // remove the shortest path from the current pathQueue
             path = pathQueue.remove(findShortestPath(pathQueue, goalTiles));
+            //System.out.println("Current shortest path: " + path);
             // get the last tile from the shortest path, add it to the tiles seen and check if it is a frontier
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
@@ -190,6 +207,27 @@ public class FrontierBasedExploration extends Exploration{
         return null;
     }
 
+    private LinkedList<Path> updateDists(LinkedList<Path> paths, Queue<Tile> frontiers) {
+        for(Path path : paths) {
+            path.updateDist(frontiers);
+        }
+        for(Path path: paths) {
+            for(Path path2: paths) {
+                if(path != path2) {
+                    if(path.getLast() == path2.getLast()) {
+                        if(path.dist > path2.dist) {
+                            paths.remove(path);
+                        }
+                        else if(path2.dist > path.dist) {
+                            paths.remove(path2);
+                        }
+                    }
+                }
+            }
+        }
+        return paths;
+    }
+
     /**
      * Perform an iteration of A-star search on a list of paths and goal tiles.
      * @param paths         the list of paths to continue search from
@@ -197,11 +235,13 @@ public class FrontierBasedExploration extends Exploration{
      * @return the index of the shortest path to continue searching from
      */
     private int findShortestPath(LinkedList<Path> paths, Queue<Tile> frontiers) {
+        //System.out.println("findShortestPath");
         int shortestDist = Integer.MAX_VALUE;
         int bestPathIndex = -1;
+        paths = updateDists(paths, frontiers);
         for(int i = 0; i < paths.size(); i++) {
             Path path = paths.get(i);
-            int curDist = path.updateDist(frontiers);
+            int curDist = path.dist;
             if(curDist < shortestDist) {
                 shortestDist = curDist;
                 bestPathIndex = i;
