@@ -42,7 +42,6 @@ public class FrontierBasedExploration extends Exploration{
         visibleTiles = agent.getVisibleTiles();     // update the currently visible tiles
         boolean updated = updateKnowledge(agent, visibleTiles);              // update the knowledge base of the agent
         //boolean updated = updateFrontiers(agent);   // update the frontiers and set boolean value to whether or not there was a new frontier found
-        System.out.println(frontierQueue);
         if(frontierQueue.isEmpty()) {
             return null;
         }
@@ -54,11 +53,7 @@ public class FrontierBasedExploration extends Exploration{
 
     public Tile updateGoal(Agent agent, boolean updated) {
         if (updated || this.curPath.size() <= 1) {
-            System.out.println("Recalculating path");
             this.curPath = findPath(agent, frontierQueue);
-        }
-        else {
-            System.out.println("Not recalculating path");
         }
         Tile goalTile = this.curPath.remove(1);
         return goalTile;
@@ -69,7 +64,6 @@ public class FrontierBasedExploration extends Exploration{
      * @param visibleTiles ArrayList containing the currently visible tiles
      */
     public boolean updateKnowledge(Agent agent, ArrayList<Tile> visibleTiles) {
-        System.out.println("updateKnowledge()");
         boolean updated = false;
         adjacencyList.addNodes(visibleTiles, agent);           // add the currently visible tiles to the adjacency list
         for(Tile tile : visibleTiles) {                 // loop over the visible tiles
@@ -80,7 +74,6 @@ public class FrontierBasedExploration extends Exploration{
             }
             else if (!frontierQueue.contains(tile) && tile.isWalkable()){
                 frontierQueue.add(tile);
-                System.out.println("Found new frontier");
                 updated = true;
             }
         }
@@ -92,7 +85,6 @@ public class FrontierBasedExploration extends Exploration{
      * @param agent the agent from which the starting position is decided
      */
     public boolean updateFrontiers(Agent agent) {
-        System.out.println("updateFrontiers()");
         boolean frontierFound = false;
         Tile startTile = agent.getAgentPosition();          // Determine the starting tile
         // Create the queue for the BFS search and add the starting tile to it
@@ -120,7 +112,6 @@ public class FrontierBasedExploration extends Exploration{
                 }
             }
         }
-        System.out.println("frontierFound = " + frontierFound);
         return frontierFound;
     }
 
@@ -131,9 +122,7 @@ public class FrontierBasedExploration extends Exploration{
      * @return the shortest path found
      */
     public Path findPath(Agent agent, Queue<Tile> goalTiles) {
-        //System.out.println("findPath()");
         Tile startTile = agent.getAgentPosition();          // Determine the starting tile
-        System.out.println("Starting tile coordinates: " + startTile.getCoordinates());
         // Create the path queue and add the first path containing the starting tile
         LinkedList<Path> pathQueue = new LinkedList<>();
         Path path = new Path();
@@ -145,7 +134,6 @@ public class FrontierBasedExploration extends Exploration{
         while(!pathQueue.isEmpty()) {
             // remove the shortest path from the current pathQueue
             path = pathQueue.remove(findShortestPath(pathQueue, goalTiles));
-            //System.out.println("Current shortest path: " + path);
             // get the last tile from the shortest path, add it to the tiles seen and check if it is a frontier
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
@@ -159,6 +147,7 @@ public class FrontierBasedExploration extends Exploration{
                     continue; // if the tile has already been seen or is already in the path continue
                 }
                 if (!path.contains(tile) && tile.isWalkable()) {
+                    tilesSeen.add(tile);
                     // if the tile is has not been seen yet and is walkable create a new path and add it to the queue
                     Path newPath = new Path(path);
                     newPath.add(tile);
@@ -235,7 +224,6 @@ public class FrontierBasedExploration extends Exploration{
      * @return the index of the shortest path to continue searching from
      */
     private int findShortestPath(LinkedList<Path> paths, Queue<Tile> frontiers) {
-        //System.out.println("findShortestPath");
         int shortestDist = Integer.MAX_VALUE;
         int bestPathIndex = -1;
         paths = updateDists(paths, frontiers);
