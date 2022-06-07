@@ -58,10 +58,25 @@ public class GameRunner {
 
     }
 
-    //GUI off. TRAIN on.
-    //Pass as string the names of the algorithms you want here.
-    //I can not get it to work with GUI for now. Even this was really difficult. However I believe it is quite stable.
-    //Questions: ask me.
+    /*
+     *Initialize the map, the agents, and their algorithms.
+     */
+    public void initMap(){
+        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
+        MapUpdater.loadMap(map, scenario);
+
+    }
+
+    public void init(String guardAlgorithm, String intruderAlgorithm){
+        Scenario.config.computeStepSize();
+        MapUpdater.initGuards(map, map.getGuards(), guardAlgorithm);
+        if (gameMode == 1) {
+            MapUpdater.initIntruders(map, map.getIntruders(), intruderAlgorithm);
+        }
+        t = 0;
+    }
+
+
     public void trainLoop(int gameMode) {
             if(!Scenario.config.GUI){
                 init("RandomExploration", "RandomExploration");
@@ -72,7 +87,6 @@ public class GameRunner {
                     Utils.sleep(20);
                     System.out.println("ITERATION: " + count);
                     train();
-                    System.out.println("INIT MAP");
                     initMap();
                     init("RandomExploration", "RandomExploration");
                     gc.setMap(map);
@@ -92,88 +106,9 @@ public class GameRunner {
             this.t++;
         }
     }
-    /*
-    *Initialize the map, the agents, and their algorithms.
-    */
-    public void initMap(){
-        map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
-        MapUpdater.loadMap(map, scenario);
-
-    }
-
-    public void init(String guardAlgorithm, String intruderAlgorithm){
-        Scenario.config.computeStepSize();
-        MapUpdater.initGuards(map, map.getGuards(), guardAlgorithm);
-        if (gameMode == 1) {
-            MapUpdater.initIntruders(map, map.getIntruders(), intruderAlgorithm);
-        }
-        t = 0;
-    }
-
-
-    /*
-    * The agent movement is done here
-     */
-    public void step(){
-        for(int j=0; j<Scenario.config.getTimeStepSize(); j++) {
-            moveGuards(j);
-            moveIntruders(j);
-        }
-    }
 
 
 
-
-    /*
-    * Call made to algorithm to rotate the agents to a certain direction.@a
-     */
-    private void moveGuards(int j) {
-        ArrayList<Guard> guards = map.getGuards();
-        for (Guard guard : guards) {
-            if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
-                Utils.sleep(20);
-                Exploration explorer = guard.getExploration();
-                DirectionEnum dir = explorer.makeMove(guard);
-                MapUpdater.moveAgent(map, guard, dir);
-                MapUpdater.refresh(map, guard.getVisibleTiles());
-                guard.computeVisibleTiles(map);
-                MapUpdater.checkIntruderCapture(guard, map);
-            }
-        }
-    }
-
-
-    private void moveIntruders(int j) {
-
-        if (gameMode == 1) {
-            ArrayList<Intruder> intruders = map.getIntruders();
-            for (Intruder intruder : intruders) {
-                if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
-                    Utils.sleep(20);
-                    Exploration explorer = intruder.getExploration();
-                    DirectionEnum dir = explorer.makeMove(intruder);
-                    MapUpdater.moveAgent(map, intruder, dir);
-                    MapUpdater.refresh(map, intruder.getVisibleTiles());
-                    intruder.computeVisibleTiles(map);
-                    MapUpdater.checkIntruderCapture(intruder, map);
-                }
-            }
-        }
-    }
-
-
-
-    public Map getMap() {
-        return map;
-    }
-
-    public ArrayList<Guard> getGuards() {return map.getGuards();}
-
-    public ArrayList<Intruder> getIntruders() {return map.getIntruders();}
-
-    public int getGameMode() {
-        return gameMode;
-    }
 
     /*
      * main while loop, one iteration = one timestep. When explored (== 100% covered), stop.
@@ -219,4 +154,67 @@ public class GameRunner {
         }
     }
 
+    /*
+     * The agent movement is done here
+     */
+    public void step(){
+        for(int j=0; j<Scenario.config.getTimeStepSize(); j++) {
+            moveGuards(j);
+            moveIntruders(j);
+        }
+    }
+
+    /*
+     * Call made to algorithm to rotate the agents to a certain direction.@a
+     */
+    private void moveGuards(int j) {
+        ArrayList<Guard> guards = map.getGuards();
+        for (Guard guard : guards) {
+            if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
+                Utils.sleep(100);
+                Exploration explorer = guard.getExploration();
+                DirectionEnum dir = explorer.makeMove(guard);
+                MapUpdater.moveAgent(map, guard, dir);
+                MapUpdater.refresh(map, guard.getVisibleTiles());
+
+
+
+
+
+                guard.computeVisibleTiles(map);
+                MapUpdater.checkIntruderCapture(guard, map);
+            }
+        }
+    }
+
+
+    private void moveIntruders(int j) {
+
+        if (gameMode == 1) {
+            ArrayList<Intruder> intruders = map.getIntruders();
+            for (Intruder intruder : intruders) {
+                if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
+                    Utils.sleep(100);
+                    Exploration explorer = intruder.getExploration();
+                    DirectionEnum dir = explorer.makeMove(intruder);
+                    MapUpdater.moveAgent(map, intruder, dir);
+                    MapUpdater.refresh(map, intruder.getVisibleTiles());
+                    intruder.computeVisibleTiles(map);
+                    MapUpdater.checkIntruderCapture(intruder, map);
+                }
+            }
+        }
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public ArrayList<Guard> getGuards() {return map.getGuards();}
+
+    public ArrayList<Intruder> getIntruders() {return map.getIntruders();}
+
+    public int getGameMode() {
+        return gameMode;
+    }
 }

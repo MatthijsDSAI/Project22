@@ -1,8 +1,8 @@
 height = 80
 width = 80
-gameMode = 0
-numGuards = 2
-numIntruders = 0
+gameMode = 1
+numGuards = 1
+numIntruders = 1
 baseSpeedGuard = 5
 baseSpeedIntruder = 5
 sprintSpeedIntruder = 1

@@ -369,4 +369,6 @@ public class MapUpdater {
             map.getTile(tile.getX(), tile.getY()).setCurrentlyViewed(false);
         }
     }
+
+
 }

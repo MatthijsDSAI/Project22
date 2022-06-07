@@ -6,7 +6,6 @@
 package controller;
 
 import java.awt.*;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.shape.Rectangle;
 
 /**

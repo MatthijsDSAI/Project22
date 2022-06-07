@@ -99,7 +99,6 @@ public abstract class Tile {
             if (hasAgent()) {
                 return getAgent().getColor();
             }
-            boolean tan;
             if(Scenario.config.getGameMode()==1){
                 if (currentlyViewed && this.toString().equals("Floor")) {
                     return Color.TAN;

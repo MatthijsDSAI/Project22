@@ -34,7 +34,8 @@ public abstract class Agent{
     public Tile startingTile;
     public boolean hasFoundTargetArea = false;
     public Tile targetArea;
-
+    public int intermediateAngle;
+    public boolean hasRotatedOnPastIteration = false;
     /*
      * The agent class
      * An agent tracks it's own position relative to its starting position.
@@ -53,7 +54,14 @@ public abstract class Agent{
     public abstract void createExplorationAlgorithm(String exploration, Map map);
 
     public void rotate(int angle){
-        this.angle = this.angle + angle;
+        int maxAngle = Math.max(angle, this.angle);
+        if(maxAngle == 270 && Math.min(angle, this.angle)==0){
+            this.intermediateAngle = 315;
+        }
+        else{
+            this.intermediateAngle = maxAngle-45;
+        }
+        this.hasRotatedOnPastIteration = true;
         this.angle = Utils.TransFormIntoValidAngle(angle);
     }
 
@@ -114,11 +122,15 @@ public abstract class Agent{
 
     public void computeVisibleTiles(Map map){
         this.visibleTiles = Visibility.computeVisibleTiles(map, this);
+        if(hasRotatedOnPastIteration){
+            this.visibleTiles.addAll(Visibility.computeVisibleTilesIntermediateAngle(map, this));
+        }
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
             tile.setCurrentlyViewed(true);
         }
+        this.hasRotatedOnPastIteration = false;
     }
 
     public ArrayList<Tile> getVisibleTiles() {
@@ -186,4 +198,8 @@ public abstract class Agent{
     public abstract Object getType();
 
     public abstract Color getColor();
+
+    public int getIntermediateAngle() {
+        return intermediateAngle;
+    }
 }
