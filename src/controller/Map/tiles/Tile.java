@@ -67,6 +67,10 @@ public abstract class Tile {
 
     public abstract String toString();
 
+    public String getCoordinates(){
+        return "(" + this.x + ", " + this.y + ")";
+    }
+
     public Agent getAgent() { // should agent part be abstracted?
         if (agent != null)
             return agent;

@@ -133,6 +133,11 @@ public abstract class Agent{
         this.hasRotatedOnPastIteration = false;
     }
 
+    public boolean isExplored(Tile tile) {
+        if(ownMap.getTile(tile.getX(), tile.getY()) != null) return true;
+        return false;
+    }
+
     public ArrayList<Tile> getVisibleTiles() {
         return visibleTiles;
     }

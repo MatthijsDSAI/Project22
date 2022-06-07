@@ -1,25 +1,3 @@
-mapgenerator/MapDrawer.java
- mapgenerator.MapDrawer
-controller/Area.java
- controller.Area
-controller/TelePortal.java
- controller.TelePortal
-controller/GameMode.java
- controller.GameMode
-utils/Position.java
- utils.Position
-utils/DirectionEnum.java
- utils.DirectionEnum
-utils/Config.java
- utils.Config
-test/AngleTest.java
- AngleTest
-controller/Scenario.java
- controller.Scenario
-mapgenerator/SimpleMapReader.java
- mapgenerator.SimpleMapReader
-Explorer.java
- Explorer
 GUI/StartScreen.java
  GUI.StartScreen
 controller/GameRunner.java
@@ -38,6 +16,8 @@ controller/Map/tiles/SpawnAreaGuards.java
 GUI/MapGui.java
  GUI.MapGui
  GUI.MapGui$1
+test/AngleTest.java
+ AngleTest
 utils/Utils.java
  utils.Utils
 controller/Map/tiles/SpawnAreaIntruders.java
@@ -52,10 +32,18 @@ controller/GraphicsConnector.java
  controller.GraphicsConnector
 exploration/Exploration.java
  exploration.Exploration
+utils/Config.java
+ utils.Config
+controller/Scenario.java
+ controller.Scenario
 controller/Map/tiles/TargetArea.java
  controller.Map.tiles.TargetArea
 GUI/PlayerSelectionComboBox.java
  GUI.PlayerSelectionComboBox
+controller/TelePortal.java
+ controller.TelePortal
+controller/GameMode.java
+ controller.GameMode
 agents/Intruder.java
  agents.Intruder
 utils/AdjacencyList.java
@@ -69,25 +57,37 @@ agents/Agent.java
  agents.Agent
 controller/Map/MapUpdater.java
  controller.Map.MapUpdater
+controller/Area.java
+ controller.Area
 agents/Guard.java
  agents.Guard
+mapgenerator/SimpleMapReader.java
+ mapgenerator.SimpleMapReader
+utils/Position.java
+ utils.Position
 GUI/PlayerSelection.java
  GUI.PlayerSelection
 exploration/FrontierBasedExploration.java
  exploration.FrontierBasedExploration
 utils/Path.java
  utils.Path
+mapgenerator/MapDrawer.java
+ mapgenerator.MapDrawer
 exploration/BaselineGuard.java
  exploration.BaselineGuard
 controller/Map/tiles/TeleportalTile.java
  controller.Map.tiles.TeleportalTile
 controller/Map/tiles/Shaded.java
  controller.Map.tiles.Shaded
+utils/DirectionEnum.java
+ utils.DirectionEnum
 controller/Hearing/Hearing.java
  controller.Hearing.Hearing
 controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
-controller/Map/tiles/Floor.java
- controller.Map.tiles.Floor
 GUI/PlayerChoiceBox.java
  GUI.PlayerChoiceBox
+controller/Map/tiles/Floor.java
+ controller.Map.tiles.Floor
+Explorer.java
+ Explorer

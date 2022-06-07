@@ -17,7 +17,7 @@ public class BaselineGuard extends FrontierBasedExploration{
     public DirectionEnum makeMove(Agent agent) {
         Tile curTile = agent.getAgentPosition();
         visibleTiles = agent.getVisibleTiles();
-        updateKnowledge(visibleTiles);
+        updateKnowledge(agent, visibleTiles);
         Tile goalTile = null;
         for(Tile tile : visibleTiles) {
             Agent agentFound = tile.getAgent();
@@ -40,13 +40,13 @@ public class BaselineGuard extends FrontierBasedExploration{
             return findNextMoveDirection(agent, path.get(1));
         }
 
-        updateKnowledge(visibleTiles);
-        updateFrontiers(agent);
-        Tile tile = findPath(agent, frontierQueue).get(1);
+        updateKnowledge(agent, visibleTiles);
+        boolean updated = updateFrontiers(agent);
+        goalTile = updateGoal(agent, updated); // update the goal tile for the agent
         if(frontierQueue.isEmpty()){
             return null;
         }
-        DirectionEnum dir = findNextMoveDirection(agent, tile);
+        DirectionEnum dir = findNextMoveDirection(agent, goalTile);
         return dir;
     }
 }
