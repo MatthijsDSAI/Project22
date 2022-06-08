@@ -52,7 +52,7 @@ public class FrontierBasedExploration extends Exploration{
     }
 
     public Tile updateGoal(Agent agent, boolean updated) {
-        if (updated || this.curPath.size() <= 1) {
+        if (updated || this.curPath.size() <= 1 || !isFrontier(this.curPath.getLast())) {
             this.curPath = findPath(agent, frontierQueue);
         }
         Tile goalTile = this.curPath.remove(1);
