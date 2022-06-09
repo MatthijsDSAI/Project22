@@ -3,10 +3,7 @@ package agents;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
-import exploration.BaselineGuard;
-import exploration.Exploration;
-import exploration.FrontierBasedExploration;
-import exploration.RandomExploration;
+import exploration.*;
 import javafx.scene.paint.Color;
 import utils.DirectionEnum;
 import utils.Utils;
@@ -42,6 +39,9 @@ public class Guard extends Agent{
                 break;
             case "BaseLineGuard":
                 this.exploration = new BaselineGuard(this, map);
+                break;
+            case "CombinedGuard": // 10 12 14 16
+                this.exploration = new CombinedGuard(this, map, 11, 17, 9, 15);
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");
