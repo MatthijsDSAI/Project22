@@ -20,7 +20,7 @@ public class Noise {
 
             while (forY != -i) {
                 if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                if ((x + forX >= 0) && (y + forY >= 0) && (x + forX) < map.getHorizontalSize() && (y + forY) < map.getVerticalSize()) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
                         map.getTile(x + forX, y + forY).setSound(0);
                     }
@@ -31,7 +31,7 @@ public class Noise {
 
             while (forX != i) {
                 if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                if ((x + forX >= 0) && (y + forY >= 0) && (x + forX) < map.getHorizontalSize() && (y + forY) < map.getVerticalSize()) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
                         if (map.getTile(x + forX, y + forY).isWalkable()) {
                             map.getTile(x + forX, y + forY).setSound(0);
@@ -44,7 +44,7 @@ public class Noise {
 
             while (forY != i) {
                 if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                if ((x + forX >= 0) && (y + forY >= 0) && (x + forX) < map.getHorizontalSize() && (y + forY) < map.getVerticalSize()) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
                         if (map.getTile(x + forX, y + forY).isWalkable()) {
                             map.getTile(x + forX, y + forY).setSound(0);
@@ -57,7 +57,7 @@ public class Noise {
 
             while (forX != -i) {
                 if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                if ((x + forX >= 0) && (y + forY >= 0) && (x + forX) < map.getHorizontalSize() && (y + forY) < map.getVerticalSize()) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
                         if (map.getTile(x + forX, y + forY).isWalkable()) {
                             map.getTile(x + forX, y + forY).setSound(0);
@@ -87,7 +87,7 @@ public class Noise {
 
             while (forY != -i) {
                 if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                if ((x + forX >= 0) && (y + forY >= 0) && (x + forX) < map.getHorizontalSize() && (y + forY) < map.getVerticalSize()) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
 
                         if (map.getTile(x + forX, y + forY).getSound() < 1 - decreasingVal * i) { // if that tile's current sound is higher skip
@@ -101,7 +101,7 @@ public class Noise {
 
             while (forX != i) {
                 if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                if ((x + forX >= 0) && (y + forY >= 0) && (x + forX) < map.getHorizontalSize() && (y + forY) < map.getVerticalSize()) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
 
                         if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
@@ -115,7 +115,7 @@ public class Noise {
 
             while (forY != i) {
                 if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                if ((x + forX >= 0) && (y + forY >= 0) && (x + forX) < map.getHorizontalSize() && (y + forY) < map.getVerticalSize()) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
 
                         if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
@@ -129,7 +129,7 @@ public class Noise {
 
             while (forX != -i) {
                 if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
+                if ((x + forX >= 0) && (y + forY >= 0) && (x + forX) < map.getHorizontalSize() && (y + forY) < map.getVerticalSize()) { // to avoid out of bounds error
                     if (map.getTile(x + forX, y + forY).isWalkable()) {
 
                         if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
