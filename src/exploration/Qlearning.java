@@ -11,9 +11,12 @@ public class Qlearning {
     private final double gamma = 0.9;
 
 
-    private int width;
-    private int height;
-    private int states = width * height;
+    private int standardTALength = 5;
+    //gives the thickness of the surrounding of the TA
+    private int standardBelt = 5;
+    private int standardTotalLength = standardTALength + 2*standardBelt;
+    private int numberOfActions = 4;
+    private int states = standardTotalLength * standardTotalLength;
     private final int reward = 50;
     private final int penalty = 10;
 
@@ -25,10 +28,9 @@ public class Qlearning {
 
     public Qlearning(Tile[][] map) {
         this.map = map;
-        width = map.length;
-        height = map[0].length;
-        Q = new double[states][states];
-        R = new int[states][states];
+        standardTotalLength = map.length;
+        Q = new double[states][numberOfActions];
+        R = new int[states][numberOfActions];
     }
 
     public void initializeR(){
@@ -37,39 +39,38 @@ public class Qlearning {
                 R[i][j] = 0;
             }
         }
-        // stateCount = i * width + j not sure is correct
         for(int i=0; i<map.length; i++){
             for(int j=0; j<map[0].length; j++){
                 //North
                 if(i-1 >= 0){
                     if(map[i-1][j].isWalkable()){
-                        R[i * width + j][(i-1) * width + j] += reward;
+                        R[i * standardTotalLength + j][(i-1) * standardTotalLength + j] += reward;
                     }else {
-                        R[i * width + j][(i-1) * width + j] -= penalty;
+                        R[i * standardTotalLength + j][(i-1) * standardTotalLength + j] -= penalty;
                     }
                 }
                 //South
-                if(i+1 <= height){
+                if(i+1 <= standardTotalLength){
                     if(map[i+1][j].isWalkable()){
-                        R[i * width + j][(i+1) * width + j] += reward;
+                        R[i * standardTotalLength + j][(i+1) * standardTotalLength + j] += reward;
                     }else {
-                        R[i * width + j][(i+1) * width + j] -= penalty;
+                        R[i * standardTotalLength + j][(i+1) * standardTotalLength + j] -= penalty;
                     }
                 }
                 //West
                 if(j-1 >= 0){
                     if(map[i][j-1].isWalkable()){
-                        R[i * width + j][i * width + j - 1] += reward;
+                        R[i * standardTotalLength + j][i * standardTotalLength + j - 1] += reward;
                     }else {
-                        R[i * width + j][i * width + j - 1] -= penalty;
+                        R[i * standardTotalLength + j][i * standardTotalLength + j - 1] -= penalty;
                     }
                 }
                 //East
-                if(j+1 < width){
+                if(j+1 < standardTotalLength){
                     if(map[i][j+1].isWalkable()){
-                        R[i * width + j][i * width + j + 1] += reward;
+                        R[i * standardTotalLength + j][i * standardTotalLength + j + 1] += reward;
                     }else {
-                        R[i * width + j][i * width + j + 1] -= penalty;
+                        R[i * standardTotalLength + j][i * standardTotalLength + j + 1] -= penalty;
                     }
                 }
             }
@@ -84,10 +85,10 @@ public class Qlearning {
         }
     }
 
-    public void tarin(Agent agent, int maxStep){
+    public void train(Agent agent, int maxStep){
         int x = agent.getX_position();
         int y = agent.getY_position();
-        int currentState = y * width + x;
+        int currentState = y * standardTotalLength + x;
         for (int i = 0; i < maxStep; i++){
             while (!isTarget(currentState)){
                 //Choose an action from current state by using policy
@@ -139,7 +140,7 @@ public class Qlearning {
     public boolean isTarget(int state){
         boolean result = false;
         // stateCount = i * width + j
-        int i = state / width;
+        int i = state / standardTotalLength;
         int j = state - i;
         return map[i][j].getType().equals("TargetArea");
     }
