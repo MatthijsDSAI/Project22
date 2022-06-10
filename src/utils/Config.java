@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 
 public class Config {
-    public boolean TRAINING = false;
+    public boolean TRAINING = true;
     private int VISION = 5;
     private int HEARINGWALKING = 5;
     private int HEARINGSPRINT = 6;
