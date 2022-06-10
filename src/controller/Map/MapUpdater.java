@@ -11,6 +11,9 @@ import utils.DirectionEnum;
 import utils.Utils;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MapUpdater {
 
@@ -344,6 +347,7 @@ public class MapUpdater {
 
     public static void checkIntruderCapture(Guard guard, Map map) {
         ArrayList<Tile> tiles = guard.getVisibleTiles();
+        ReadWriteLock lock = new ReentrantReadWriteLock();
         for(Tile tile: tiles){
             if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
                 if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<=1){
@@ -351,7 +355,10 @@ public class MapUpdater {
                 }
             }
         }
+
         map.getIntruders().removeIf(intruder -> intruder.getAgentPosition() == guard.getAgentPosition());
+
+
     }
 
     public static void checkIntruderCapture(Intruder intruder, Map map) {

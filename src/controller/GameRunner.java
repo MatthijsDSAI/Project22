@@ -175,9 +175,8 @@ public class GameRunner {
      */
     private void moveGuards(int j) {
         ArrayList<Guard> guards = map.getGuards();
-        Iterator<Guard> iter = guards.iterator();
-        while(iter.hasNext()) {
-            Guard guard = iter.next();
+        for(int i = guards.size()-1; i>=0; i--){
+            Guard guard = guards.get(i);
             if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
                 Utils.sleep(20);
                 Exploration explorer = guard.getExploration();
@@ -195,9 +194,8 @@ public class GameRunner {
 
         if (gameMode == 1) {
             ArrayList<Intruder> intruders = map.getIntruders();
-            Iterator<Intruder> iter = intruders.iterator();
-            while(iter.hasNext()) {
-                Intruder intruder = iter.next();
+            for(int i = intruders.size()-1; i>=0; i--){
+                Intruder intruder = intruders.get(i);
                 if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
                     Utils.sleep(20);
                     Exploration explorer = intruder.getExploration();

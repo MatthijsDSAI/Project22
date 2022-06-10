@@ -88,21 +88,15 @@ public abstract class Tile {
     public javafx.scene.shape.Rectangle createRec(int x, int y){return new Rectangle(x, y,10,10);}
 
     public Color getColor() {
-
-        if ((0.5 < getSound()) && (getSound() <= 1)) {
-            if (hasAgent()) {
-                return Scenario.config.getAgentColor().darker().darker();
-            }
+        if (hasAgent()) {
+            return getAgent().getColor();
+        }
+        else if ((0.5 < getSound()) && (getSound() <= 1)) {
             return c.darker().darker();
         } else if ((0 < getSound()) && (getSound() <= 0.5)) {
-            if (hasAgent()) {
-                return Scenario.config.getAgentColor().darker();
-            }
             return c.darker();
         } else {
-            if (hasAgent()) {
-                return getAgent().getColor();
-            }
+
             if(Scenario.config.getGameMode()==1){
                 if (currentlyViewed && this.toString().equals("Floor")) {
                     return Color.TAN;

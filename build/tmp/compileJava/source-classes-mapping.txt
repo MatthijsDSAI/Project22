@@ -18,10 +18,22 @@ controller/TelePortal.java
  controller.TelePortal
 utils/Position.java
  utils.Position
-Explorer.java
- Explorer
 GUI/StartScreen.java
  GUI.StartScreen
+GUI/MapGui.java
+ GUI.MapGui
+ GUI.MapGui$1
+GUI/PlayerSelectionComboBox.java
+ GUI.PlayerSelectionComboBox
+GUI/PlayerChoiceBox.java
+ GUI.PlayerChoiceBox
+Explorer.java
+ Explorer
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
+GUI/PlayerSelection.java
+ GUI.PlayerSelection
 controller/GameRunner.java
  controller.GameRunner
  controller.GameRunner$1
@@ -35,9 +47,6 @@ exploration/RandomExploration.java
  exploration.RandomExploration
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
-GUI/MapGui.java
- GUI.MapGui
- GUI.MapGui$1
 utils/Utils.java
  utils.Utils
 controller/Map/tiles/SpawnAreaIntruders.java
@@ -54,15 +63,10 @@ exploration/Exploration.java
  exploration.Exploration
 controller/Map/tiles/TargetArea.java
  controller.Map.tiles.TargetArea
-GUI/PlayerSelectionComboBox.java
- GUI.PlayerSelectionComboBox
 agents/Intruder.java
  agents.Intruder
 utils/AdjacencyList.java
  utils.AdjacencyList
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
 controller/Map/Map.java
  controller.Map.Map
 agents/Agent.java
@@ -71,8 +75,6 @@ controller/Map/MapUpdater.java
  controller.Map.MapUpdater
 agents/Guard.java
  agents.Guard
-GUI/PlayerSelection.java
- GUI.PlayerSelection
 exploration/FrontierBasedExploration.java
  exploration.FrontierBasedExploration
 utils/Path.java
@@ -89,5 +91,3 @@ controller/Map/tiles/Wall.java
  controller.Map.tiles.Wall
 controller/Map/tiles/Floor.java
  controller.Map.tiles.Floor
-GUI/PlayerChoiceBox.java
- GUI.PlayerChoiceBox
