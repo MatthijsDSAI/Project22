@@ -1,25 +1,21 @@
-GUI/StartScreen.java
- GUI.StartScreen
-controller/GameRunner.java
- controller.GameRunner
- controller.GameRunner$1
- controller.GameRunner$2
- controller.GameRunner$3
-controller/Visibility/Visibility.java
- controller.Visibility.Visibility
-controller/Map/tiles/Tile.java
- controller.Map.tiles.Tile
+utils/Config.java
+ utils.Config
+controller/Hearing/Noise.java
+ controller.Hearing.Noise
+exploration/FrontierBasedExploration.java
+ exploration.FrontierBasedExploration
+controller/Map/tiles/Wall.java
+ controller.Map.tiles.Wall
 exploration/RandomExploration.java
  exploration.RandomExploration
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
-GUI/MapGui.java
- GUI.MapGui
- GUI.MapGui$1
+utils/Path.java
+ utils.Path
 test/AngleTest.java
  AngleTest
-utils/Utils.java
- utils.Utils
+controller/Map/tiles/Shaded.java
+ controller.Map.tiles.Shaded
 controller/Map/tiles/SpawnAreaIntruders.java
  controller.Map.tiles.SpawnAreaIntruders
 agents/Marker.java
@@ -28,66 +24,69 @@ exploration/Qlearning.java
  exploration.Qlearning
 exploration/BaseLineIntruder.java
  exploration.BaseLineIntruder
-controller/GraphicsConnector.java
- controller.GraphicsConnector
+exploration/BaselineGuard.java
+ exploration.BaselineGuard
 exploration/Exploration.java
  exploration.Exploration
-utils/Config.java
- utils.Config
-controller/Scenario.java
- controller.Scenario
+mapgenerator/MapDrawer.java
+ mapgenerator.MapDrawer
+controller/Map/tiles/TeleportalTile.java
+ controller.Map.tiles.TeleportalTile
 controller/Map/tiles/TargetArea.java
  controller.Map.tiles.TargetArea
-GUI/PlayerSelectionComboBox.java
- GUI.PlayerSelectionComboBox
+utils/Utils.java
+ utils.Utils
 controller/TelePortal.java
  controller.TelePortal
 controller/GameMode.java
  controller.GameMode
-agents/Intruder.java
- agents.Intruder
+utils/DirectionEnum.java
+ utils.DirectionEnum
 utils/AdjacencyList.java
  utils.AdjacencyList
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
+controller/Hearing/Hearing.java
+ controller.Hearing.Hearing
 controller/Map/Map.java
  controller.Map.Map
 agents/Agent.java
  agents.Agent
-controller/Map/MapUpdater.java
- controller.Map.MapUpdater
+controller/Scenario.java
+ controller.Scenario
 controller/Area.java
  controller.Area
-agents/Guard.java
- agents.Guard
+controller/Map/tiles/Floor.java
+ controller.Map.tiles.Floor
 mapgenerator/SimpleMapReader.java
  mapgenerator.SimpleMapReader
 utils/Position.java
  utils.Position
+controller/Map/MapUpdater.java
+ controller.Map.MapUpdater
+agents/Intruder.java
+ agents.Intruder
+agents/Guard.java
+ agents.Guard
+controller/Visibility/Visibility.java
+ controller.Visibility.Visibility
+controller/Map/tiles/Tile.java
+ controller.Map.tiles.Tile
+GUI/StartScreen.java
+ GUI.StartScreen
+controller/GameRunner.java
+ controller.GameRunner
+GUI/PlayerSelectionComboBox.java
+ GUI.PlayerSelectionComboBox
+GUI/MapGui.java
+ GUI.MapGui
+ GUI.MapGui$1
 GUI/PlayerSelection.java
  GUI.PlayerSelection
-exploration/FrontierBasedExploration.java
- exploration.FrontierBasedExploration
-utils/Path.java
- utils.Path
-mapgenerator/MapDrawer.java
- mapgenerator.MapDrawer
-exploration/BaselineGuard.java
- exploration.BaselineGuard
-controller/Map/tiles/TeleportalTile.java
- controller.Map.tiles.TeleportalTile
-controller/Map/tiles/Shaded.java
- controller.Map.tiles.Shaded
-utils/DirectionEnum.java
- utils.DirectionEnum
-controller/Hearing/Hearing.java
- controller.Hearing.Hearing
-controller/Map/tiles/Wall.java
- controller.Map.tiles.Wall
-GUI/PlayerChoiceBox.java
- GUI.PlayerChoiceBox
-controller/Map/tiles/Floor.java
- controller.Map.tiles.Floor
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
 Explorer.java
  Explorer
+GUI/PlayerChoiceBox.java
+ GUI.PlayerChoiceBox
+controller/GraphicsConnector.java
+ controller.GraphicsConnector

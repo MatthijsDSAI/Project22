@@ -4,7 +4,9 @@ import javafx.scene.paint.Color;
 
 
 public class Config {
+    public boolean loop = true;
     public boolean TRAINING = false;
+    public boolean EXPERIMENT = true;
     private int VISION = 5;
     private int HEARINGWALKING = 5;
     private int HEARINGSPRINT = 6;
@@ -20,7 +22,7 @@ public class Config {
     private int timeStepSize;
     private boolean MOVE = true;
     private int gameMode;
-
+    private int numberOfGames = 50;
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
     public Config(){
@@ -45,6 +47,10 @@ public class Config {
     public int getDistanceSmell(){return SMELL;}
 
     public void setDistanceSmell(int smell){this.SMELL=smell;}
+
+    public boolean isEXPERIMENT() {
+        return EXPERIMENT;
+    }
 
     public double getBASESPEEDINTRUDER() {
         return BASESPEEDINTRUDER;
@@ -104,8 +110,15 @@ public class Config {
     public int getGameMode(){
         return gameMode;
     }
-    public boolean getTraining(){
-        return TRAINING;
+    public boolean getLoop(){
+        return loop;
     }
 
+    public int getNumberOfGames(){
+        return numberOfGames;
+    }
+
+    public boolean isTRAINING() {
+        return TRAINING;
+    }
 }
