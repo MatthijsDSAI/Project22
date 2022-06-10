@@ -197,6 +197,7 @@ public class GameRunner {
                     Utils.sleep(50);
                     Exploration explorer = intruder.getExploration();
                     DirectionEnum dir = explorer.makeMove(intruder);
+
                     MapUpdater.moveAgent(map, intruder, dir);
                     MapUpdater.refresh(map, intruder.getVisibleTiles());
                     intruder.computeVisibleTiles(map);

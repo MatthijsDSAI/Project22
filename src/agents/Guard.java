@@ -40,7 +40,7 @@ public class Guard extends Agent{
             case "BaseLineGuard":
                 this.exploration = new BaselineGuard(this, map);
                 break;
-            case "CombinedGuard": // 10 12 14 16
+            case "CombinedGuard": // 10 12 14 16; x: 9 - 15, y: 11 - 17
                 this.exploration = new CombinedGuard(this, map, 11, 17, 9, 15);
                 break;
             default:

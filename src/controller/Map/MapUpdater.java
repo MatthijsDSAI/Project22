@@ -7,6 +7,7 @@ import controller.Area;
 import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
+import javafx.scene.paint.Color;
 import utils.DirectionEnum;
 import utils.Utils;
 
@@ -51,6 +52,8 @@ public class MapUpdater {
     public static void changeTiles(Map map, Agent agent, Tile fromTile, Tile toTile){
         if(toTile.isWalkable()) {
             map.getTile(fromTile.getX(),fromTile.getY()).removeAgent();
+            map.getTile(fromTile.getX(),fromTile.getY()).setColor(Color.AQUA);
+
             map.getTile(toTile.getX(),toTile.getY()).addAgent(agent);
 
             removeNoises(map, map.getTile(fromTile.getX(),fromTile.getY()));
