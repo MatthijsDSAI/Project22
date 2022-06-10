@@ -155,4 +155,8 @@ public abstract class Tile {
     public void setCurrentlyViewed(boolean b){
         currentlyViewed = b;
     }
+
+    public boolean equals(Tile tile){
+        return this.getX()==tile.getX() && this.getY()== tile.getY();
+    }
 }

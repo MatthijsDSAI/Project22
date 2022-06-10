@@ -6,6 +6,7 @@ import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.MapUpdater;
 import controller.Map.tiles.Tile;
+import exploration.BaselineGuard;
 import exploration.Exploration;
 import utils.Config;
 import utils.DirectionEnum;
@@ -13,6 +14,7 @@ import utils.Utils;
 
 import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /*
 * Main class which stores and runs everything.
@@ -26,7 +28,8 @@ public class GameRunner {
     private int gameMode;
     private GraphicsConnector gc;
     //Fields that change after a training
-    private boolean TRAINING = Scenario.config.getTraining();
+    private String guardExploration = "BaseLineIntruder";
+    private String intruderExploration = "BaseLineGuard";
     private Map map;
     private int t;
     /*
@@ -49,6 +52,7 @@ public class GameRunner {
                 System.out.println("There has been an issue with the initialization of the GUI");
             }
         }
+        boolean TRAINING = Scenario.config.getTraining();
         if(TRAINING){
             trainLoop(gameMode);
         }
@@ -69,6 +73,8 @@ public class GameRunner {
 
     public void init(String guardAlgorithm, String intruderAlgorithm){
         Scenario.config.computeStepSize();
+        guardExploration = guardAlgorithm;
+        intruderExploration = intruderAlgorithm;
         MapUpdater.initGuards(map, map.getGuards(), guardAlgorithm);
         if (gameMode == 1) {
             MapUpdater.initIntruders(map, map.getIntruders(), intruderAlgorithm);
@@ -83,12 +89,12 @@ public class GameRunner {
             }
             Thread t = new Thread(() -> {
                 int count = 0;
-                while(count<5) {
+                while(count<30) {
                     Utils.sleep(20);
                     System.out.println("ITERATION: " + count);
                     train();
                     initMap();
-                    init("RandomExploration", "RandomExploration");
+                    init(guardExploration, intruderExploration);
                     gc.setMap(map);
                     count++;
                 }
@@ -169,18 +175,15 @@ public class GameRunner {
      */
     private void moveGuards(int j) {
         ArrayList<Guard> guards = map.getGuards();
-        for (Guard guard : guards) {
+        Iterator<Guard> iter = guards.iterator();
+        while(iter.hasNext()) {
+            Guard guard = iter.next();
             if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
                 Utils.sleep(50);
                 Exploration explorer = guard.getExploration();
                 DirectionEnum dir = explorer.makeMove(guard);
                 MapUpdater.moveAgent(map, guard, dir);
                 MapUpdater.refresh(map, guard.getVisibleTiles());
-
-
-
-
-
                 guard.computeVisibleTiles(map);
                 MapUpdater.checkIntruderCapture(guard, map);
             }
@@ -192,7 +195,9 @@ public class GameRunner {
 
         if (gameMode == 1) {
             ArrayList<Intruder> intruders = map.getIntruders();
-            for (Intruder intruder : intruders) {
+            Iterator<Intruder> iter = intruders.iterator();
+            while(iter.hasNext()) {
+                Intruder intruder = iter.next();
                 if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
                     Utils.sleep(50);
                     Exploration explorer = intruder.getExploration();
@@ -202,6 +207,7 @@ public class GameRunner {
                     MapUpdater.refresh(map, intruder.getVisibleTiles());
                     intruder.computeVisibleTiles(map);
                     MapUpdater.checkIntruderCapture(intruder, map);
+
                 }
             }
         }

@@ -138,7 +138,7 @@ public class Visibility {
         if(angle==180){
             int bottomLimit = Math.min(map.getVerticalSize()-1, agentY+d-1);
             int leftLimit = 0;
-            int rightLimit = map.getVerticalSize()-1;
+            int rightLimit = map.getHorizontalSize()-1;
             for(int j = agentY; j<=bottomLimit && middleLane; j++){
                 if((agentX+1)<=rightLimit){
                     visibleTiles.add(map.getTile(agentX+1, j));

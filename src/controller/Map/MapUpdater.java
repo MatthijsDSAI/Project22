@@ -349,7 +349,6 @@ public class MapUpdater {
         ArrayList<Tile> tiles = guard.getVisibleTiles();
         for(Tile tile: tiles){
             if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
-                System.out.println(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile));
                 if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<=1){
                     map.getIntruders().remove((Intruder)tile.getAgent());
                 }
