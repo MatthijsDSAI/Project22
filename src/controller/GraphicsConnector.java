@@ -7,7 +7,6 @@ import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /*
@@ -43,12 +42,12 @@ public class GraphicsConnector {
     }
 
     public void run(){
-        if(Scenario.config.getTraining()){
-            gameRunner.trainLoop(Scenario.config.getGameMode());
+        if(Scenario.config.getLoop()){
+            gameRunner.run(Scenario.config.getGameMode(), Scenario.config.getNumberOfGames());
         }
         else{
             if(Scenario.config.isMOVE())
-                gameRunner.run(Scenario.config.getGameMode());
+                gameRunner.run(Scenario.config.getGameMode(), 1);
         }
     }
 

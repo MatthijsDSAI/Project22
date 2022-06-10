@@ -5,16 +5,11 @@ import agents.Guard;
 import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.MapUpdater;
-import controller.Map.tiles.Tile;
-import exploration.BaselineGuard;
-import exploration.Exploration;
 import utils.Config;
-import utils.DirectionEnum;
 import utils.Utils;
 
 import java.util.Calendar;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /*
 * Main class which stores and runs everything.
@@ -27,15 +22,13 @@ public class GameRunner {
     private Scenario scenario;
     private int gameMode;
     private GraphicsConnector gc;
-    //Fields that change after a training
     private String guardExploration = "BaseLineIntruder";
     private String intruderExploration = "BaseLineGuard";
     private Map map;
     private int t;
-    /*
-    *Created off of a Scenario. The map is read in through scenario and the data is transfered through to gamerunner.
-    * A Map class is then made based off of this, the scenario is not used further
-     */
+    private int guardWins = 0;
+    private int intruderWins = 0;
+    private int gamesPlayed = 0;
     public GameRunner(Scenario scenario) {
         this.scenario = scenario;
         gameMode = scenario.getGameMode();
@@ -52,19 +45,17 @@ public class GameRunner {
                 System.out.println("There has been an issue with the initialization of the GUI");
             }
         }
-        boolean TRAINING = Scenario.config.getTraining();
-        if(TRAINING){
-            trainLoop(gameMode);
+        boolean LOOP = Scenario.config.getLoop();
+        if(LOOP){
+            int numberOfGames = Scenario.config.getNumberOfGames();
+            run(gameMode, numberOfGames);
         }
         else{
-            run(gameMode);
+            run(gameMode, 1);
         }
 
     }
 
-    /*
-     *Initialize the map, the agents, and their algorithms.
-     */
     public void initMap(){
         map = new Map(scenario.getMapHeight()+1, scenario.getMapWidth()+1);
         MapUpdater.loadMap(map, scenario);
@@ -82,27 +73,36 @@ public class GameRunner {
         t = 0;
     }
 
-
-    public void trainLoop(int gameMode) {
-            if(!Scenario.config.GUI){
-                init("RandomExploration", "RandomExploration");
-            }
-            Thread t = new Thread(() -> {
-                int count = 0;
-                while(count<30) {
-                    Utils.sleep(20);
-                    System.out.println("ITERATION: " + count);
-                    train();
-                    initMap();
-                    init(guardExploration, intruderExploration);
-                    gc.setMap(map);
-                    count++;
+    public void run(int gameMode, int numberOfGames) {
+        if(!Scenario.config.GUI){
+            init("RandomExploration", "RandomExploration");
+        }
+        Thread t = new Thread(() -> {
+            while(gamesPlayed<numberOfGames) {
+                reinitialise();
+                Utils.sleep(20);
+                loop(gameMode);
+                if(config.isTRAINING()){
+                    //perform learning
                 }
-            });
+                if(config.isEXPERIMENT()){
+                    printData();
+                }
+                gamesPlayed++;
+            }
+        });
         t.start();
     }
 
-    public void train(){
+
+    public void loop(int gameMode){
+        if(gameMode==0)
+            loopExploration();
+        else if(gameMode==1)
+            loopGuardIntruderGame();
+    }
+
+    public void loopGuardIntruderGame(){
         boolean areaReached = false;
         boolean noIntrudersLeft = false;
         while ((!areaReached && !noIntrudersLeft)) {
@@ -111,102 +111,36 @@ public class GameRunner {
             noIntrudersLeft = Map.noIntrudersLeft(map);
             this.t++;
         }
+        incrementWins(areaReached, noIntrudersLeft);
     }
 
-
-
-
-    /*
-     * main while loop, one iteration = one timestep. When explored (== 100% covered), stop.
-     */
-    public void run(int gameMode){
-        if(gameMode == 0) {
-            var ref = new Object() {
-                boolean explored = false;
-            };
-            Thread t = new Thread(() -> {
-                while (!ref.explored) {
-                    step();
-                    if (config.DEBUG) {
-                        System.out.println("Timestep: " + this.t + " at: " + Calendar.getInstance().getTime());
-                        System.out.println(100 * Map.explored(map) + "% of map has been explored");
-                    }
-                    ref.explored = Map.isExplored(map);
-                }
-            });
-            t.start();
-        }
-        else if(gameMode==1){
-            var intruderWin = new Object() {
-                boolean areaReached = false;
-            };
-            var guardWin = new Object() {
-                boolean noIntrudersLeft = false;
-            };
-            new Thread(() -> {
-                while (!intruderWin.areaReached && !guardWin.noIntrudersLeft) {
-                    step();
-                    intruderWin.areaReached = Map.checkTargetArea(map, this.t);
-                    guardWin.noIntrudersLeft = Map.noIntrudersLeft(map);
-                    this.t++;
-                }
-                if(intruderWin.areaReached){
-                    System.out.println("INTRUDER WIN");
-                }
-                if(guardWin.noIntrudersLeft){
-                    System.out.println("GUARD WIN");
-                }
-            }).start();
+    public void loopExploration(){
+        boolean explored = false;
+        while ((!explored)) {
+            step();
+            if (config.DEBUG) {
+                System.out.println("Timestep: " + this.t + " at: " + Calendar.getInstance().getTime());
+                System.out.println(100 * Map.explored(map) + "% of map has been explored");
+            }
+            explored = Map.isExplored(map);
+            this.t++;
         }
     }
 
-    /*
-     * The agent movement is done here
-     */
     public void step(){
         for(int j=0; j<Scenario.config.getTimeStepSize(); j++) {
-            moveGuards(j);
-            moveIntruders(j);
-        }
-    }
-
-    /*
-     * Call made to algorithm to rotate the agents to a certain direction.@a
-     */
-    private void moveGuards(int j) {
-        ArrayList<Guard> guards = map.getGuards();
-        for(int i = guards.size()-1; i>=0; i--){
-            Guard guard = guards.get(i);
-            if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
-                Utils.sleep(20);
-                Exploration explorer = guard.getExploration();
-                DirectionEnum dir = explorer.makeMove(guard);
-                MapUpdater.moveAgent(map, guard, dir);
-                MapUpdater.refresh(map, guard.getVisibleTiles());
-                guard.computeVisibleTiles(map);
-                MapUpdater.checkIntruderCapture(guard, map);
+            MapUpdater.moveGuards(map, j);
+            if(getGameMode()==1) {
+                MapUpdater.moveIntruders(map, j);
             }
         }
     }
 
-
-    private void moveIntruders(int j) {
-
-        if (gameMode == 1) {
-            ArrayList<Intruder> intruders = map.getIntruders();
-            for(int i = intruders.size()-1; i>=0; i--){
-                Intruder intruder = intruders.get(i);
-                if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
-                    Utils.sleep(20);
-                    Exploration explorer = intruder.getExploration();
-                    DirectionEnum dir = explorer.makeMove(intruder);
-                    MapUpdater.moveAgent(map, intruder, dir);
-                    MapUpdater.refresh(map, intruder.getVisibleTiles());
-                    intruder.computeVisibleTiles(map);
-                    MapUpdater.checkIntruderCapture(intruder, map);
-
-                }
-            }
+    private void reinitialise() {
+        if(gamesPlayed>0){
+            initMap();
+            init(guardExploration, intruderExploration);
+            gc.setMap(map);
         }
     }
 
@@ -220,5 +154,18 @@ public class GameRunner {
 
     public int getGameMode() {
         return gameMode;
+    }
+
+    public void incrementWins(boolean areaReached, boolean noIntrudersLeft){
+        if(areaReached){
+            intruderWins++;
+        }
+        else if(noIntrudersLeft){
+            guardWins++;
+        }
+    }
+    private void printData() {
+        System.out.println(guardExploration + " wins: " + guardWins + ", " + intruderExploration + " wins: " + intruderWins);
+        System.out.println("Turns until win: " + t);
     }
 }
