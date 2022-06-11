@@ -21,17 +21,11 @@ public class CombinedGuard extends Exploration {
     public int sizeOfStandardized;
     public int sizeOfTA;
     public FrontierBasedExploration frontierExploration;
-
     private boolean targetHasBeenReached = false;
-    private boolean doWeKnowTAYet = false;
-    private int upperBoundaryOfStandardized;
-
     private boolean invaderSeen = false;
     private boolean patrolling = false;
 
     private int situationStage = 1;
-    private boolean wholeVisionInsideTA = false;
-    private int addDegreeFor3_2;
     private Random r;
 
     private int northBoundaryOfStandardized;
@@ -39,12 +33,9 @@ public class CombinedGuard extends Exploration {
     private int westBoundaryOfStandardized;
     private int eastBoundaryOfStandardized;
 
-    private Tile northWestCorner;
-    private Tile northEastCorner;
-    private Tile southEastCorner;
-    private Tile southWestCorner;
-
     private boolean guardInLoop = false;
+    private boolean isChasing = false;
+    private int timePassedAfterSeeingInvader = 0;
 
     private int previousDistToW = 0;
     private int previousDistToN = 0;
@@ -91,7 +82,7 @@ public class CombinedGuard extends Exploration {
     */
     @Override
     public DirectionEnum makeMove(Agent agent) {
-        boolean DEBUG = true;
+        boolean DEBUG = false;
         Guard guard = (Guard) agent;
         ArrayList<Tile> visibleTiles = guard.getVisibleTiles();
 
@@ -101,10 +92,10 @@ public class CombinedGuard extends Exploration {
         }
 
         // first checking if agent sees TA, if sees TA set "targetHasBeenReached" true and never change
-        if (!targetHasBeenReached) { // agent sees the target area first time
+        if (!targetHasBeenReached) {
             targetHasBeenReached = checkTargetArea(visibleTiles);
         }
-
+        // checking if agent sees intruder
         invaderSeen = checkInvader(visibleTiles);
 
         // situation 1: guard has not seen TA or Invader yet, so keep exploring
@@ -116,13 +107,34 @@ public class CombinedGuard extends Exploration {
             return frontierExploration.makeMove(this.agent);
         }
 
-        // situation 2: guard has seen invader whilst not seeing TA, chase anyway
+        // situation 2: guard has seen invader whilst not seeing TA, start to chase
         if (!targetHasBeenReached && invaderSeen) { // agent sees invader for the first time
+            isChasing = true;
             if (DEBUG) {
                 System.out.println("2");
                 System.out.println(chasing(guard, getInvader(visibleTiles).getAgentPosition()).getDirection());
             }
             return chasing(guard, getInvader(visibleTiles).getAgentPosition());
+        }
+
+        // situation 2.1: guard is chasing invader without the knowledge of TA
+        if (!targetHasBeenReached && isChasing && invaderSeen) {
+            if (DEBUG) {
+                System.out.println("2.1");
+                // System.out.println(chasing(guard, getInvader(visibleTiles).getAgentPosition()).getDirection());
+            }
+            if (checkInvader(visibleTiles)) {
+                timePassedAfterSeeingInvader = 0;
+            } else {
+                timePassedAfterSeeingInvader++;
+            }
+
+            if (timePassedAfterSeeingInvader > 5) {
+                invaderSeen = false;
+                return frontierExploration.makeMove(this.agent);
+            } else {
+                return chasing(guard, getInvader(visibleTiles).getAgentPosition());
+            }
         }
 
         // situation 3: (where QL will be added)
@@ -355,6 +367,22 @@ public class CombinedGuard extends Exploration {
             return chasing(guard, getInvader(visibleTiles).getAgentPosition());
         }
 
+        // situation 4.1: Guard chasing invader while knowing where TA is
+        if (targetHasBeenReached && invaderSeen) {
+            // TODO guard.shout()
+
+            Tile guardPosition = map.getTile(guard.getX_position(), guard.getY_position());
+            int temp = getDistanceToClosestCorner(guardPosition);
+            if (temp > 10) {
+                invaderSeen = false;
+                situationStage = 1;
+                // for now let's just return a random move before going back to our standardized area
+                return randomMove(guardPosition);
+            } else {
+                return chasing(guard, getInvader(visibleTiles).getAgentPosition());
+            }
+        }
+
         return null;
     }
 
@@ -365,6 +393,24 @@ public class CombinedGuard extends Exploration {
             }
         }
         return false;
+    }
+
+    public DirectionEnum randomMove(Tile agentTile){
+        List<DirectionEnum> validMoves = new ArrayList<>();
+
+        if (map.getTile(agentTile.getX() + 1, agentTile.getY()).isWalkable()){
+            validMoves.add(DirectionEnum.EAST);
+        }
+        if (map.getTile(agentTile.getX() - 1, agentTile.getY()).isWalkable()){
+            validMoves.add(DirectionEnum.WEST);
+        }
+        if (map.getTile(agentTile.getX(), agentTile.getY() - 1).isWalkable()){
+            validMoves.add(DirectionEnum.NORTH);
+        }
+        if (map.getTile(agentTile.getX(), agentTile.getY() + 1).isWalkable()){
+            validMoves.add(DirectionEnum.SOUTH);
+        }
+        return validMoves.get(r.nextInt(validMoves.size()));
     }
 
     private Tile getClosestCorner(Tile agentTile) {
@@ -387,6 +433,23 @@ public class CombinedGuard extends Exploration {
         }
         return closestTile;
     }
+
+    private int getDistanceToClosestCorner(Tile agentTile) {
+        int smallestVal = agentTile.manhattanDist(northEastCorner);
+
+        if (abs(agentTile.manhattanDist(northWestCorner)) < abs(smallestVal)) {
+            smallestVal = agentTile.manhattanDist(northWestCorner);
+
+        }
+        if (abs(agentTile.manhattanDist(southWestCorner)) < abs(smallestVal)) {
+            smallestVal = agentTile.manhattanDist(southWestCorner);
+        }
+        if (abs(agentTile.manhattanDist(southEastCorner)) < abs(smallestVal)) {
+            smallestVal = agentTile.manhattanDist(southEastCorner);
+        }
+        return smallestVal;
+    }
+
     private boolean checkInvader(ArrayList<Tile> vision) {
         for (Tile tile : vision) {
             if (tile.hasAgent()) {
@@ -415,43 +478,34 @@ public class CombinedGuard extends Exploration {
 
         ArrayList<DirectionEnum> dirs = new ArrayList<>();
 
-        int xDiff = abs(guardsX - intruderX);
-        int yDiff = abs(guardsY - intruderY);
-
-        if(xDiff < yDiff) {
-            if (guardsX < intruderX) {
+        if(guardsX < intruderX) {
+            System.out.println("East");
+            if(map.getTile(agent.getX_position()+1, agent.getY_position()).isWalkable()) {
                 dirs.add(DirectionEnum.EAST);
-            } else if (guardsX > intruderX) {
+            }
+        }
+        else if(guardsX > intruderX) {
+            System.out.println("West");
+            if(map.getTile(agent.getX_position()-1, agent.getY_position()).isWalkable()) {
                 dirs.add(DirectionEnum.WEST);
             }
         }
-        else if(xDiff > yDiff) {
-            if (guardsY < intruderY) {
+
+        if (guardsY < intruderY) {
+            System.out.println("South");
+            if(map.getTile(agent.getX_position(), agent.getY_position()+1).isWalkable()) {
                 dirs.add(DirectionEnum.SOUTH);
-            } else if (guardsY > intruderY) {
-                dirs.add(DirectionEnum.NORTH);
-            }
-        }else {
-            if (guardsX < intruderX) {
-                dirs.add(DirectionEnum.EAST);
-            } else if (guardsX > intruderX) {
-                dirs.add(DirectionEnum.WEST);
-            }
-            if (guardsY < intruderY) {
-                dirs.add(DirectionEnum.SOUTH);
-            } else if (guardsY > intruderY) {
-                dirs.add(DirectionEnum.NORTH);
             }
         }
-
-        for(DirectionEnum dir : dirs) {
-            if(agent.getAngle() == dir.getAngle()) {
-                return dir;
+        else if (guardsY > intruderY) {
+            System.out.println("North");
+            if(map.getTile(agent.getX_position(), agent.getY_position()-1).isWalkable()) {
+                dirs.add(DirectionEnum.NORTH);
             }
         }
 
         if(!dirs.isEmpty()) {
-            r = new Random();
+            System.out.println(dirs.size());
             return dirs.get(r.nextInt(dirs.size()));
         }
         else {
