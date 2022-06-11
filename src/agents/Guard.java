@@ -46,6 +46,9 @@ public class Guard extends Agent{
                 int size = 2; // this defines the area difference between the standardized area and TA
                 this.exploration = new CombinedGuard(this, map, temp[1] - size, temp[3] + size, temp[0] - size, temp[2] + size);
                 break;
+            case "QLGuard":
+                this.exploration = new QLGuard(this, map);
+                break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");
 
