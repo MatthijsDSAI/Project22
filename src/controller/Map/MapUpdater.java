@@ -4,14 +4,18 @@ import agents.Agent;
 import agents.Guard;
 import agents.Intruder;
 import controller.Area;
+import controller.Hearing.Noise;
 import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
-import javafx.scene.paint.Color;
+import exploration.Exploration;
 import utils.DirectionEnum;
 import utils.Utils;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MapUpdater {
 
@@ -52,12 +56,10 @@ public class MapUpdater {
     public static void changeTiles(Map map, Agent agent, Tile fromTile, Tile toTile){
         if(toTile.isWalkable()) {
             map.getTile(fromTile.getX(),fromTile.getY()).removeAgent();
-            map.getTile(fromTile.getX(),fromTile.getY()).setColor(Color.AQUA);
-
             map.getTile(toTile.getX(),toTile.getY()).addAgent(agent);
 
-            removeNoises(map, map.getTile(fromTile.getX(),fromTile.getY()));
-            addNoises(map, map.getTile(toTile.getX(),toTile.getY()));
+            Noise.removeNoises(map, map.getTile(fromTile.getX(),fromTile.getY()));
+            Noise.addNoises(map, map.getTile(toTile.getX(),toTile.getY()));
 
             agent.setAgentPosition(toTile);
         }
@@ -66,145 +68,78 @@ public class MapUpdater {
         }
     }
 
-    public static void removeNoises(Map map, Tile newTile) {
-        boolean debug = false;
-        double numOfLoops = 2;
-        int x = newTile.getX();
-        int y = newTile.getY();
 
-        if(debug) System.out.println("Current tile x:" + (x) + ", y:" + (y));
-        newTile.setSound(0); // set agent's current position to 0, no sound
-
-        for (int i=1; i <= numOfLoops; i++) {
-            int forX = -i;
-            int forY = 0;
-
-            while (forY != -i) {
-                if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
-                    if (map.getTile(x + forX, y + forY).isWalkable()) {
-                        map.getTile(x + forX, y + forY).setSound(0);
-                    }
-                }
-                forX++;
-                forY--;
-            }
-
-            while (forX != i) {
-                if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
-                    if (map.getTile(x + forX, y + forY).isWalkable()) {
-                        if (map.getTile(x + forX, y + forY).isWalkable()) {
-                            map.getTile(x + forX, y + forY).setSound(0);
-                        }
-                    }
-                }
-                forX++;
-                forY++;
-            }
-
-            while (forY != i) {
-                if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
-                    if (map.getTile(x + forX, y + forY).isWalkable()) {
-                        if (map.getTile(x + forX, y + forY).isWalkable()) {
-                            map.getTile(x + forX, y + forY).setSound(0);
-                        }
-                    }
-                }
-                forX--;
-                forY++;
-            }
-
-            while (forX != -i) {
-                if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
-                    if (map.getTile(x + forX, y + forY).isWalkable()) {
-                        if (map.getTile(x + forX, y + forY).isWalkable()) {
-                            map.getTile(x + forX, y + forY).setSound(0);
-                        }
-                    }
-                }
-                forX--;
-                forY--;
+    /*
+     * Call made to algorithm to rotate the agents to a certain direction.@a
+     */
+    public static void moveGuards(Map map, int j) {
+        ArrayList<Guard> guards = map.getGuards();
+        for(int i = guards.size()-1; i>=0; i--){
+            Guard guard = guards.get(i);
+            if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
+                Utils.sleep(20);
+                Exploration explorer = guard.getExploration();
+                DirectionEnum dir = explorer.makeMove(guard);
+                MapUpdater.moveAgent(map, guard, dir);
+                MapUpdater.refreshCurrentlyViewed(map, guard.getVisibleTiles());
+                guard.computeVisibleTiles(map);
+                MapUpdater.checkIntruderCapture(guard, map);
             }
         }
-        if(debug) System.out.println("finished");
-        }
+    }
 
-    public static void addNoises(Map map, Tile newTile) {
-        boolean debug = false;
-        double numOfLoops = 2;
-        int x = newTile.getX();
-        int y = newTile.getY();
-        double decreasingVal = 1 / (numOfLoops + 1);
 
-        if(debug) System.out.println("Current tile x:" + (x) + ", y:" + (y));
-        newTile.setSound(1); // set agent's current position to 1, max sound
+    public static void moveIntruders(Map map, int j) {
+        ArrayList<Intruder> intruders = map.getIntruders();
+        for(int i = intruders.size()-1; i>=0; i--){
+            Intruder intruder = intruders.get(i);
+            if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
+                Utils.sleep(20);
+                Exploration explorer = intruder.getExploration();
+                DirectionEnum dir = explorer.makeMove(intruder);
+                MapUpdater.moveAgent(map, intruder, dir);
+                MapUpdater.refreshCurrentlyViewed(map, intruder.getVisibleTiles());
+                intruder.computeVisibleTiles(map);
+                MapUpdater.checkIntruderCapture(intruder, map);
 
-        for (int i=1; i <= numOfLoops; i++) {
-            int forX = -i;
-            int forY = 0;
-
-            while (forY != -i) {
-                if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
-                    if (map.getTile(x + forX, y + forY).isWalkable()) {
-
-                        if (map.getTile(x + forX, y + forY).getSound() < 1 - decreasingVal * i) { // if that tile's current sound is higher skip
-                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
-                        }
-                    }
-                }
-                forX++;
-                forY--;
-            }
-
-            while (forX != i) {
-                if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
-                    if (map.getTile(x + forX, y + forY).isWalkable()) {
-
-                        if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
-                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
-                        }
-                    }
-                }
-                forX++;
-                forY++;
-            }
-
-            while (forY != i) {
-                if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
-                    if (map.getTile(x + forX, y + forY).isWalkable()) {
-
-                        if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
-                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
-                        }
-                    }
-                }
-                forX--;
-                forY++;
-            }
-
-            while (forX != -i) {
-                if(debug) System.out.println("at x:" + (x + forX) + ", y:" + (y + forY));
-                if ((x + forX >= 0) && (y + forY >= 0)) { // to avoid out of bounds error
-                    if (map.getTile(x + forX, y + forY).isWalkable()) {
-
-                        if (map.getTile(x + forX, y + forY).getSound() < 1) { // if that tile's current sound is higher skip
-                            map.getTile(x + forX, y + forY).setSound(1 - decreasingVal * i);
-                        }
-                    }
-                }
-                forX--;
-                forY--;
             }
         }
-        if(debug) System.out.println("finished");
 
     }
+
+    public static void checkIntruderCapture(Guard guard, Map map) {
+        ArrayList<Tile> tiles = guard.getVisibleTiles();
+        for(Tile tile: tiles){
+            if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
+                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<=1){
+                    map.getIntruders().remove((Intruder)tile.getAgent());
+                }
+            }
+        }
+
+        map.getIntruders().removeIf(intruder -> intruder.getAgentPosition() == guard.getAgentPosition());
+
+
+    }
+
+    public static void checkIntruderCapture(Intruder intruder, Map map) {
+        ArrayList<Tile> tiles = Utils.getSurroundingTiles(map, intruder.getAgentPosition());
+        for(Tile tile : tiles){
+            if(tile.hasAgent() && tile.getAgent().getType().equals("Guard")){
+                checkIntruderCapture((Guard)tile.getAgent(), map);
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////---------INITIALIZATION----------/////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * Initialization of guards, including putting them on the map.
@@ -232,16 +167,6 @@ public class MapUpdater {
             intruder.computeVisibleTiles(map);
         }
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////---------INITIALIZATION----------/////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
 
     public static void loadMap(Map map, Scenario scenario){
         int left;
@@ -345,28 +270,9 @@ public class MapUpdater {
         }
     }
 
-    public static void checkIntruderCapture(Guard guard, Map map) {
-        ArrayList<Tile> tiles = guard.getVisibleTiles();
-        for(Tile tile: tiles){
-            if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
-                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<=1){
-                    map.getIntruders().remove((Intruder)tile.getAgent());
-                }
-            }
-        }
-        map.getIntruders().removeIf(intruder -> intruder.getAgentPosition() == guard.getAgentPosition());
-    }
 
-    public static void checkIntruderCapture(Intruder intruder, Map map) {
-        ArrayList<Tile> tiles = Utils.getSurroundingTiles(map, intruder.getAgentPosition());
-        for(Tile tile : tiles){
-            if(tile.hasAgent() && tile.getAgent().getType().equals("Guard")){
-                checkIntruderCapture((Guard)tile.getAgent(), map);
-            }
-        }
-    }
 
-    public static void refresh(Map map, ArrayList<Tile> visibleTiles) {
+    public static void refreshCurrentlyViewed(Map map, ArrayList<Tile> visibleTiles) {
         for(Tile tile: visibleTiles){
             map.getTile(tile.getX(), tile.getY()).setCurrentlyViewed(false);
         }
