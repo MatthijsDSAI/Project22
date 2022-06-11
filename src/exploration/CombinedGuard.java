@@ -52,7 +52,7 @@ public class CombinedGuard extends Exploration {
     private int previousDistToS = 0;
 
 
-    // assuming we know the location of standardized area
+    // assuming we know the boundaries of standardized area
     public CombinedGuard(Agent agent, Map map, int northBoundaryOfStandardized, int southBoundaryOfStandardized, int westBoundaryOfStandardized, int eastBoundaryOfStandardized) {
         this.map = map;
         this.agent = agent;
@@ -60,12 +60,6 @@ public class CombinedGuard extends Exploration {
         this.southBoundaryOfStandardized = southBoundaryOfStandardized;
         this.westBoundaryOfStandardized = westBoundaryOfStandardized;
         this.eastBoundaryOfStandardized = eastBoundaryOfStandardized;
-
-        this.northWestCorner = map.getTile(westBoundaryOfStandardized - 1, northBoundaryOfStandardized - 1);
-        this.northEastCorner = map.getTile(eastBoundaryOfStandardized + 1, northBoundaryOfStandardized - 1);
-        this.southEastCorner = map.getTile(eastBoundaryOfStandardized + 1, southBoundaryOfStandardized + 1);
-        this.southWestCorner = map.getTile(westBoundaryOfStandardized - 1, southBoundaryOfStandardized + 1);
-
 
         this.frontierExploration = new FrontierBasedExploration(agent, map);
     }

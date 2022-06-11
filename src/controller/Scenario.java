@@ -40,6 +40,7 @@ public class Scenario {
     private int distanceViewing;
     private int distanceHearingWalking, distanceHearingSprinting;
     private int distanceSmelling;
+    private int[] targetAreaBoundaries = new int[4];
 
     public Scenario(String mapFile){
         // set parameters
@@ -135,6 +136,10 @@ public class Scenario {
                         config.setBASESPEEDGUARD(baseSpeedGuard);
                         break;
                     case "targetArea":
+                        for(int i = 0; i < targetAreaBoundaries.length; i++) { // to be used for combined agent
+                            targetAreaBoundaries[i] = Integer.parseInt(items[i]);
+                        }
+                        config.setStandardizedAreaBoundaries(targetAreaBoundaries);
                         areas.add(new Area(Integer.parseInt(items[0]),Integer.parseInt(items[1]),Integer.parseInt(items[2]),Integer.parseInt(items[3]), "targetArea"));
                         this.targetArea = new Area(Integer.parseInt(items[0]),Integer.parseInt(items[1]),Integer.parseInt(items[2]),Integer.parseInt(items[3]), "targetArea");
                         int middleX = (targetArea.getLeftBoundary()+targetArea.getRightBoundary())/2;
@@ -211,6 +216,10 @@ public class Scenario {
 
     public int getMapWidth() {
         return mapWidth;
+    }
+
+    public int[] getTargetAreaBoundaries() {
+        return targetAreaBoundaries;
     }
 
     public Area getSpawnAreaGuards() {

@@ -22,6 +22,7 @@ public class Config {
     private int timeStepSize;
     private boolean MOVE = true;
     private int gameMode;
+    private int[] standardizedAreaBoundaries;
     private int numberOfGames = 50;
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
@@ -74,6 +75,14 @@ public class Config {
 
     public void setSPRINTSTEEDINTRUDER(double SPRINTSTEEDINTRUDER) {
         this.SPRINTSTEEDINTRUDER = SPRINTSTEEDINTRUDER;
+    }
+
+    public int[] getStandardizedAreaBoundaries() {
+        return standardizedAreaBoundaries;
+    }
+
+    public void setStandardizedAreaBoundaries(int[] standardizedAreaBoundaries) {
+        this.standardizedAreaBoundaries = standardizedAreaBoundaries;
     }
 
     public Color getAgentColor(){
