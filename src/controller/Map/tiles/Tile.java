@@ -101,6 +101,10 @@ public abstract class Tile {
                 if (currentlyViewed && this.toString().equals("Floor")) {
                     return Color.TAN;
                 }
+            } else if(Scenario.config.getGameMode()==0){
+                if (currentlyViewed && this.toString().equals("Floor")) {
+                    return Color.TAN;
+                }
             }
             else{
                 if(currentlyViewed && this.toString().equals("Floor")){

@@ -25,14 +25,20 @@ public class CombinedGuard extends Exploration {
     private boolean invaderSeen = false;
     private boolean patrolling = false;
 
-    private int situationStage = 1;
-    private Random r;
+    private int situationStageOf3 = 1;
+    private Random r = new Random();
 
     private int northBoundaryOfStandardized;
     private int southBoundaryOfStandardized;
     private int westBoundaryOfStandardized;
     private int eastBoundaryOfStandardized;
 
+    private Tile northEastCorner;
+    private Tile northWestCorner;
+    private Tile southWestCorner;
+    private Tile southEastCorner;
+
+    private boolean useQL = false;
     private boolean guardInLoop = false;
     private boolean isChasing = false;
     private int timePassedAfterSeeingInvader = 0;
@@ -52,6 +58,13 @@ public class CombinedGuard extends Exploration {
         this.westBoundaryOfStandardized = westBoundaryOfStandardized;
         this.eastBoundaryOfStandardized = eastBoundaryOfStandardized;
 
+        // getting the corner tiles
+        this.northEastCorner = map.getTile(eastBoundaryOfStandardized, northBoundaryOfStandardized);
+        this.northWestCorner = map.getTile(westBoundaryOfStandardized, northBoundaryOfStandardized);
+        this.southWestCorner = map.getTile(westBoundaryOfStandardized, southBoundaryOfStandardized);
+        this.southEastCorner = map.getTile(eastBoundaryOfStandardized, southBoundaryOfStandardized);
+
+
         this.frontierExploration = new FrontierBasedExploration(agent, map);
     }
 
@@ -68,22 +81,34 @@ public class CombinedGuard extends Exploration {
 
 
     /**
-     * 4 things can happen: ( can be added further )
-     * 1. Agent has never seen TA (target area) or intruder, so keep exploring
-     * 2. Agent has seen intruder but not the TA, what TODO?
-     * 3. Agent has seen target area but not the intruder, start patrolling around the TA via QL
-     * 4. Agent has seen intruder whilst previously seeing TA;
-     *      - either shout (check if there exists another guard) and pursue invader
-     *      - pursue invader solo
-     *      - disregard
+     * This class handles 4 situations: (new situations can be added further)
      *
-     * 5. Agent sees intruder and TA at the same time
+     * Situation 1: Guard has not seen TA or Invader yet, so keep exploring. Return frontierExploration move
      *
+     * Situation 2: Guard has seen invader whilst not seeing TA, start to chase
+     *      - Situation 2.1: Guard is chasing invader without the knowledge of TA, return chasing method
+     *
+     * Situation 3: Guard has seen target area but not the intruder, start patrolling (either with baseline patrolling or QL)
+     * The situations mentioned below is for baseline patrolling, if QL is to be used then these situations can be skipped
+     *      - Situation 3.1: Turn guard towards to the closest border
+     *      - Situation 3.2: Make guard reach the corner of a boundary by going in a straight line
+     *      - Situation 3.3: Make guard go to the corner of standardized area in a straight line
+     *      - Situation 3.4: Make guard patrol along the border of standardized area
+     *
+     * Situation 4: Guard sees invader while patrolling
+     *      - Situation 4.1: Chase intruder, if distance to the closest corner becomes over 10 then give up and return to TA
+     *      (?further situations could be added here?)
+     *      (shout (check if there exists another guard) and pursue invader)
+     *      (disregard)
+     *      ...
     */
     @Override
     public DirectionEnum makeMove(Agent agent) {
-        boolean DEBUG = false;
+        boolean DEBUG = true;
         Guard guard = (Guard) agent;
+        int x = guard.getX_position();
+        int y = guard.getY_position();
+
         ArrayList<Tile> visibleTiles = guard.getVisibleTiles();
 
         if (DEBUG) {
@@ -94,6 +119,11 @@ public class CombinedGuard extends Exploration {
         // first checking if agent sees TA, if sees TA set "targetHasBeenReached" true and never change
         if (!targetHasBeenReached) {
             targetHasBeenReached = checkTargetArea(visibleTiles);
+        }
+
+        // meaning we have captured the intruder, so go back to TA
+        if (invaderSeen && !checkInvader(visibleTiles)) {
+            situationStageOf3 = 1;
         }
         // checking if agent sees intruder
         invaderSeen = checkInvader(visibleTiles);
@@ -123,12 +153,12 @@ public class CombinedGuard extends Exploration {
                 System.out.println("2.1");
                 // System.out.println(chasing(guard, getInvader(visibleTiles).getAgentPosition()).getDirection());
             }
-            if (checkInvader(visibleTiles)) {
+            if (checkInvader(visibleTiles)) { // meaning again saw the intruder, set counter to 0
                 timePassedAfterSeeingInvader = 0;
             } else {
                 timePassedAfterSeeingInvader++;
             }
-
+            // meaning 5 timesteps has passed since last time of seeing invader, then give up and start exploring
             if (timePassedAfterSeeingInvader > 5) {
                 invaderSeen = false;
                 return frontierExploration.makeMove(this.agent);
@@ -137,73 +167,81 @@ public class CombinedGuard extends Exploration {
             }
         }
 
-        // situation 3: (where QL will be added)
-        // situation 3.1: agent sees the target area first time, turn towards to closest border
-        if (targetHasBeenReached && (situationStage == 1)) {
-            if (DEBUG) System.out.println("3.1");
-            int x = agent.getX_position();
-            int y = agent.getY_position();
+        // situation 3:
 
-            if (DEBUG) {
-                System.out.println("Distance to east boundary: " + (x - eastBoundaryOfStandardized));
-                System.out.println("Distance to west boundary: " + (x - westBoundaryOfStandardized));
-                System.out.println("Distance to north boundary: " + (y - northBoundaryOfStandardized));
-                System.out.println("Distance to south boundary: " + (y - southBoundaryOfStandardized));
-            }
+        // situation 3.1: Guard sees the target area first time, turn towards to closest border
+        if (targetHasBeenReached && (situationStageOf3 == 1)) {
+            // checking if guard already on a border
+            if (!(((x - eastBoundaryOfStandardized) == 0) || ((x - westBoundaryOfStandardized) == 0) || ((y - northBoundaryOfStandardized) == 0) || ((y - southBoundaryOfStandardized) == 0))) {
+                if (DEBUG) System.out.println("3.1");
+
+                if (DEBUG) {
+                    System.out.println("Distance to east boundary: " + (x - eastBoundaryOfStandardized));
+                    System.out.println("Distance to west boundary: " + (x - westBoundaryOfStandardized));
+                    System.out.println("Distance to north boundary: " + (y - northBoundaryOfStandardized));
+                    System.out.println("Distance to south boundary: " + (y - southBoundaryOfStandardized));
+                }
 
 
-            DirectionEnum answer = DirectionEnum.EAST;
-            int smallestVal = (x - eastBoundaryOfStandardized);
-            if (abs((x - westBoundaryOfStandardized)) < abs(x - eastBoundaryOfStandardized)) {
-                answer = DirectionEnum.WEST;
-                smallestVal = (x - westBoundaryOfStandardized);
-            }
-            if (abs((x - northBoundaryOfStandardized)) < abs(smallestVal)) {
-                answer = DirectionEnum.NORTH;
-                smallestVal = (x - northBoundaryOfStandardized);
-            }
-            if (abs((x - southBoundaryOfStandardized)) < abs(smallestVal)) {
-                answer = DirectionEnum.SOUTH;
-                smallestVal = (x - southBoundaryOfStandardized);
-            }
+                DirectionEnum answer = DirectionEnum.EAST;
+                int smallestVal = (x - eastBoundaryOfStandardized);
 
-            situationStage = 2;
+                if (abs((x - westBoundaryOfStandardized)) < abs((x - eastBoundaryOfStandardized))) {
+                    answer = DirectionEnum.WEST;
+                    smallestVal = (x - westBoundaryOfStandardized);
+                }
+                if (abs((y - northBoundaryOfStandardized)) < abs(smallestVal)) {
+                    answer = DirectionEnum.NORTH;
+                    smallestVal = (y - northBoundaryOfStandardized);
+                }
+                if (abs((y - southBoundaryOfStandardized)) < abs(smallestVal)) {
+                    answer = DirectionEnum.SOUTH;
+                    smallestVal = (y - southBoundaryOfStandardized);
+                }
 
-            if (smallestVal < 0 && answer.getDirection().equals("west")) {
-                if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle() + 180));
-                return DirectionEnum.getDirection(answer.getAngle() + 180);
-            } else if (smallestVal < 0 && answer.getDirection().equals("north")) {
-                if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle() + 180));
-                return DirectionEnum.getDirection(answer.getAngle() + 180);
-            } else if (smallestVal > 0 && answer.getDirection().equals("east")) {
-                if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle() + 180));
-                return DirectionEnum.getDirection(answer.getAngle() + 180);
-            } else if (smallestVal > 0 && answer.getDirection().equals("south")) {
-                if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle() + 180));
-                return DirectionEnum.getDirection(answer.getAngle() + 180);
+                situationStageOf3 = 2;
+
+                if (smallestVal < 0 && answer.getDirection().equals("west")) {
+                    if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle() + 180));
+                    return DirectionEnum.getDirection(answer.getAngle() + 180);
+                } else if (smallestVal < 0 && answer.getDirection().equals("north")) {
+                    if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle() + 180));
+                    return DirectionEnum.getDirection(answer.getAngle() + 180);
+                } else if (smallestVal > 0 && answer.getDirection().equals("east")) {
+                    if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle() + 180));
+                    return DirectionEnum.getDirection(answer.getAngle() + 180);
+                } else if (smallestVal > 0 && answer.getDirection().equals("south")) {
+                    if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle() + 180));
+                    return DirectionEnum.getDirection(answer.getAngle() + 180);
+                }
+                if (DEBUG) System.out.println(answer);
+                return answer;
+            } else { // meaning guard is already on a border skip situation 3.1
+                situationStageOf3 = 2;
+
+                // fixes the problem of missing previous data if it goes directly go to situation 3.3
+                previousDistToW = (x - westBoundaryOfStandardized);
+                previousDistToE = (x - eastBoundaryOfStandardized);
+                previousDistToN = (y - northBoundaryOfStandardized);
+                previousDistToS = (y - southBoundaryOfStandardized);
             }
-            // add handling of 0
-            if (DEBUG) System.out.println(DirectionEnum.getDirection(answer.getAngle()));
-            return answer;
         }
 
         // situation 3.2: Guard is going to reach the corner of a boundary in a straight line
-        if (targetHasBeenReached && (situationStage == 2)) {
+        if (targetHasBeenReached && (situationStageOf3 == 2)) {
             System.out.println("3.2");
-            int x = agent.getX_position();
-            int y = agent.getY_position();
-
-            HashMap<Integer, DirectionEnum> distanceToBoundaries = new HashMap<>();
-            distanceToBoundaries.put((x - eastBoundaryOfStandardized), DirectionEnum.EAST);
-            distanceToBoundaries.put((x - westBoundaryOfStandardized), DirectionEnum.WEST);
-            distanceToBoundaries.put((y - northBoundaryOfStandardized), DirectionEnum.NORTH);
-            distanceToBoundaries.put((y - southBoundaryOfStandardized), DirectionEnum.SOUTH);
 
             int distToW = (x - westBoundaryOfStandardized);
             int distToE = (x - eastBoundaryOfStandardized);
             int distToN = (y - northBoundaryOfStandardized);
             int distToS = (y - southBoundaryOfStandardized);
 
+            // fixes the problem of missing previous data if it goes directly go to situation 3.3
+            previousDistToW = distToW;
+            previousDistToE = distToE;
+            previousDistToN = distToN;
+            previousDistToS = distToS;
+
             if (DEBUG) {
                 System.out.println("Distance to east boundary: " + (x - eastBoundaryOfStandardized));
                 System.out.println("Distance to west boundary: " + (x - westBoundaryOfStandardized));
@@ -211,68 +249,67 @@ public class CombinedGuard extends Exploration {
                 System.out.println("Distance to south boundary: " + (y - southBoundaryOfStandardized));
             }
 
-            for (java.util.Map.Entry<Integer, DirectionEnum> entry : distanceToBoundaries.entrySet()) {
-                if (entry.getKey() == 0) {
-                    situationStage = 3;
-                    if (DEBUG) {
-                        System.out.println("previous dir of agent: " + DirectionEnum.getDirection(agent.getAngle()));
-                        System.out.println("new dir: " + DirectionEnum.getDirection(agent.getAngle() + addDegreeFor3_2).getDirection());
+            // has reached a border
+            if ((distToW == 0) || (distToE == 0) || (distToN == 0) || (distToS == 0)) {
+                situationStageOf3 = 3;
+                if (DEBUG) {
+                    System.out.println("previous dir of agent: " + DirectionEnum.getDirection(agent.getAngle()));
+                    System.out.println("new dir: " + DirectionEnum.getDirection(agent.getAngle()).getDirection());
+                }
+                if (distToW == 0) { // on west border
+                    if (abs(distToS) < abs(distToN)) { // closer to south
+                        if (distToS > 0) {
+                            return DirectionEnum.NORTH;
+                        } else {
+                            return DirectionEnum.SOUTH;
+                        }
+                    } else { // closer to north
+                        if (distToN > 0) {
+                            return DirectionEnum.NORTH;
+                        } else {
+                            return DirectionEnum.SOUTH;
+                        }
                     }
-                    if (distToW == 0) { // on west border
-                        if (abs(distToS) < abs(distToN)) { // closer to south
-                            if (distToS > 0) {
-                                return DirectionEnum.NORTH;
-                            } else {
-                                return DirectionEnum.SOUTH;
-                            }
-                        } else { // closer to north
-                            if (distToN > 0) {
-                                return DirectionEnum.NORTH;
-                            } else {
-                                return DirectionEnum.SOUTH;
-                            }
+                } else if (distToN == 0) { // on north border
+                    if (abs(distToW) < abs(distToE)) { // closer to west
+                        if (distToW > 0) {
+                            return DirectionEnum.WEST;
+                        } else {
+                            return DirectionEnum.EAST;
                         }
-                    } else if (distToN == 0) { // on north border
-                        if (abs(distToW) < abs(distToE)) { // closer to west
-                            if (distToW > 0) {
-                                return DirectionEnum.WEST;
-                            } else {
-                                return DirectionEnum.EAST;
-                            }
-                        } else { // closer to east
-                            if (distToW > 0) {
-                                return DirectionEnum.WEST;
-                            } else {
-                                return DirectionEnum.EAST;
-                            }
+                    } else { // closer to east
+                        if (distToE > 0) {
+                            return DirectionEnum.WEST;
+                        } else {
+                            return DirectionEnum.EAST;
                         }
-                    } else if (distToE == 0) { // on east border
-                        if (abs(distToS) < abs(distToN)) { // closer to south
-                            if (distToS > 0) {
-                                return DirectionEnum.NORTH;
-                            } else {
-                                return DirectionEnum.SOUTH;
-                            }
-                        } else { // closer to north
-                            if (distToN > 0) {
-                                return DirectionEnum.NORTH;
-                            } else {
-                                return DirectionEnum.SOUTH;
-                            }
+                    }
+                } else if (distToE == 0) { // on east border
+                    if (abs(distToS) < abs(distToN)) { // closer to south
+                        if (distToS > 0) {
+                            return DirectionEnum.NORTH;
+                        } else {
+                            return DirectionEnum.SOUTH;
                         }
-                    } else if (distToS == 0) { // on north border
-                        if (abs(distToW) < abs(distToE)) { // closer to west
-                            if (distToW > 0) {
-                                return DirectionEnum.WEST;
-                            } else {
-                                return DirectionEnum.EAST;
-                            }
-                        } else { // closer to east
-                            if (distToW > 0) {
-                                return DirectionEnum.WEST;
-                            } else {
-                                return DirectionEnum.EAST;
-                            }
+                    } else { // closer to north
+                        if (distToN > 0) {
+                            return DirectionEnum.NORTH;
+                        } else {
+                            return DirectionEnum.SOUTH;
+                        }
+                    }
+                } else { // on south border
+                    if (abs(distToW) < abs(distToE)) { // closer to west
+                        if (distToW > 0) {
+                            return DirectionEnum.WEST;
+                        } else {
+                            return DirectionEnum.EAST;
+                        }
+                    } else { // closer to east
+                        if (distToE > 0) {
+                            return DirectionEnum.WEST;
+                        } else {
+                            return DirectionEnum.EAST;
                         }
                     }
                 }
@@ -282,10 +319,8 @@ public class CombinedGuard extends Exploration {
         }
 
         // situation 3.3: Guard is going to the corner of standardized area in a straight line
-        if (targetHasBeenReached && (situationStage == 3)) {
+        if (targetHasBeenReached && (situationStageOf3 == 3)) {
             System.out.println("3.3");
-            int x = agent.getX_position();
-            int y = agent.getY_position();
 
             int distToW = (x - westBoundaryOfStandardized);
             int distToE = (x - eastBoundaryOfStandardized);
@@ -299,56 +334,84 @@ public class CombinedGuard extends Exploration {
                 System.out.println("Distance to south boundary: " + (y - southBoundaryOfStandardized));
             }
 
-            Tile closestTile = getClosestCorner(map.getTile(x, y));
-
-            // checking if reached any of 4 corners
+            // checking if reached any of 4 corners (meaning distance to any 2 borders being 0)
             if((distToW == 0 && distToN == 0) || (distToN == 0 && distToE == 0) || (distToE == 0 && distToS == 0) || (distToS == 0 && distToW == 0)) {
-                if (!guardInLoop) {
-                    guardInLoop = true;
-                    patrolling = true;
-                    situationStage = 4;
-                    if (DirectionEnum.getDirection(agent.getAngle()) == DirectionEnum.WEST && previousDistToW < 0) {
-                        return DirectionEnum.getDirection(agent.getAngle() - 90); // turning left
-                    } else if (DirectionEnum.getDirection(agent.getAngle()) == DirectionEnum.WEST && previousDistToW > 0) {
-                        return DirectionEnum.getDirection(agent.getAngle() + 90); // turning right
-                    }
+                guardInLoop = true;
+                patrolling = true;
+                situationStageOf3 = -1;
 
-                    if (DirectionEnum.getDirection(agent.getAngle()) == DirectionEnum.NORTH && previousDistToN < 0) {
+                // for northwest corner
+                if ((distToW == 0 && distToN == 0)) {
+                    if (DEBUG) System.out.println("reached northwest corner");
+                    if (previousDistToN < 0) { // coming from north
+                        return DirectionEnum.getDirection(agent.getAngle() + 90); // turning left
+                    } else if (previousDistToN > 0) { // coming from south
+                        return DirectionEnum.getDirection(agent.getAngle() - 90); // turning right
+                    } else if (previousDistToW < 0) { // coming from west
+                        return DirectionEnum.getDirection(agent.getAngle()); // go straight
+                    } else if (previousDistToW > 0 ) { // coming from east
+                        return DirectionEnum.getDirection(agent.getAngle() + 180); // u-turn
+                    }
+                }
+
+                // for northeast corner
+                if ((distToE == 0 && distToN == 0)) {
+                    if (DEBUG) System.out.println("reached northeast corner");
+                    if (previousDistToN < 0) { // coming from north
+                        return DirectionEnum.getDirection(agent.getAngle());
+                    } else if (previousDistToN > 0) { // coming from south
+                        return DirectionEnum.getDirection(agent.getAngle() + 180);
+                    } else if (previousDistToE < 0) { // coming from west
                         return DirectionEnum.getDirection(agent.getAngle() - 90);
-                    } else if (DirectionEnum.getDirection(agent.getAngle()) == DirectionEnum.NORTH && previousDistToN > 0) {
+                    } else if (previousDistToE > 0 ) { // coming from east
                         return DirectionEnum.getDirection(agent.getAngle() + 90);
                     }
+                }
 
-                    if (DirectionEnum.getDirection(agent.getAngle()) == DirectionEnum.EAST && previousDistToE < 0) {
-                        return DirectionEnum.getDirection(agent.getAngle() + 90);
-                    } else if (DirectionEnum.getDirection(agent.getAngle()) == DirectionEnum.EAST && previousDistToE > 0) {
+                // for southeast corner
+                if ((distToS == 0 && distToE == 0)) {
+                    if (DEBUG) System.out.println("reached southeast corner");
+                    if (previousDistToS < 0) { // coming from north
                         return DirectionEnum.getDirection(agent.getAngle() - 90);
-                    }
-
-                    if (DirectionEnum.getDirection(agent.getAngle()) == DirectionEnum.SOUTH && previousDistToS < 0) {
+                    } else if (previousDistToS > 0) { // coming from south
                         return DirectionEnum.getDirection(agent.getAngle() + 90);
-                    } else if (DirectionEnum.getDirection(agent.getAngle()) == DirectionEnum.SOUTH && previousDistToS > 0) {
+                    } else if (previousDistToE < 0) { // coming from west
+                        return DirectionEnum.getDirection(agent.getAngle() + 180);
+                    } else if (previousDistToE > 0 ) { // coming from east
+                        return DirectionEnum.getDirection(agent.getAngle());
+                    }
+                }
+
+                // for southwest corner
+                if ((distToS == 0 && distToW == 0)) {
+                    if (DEBUG) System.out.println("reached southwest corner");
+                    if (previousDistToS < 0) { // coming from north
+                        return DirectionEnum.getDirection(agent.getAngle() + 180);
+                    } else if (previousDistToS > 0) { // coming from south
+                        return DirectionEnum.getDirection(agent.getAngle());
+                    } else if (previousDistToW < 0) { // coming from west
+                        return DirectionEnum.getDirection(agent.getAngle() + 90);
+                    } else if (previousDistToW > 0 ) { // coming from east
                         return DirectionEnum.getDirection(agent.getAngle() - 90);
                     }
                 }
             }
 
-            if (!guardInLoop) {
-                this.previousDistToW = distToW;
-                this.previousDistToE = distToE;
-                this.previousDistToN = distToN;
-                this.previousDistToS = distToS;
-            }
 
-            System.out.println("aaa");
+            previousDistToW = distToW;
+            previousDistToE = distToE;
+            previousDistToN = distToN;
+            previousDistToS = distToS;
+
             if (DEBUG) System.out.println(DirectionEnum.getDirection(agent.getAngle()).getDirection());
             return DirectionEnum.getDirection(agent.getAngle());
         }
 
         // situation 3.4: Guard is patrolling along the border of standardized area
         if (patrolling && !invaderSeen) {
-            int x = agent.getX_position();
-            int y = agent.getY_position();
+            guardInLoop = false;
+
+            System.out.println("3.4");
 
             int distToW = (x - westBoundaryOfStandardized);
             int distToE = (x - eastBoundaryOfStandardized);
@@ -363,19 +426,20 @@ public class CombinedGuard extends Exploration {
 
         // situation 4: Guard sees invader while patrolling
         if (patrolling && invaderSeen) {
+            System.out.println("4");
             // TODO guard.shout()
+            patrolling = false;
             return chasing(guard, getInvader(visibleTiles).getAgentPosition());
         }
 
         // situation 4.1: Guard chasing invader while knowing where TA is
         if (targetHasBeenReached && invaderSeen) {
-            // TODO guard.shout()
-
+            System.out.println("4.1");
             Tile guardPosition = map.getTile(guard.getX_position(), guard.getY_position());
             int temp = getDistanceToClosestCorner(guardPosition);
             if (temp > 10) {
                 invaderSeen = false;
-                situationStage = 1;
+                situationStageOf3 = 1;
                 // for now let's just return a random move before going back to our standardized area
                 return randomMove(guardPosition);
             } else {
@@ -463,8 +527,9 @@ public class CombinedGuard extends Exploration {
 
     private Intruder getInvader(ArrayList<Tile> vision) {
         for (Tile tile : vision) {
-            if (tile.getAgent().getType().equals("Intruder")) {
-                return (Intruder) tile.getAgent();
+            Agent foundAgent = tile.getAgent();
+            if ((foundAgent != null) && foundAgent.getType().equals("Intruder")) {
+                return (Intruder) foundAgent;
             }
         }
         return null;
