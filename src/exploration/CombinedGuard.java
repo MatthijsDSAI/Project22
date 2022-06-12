@@ -119,6 +119,7 @@ public class CombinedGuard extends FrontierBasedExploration {
         int y = guard.getY_position();
 
         ArrayList<Tile> visibleTiles = guard.getVisibleTiles();
+        updateKnowledge(agent, visibleTiles);
 
         if (DEBUG) {
             System.out.println();
@@ -179,7 +180,7 @@ public class CombinedGuard extends FrontierBasedExploration {
         // situation 3: TODO use path finder
         // situation 3.1: Guard sees the target area first time
         if (targetHasBeenReached && (situationStageOf3 == 1)) {
-            Path path = findPath(agent, cornersOfStandardized);
+            Path path = findPath(agent, cornersOfStandardized, false);
             System.out.println(path.size());
             if(path.size() == 1) { // setting to 1 so that guard is turned to right direction in situation 3.3 (so 1 move away from goal)
                 situationStageOf3 = 2;
