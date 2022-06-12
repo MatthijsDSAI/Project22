@@ -103,6 +103,7 @@ public class Scenario {
                         break;
                     case "numGuards":
                         numGuards = Integer.parseInt(value);
+                        config.setNumOfGuards(numGuards);
                         break;
                     case "numIntruders":
                         numIntruders = Integer.parseInt(value);

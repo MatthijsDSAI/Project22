@@ -22,6 +22,7 @@ public class Config {
     private int timeStepSize;
     private boolean MOVE = true;
     private int gameMode;
+    private int numOfGuards;
     private int[] standardizedAreaBoundaries;
     private int numberOfGames = 50;
     //store an instance of this in our main gamerunner class eventually
@@ -125,6 +126,14 @@ public class Config {
 
     public int getNumberOfGames(){
         return numberOfGames;
+    }
+
+    public int getNumOfGuards() {
+        return numOfGuards;
+    }
+
+    public void setNumOfGuards(int numOfGuards) {
+        this.numOfGuards = numOfGuards;
     }
 
     public boolean isTRAINING() {
