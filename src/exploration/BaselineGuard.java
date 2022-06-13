@@ -1,7 +1,6 @@
 package exploration;
 
 import agents.Agent;
-import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import javafx.scene.paint.Color;
@@ -22,6 +21,7 @@ public class BaselineGuard extends FrontierBasedExploration{
 
     @Override
     public DirectionEnum makeMove(Agent agent) {
+        //agent.addMarkers(1,map);
         Tile curTile = agent.getAgentPosition();
         visibleTiles = agent.getVisibleTiles();
         boolean updated = updateKnowledge(agent, visibleTiles);
@@ -31,6 +31,7 @@ public class BaselineGuard extends FrontierBasedExploration{
             if(agentFound != null && agentFound.getType().equals("Intruder")) {
                 goalTile = agentFound.getAgentPosition();
                 Path path = findPath(agent, goalTile);
+                agent.addMarkers(3,map);
                 return findNextMoveDirection(agent, path.get(1));
             }
             if(tile.toString().equals("TargetArea")) {
@@ -38,18 +39,20 @@ public class BaselineGuard extends FrontierBasedExploration{
             if(tile.toString().equals("TargetArea") && !(tile.getX() == curTile.getX() && tile.getY() == curTile.getY())) {
                 goalTile = tile;
             }
+            if(tile.getHasMarker()==true)
+                MarkerInterpretation(agent);
         }
-        if(goalTile == null && part ==0)
+        if(part ==0)
         {
             if(halfway == 1)
             {
                 agent.addMarkers(0,map);
-                if(agent.getX_position()+3<agent.ownMap.getHorizontalSize())
+                if(agent.getX_position()+3<agent.ownMap.getHorizontalSize() && agent.ownMap.getTile(agent.getX_position()+3, agent.getY_position()).isWalkable()==true)
                 {
                     goalTile = agent.ownMap.getTile(agent.getX_position()+3, agent.getY_position());
                     x1=agent.getX_position()+3;
                 }
-                else if(agent.getX_position()-3>0)
+                else if(agent.getX_position()-3>0 && agent.ownMap.getTile(agent.getX_position()-3, agent.getY_position()).isWalkable()==true)
                 {
                     goalTile = agent.ownMap.getTile(agent.getX_position()-3, agent.getY_position());
                     x2=agent.getX_position()-3;
@@ -61,7 +64,6 @@ public class BaselineGuard extends FrontierBasedExploration{
             else if(agent.getY_position()>agent.ownMap.getVerticalSize()/2)
                 goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()-1);
             else halfway=1;
-
         }
         if(goalTile != null) {
             Path path = findPath(agent, goalTile);
@@ -84,8 +86,7 @@ public class BaselineGuard extends FrontierBasedExploration{
         {
             Color c = agent.ownMap.getTile(f.getX(),f.getY()).getColor();
             if(c==Color.RED){
-                //TO ADD
-                // % explored >= 50%
+                //TO ADD % explored >= 50% don't follow this rule anymore
                 if(agent.getY_position()==agent.ownMap.getVerticalSize()/2 && ok ==0)
                     agent.setAngle((int) (agent.getAngle()+90));
                 //if(agent.getExploration())
