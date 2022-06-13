@@ -1,7 +1,6 @@
 package exploration;
 
 import agents.Agent;
-import agents.Guard;
 import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
@@ -22,9 +21,9 @@ public class CombinedGuard extends FrontierBasedExploration {
     private boolean invaderSeen = false;
     private boolean patrolling = false;
 
-    private final Queue<Tile> cornersOfStandardized = new LinkedList<Tile>();
+    private final Queue<Tile> cornersOfStandardized = new LinkedList<>();
 
-    private boolean useQL = false;
+    private boolean useQL = true;
     private boolean isChasing = false;
     private int timePassedAfterSeeingInvader = 0;
     private int situationStageOf3 = 1;
@@ -45,6 +44,7 @@ public class CombinedGuard extends FrontierBasedExploration {
     private int previousDistToN = 0;
     private int previousDistToE = 0;
     private int previousDistToS = 0;
+    private DirectionEnum lastDirIntruderHasBeenSeen;
 
     private int distanceToOtherGuards = 0;
 
@@ -102,7 +102,8 @@ public class CombinedGuard extends FrontierBasedExploration {
      */
     @Override
     public DirectionEnum makeMove(Agent agent) {
-        boolean DEBUG = true;
+        System.out.println(this);
+        boolean DEBUG = false;
         int x = agent.getX_position();
         int y = agent.getY_position();
 
@@ -125,6 +126,9 @@ public class CombinedGuard extends FrontierBasedExploration {
         }
         // checking if agent sees intruder
         invaderSeen = checkInvader(visibleTiles);
+        if (invaderSeen) {
+            lastDirIntruderHasBeenSeen = DirectionEnum.getDirection(agent.getAngle());
+        }
 
         // situation 1: guard has not seen TA or Invader yet, so keep exploring
         if (!targetHasBeenReached && !invaderSeen && !isChasing) {
@@ -140,9 +144,9 @@ public class CombinedGuard extends FrontierBasedExploration {
             System.out.println("2");
             isChasing = true;
             if (DEBUG) {
-                System.out.println(chasing(agent, getInvader(visibleTiles).getAgentPosition()).getDirection());
+                System.out.println(chasing(agent, visibleTiles, checkInvader(visibleTiles)).getDirection());
             }
-            return chasing(agent, getInvader(visibleTiles).getAgentPosition());
+            return chasing(agent, visibleTiles, checkInvader(visibleTiles));
         }
 
         // situation 2.1: guard is chasing invader without the knowledge of TA
@@ -158,21 +162,18 @@ public class CombinedGuard extends FrontierBasedExploration {
             }
             // meaning 15 timesteps has passed since last time of seeing invader, then give up and start exploring
             if (timePassedAfterSeeingInvader > 15) {
+                timePassedAfterSeeingInvader = 0;
                 isChasing = false;
-                return makeMove(agent);
+                return frontierExploration.makeMove(this.agent);
             } else {
-                if (!checkInvader((visibleTiles))) {
-                    return frontierExploration.makeMove(this.agent);
-                } else {
-                    return chasing(agent, getInvader(visibleTiles).getAgentPosition());
-                }
+                return chasing(agent, visibleTiles, checkInvader(visibleTiles));
             }
         }
 
         // situation 3:
 
         // situation 3.1: Guard sees the target area first time
-        if (targetHasBeenReached && (situationStageOf3 == 1)) {
+        if (!isChasing && targetHasBeenReached && (situationStageOf3 == 1)) {
             System.out.println("3.1");
 
             Path path = findPath(agent, cornersOfStandardized, false);
@@ -314,7 +315,8 @@ public class CombinedGuard extends FrontierBasedExploration {
             patrolling = false;
             isChasing = true;
             situationStageOf4 = 2;
-            return chasing(agent, getInvader(visibleTiles).getAgentPosition());
+            situationStageOf3 = -1;
+            return chasing(agent, visibleTiles, checkInvader(visibleTiles));
         }
 
         // situation 4.2: Guard chasing invader while knowing where TA is
@@ -322,8 +324,10 @@ public class CombinedGuard extends FrontierBasedExploration {
             System.out.println("4.2");
 
             int temp = getDistanceToClosestCorner(map.getTile(x, y));
+            System.out.println("distance from closest corner: " + temp);
             if (temp > 15) { // if guard goes too far from TA return
                 // reseting params
+                System.out.println("help");
                 invaderSeen = false;
                 isChasing = false;
                 situationStageOf3 = 1;
@@ -332,15 +336,9 @@ public class CombinedGuard extends FrontierBasedExploration {
                 Path path = findPath(agent, cornersOfStandardized, false);
                 return findNextMoveDirection(agent, path.get(1));
             } else {
-                if (!checkInvader((visibleTiles))) {
-                    return frontierExploration.makeMove(this.agent);
-                } else {
-                    return chasing(agent, getInvader(visibleTiles).getAgentPosition());
-                }
+                return chasing(agent, visibleTiles, checkInvader(visibleTiles));
             }
         }
-
-        System.out.println("returning null, targetHasBeenReached: "+targetHasBeenReached+ "invaderSeen: "+isChasing);
         return null;
     }
 
@@ -408,44 +406,88 @@ public class CombinedGuard extends FrontierBasedExploration {
         return null;
     }
 
-    public DirectionEnum chasing(Agent agent, Tile intruder) {
+    public DirectionEnum chasing(Agent agent, ArrayList<Tile> vision, boolean thereIsIntruder) {
         int guardsX = agent.getX_position();
         int guardsY = agent.getY_position();
-        int intruderX = intruder.getX();
-        int intruderY = intruder.getY();
 
         ArrayList<DirectionEnum> dirs = new ArrayList<>();
 
-        if (guardsX < intruderX) {
-            System.out.println("East");
-            if (map.getTile(agent.getX_position() + 1, agent.getY_position()).isWalkable()) {
-                dirs.add(DirectionEnum.EAST);
-            }
-        } else if (guardsX > intruderX) {
-            System.out.println("West");
-            if (map.getTile(agent.getX_position() - 1, agent.getY_position()).isWalkable()) {
-                dirs.add(DirectionEnum.WEST);
-            }
-        }
+        if (thereIsIntruder) {
+            Tile intruderTile = getInvader(vision).getAgentPosition();
+            int intruderX = intruderTile.getX();
+            int intruderY = intruderTile.getY();
 
-        if (guardsY < intruderY) {
-            System.out.println("South");
-            if (map.getTile(agent.getX_position(), agent.getY_position() + 1).isWalkable()) {
-                dirs.add(DirectionEnum.SOUTH);
+            if (guardsX < intruderX) {
+                System.out.println("East");
+                if (map.getTile(agent.getX_position() + 1, agent.getY_position()).isWalkable()) {
+                    dirs.add(DirectionEnum.EAST);
+                }
+            } else if (guardsX > intruderX) {
+                System.out.println("West");
+                if (map.getTile(agent.getX_position() - 1, agent.getY_position()).isWalkable()) {
+                    dirs.add(DirectionEnum.WEST);
+                }
             }
-        } else if (guardsY > intruderY) {
-            System.out.println("North");
-            if (map.getTile(agent.getX_position(), agent.getY_position() - 1).isWalkable()) {
-                dirs.add(DirectionEnum.NORTH);
+
+            if (guardsY < intruderY) {
+                System.out.println("South");
+                if (map.getTile(agent.getX_position(), agent.getY_position() + 1).isWalkable()) {
+                    dirs.add(DirectionEnum.SOUTH);
+                }
+            } else if (guardsY > intruderY) {
+                System.out.println("North");
+                if (map.getTile(agent.getX_position(), agent.getY_position() - 1).isWalkable()) {
+                    dirs.add(DirectionEnum.NORTH);
+                }
+            }
+
+        } else { // meaning we lost vision of intruder, try to go in the way where last intruder was
+            if (checkIfWalkable(agent.getAgentPosition(), lastDirIntruderHasBeenSeen)) {
+                dirs.add(lastDirIntruderHasBeenSeen);
+            }
+            if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.getDirection(lastDirIntruderHasBeenSeen.getAngle() + 90))) {
+                dirs.add(DirectionEnum.getDirection(lastDirIntruderHasBeenSeen.getAngle() + 90));
+            }
+            if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.getDirection(lastDirIntruderHasBeenSeen.getAngle() - 90))) {
+                dirs.add(DirectionEnum.getDirection(lastDirIntruderHasBeenSeen.getAngle() - 90));
             }
         }
 
         if (!dirs.isEmpty()) {
-            System.out.println(dirs.size());
             return dirs.get(r.nextInt(dirs.size()));
         } else {
             return null;
         }
+    }
+
+    public boolean checkIfWalkable(Tile agentTile, DirectionEnum dir) {
+        int x = agentTile.getX();
+        int y = agentTile.getY();
+
+        if (dir == DirectionEnum.EAST) {
+            return (map.getTile(x + 1, y).isWalkable());
+        } else if (dir == DirectionEnum.WEST) {
+            return (map.getTile(x - 1, y).isWalkable());
+        } else if (dir == DirectionEnum.SOUTH) {
+            return (map.getTile(x, y + 1).isWalkable());
+        } else if (dir == DirectionEnum.NORTH) {
+            return (map.getTile(x, y - 1).isWalkable());
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "CombinedGuard{" +
+                "targetHasBeenReached=" + targetHasBeenReached +
+                ", invaderSeen=" + invaderSeen +
+                ", patrolling=" + patrolling +
+                ", useQL=" + useQL +
+                ", isChasing=" + isChasing +
+                ", timePassedAfterSeeingInvader=" + timePassedAfterSeeingInvader +
+                ", situationStageOf3=" + situationStageOf3 +
+                ", situationStageOf4=" + situationStageOf4 +
+                '}';
     }
 }
 
