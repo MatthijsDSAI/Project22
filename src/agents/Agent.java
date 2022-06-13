@@ -262,6 +262,10 @@ public abstract class Agent{
         return  targetArea;
     }
 
+    public int getNumberMarekr(int i){
+        return this.marker[i].getNumber_markers();
+    }
+
     public abstract Object getType();
 
     public abstract Color getColor();

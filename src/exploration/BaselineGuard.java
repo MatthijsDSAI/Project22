@@ -46,16 +46,17 @@ public class BaselineGuard extends FrontierBasedExploration{
         {
             if(halfway == 1)
             {
-                agent.addMarkers(0,map);
-                if(agent.getX_position()+1<agent.ownMap.getHorizontalSize())
-                {
-                    goalTile = agent.ownMap.getTile(agent.getX_position()+3, agent.getY_position());
-                }
-                else if(agent.getX_position()-1>0 && agent.ownMap.getTile(agent.getX_position()-3, agent.getY_position()).isWalkable()==true)
-                {
-                    goalTile = agent.ownMap.getTile(agent.getX_position()-3, agent.getY_position());
-                }
+                if(agent.getNumberMarekr(0)>0)
+                    agent.addMarkers(0,map);
                 else part=1;
+                if(agent.getX_position()+agent.getSpeed()<agent.ownMap.getHorizontalSize())
+                {
+                    goalTile = agent.ownMap.getTile(agent.getX_position()+agent.getSpeed(), agent.getY_position());
+                }
+                else if(agent.getX_position()-agent.getSpeed()>0 && agent.ownMap.getTile(agent.getX_position()-agent.getSpeed(), agent.getY_position()).isWalkable()==true)
+                {
+                    goalTile = agent.ownMap.getTile(agent.getX_position()-agent.getSpeed(), agent.getY_position());
+                }
             }
             else if(agent.getY_position()<agent.ownMap.getVerticalSize()/2)
                 goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()+1);
@@ -85,6 +86,7 @@ public class BaselineGuard extends FrontierBasedExploration{
             Color c = agent.ownMap.getTile(f.getX(),f.getY()).getColor();
             if(c==Color.RED){
                 //TO ADD % explored >= 50% don't follow this rule anymore
+                // Actually check frontiers
                 if(agent.getY_position()==agent.ownMap.getVerticalSize()/2 && ok ==0)
                     agent.setAngle((int) (agent.getAngle()+90));
                 //if(agent.getExploration())
