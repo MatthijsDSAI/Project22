@@ -17,7 +17,7 @@ public class FrontierBasedExploration extends Exploration{
     public LinkedList<Tile> exploredTiles;
     public Queue<Tile> frontierQueue;
     public Queue<Tile> BFSQueue;
-    public Path curPath;
+    public Path curPath = new Path();
     //public ArrayList<Tile> curPath;
     public boolean DEBUG = Scenario.config.DEBUG;
 

@@ -10,7 +10,7 @@ import utils.Path;
 public class BaselineGuard extends FrontierBasedExploration{
 
     Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER};
-    int ok=0, halfway=0, part =0, x1, x2;
+    int ok=0, halfway=0, part =0;
 
     public BaselineGuard(Agent agent, Map map) {
         super(agent, map);
@@ -47,17 +47,15 @@ public class BaselineGuard extends FrontierBasedExploration{
             if(halfway == 1)
             {
                 agent.addMarkers(0,map);
-                if(agent.getX_position()+3<agent.ownMap.getHorizontalSize() && agent.ownMap.getTile(agent.getX_position()+3, agent.getY_position()).isWalkable()==true)
+                if(agent.getX_position()+1<agent.ownMap.getHorizontalSize())
                 {
                     goalTile = agent.ownMap.getTile(agent.getX_position()+3, agent.getY_position());
-                    x1=agent.getX_position()+3;
                 }
-                else if(agent.getX_position()-3>0 && agent.ownMap.getTile(agent.getX_position()-3, agent.getY_position()).isWalkable()==true)
+                else if(agent.getX_position()-1>0 && agent.ownMap.getTile(agent.getX_position()-3, agent.getY_position()).isWalkable()==true)
                 {
                     goalTile = agent.ownMap.getTile(agent.getX_position()-3, agent.getY_position());
-                    x2=agent.getX_position()-3;
                 }
-                else if(x1>=agent.ownMap.getHorizontalSize() && x2<=0) part=1;
+                else part=1;
             }
             else if(agent.getY_position()<agent.ownMap.getVerticalSize()/2)
                 goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()+1);
