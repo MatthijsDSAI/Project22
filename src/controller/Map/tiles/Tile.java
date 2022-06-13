@@ -26,6 +26,7 @@ public abstract class Tile {
     private int y;
     private double sound;
     private boolean currentlyViewed = false;
+    private boolean isP=false;
 
     protected Tile(){}
 
@@ -110,7 +111,6 @@ public abstract class Tile {
                     return Color.TAN;
                 }
             }
-
             return c;
         }
     }
@@ -153,4 +153,8 @@ public abstract class Tile {
     public boolean equals(Tile tile){
         return this.getX()==tile.getX() && this.getY()== tile.getY();
     }
+
+    public void setIsPheromone(boolean b) {this.isP=b;}
+
+    public boolean getIsPheromone(){return this.isP;}
 }

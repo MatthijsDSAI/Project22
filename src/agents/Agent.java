@@ -189,6 +189,10 @@ public abstract class Agent{
                 ownMap.getTile(this.getX_position(), this.getY_position()).setColor(c);
                 map.getTile(this.getX_position(), this.getY_position()).setColor(c);
             }
+            else{
+                ownMap.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
+                map.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
+            }
             ownMap.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
             map.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
         }
@@ -199,9 +203,13 @@ public abstract class Agent{
     public void addMarkers(int i, Map map){
         if(marker[i].getNumber_markers()>0) {
             marker[i].setNumber_markers(marker[i].getNumber_markers() - 1);
-            if (c != null) {
+            if ( marker[i].getColor()!= null) {
                 ownMap.getTile(this.getX_position(), this.getY_position()).setColor(marker[i].getColor());
                 map.getTile(this.getX_position(), this.getY_position()).setColor(marker[i].getColor());
+            }
+            else {
+                ownMap.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
+                map.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
             }
             ownMap.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
             map.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
