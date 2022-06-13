@@ -118,6 +118,9 @@ public class CombinedGuard extends FrontierBasedExploration {
         // if guard sees TA set "targetHasBeenReached" true and never change back to false
         if (!targetHasBeenReached) {
             targetHasBeenReached = checkTargetArea(visibleTiles);
+            if(targetHasBeenReached) {
+                agent.updateTargetArea();
+            }
         }
 
         // this means we were chasing an intruder and have captured it, so go back to TA (situation 3.1)
@@ -136,7 +139,8 @@ public class CombinedGuard extends FrontierBasedExploration {
             if (DEBUG) {
                 System.out.println(frontierExploration.makeMove(this.agent).getDirection());
             }
-            return frontierExploration.makeMove(this.agent);
+            DirectionEnum dir = frontierExploration.makeMove(this.agent);
+            return dir;
         }
 
         // situation 2: guard has seen invader whilst not seeing TA, start to chase
@@ -176,16 +180,16 @@ public class CombinedGuard extends FrontierBasedExploration {
         if (!isChasing && targetHasBeenReached && (situationStageOf3 == 1)) {
             System.out.println("3.1");
 
-            Path path = findPath(agent, cornersOfStandardized, false);
-            if (path.size() == 2) { // setting to 1 so that guard is turned to right direction in situation 3.2 (so 1 move away from goal)
+            this.curPath = findPathTargetArea(agent, cornersOfStandardized, false);
+            if (this.curPath.size() == 2) { // setting to 1 so that guard is turned to right direction in situation 3.2 (so 1 move away from goal)
                 situationStageOf3 = 2;
                 previousDistToW = (x - westBoundaryOfStandardized);
                 previousDistToE = (x - eastBoundaryOfStandardized);
                 previousDistToN = (y - northBoundaryOfStandardized);
                 previousDistToS = (y - southBoundaryOfStandardized);
             }
-            if (DEBUG) System.out.println(findNextMoveDirection(agent, path.get(1)));
-            return findNextMoveDirection(agent, path.get(1));
+            if (DEBUG) System.out.println(findNextMoveDirection(agent, this.curPath.get(1)));
+            return findNextMoveDirection(agent, this.curPath.get(1));
         }
 
         // situation 3.3: Guard is going to the corner of standardized area
@@ -339,6 +343,7 @@ public class CombinedGuard extends FrontierBasedExploration {
                 return chasing(agent, visibleTiles, checkInvader(visibleTiles));
             }
         }
+        System.out.println("got here");
         return null;
     }
 
