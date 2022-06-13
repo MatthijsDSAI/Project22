@@ -87,7 +87,6 @@ public class Intruder extends Agent{
     public boolean completedObjective(){
         numOfTimestepsInTargetArea++;
         return (numberOfTargetAreaEntries>1) || (numOfTimestepsInTargetArea>2);
-
     }
 
     public void incrementTargetEntries(int t){

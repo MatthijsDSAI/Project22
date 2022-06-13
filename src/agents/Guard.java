@@ -33,7 +33,7 @@ public class Guard extends Agent{
         {
             Color c = ownMap.getTile(f.getX(),f.getY()).getColor();
             if(c==Color.RED){
-                //if()
+              //  if (ownMap.getVerticalSize()/2 == ((m * this.getX_position()) + d))
                 System.out.println("Reached the half of the map.");
             }
             else if(c==Color.WHITE){

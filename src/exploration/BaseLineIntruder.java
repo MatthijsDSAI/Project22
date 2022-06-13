@@ -61,5 +61,4 @@ public class BaseLineIntruder extends FrontierBasedExploration {
         }
         return bestFrontier;
     }
-
 }

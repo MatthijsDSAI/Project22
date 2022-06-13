@@ -197,8 +197,6 @@ public abstract class Agent{
     }
 
     public void addMarkers(int i, Map map){
-        // marker[i].addMarker(this, c, map);
-        System.out.println("Marker " + c.toString() +" placed at " + this.getX_position() + " "+ this.getY_position());
         if(marker[i].getNumber_markers()>0) {
             marker[i].setNumber_markers(marker[i].getNumber_markers() - 1);
             if (c != null) {

@@ -11,15 +11,13 @@ import utils.Path;
 public class BaselineGuard extends FrontierBasedExploration{
 
     Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER};
+    int ok=0, halfway=0, part =0, x1, x2;
 
     public BaselineGuard(Agent agent, Map map) {
         super(agent, map);
         //System.out.println("Creating markers...");
-//        agent.createMarkers(5, c);
+        agent.createMarkers(5, c);
         //System.out.println("Markers created");
-//        System.out.println("Adding one marker...");
-//        agent.addMarkers(3, c[3], map);
-//        System.out.println("Marker added");
     }
 
     @Override
@@ -41,6 +39,30 @@ public class BaselineGuard extends FrontierBasedExploration{
                 goalTile = tile;
             }
         }
+        if(goalTile == null && part ==0)
+        {
+            if(halfway == 1)
+            {
+                agent.addMarkers(0,map);
+                if(agent.getX_position()+3<agent.ownMap.getHorizontalSize())
+                {
+                    goalTile = agent.ownMap.getTile(agent.getX_position()+3, agent.getY_position());
+                    x1=agent.getX_position()+3;
+                }
+                else if(agent.getX_position()-3>0)
+                {
+                    goalTile = agent.ownMap.getTile(agent.getX_position()-3, agent.getY_position());
+                    x2=agent.getX_position()-3;
+                }
+                else if(x1>=agent.ownMap.getHorizontalSize() && x2<=0) part=1;
+            }
+            else if(agent.getY_position()<agent.ownMap.getVerticalSize()/2)
+                goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()+1);
+            else if(agent.getY_position()>agent.ownMap.getVerticalSize()/2)
+                goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()-1);
+            else halfway=1;
+
+        }
         if(goalTile != null) {
             Path path = findPath(agent, goalTile);
             if(path == null) {
@@ -48,12 +70,30 @@ public class BaselineGuard extends FrontierBasedExploration{
             }
             return findNextMoveDirection(agent, path.get(1));
         }
-
         if(frontierQueue.isEmpty()){
             return null;
         }
         goalTile = updateGoal(agent, updated); // update the goal tile for the agent
         DirectionEnum dir = findNextMoveDirection(agent, goalTile);
         return dir;
+    }
+
+    public void MarkerInterpretation(Agent agent){
+        Tile f = agent.findMarker();
+        if(f!=null)
+        {
+            Color c = agent.ownMap.getTile(f.getX(),f.getY()).getColor();
+            if(c==Color.RED){
+                //TO ADD
+                // % explored >= 50%
+                if(agent.getY_position()==agent.ownMap.getVerticalSize()/2 && ok ==0)
+                    agent.setAngle((int) (agent.getAngle()+90));
+                //if(agent.getExploration())
+                System.out.println("Reached the half of the map.");
+            }
+            else if(c==Color.WHITE){
+                System.out.println("An intruder was caught");
+            }
+        }
     }
 }
