@@ -4,13 +4,22 @@ import agents.Agent;
 import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
+import javafx.scene.paint.Color;
 import utils.DirectionEnum;
 import utils.Path;
 
 public class BaselineGuard extends FrontierBasedExploration{
 
+    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER};
+
     public BaselineGuard(Agent agent, Map map) {
         super(agent, map);
+        //System.out.println("Creating markers...");
+//        agent.createMarkers(5, c);
+        //System.out.println("Markers created");
+//        System.out.println("Adding one marker...");
+//        agent.addMarkers(3, c[3], map);
+//        System.out.println("Marker added");
     }
 
     @Override

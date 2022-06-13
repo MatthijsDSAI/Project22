@@ -145,15 +145,71 @@ public abstract class Agent{
     public void setAgentPosition(Tile tile){
         agentPosition = tile;
     }
-    
-    public void createMarkers(int number_markers, int distance) {
+
+    public void createMarkers(int number_markers, int distance, Color[] c) {
         for(int i=0;i<5;i++)
-            marker[i].setSpecifics(number_markers,distance);
+        {
+            marker[i] = new Marker(c[i], number_markers);
+            if(c==null)
+                marker[i].setDistance(distance);
+            //System.out.println("Marker created: " + marker[i].toString());
+        }
     }
-    
+
+    public void createMarkers(int number_markers, Color[] c) {
+        for(int i=0;i<5;i++)
+        {
+            marker[i] = new Marker(c[i], number_markers);
+            //System.out.println("Marker created: " + marker[i].getColor());
+        }
+    }
+
+    public Tile findMarker(){
+        //this.computeVisibleTiles(ownMap);
+        ArrayList<Tile> visibleTiles = this.getVisibleTiles();
+        for(Tile t : visibleTiles){ // return a list of markers
+            //if(t.getY() == tile.getY() && t.getX()== tile.getX())
+            if(t.getHasMarker()==true) {
+               // mx_pos=t.getX();
+                //my_pos=t.getY();
+                System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
+                return t;
+            }
+        }
+        System.out.println("Didn't see a marker yet");
+        return null;
+    }
+
     public void addMarkers(int i, Color c, Map map){
-        marker[i].addMarker(this, c, map);
-        marker[i].setNumber_markers(marker[i].getNumber_markers()-1);
+        // marker[i].addMarker(this, c, map);
+        System.out.println("Marker " + c.toString() +" placed at " + this.getX_position() + " "+ this.getY_position());
+        if(marker[i].getNumber_markers()>0) {
+            marker[i].setNumber_markers(marker[i].getNumber_markers() - 1);
+            if (c != null) {
+                ownMap.getTile(this.getX_position(), this.getY_position()).setColor(c);
+                map.getTile(this.getX_position(), this.getY_position()).setColor(c);
+            }
+            ownMap.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
+            map.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
+        }
+        else
+            System.out.println("Markers are finished");
+    }
+
+    public void addMarkers(int i, Map map){
+        // marker[i].addMarker(this, c, map);
+        System.out.println("Marker " + c.toString() +" placed at " + this.getX_position() + " "+ this.getY_position());
+        if(marker[i].getNumber_markers()>0) {
+            marker[i].setNumber_markers(marker[i].getNumber_markers() - 1);
+            if (c != null) {
+                ownMap.getTile(this.getX_position(), this.getY_position()).setColor(marker[i].getColor());
+                map.getTile(this.getX_position(), this.getY_position()).setColor(marker[i].getColor());
+            }
+            ownMap.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
+            map.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
+        }
+        else
+            System.out.println("Markers are finished");
     }
 
     public Tile getAgentPosition(){

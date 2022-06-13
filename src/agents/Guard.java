@@ -13,17 +13,33 @@ import utils.Utils;
 
 public class Guard extends Agent{
 
-    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, null};
+    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER};
     int i = 0;
 
     public Guard(Tile tile){
         super(tile);
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
+        this.createMarkers(5, c);
     }
 
     @Override
     public void addMarkers(int i, Color c, Map map) {
         super.addMarkers(i, c, map);
+    }
+
+    public void MarkerInterpretation(){
+        Tile f = findMarker();
+        if(f!=null)
+        {
+            Color c = ownMap.getTile(f.getX(),f.getY()).getColor();
+            if(c==Color.RED){
+                //if()
+                System.out.println("Reached the half of the map.");
+            }
+            else if(c==Color.WHITE){
+                System.out.println("An intruder was caught");
+            }
+        }
     }
 
     @Override
@@ -45,7 +61,6 @@ public class Guard extends Agent{
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");
-
         }
     }
 
