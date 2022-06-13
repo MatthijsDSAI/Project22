@@ -23,6 +23,7 @@ public class PlayerSelectionComboBox extends HBox {
         this.intruder = new PlayerChoiceBox(this, "intruder");
         intruder.getItems().add("RandomExploration");
         intruder.getItems().add("BaseLineIntruder");
+        intruder.getItems().add("CombinedIntruder");
         getChildren().addAll(guard, intruder);
     }
 
