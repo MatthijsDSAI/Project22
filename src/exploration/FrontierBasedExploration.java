@@ -237,7 +237,7 @@ public class FrontierBasedExploration extends Exploration{
             path = queue.remove(findShortestPath(queue, goal));
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
-            if (lastTile.isWalkable() && goal.contains(lastTile)) {
+            if ((lastTile.isWalkable() || lastTile.hasAgent()) && goal.contains(lastTile)) {
                 return path;
             }
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(lastTile);
@@ -245,10 +245,17 @@ public class FrontierBasedExploration extends Exploration{
                 if(path.contains(tile) || tilesSeen.contains(tile)) {
                     continue;
                 }
-                if (!path.contains(tile) && tile.isWalkable()) {
-                    Path newPath = new Path(path);
-                    newPath.add(tile);
-                    queue.offer(newPath);
+                if (!path.contains(tile)) {
+                    if(tile.hasAgent()) {
+                        Path newPath = new Path(path);
+                        newPath.add(tile);
+                        queue.offer(newPath);
+                    }
+                    else if (tile.isWalkable()) {
+                        Path newPath = new Path(path);
+                        newPath.add(tile);
+                        queue.offer(newPath);
+                    }
                 }
             }
         }

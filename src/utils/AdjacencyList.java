@@ -71,10 +71,10 @@ public class AdjacencyList {
         int maxRow = tiles.length;
         int maxCol = tiles[0].length;
 
-        if(row-1 >= 0) neighbours.add(tiles[row-1][col]);
-        if(row+1 <= maxRow) neighbours.add(tiles[row+1][col]);
-        if(col-1 >= 0) neighbours.add(tiles[row][col-1]);
-        if(col+1 <= maxCol) neighbours.add(tiles[row][col+1]);
+        if(row-1 > 0) neighbours.add(tiles[row-1][col]);
+        if(row+1 < maxRow) neighbours.add(tiles[row+1][col]);
+        if(col-1 > 0) neighbours.add(tiles[row][col-1]);
+        if(col+1 < maxCol) neighbours.add(tiles[row][col+1]);
 
         return neighbours;
     }
