@@ -27,7 +27,7 @@ public class MapUpdater {
         }
         Tile fromTile = null;
         Tile toTile = null;
-        System.out.println(direction);
+        System.out.println("new direction: " + direction);
 
         if(agent.getAngle() != direction.getAngle()) {
             agent.rotate(direction.getAngle());
@@ -72,7 +72,7 @@ public class MapUpdater {
             agent.setAgentPosition(toTile);
         }
         else{
-            throw new RuntimeException("Can not move to tile " + toTile.getX() + ", " + toTile.getY());
+            throw new RuntimeException("Can not move to tile x:" + toTile.getX() + ", y:" + toTile.getY());
         }
     }
 
@@ -85,7 +85,7 @@ public class MapUpdater {
         for(int i = guards.size()-1; i>=0; i--){
             Guard guard = guards.get(i);
             if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
-                Utils.sleep(20);
+                Utils.sleep(0);
                 Exploration explorer = guard.getExploration();
                 DirectionEnum dir = explorer.makeMove(guard);
                 MapUpdater.moveAgent(map, guard, dir);
@@ -102,7 +102,7 @@ public class MapUpdater {
         for(int i = intruders.size()-1; i>=0; i--){
             Intruder intruder = intruders.get(i);
             if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
-                Utils.sleep(20);
+                Utils.sleep(0);
                 Exploration explorer = intruder.getExploration();
                 DirectionEnum dir = explorer.makeMove(intruder);
                 MapUpdater.moveAgent(map, intruder, dir);

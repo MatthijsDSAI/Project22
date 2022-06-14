@@ -43,6 +43,7 @@ public class FrontierBasedExploration extends Exploration{
         if(frontierQueue.isEmpty()) {
             return null;
         }
+
         Tile goalTile = updateGoal(agent, updated); // update the goal tile for the agent
         DirectionEnum dir = findNextMoveDirection(agent, goalTile);
         //Utils.sleep(100);

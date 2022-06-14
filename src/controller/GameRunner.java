@@ -22,8 +22,8 @@ public class GameRunner {
     private Scenario scenario;
     private int gameMode;
     private GraphicsConnector gc;
-    private String guardExploration = "BaseLineIntruder";
-    private String intruderExploration = "BaseLineGuard";
+    private String guardExploration = "CombinedGuard";
+    private String intruderExploration = "BaseLineIntruder";
     private Map map;
     private int t;
     private int guardWins = 0;
@@ -75,7 +75,7 @@ public class GameRunner {
 
     public void run(int gameMode, int numberOfGames) {
         if(!Scenario.config.GUI){
-            init("RandomExploration", "RandomExploration");
+            init(guardExploration, intruderExploration);
         }
         Thread t = new Thread(() -> {
             while(gamesPlayed<numberOfGames) {
@@ -140,7 +140,9 @@ public class GameRunner {
         if(gamesPlayed>0){
             initMap();
             init(guardExploration, intruderExploration);
-            gc.setMap(map);
+            if(config.GUI){
+                gc.setMap(map);
+            }
         }
     }
 

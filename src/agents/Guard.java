@@ -43,7 +43,7 @@ public class Guard extends Agent{
                 break;
             case "CombinedGuard": // 10 12 14 16; x: 9 - 15, y: 11 - 17
                 int[] temp = Scenario.config.getStandardizedAreaBoundaries();
-                int size = 3; // this defines the area difference between the standardized area and TA
+                int size = 5; // this defines the area difference between the standardized area and TA
 
                 int northBoundaryOfStandardized = temp[1] - size;
                 int southBoundaryOfStandardized = temp[3] + size;
