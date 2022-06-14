@@ -41,9 +41,6 @@ public class MapUpdater {
         else{
             fromTile = agent.getAgentPosition();
             toTile = Map.getTileFromDirection(map, agent.getAgentPosition(), direction);
-            System.out.println("Agent position: x: " + agent.getAgentPosition().getX() + ", y: " + agent.getAgentPosition().getY());
-            System.out.println();
-            if (toTile.hasAgent()) System.out.println("Here is agent, at x:  " + toTile.getX() + ", y: " + toTile.getY());
             changeTiles(map, agent, fromTile, toTile);
         }
         assert toTile != null;
