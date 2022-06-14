@@ -27,6 +27,8 @@ public abstract class Tile {
     private double sound;
     private boolean currentlyViewed = false;
 
+    private boolean isStandardizedTA = false;
+
     protected Tile(){}
 
     public Tile(boolean exploredByDefault, boolean walkable, boolean seeThrough, Color c, Tile type, Agent agent) {
@@ -122,6 +124,14 @@ public abstract class Tile {
     // calculates the Manhattan distance between this and other
     public int manhattanDist(Tile other) {
         return (Math.abs(this.getX() - other.getX()) + Math.abs(this.getY() - other.getY()));
+    }
+
+    public boolean isStandardizedTA() {
+        return isStandardizedTA;
+    }
+
+    public void setStandardizedTA(boolean standardizedTA) {
+        isStandardizedTA = standardizedTA;
     }
 
     public void setColor(Color c) {this.c = c;}

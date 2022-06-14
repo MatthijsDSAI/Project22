@@ -82,7 +82,7 @@ public class QLGuard extends FrontierBasedExploration{
             for (int j = 0; j < numberOfActions; j++) {
                 qTable[i][j] = Double.parseDouble(values[i][j]);
             }
-            System.out.println(i);
+            // System.out.println(i);
         }
         return qTable;
     }
