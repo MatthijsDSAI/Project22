@@ -23,7 +23,7 @@ public class CombinedGuard extends FrontierBasedExploration {
 
     private final Queue<Tile> cornersOfStandardized = new LinkedList<>();
 
-    private boolean useQL = false;
+    private boolean useQL = true;
     private boolean isChasing = false;
     private int timePassedAfterSeeingInvader = 0;
     private int situationStageOf3 = 1;
@@ -437,11 +437,8 @@ public class CombinedGuard extends FrontierBasedExploration {
         if (!dirs.isEmpty()) {
             return dirs.get(r.nextInt(dirs.size()));
         } else {
-            System.out.println("chasing returns null");
-            System.out.println("guard x: " + guardsX + ", y: " + guardsY);
-            Tile intruderTile = getInvader(vision).getAgentPosition();
-            System.out.println("intruder x: " + intruderTile.getX() + ", y: " + intruderTile.getY());
-            return null;
+            System.out.println("returning random move");
+            return randomMove(agent.getAgentPosition());
         }
     }
 

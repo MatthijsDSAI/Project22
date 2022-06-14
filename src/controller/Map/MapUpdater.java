@@ -41,6 +41,9 @@ public class MapUpdater {
         else{
             fromTile = agent.getAgentPosition();
             toTile = Map.getTileFromDirection(map, agent.getAgentPosition(), direction);
+            System.out.println("Agent position: x: " + agent.getAgentPosition().getX() + ", y: " + agent.getAgentPosition().getY());
+            System.out.println();
+            if (toTile.hasAgent()) System.out.println("Here is agent, at x:  " + toTile.getX() + ", y: " + toTile.getY());
             changeTiles(map, agent, fromTile, toTile);
         }
         assert toTile != null;
@@ -82,6 +85,9 @@ public class MapUpdater {
      */
     public static void moveGuards(Map map, int j) {
         ArrayList<Guard> guards = map.getGuards();
+        System.out.println();
+        System.out.println();
+        System.out.println("Moving guards");
         for(int i = guards.size()-1; i>=0; i--){
             Guard guard = guards.get(i);
             if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
