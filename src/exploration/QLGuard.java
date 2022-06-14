@@ -39,7 +39,7 @@ public class QLGuard extends FrontierBasedExploration{
         double[][] qTable = getQTable();
 
         int action = decideAction(qTable, currentState);
-
+        //int action = movesQTable[currentState];
         DirectionEnum dir = actionToDirection(action);
         return dir;
     }
