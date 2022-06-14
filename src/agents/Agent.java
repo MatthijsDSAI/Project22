@@ -134,6 +134,10 @@ public abstract class Agent{
         this.hasRotatedOnPastIteration = false;
     }
 
+    public boolean updateTargetArea() {
+        return true;
+    }
+
     public boolean isExplored(Tile tile) {
         if(ownMap.getTile(tile.getX(), tile.getY()) != null) return true;
         return false;

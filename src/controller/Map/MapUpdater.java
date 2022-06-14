@@ -27,6 +27,7 @@ public class MapUpdater {
         }
         Tile fromTile = null;
         Tile toTile = null;
+        System.out.println(direction);
 
         if(agent.getAngle() != direction.getAngle()) {
             agent.rotate(direction.getAngle());

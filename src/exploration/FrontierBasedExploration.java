@@ -15,7 +15,7 @@ public class FrontierBasedExploration extends Exploration{
     public LinkedList<Tile> exploredTiles;
     public Queue<Tile> frontierQueue;
     public Queue<Tile> BFSQueue;
-    public Path curPath;
+    public Path curPath = new Path();
     //public ArrayList<Tile> curPath;
     public boolean DEBUG = Scenario.config.DEBUG;
 
@@ -157,6 +157,64 @@ public class FrontierBasedExploration extends Exploration{
             }
         }
         return null;
+    }
+
+    public Path findPathTargetArea(Agent agent, Queue<Tile> goalTiles, Boolean frontierMode) {
+        Tile startTile = agent.getAgentPosition();          // Determine the starting tile
+        // Create the path queue and add the first path containing the starting tile
+        LinkedList<Path> pathQueue = new LinkedList<>();
+        Path path = new Path();
+        path.add(startTile);
+        pathQueue.add(path);
+        LinkedList<Tile> tilesSeen = new LinkedList<>(); // List containing the tiles which have already been seen in search
+
+        // loop over pathQueue until it is empty
+        while(!pathQueue.isEmpty()) {
+            // remove the shortest path from the current pathQueue
+            path = pathQueue.remove(findShortestPath(pathQueue, goalTiles));
+            // get the last tile from the shortest path, add it to the tiles seen and check if it is a frontier
+            Tile lastTile = path.getLast();
+            tilesSeen.add(lastTile);
+            if (frontierMode && lastTile.isWalkable() && isFrontier(lastTile) && goalTiles.contains(lastTile) && startTile != lastTile) {
+                return path; // if current path is a path to a frontier return that path
+            }
+            else if (!frontierMode && lastTile.isWalkable() && goalTiles.contains(lastTile) && startTile != lastTile) {
+                return path; // if current path is a path to a frontier return that path
+            }
+            // get the tiles adjacent to the current tile and loop over them
+            LinkedList<Tile> curAdjacencyList = getNeighbours(lastTile);
+            for (Tile tile : curAdjacencyList) {
+                if(path.contains(tile) || tilesSeen.contains(tile)) {
+                    continue; // if the tile has already been seen or is already in the path continue
+                }
+                if (!path.contains(tile) && tile.isWalkable()) {
+                    tilesSeen.add(tile);
+                    // if the tile is has not been seen yet and is walkable create a new path and add it to the queue
+                    Path newPath = new Path(path);
+                    newPath.add(tile);
+                    pathQueue.offer(newPath);
+                }
+            }
+        }
+        return null;
+    }
+
+    private LinkedList<Tile> getNeighbours(Tile tile) {
+        LinkedList<Tile> neighbours = new LinkedList<>();
+
+        Tile[][] tiles = map.getTiles();
+
+        int row = tile.getY();
+        int col = tile.getX();
+        int maxRow = tiles.length;
+        int maxCol = tiles[0].length;
+
+        if(row-1 >= 0) neighbours.add(tiles[row-1][col]);
+        if(row+1 <= maxRow) neighbours.add(tiles[row+1][col]);
+        if(col-1 >= 0) neighbours.add(tiles[row][col-1]);
+        if(col+1 <= maxCol) neighbours.add(tiles[row][col+1]);
+
+        return neighbours;
     }
 
     /**
