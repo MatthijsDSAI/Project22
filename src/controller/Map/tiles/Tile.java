@@ -80,10 +80,14 @@ public abstract class Tile {
     }
 
     public void addAgent(Agent agent) {
+        this.setWalkable(false);
         this.agent = agent;
     }
 
-    public void removeAgent() {this.agent = null;}
+    public void removeAgent() {
+        this.setWalkable(true);
+        this.agent = null;
+    }
 
     public boolean hasAgent() {return (agent != null);}
 
