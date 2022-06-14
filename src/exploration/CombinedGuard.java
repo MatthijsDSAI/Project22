@@ -327,8 +327,20 @@ public class CombinedGuard extends FrontierBasedExploration {
             // situation 3.3: Guard is patrolling along the border of standardized area by using QL
             if (patrolling && !invaderSeen) {
                 System.out.println("3.3: QL patrolling");
-
-                return qlGuard.makeMove(agent);
+                List<Integer> invalidMoves = new ArrayList<>();
+                if(map.getTile(agent.getX_position()-1, agent.getY_position()).hasAgent())
+                    if(map.getTile(agent.getX_position()-1, agent.getY_position()).getAgent().equals("Guard"))
+                        invalidMoves.add(0);
+                if(map.getTile(agent.getX_position(), agent.getY_position()+1).hasAgent())
+                    if(map.getTile(agent.getX_position(), agent.getY_position()+1).getAgent().equals("Guard"))
+                        invalidMoves.add(1);
+                if(map.getTile(agent.getX_position()+1, agent.getY_position()).hasAgent())
+                    if(map.getTile(agent.getX_position()+1, agent.getY_position()).getAgent().equals("Guard"))
+                        invalidMoves.add(2);
+                if(map.getTile(agent.getX_position(), agent.getY_position()-1).hasAgent())
+                    if(map.getTile(agent.getX_position(), agent.getY_position()-1).getAgent().equals("Guard"))
+                        invalidMoves.add(3);
+                return qlGuard.makeMove(agent, invalidMoves);
             }
         }
 
