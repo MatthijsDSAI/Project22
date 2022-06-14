@@ -44,6 +44,45 @@ public class QLGuard extends FrontierBasedExploration{
         return dir;
     }
 
+    public DirectionEnum makeMove(Agent agent, List<Integer> invalidMoves) {
+        Tile curTile = agent.getAgentPosition();
+        int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
+        visibleTiles = agent.getVisibleTiles();
+
+        //get qtable from file
+        int[] movesQTable = getMovesQTable();
+        double[][] qTable = getQTable();
+
+        int action = decideSingleAction(getActions(qTable, currentState),invalidMoves);
+
+        DirectionEnum dir = actionToDirection(action);
+        return dir;
+    }
+
+    public double[] getActions(double[][] qTable, int currentState){
+        return qTable[currentState];
+    }
+
+    public int decideSingleAction(double[] moveValues, List<Integer> invalidMoves){
+        //remove invalid moves
+        for (int i = 0; i < invalidMoves.size(); i++) {
+            moveValues[invalidMoves.get(i)] = 0.0;
+        }
+        Random rand = new Random();
+        double total = 0.0;
+        for (int i = 0; i < numberOfActions; i++) {
+            total += moveValues[i];
+        }
+        double r = rand.nextDouble()*total;
+        double sum = 0.0;
+        for (int i = 0; i < numberOfActions; i++) {
+            sum += moveValues[i];
+            if(r<=sum) return i;
+        }
+        //if all moves are invalid
+        return -1;
+    }
+
     private int decideAction(double[][] qTable, int currentState) {
         Random rand = new Random();
         double total = 0.0;
