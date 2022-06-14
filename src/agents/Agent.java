@@ -16,6 +16,7 @@ import utils.Utils;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class Agent{
     double audiostdeviation;
@@ -131,6 +132,10 @@ public abstract class Agent{
             tile.setCurrentlyViewed(true);
         }
         this.hasRotatedOnPastIteration = false;
+    }
+
+    public boolean updateTargetArea() {
+        return true;
     }
 
     public boolean isExplored(Tile tile) {
@@ -256,6 +261,32 @@ public abstract class Agent{
             }
         }
         return hasFoundTargetArea;
+    }
+
+    @Override
+    public String toString() {
+        return "Agent{" +
+                "audiostdeviation=" + audiostdeviation +
+                ", x_position=" + x_position +
+                ", y_position=" + y_position +
+                ", angle=" + angle +
+                ", a_name='" + a_name + '\'' +
+                ", baseSpeed=" + baseSpeed +
+                ", soundproduced=" + soundproduced +
+                ", isSprinting=" + isSprinting +
+                ", ownMap=" + ownMap +
+                ", visibleTiles=" + visibleTiles +
+                ", marker=" + Arrays.toString(marker) +
+                ", agentPosition=" + agentPosition +
+                ", exploration=" + exploration +
+                ", c=" + Arrays.toString(c) +
+                ", hearingTiles=" + hearingTiles +
+                ", startingTile=" + startingTile +
+                ", hasFoundTargetArea=" + hasFoundTargetArea +
+                ", targetArea=" + targetArea +
+                ", intermediateAngle=" + intermediateAngle +
+                ", hasRotatedOnPastIteration=" + hasRotatedOnPastIteration +
+                '}';
     }
 
     public Tile getTargetArea(){

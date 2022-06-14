@@ -3,10 +3,7 @@ package agents;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
-import exploration.BaseLineIntruder;
-import exploration.Exploration;
-import exploration.FrontierBasedExploration;
-import exploration.RandomExploration;
+import exploration.*;
 import javafx.scene.paint.Color;
 
 public class Intruder extends Agent{
@@ -78,6 +75,9 @@ public class Intruder extends Agent{
                 break;
             case "BaseLineIntruder":
                 this.exploration = new BaseLineIntruder(this, map);
+                break;
+            case "CombinedIntruder":
+                this.exploration = new CombinedIntruder(this, map);
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");

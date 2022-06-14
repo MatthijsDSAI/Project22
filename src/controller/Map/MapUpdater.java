@@ -9,6 +9,7 @@ import controller.Map.tiles.*;
 import controller.Scenario;
 import controller.TelePortal;
 import exploration.Exploration;
+import javafx.scene.paint.Color;
 import utils.DirectionEnum;
 import utils.Utils;
 
@@ -26,6 +27,7 @@ public class MapUpdater {
         }
         Tile fromTile = null;
         Tile toTile = null;
+        System.out.println(direction);
 
         if(agent.getAngle() != direction.getAngle()) {
             agent.rotate(direction.getAngle());
@@ -60,6 +62,12 @@ public class MapUpdater {
 
             Noise.removeNoises(map, map.getTile(fromTile.getX(),fromTile.getY()));
             Noise.addNoises(map, map.getTile(toTile.getX(),toTile.getY()));
+
+            map.getTile(fromTile.getX(),fromTile.getY()).setColor(Color.BLUEVIOLET);
+
+            if (agent.getType().equals("Intruder")) {
+                map.getTile(fromTile.getX(),fromTile.getY()).setColor(Color.CHARTREUSE);
+            }
 
             agent.setAgentPosition(toTile);
         }
@@ -111,7 +119,7 @@ public class MapUpdater {
         ArrayList<Tile> tiles = guard.getVisibleTiles();
         for(Tile tile: tiles){
             if(tile.hasAgent() && tile.getAgent().getType().equals("Intruder")){
-                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile)<=1){
+                if(Utils.distanceBetweenTiles(guard.getAgentPosition(), tile) < 2){
                     map.getIntruders().remove((Intruder)tile.getAgent());
                 }
             }

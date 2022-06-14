@@ -3,11 +3,9 @@ package agents;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
-import exploration.BaselineGuard;
-import exploration.Exploration;
-import exploration.FrontierBasedExploration;
-import exploration.RandomExploration;
+import exploration.*;
 import javafx.scene.paint.Color;
+import utils.Config;
 import utils.DirectionEnum;
 import utils.Utils;
 
@@ -58,6 +56,34 @@ public class Guard extends Agent{
                 break;
             case "BaseLineGuard":
                 this.exploration = new BaselineGuard(this, map);
+                break;
+            case "CombinedGuard": // 10 12 14 16; x: 9 - 15, y: 11 - 17
+                int[] temp = Scenario.config.getStandardizedAreaBoundaries();
+                int size = 3; // this defines the area difference between the standardized area and TA
+
+                int northBoundaryOfStandardized = temp[1] - size;
+                int southBoundaryOfStandardized = temp[3] + size;
+                int westBoundaryOfStandardized = temp[0] - size;
+                int eastBoundaryOfStandardized = temp[2] + size;
+
+                // adding Standardized Area to Map
+                for (int i = westBoundaryOfStandardized; i < eastBoundaryOfStandardized; i++) {
+                    map.getTile(i, northBoundaryOfStandardized).setStandardizedTA(true);
+                }
+                for (int i = northBoundaryOfStandardized; i < southBoundaryOfStandardized; i++) {
+                    map.getTile(eastBoundaryOfStandardized, i).setStandardizedTA(true);
+                }
+                for (int i = eastBoundaryOfStandardized; i > westBoundaryOfStandardized; i--) {
+                    map.getTile(i, southBoundaryOfStandardized).setStandardizedTA(true);
+                }
+                for (int i = southBoundaryOfStandardized; i > northBoundaryOfStandardized; i--) {
+                    map.getTile(westBoundaryOfStandardized, i).setStandardizedTA(true);
+                }
+
+                this.exploration = new CombinedGuard(this, map, temp[1] - size, temp[3] + size, temp[0] - size, temp[2] + size);
+                break;
+            case "QLGuard":
+                this.exploration = new QLGuard(this, map);
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");

@@ -1,21 +1,44 @@
-utils/Config.java
- utils.Config
+utils/Position.java
+ utils.Position
+controller/TelePortal.java
+ controller.TelePortal
+mapgenerator/MapDrawer.java
+ mapgenerator.MapDrawer
+controller/GameMode.java
+ controller.GameMode
 controller/Hearing/Noise.java
  controller.Hearing.Noise
-exploration/FrontierBasedExploration.java
- exploration.FrontierBasedExploration
-controller/Map/tiles/Wall.java
- controller.Map.tiles.Wall
+mapgenerator/SimpleMapReader.java
+ mapgenerator.SimpleMapReader
+utils/Config.java
+ utils.Config
+test/AngleTest.java
+ AngleTest
+utils/DirectionEnum.java
+ utils.DirectionEnum
+controller/Scenario.java
+ controller.Scenario
+controller/Area.java
+ controller.Area
+GUI/StartScreen.java
+ GUI.StartScreen
+controller/GameRunner.java
+ controller.GameRunner
+controller/Visibility/Visibility.java
+ controller.Visibility.Visibility
+controller/Map/tiles/Tile.java
+ controller.Map.tiles.Tile
 exploration/RandomExploration.java
  exploration.RandomExploration
 controller/Map/tiles/SpawnAreaGuards.java
  controller.Map.tiles.SpawnAreaGuards
-utils/Path.java
- utils.Path
-test/AngleTest.java
- AngleTest
-controller/Map/tiles/Shaded.java
- controller.Map.tiles.Shaded
+GUI/MapGui.java
+ GUI.MapGui
+ GUI.MapGui$1
+utils/Utils.java
+ utils.Utils
+exploration/QLGuard.java
+ exploration.QLGuard
 controller/Map/tiles/SpawnAreaIntruders.java
  controller.Map.tiles.SpawnAreaIntruders
 agents/Marker.java
@@ -24,69 +47,52 @@ exploration/Qlearning.java
  exploration.Qlearning
 exploration/BaseLineIntruder.java
  exploration.BaseLineIntruder
-exploration/BaselineGuard.java
- exploration.BaselineGuard
+controller/GraphicsConnector.java
+ controller.GraphicsConnector
 exploration/Exploration.java
  exploration.Exploration
-mapgenerator/MapDrawer.java
- mapgenerator.MapDrawer
-controller/Map/tiles/TeleportalTile.java
- controller.Map.tiles.TeleportalTile
 controller/Map/tiles/TargetArea.java
  controller.Map.tiles.TargetArea
-utils/Utils.java
- utils.Utils
-controller/TelePortal.java
- controller.TelePortal
-controller/GameMode.java
- controller.GameMode
-utils/DirectionEnum.java
- utils.DirectionEnum
+GUI/PlayerSelectionComboBox.java
+ GUI.PlayerSelectionComboBox
+GUI/PlayerChoiceBox.java
+ GUI.PlayerChoiceBox
 utils/AdjacencyList.java
  utils.AdjacencyList
-controller/Hearing/Hearing.java
- controller.Hearing.Hearing
+GUI/StartButton.java
+ GUI.StartButton
+ GUI.StartButton$1
 controller/Map/Map.java
  controller.Map.Map
 agents/Agent.java
  agents.Agent
-controller/Scenario.java
- controller.Scenario
-controller/Area.java
- controller.Area
-controller/Map/tiles/Floor.java
- controller.Map.tiles.Floor
-mapgenerator/SimpleMapReader.java
- mapgenerator.SimpleMapReader
-utils/Position.java
- utils.Position
 controller/Map/MapUpdater.java
  controller.Map.MapUpdater
-agents/Intruder.java
- agents.Intruder
 agents/Guard.java
  agents.Guard
-controller/Visibility/Visibility.java
- controller.Visibility.Visibility
-controller/Map/tiles/Tile.java
- controller.Map.tiles.Tile
-GUI/StartScreen.java
- GUI.StartScreen
-controller/GameRunner.java
- controller.GameRunner
-GUI/PlayerSelectionComboBox.java
- GUI.PlayerSelectionComboBox
-GUI/MapGui.java
- GUI.MapGui
- GUI.MapGui$1
 GUI/PlayerSelection.java
  GUI.PlayerSelection
-GUI/StartButton.java
- GUI.StartButton
- GUI.StartButton$1
+exploration/FrontierBasedExploration.java
+ exploration.FrontierBasedExploration
+utils/Path.java
+ utils.Path
+exploration/BaselineGuard.java
+ exploration.BaselineGuard
+exploration/CombinedGuard.java
+ exploration.CombinedGuard
+controller/Map/tiles/TeleportalTile.java
+ controller.Map.tiles.TeleportalTile
+controller/Map/tiles/Shaded.java
+ controller.Map.tiles.Shaded
+controller/Hearing/Hearing.java
+ controller.Hearing.Hearing
+controller/Map/tiles/Wall.java
+ controller.Map.tiles.Wall
+controller/Map/tiles/Floor.java
+ controller.Map.tiles.Floor
 Explorer.java
  Explorer
-GUI/PlayerChoiceBox.java
- GUI.PlayerChoiceBox
-controller/GraphicsConnector.java
- controller.GraphicsConnector
+agents/Intruder.java
+ agents.Intruder
+exploration/CombinedIntruder.java
+ exploration.CombinedIntruder
