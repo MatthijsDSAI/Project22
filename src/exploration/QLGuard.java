@@ -35,6 +35,9 @@ public class QLGuard extends FrontierBasedExploration{
         if(currentState==-1){
             DirectionEnum dir = actionToDirection(1);
             return dir;
+        } else if(currentState==totalStates){
+            DirectionEnum dir = actionToDirection(3);
+            return dir;
         }
         visibleTiles = agent.getVisibleTiles();
 
@@ -53,6 +56,9 @@ public class QLGuard extends FrontierBasedExploration{
         int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
         if(currentState==-1){
             DirectionEnum dir = actionToDirection(1);
+            return dir;
+        } else if(currentState==totalStates){
+            DirectionEnum dir = actionToDirection(3);
             return dir;
         }
         visibleTiles = agent.getVisibleTiles();
