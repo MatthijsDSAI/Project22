@@ -100,10 +100,9 @@ public class CombinedGuard extends FrontierBasedExploration {
         ArrayList<Tile> visibleTiles = agent.getVisibleTiles();
         updateKnowledge(agent, visibleTiles);
 
-        if (DEBUG) {
-            System.out.println();
-            System.out.println("Location of guard: at x:" + x + ", y:" + y);
-        }
+
+        System.out.println("Location of guard: at x:" + x + ", y:" + y);
+
 
         // if guard sees TA set "targetHasBeenReached" true and never change back to false
         if (!targetHasBeenReached) {
@@ -258,19 +257,26 @@ public class CombinedGuard extends FrontierBasedExploration {
             // situation 3.3: Guard is patrolling along the border of standardized area by using QL
             if (patrolling && !invaderSeen && targetHasBeenReached && !isChasing) {
                 System.out.println("3.3: QL patrolling");
+//                if (dir == DirectionEnum.EAST) {
+//                    return (map.getTile(x + 1, y).isWalkable());
+//                } else if (dir == DirectionEnum.WEST) {
+//                    return (map.getTile(x - 1, y).isWalkable());
+//                } else if (dir == DirectionEnum.SOUTH) {
+//                    return (map.getTile(x, y + 1).isWalkable());
+//                } else if (dir == DirectionEnum.NORTH) {
+//                    return (map.getTile(x, y - 1).isWalkable());
+//                }
                 List<Integer> invalidMoves = new ArrayList<>();
-                if(map.getTile(agent.getX_position()-1, agent.getY_position()).hasAgent())
-                    if(map.getTile(agent.getX_position()-1, agent.getY_position()).getAgent().equals("Guard"))
-                        invalidMoves.add(0);
-                if(map.getTile(agent.getX_position(), agent.getY_position()+1).hasAgent())
-                    if(map.getTile(agent.getX_position(), agent.getY_position()+1).getAgent().equals("Guard"))
-                        invalidMoves.add(1);
-                if(map.getTile(agent.getX_position()+1, agent.getY_position()).hasAgent())
-                    if(map.getTile(agent.getX_position()+1, agent.getY_position()).getAgent().equals("Guard"))
-                        invalidMoves.add(2);
-                if(map.getTile(agent.getX_position(), agent.getY_position()-1).hasAgent())
-                    if(map.getTile(agent.getX_position(), agent.getY_position()-1).getAgent().equals("Guard"))
-                        invalidMoves.add(3);
+                if(!checkIfWalkable(agent.getAgentPosition(), DirectionEnum.WEST)) invalidMoves.add(0);
+                if(!checkIfWalkable(agent.getAgentPosition(), DirectionEnum.SOUTH)) invalidMoves.add(1);
+                if(!checkIfWalkable(agent.getAgentPosition(), DirectionEnum.EAST)) invalidMoves.add(2);
+                if(!checkIfWalkable(agent.getAgentPosition(), DirectionEnum.NORTH)) invalidMoves.add(0);
+
+                System.out.println("Distance to east boundary: " + (x - eastBoundaryOfStandardized));
+                System.out.println("Distance to west boundary: " + (x - westBoundaryOfStandardized));
+                System.out.println("Distance to north boundary: " + (y - northBoundaryOfStandardized));
+                System.out.println("Distance to south boundary: " + (y - southBoundaryOfStandardized));
+
                 return qlGuard.makeMove(agent, invalidMoves);
             }
         }
