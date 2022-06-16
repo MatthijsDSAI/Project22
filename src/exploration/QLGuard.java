@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.Math.abs;
+
 public class QLGuard extends FrontierBasedExploration{
 
     private int taLength = 5;
@@ -23,6 +25,10 @@ public class QLGuard extends FrontierBasedExploration{
     private int numberOfActions = 4;
     private int areaLength = taLength + 2*beltLength;
     private int totalStates = areaLength * areaLength;
+
+    private int errorCount = 0;
+
+    private Random r = new Random();
 
     public QLGuard(Agent agent, Map map) {
         super(agent, map);
@@ -32,13 +38,7 @@ public class QLGuard extends FrontierBasedExploration{
     public DirectionEnum makeMove(Agent agent) {
         Tile curTile = agent.getAgentPosition();
         int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
-        if(currentState==-1){
-            DirectionEnum dir = actionToDirection(1);
-            return dir;
-        } else if(currentState==totalStates){
-            DirectionEnum dir = actionToDirection(3);
-            return dir;
-        }
+
         visibleTiles = agent.getVisibleTiles();
 
         //get qtable from file
@@ -51,16 +51,52 @@ public class QLGuard extends FrontierBasedExploration{
         return dir;
     }
 
+    public DirectionEnum makeMove(Agent agent, int distToW, int distToE, int distToN, int distToS) {
+        Tile curTile = agent.getAgentPosition();
+        int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
+
+        visibleTiles = agent.getVisibleTiles();
+
+        //get qtable from file
+        int[] movesQTable = getMovesQTable();
+        double[][] qTable = getQTable();
+
+        if (currentState < 0 || currentState > 224) {
+            ArrayList<DirectionEnum> possibleMoves = new ArrayList<>();
+
+            if (abs(distToW) < 7 && abs(distToN) < 7) {
+                possibleMoves.add(DirectionEnum.EAST);
+                possibleMoves.add(DirectionEnum.SOUTH);
+            } else if (abs(distToE) < 7 && abs(distToN) < 7) {
+                possibleMoves.add(DirectionEnum.WEST);
+                possibleMoves.add(DirectionEnum.SOUTH);
+            } else if (abs(distToE) < 7 && abs(distToS) < 7) {
+                possibleMoves.add(DirectionEnum.WEST);
+                possibleMoves.add(DirectionEnum.NORTH);
+            } else if (abs(distToW) < 7 && abs(distToS) < 7) {
+                possibleMoves.add(DirectionEnum.EAST);
+                possibleMoves.add(DirectionEnum.NORTH);
+            }
+            errorCount++;
+            if (possibleMoves.size() == 0) {
+                possibleMoves.add(DirectionEnum.EAST);
+                possibleMoves.add(DirectionEnum.SOUTH);
+                possibleMoves.add(DirectionEnum.WEST);
+                possibleMoves.add(DirectionEnum.NORTH);
+            }
+            return possibleMoves.get(r.nextInt(possibleMoves.size()));
+        }
+
+        int action = decideAction(qTable, currentState);
+
+        DirectionEnum dir = actionToDirection(action);
+        return dir;
+    }
+
     public DirectionEnum makeMove(Agent agent, List<Integer> invalidMoves) {
         Tile curTile = agent.getAgentPosition();
         int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
-        if(currentState==-1){
-            DirectionEnum dir = actionToDirection(1);
-            return dir;
-        } else if(currentState==totalStates){
-            DirectionEnum dir = actionToDirection(3);
-            return dir;
-        }
+
         visibleTiles = agent.getVisibleTiles();
 
         //get qtable from file

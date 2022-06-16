@@ -24,10 +24,10 @@ public class MapUpdater {
         if(Scenario.config.DEBUG){
             System.out.println("Agent movement initialized");
             System.out.println("Current angle: " + agent.getAngle());
+            System.out.println("new direction: " + direction);
         }
         Tile fromTile = null;
         Tile toTile = null;
-        System.out.println("new direction: " + direction);
 
         if(agent.getAngle() != direction.getAngle()) {
             agent.rotate(direction.getAngle());
@@ -82,9 +82,12 @@ public class MapUpdater {
      */
     public static void moveGuards(Map map, int j) {
         ArrayList<Guard> guards = map.getGuards();
-        System.out.println();
-        System.out.println();
-        System.out.println("Moving guards");
+        if (Scenario.config.DEBUG) {
+            System.out.println();
+            System.out.println();
+            System.out.println("Moving guards");
+        }
+
         for(int i = guards.size()-1; i>=0; i--){
             Guard guard = guards.get(i);
             if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
