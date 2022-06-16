@@ -32,6 +32,10 @@ public class QLGuard extends FrontierBasedExploration{
     public DirectionEnum makeMove(Agent agent) {
         Tile curTile = agent.getAgentPosition();
         int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
+        if(currentState==-1){
+            DirectionEnum dir = actionToDirection(1);
+            return dir;
+        }
         visibleTiles = agent.getVisibleTiles();
 
         //get qtable from file
@@ -47,6 +51,10 @@ public class QLGuard extends FrontierBasedExploration{
     public DirectionEnum makeMove(Agent agent, List<Integer> invalidMoves) {
         Tile curTile = agent.getAgentPosition();
         int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
+        if(currentState==-1){
+            DirectionEnum dir = actionToDirection(1);
+            return dir;
+        }
         visibleTiles = agent.getVisibleTiles();
 
         //get qtable from file
@@ -160,6 +168,10 @@ public class QLGuard extends FrontierBasedExploration{
         difference /= 2;
         x -= difference;
         y -= difference;
-        return y * areaLength + x;
+        int state = y * areaLength + x;
+        if(state==-1){
+            System.out.println("oh noo");
+        }
+        return state;
     }
 }
