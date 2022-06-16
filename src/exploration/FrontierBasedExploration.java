@@ -27,6 +27,7 @@ public class FrontierBasedExploration extends Exploration{
         frontierQueue = new LinkedList<>();
         BFSQueue = new LinkedList<>();
         exploredTiles = new LinkedList<>();
+        this.curPath = new Path();
     }
 
     @Override
