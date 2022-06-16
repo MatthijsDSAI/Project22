@@ -12,10 +12,10 @@ public class MapDrawer extends JFrame implements MouseListener {
     private int amountOfClicks = 0;
     StringBuilder wall;
     private double[] tempLine;
-    private static final double HORIZONTAL_BORDER = 60;
-    private static final double VERTICAL_BORDER = 100;
-    private static final double frameWidth = 2000;
-    private static final double frameHeight = 2000;
+    private static final double HORIZONTAL_BORDER = 80;
+    private static final double VERTICAL_BORDER = 80;
+    private static final double frameWidth = 800;
+    private static final double frameHeight = 800;
     private final ArrayList<Rectangle2D> walls;
     private final ArrayList<Line2D> borders;
     private double[] print;
@@ -65,8 +65,8 @@ public class MapDrawer extends JFrame implements MouseListener {
 
     public static void main(String[] args){
         ArrayList<Rectangle2D> list = SimpleMapReader.readInCoordinatesOfWall();
-        double mapWidth = SimpleMapReader.readInConstant("width");
-        double mapHeight = SimpleMapReader.readInConstant("height");
+        double mapWidth = 80;
+        double mapHeight = 80;
         ArrayList<Rectangle2D> newList = new ArrayList<>();
         for(Rectangle2D rec : list){
             newList.add(new Rectangle2D.Double(rec.getX()+HORIZONTAL_BORDER/2, rec.getY() +VERTICAL_BORDER/2, rec.getWidth(), rec.getHeight()));
@@ -99,9 +99,6 @@ public class MapDrawer extends JFrame implements MouseListener {
         double x = transformX(e.getX());
         double y = transformY(e.getY());
 
-//        System.out.println("Line: " + amountOfClicks);
-//        System.out.println("x1: " + x);
-//        System.out.println("y1: " + y);
         print[0] = x;
         print[1] = y;
         tempLine[0] = e.getX();

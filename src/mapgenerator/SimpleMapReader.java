@@ -25,7 +25,7 @@ public class SimpleMapReader {
         String line;
         double value = 0;
         try{
-            BufferedReader br = new BufferedReader(new FileReader("testmap.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("experimentMap_1.txt"));
 
             while((line = br.readLine()) != null){
 

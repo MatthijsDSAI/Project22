@@ -11,76 +11,57 @@ import java.util.Random;
 
 public class RandomExploration extends Exploration {
 
-    private final Agent agent;
+    private Agent agent;
     int x,y;
-    Tile[][] tiles;
+    Map map;
     Random r = new Random();
 
 
     //Constructor
     public RandomExploration(Agent agent, Map map) {
+        this.map = map;
         this.agent = agent;
-        this.tiles = map.getTiles();
-
-        this.x = agent.getX_position();
-        this.y = agent.getY_position();
     }
 
-    public RandomExploration(Agent agent, int x, int y) {
-        this.agent = agent;
-        this.x = x;
-        this.y = y;
-    }
-
-    public List<DirectionEnum> checkTile(){
+    public List<DirectionEnum> checkTile(Agent agent){
         List<DirectionEnum> validMove= new ArrayList<>();
-        if (tiles[x + 1][y].isWalkable()){
+        if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.EAST)){
             validMove.add(DirectionEnum.EAST);
         }
-        if (tiles[x - 1][y].isWalkable()){
+        if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.WEST)){
            validMove.add(DirectionEnum.WEST);
         }
-        if (tiles[x][y-1].isWalkable()){
+        if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.NORTH)){
             validMove.add(DirectionEnum.NORTH);
         }
-        if (tiles[x][y+1].isWalkable()){
+        if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.SOUTH)){
             validMove.add(DirectionEnum.SOUTH);
         }
         return validMove;
     }
 
-//    public DirectionEnum randomDirection(){
-//        int randomMove = (int) (Math.random()*3);
-//        return switch (randomMove) {
-//            case 0 -> DirectionEnum.WEST;
-//            case 1 -> DirectionEnum.EAST;
-//            case 2 -> DirectionEnum.NORTH;
-//            default -> DirectionEnum.SOUTH;
-//        };
-//    }
+    public boolean checkIfWalkable(Tile agentTile, DirectionEnum dir) {
+        int x = agentTile.getX();
+        int y = agentTile.getY();
+
+        if (dir == DirectionEnum.EAST) {
+            return (map.getTile(x + 1, y).isWalkable());
+        } else if (dir == DirectionEnum.WEST) {
+            return (map.getTile(x - 1, y).isWalkable());
+        } else if (dir == DirectionEnum.SOUTH) {
+            return (map.getTile(x, y + 1).isWalkable());
+        } else if (dir == DirectionEnum.NORTH) {
+            return (map.getTile(x, y - 1).isWalkable());
+        }
+        return false;
+    }
+
     @Override
     public DirectionEnum makeMove(Agent agent) {
-        List<DirectionEnum> l = checkTile();
+        List<DirectionEnum> l = checkTile(agent);
         DirectionEnum dir = l.get(r.nextInt(l.size()));
-        changePosition(dir);
         return dir;
     }
-
-    private void changePosition(DirectionEnum dir) {
-        if(dir == DirectionEnum.NORTH){
-            y--;
-        }
-        if(dir == DirectionEnum.EAST){
-            x++;
-        }
-        if(dir == DirectionEnum.SOUTH){
-            y++;
-        }
-        if(dir == DirectionEnum.WEST){
-            x--;
-        }
-    }
-
 
     public String getExplorationName() {
         return "RandomExploration";

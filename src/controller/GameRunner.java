@@ -22,8 +22,8 @@ public class GameRunner {
     private Scenario scenario;
     private int gameMode;
     private GraphicsConnector gc;
-    private String guardExploration = "CombinedGuard";
-    private String intruderExploration = "BaseLineIntruder";
+    private String guardExploration = "RandomExploration";
+    private String intruderExploration = "RandomExploration";
     private Map map;
     private int t;
     private int guardWins = 0;
