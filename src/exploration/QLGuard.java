@@ -210,10 +210,8 @@ public class QLGuard extends FrontierBasedExploration{
         difference /= 2;
         x -= difference;
         y -= difference;
+        if(x < 0 || x>areaLength-1 || y < 0 || y > areaLength-1) return -1; //if coordinate is not in standardized area
         int state = y * areaLength + x;
-        if(state==-1){
-            System.out.println("oh noo");
-        }
         return state;
     }
 }
