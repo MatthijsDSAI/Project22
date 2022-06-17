@@ -79,27 +79,30 @@ public class BaselineGuard extends FrontierBasedExploration{
         return dir;
     }
 
-    public void MarkerInterpretation(Agent agent){
+    public Tile MarkerInterpretation(Agent agent){
         Tile f = agent.findMarker();
         if(f!=null)
         {
             Color c = agent.ownMap.getTile(f.getX(),f.getY()).getColor();
             if(c==Color.RED){
-                //TO ADD % explored >= 50% don't follow this rule anymore
-                // Actually check frontiers
-                if(agent.getY_position()==agent.ownMap.getVerticalSize()/2 && ok ==0)
-                    agent.setAngle((int) (agent.getAngle()+90));
-                //if(agent.getExploration())
-                System.out.println("Reached the half of the map.");
+                    if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null &&agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position());
+                    else if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position());
             }
             else if(c==Color.WHITE){
                 System.out.println("An intruder was caught");
             }
             else if(f.getIsPheromone()==true)
             {
-                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1))
+//               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null)
+//               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null)
+//               if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null)
+//               if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null)
                 System.out.println("Agent already entered a teleportal.");
             }
+            return f;
         }
+        return null;
     }
 }
