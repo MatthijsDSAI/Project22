@@ -5,7 +5,6 @@ import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import utils.DirectionEnum;
 
-import java.awt.print.Book;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -24,8 +23,16 @@ public class QLGuard extends FrontierBasedExploration{
     private int areaLength = taLength + 2*beltLength;
     private int totalStates = areaLength * areaLength;
 
+    private double[][] qTable;
+    private boolean placedMiddleMarker = false;
+
+    private int areaAllocated = 0; //0 = whole area, 1 = south, 2 = north
+
     public QLGuard(Agent agent, Map map) {
         super(agent, map);
+        //get qtable from file
+        //int[] movesQTable = getMovesQTable();
+        qTable = getQTableFromFile();
     }
 
     @Override
@@ -34,32 +41,44 @@ public class QLGuard extends FrontierBasedExploration{
         int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
         visibleTiles = agent.getVisibleTiles();
 
-        //get qtable from file
-        int[] movesQTable = getMovesQTable();
-        double[][] qTable = getQTable();
-
-        int action = decideAction(qTable, currentState);
+        int action = decideAction(currentState);
 
         DirectionEnum dir = actionToDirection(action);
         return dir;
     }
 
-    public DirectionEnum makeMove(Agent agent, List<Integer> invalidMoves) {
+    public DirectionEnum makeMoveToCenter(Agent agent){
         Tile curTile = agent.getAgentPosition();
-        int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
-        visibleTiles = agent.getVisibleTiles();
-
-        //get qtable from file
-        int[] movesQTable = getMovesQTable();
-        double[][] qTable = getQTable();
-
-        int action = decideSingleAction(getActions(qTable, currentState),invalidMoves);
-
-        DirectionEnum dir = actionToDirection(action);
-        return dir;
+        int centerTile = totalStates/2;
+        centerTile += totalStates%2;
+        return getCalculatePathFromState(getStateFromCoord(curTile.getX(),curTile.getY()),centerTile);
     }
 
-    public double[] getActions(double[][] qTable, int currentState){
+    public boolean checkCurrentTileForMarker(Agent agent) {
+        //if(agent.getAgentPosition().getColor().toString().equals("ORANGE"))
+        if(agent.getAgentPosition().getHasMarker())
+            return true;
+        return false;
+    }
+
+    public boolean checkSecondMarker(ArrayList<Tile> visibleTiles) {
+        int centerTile = totalStates/2;
+        centerTile += totalStates%2;
+        int secondTile = centerTile +1;
+        for (Tile t:visibleTiles) {
+            if(getStateFromCoord(t.getX(),t.getY())==secondTile){
+                //if(t.getColor().toString().equals("ORANGE")){
+                if(t.getHasMarker()){
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+    public double[] getActions(int currentState){
         return qTable[currentState];
     }
 
@@ -83,7 +102,7 @@ public class QLGuard extends FrontierBasedExploration{
         return -1;
     }
 
-    private int decideAction(double[][] qTable, int currentState) {
+    private int decideAction(int currentState) {
         Random rand = new Random();
         double total = 0.0;
         for (int i = 0; i < numberOfActions; i++) {
@@ -98,11 +117,10 @@ public class QLGuard extends FrontierBasedExploration{
         return 0;
     }
 
-    private double[][] getQTable() {
+    private double[][] getQTableFromFile() {
         double[][] qTable = new double[totalStates][numberOfActions];
         String[][] values = new String[totalStates][numberOfActions];
         Path pathToFile = Paths.get("qTable.csv");
-
 
         try (BufferedReader br = Files.newBufferedReader(pathToFile,
                 StandardCharsets.US_ASCII)) {
@@ -148,7 +166,19 @@ public class QLGuard extends FrontierBasedExploration{
         return movesQTable;
     }
 
-    private DirectionEnum actionToDirection(int action) {
+    public void makeSouthQTable(){
+        for (int i = 0; i < qTable.length/2 + 1; i++) {
+            qTable[i][3] = 0.0; //remove possibility to go up -> agent will walk downwards
+        }
+    }
+
+    public void makeNorthQTable(){
+        for (int i = qTable.length/2; i < qTable.length; i++) {
+            qTable[i][1] = 0.0; //remove possibility to go down -> agent will walk upwards
+        }
+    }
+
+    public DirectionEnum actionToDirection(int action) {
         if(action == 0) return DirectionEnum.WEST;
         else if(action == 1) return DirectionEnum.SOUTH;
         else if(action == 2) return DirectionEnum.EAST;
@@ -161,5 +191,17 @@ public class QLGuard extends FrontierBasedExploration{
         x -= difference;
         y -= difference;
         return y * areaLength + x;
+    }
+
+    public DirectionEnum getCalculatePathFromState(int currentState, int goalState){
+        int currentY = currentState/areaLength;
+        int goalY = goalState/areaLength;
+        if(goalY<currentY) return actionToDirection(3);
+        else if(goalY>currentY) return actionToDirection(1);
+        int currentX = currentState%areaLength;
+        int goalX = goalState%areaLength;
+        if(goalX<currentX) return actionToDirection(0);
+        else if(goalX>currentX) return actionToDirection(2);
+        return null;
     }
 }

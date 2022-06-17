@@ -30,7 +30,8 @@ public abstract class Agent{
     private Marker[] marker = new Marker[5]; // 5 types of markers
     private Tile agentPosition;
     public Exploration exploration;
-    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK}; // color vector for markers
+    //orange used for guard QL multi guard
+    public static Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK}; // color vector for markers
     private ArrayList<Tile> hearingTiles;
     public Tile startingTile;
     public boolean hasFoundTargetArea = false;

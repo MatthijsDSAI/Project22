@@ -6,7 +6,7 @@ import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
 import utils.DirectionEnum;
-import utils.Path;
+
 import java.util.*;
 import static java.lang.Math.abs;
 
@@ -20,6 +20,10 @@ public class CombinedGuard extends FrontierBasedExploration {
     private boolean targetHasBeenReached = false;
     private boolean invaderSeen = false;
     private boolean patrolling = false;
+    private boolean hasPlacedTAMarker = false;
+    private boolean needToPlaceSecondMarker = false;
+    private boolean qlGuardHasHalve = false;
+    private boolean freeGuard = false;
 
     private final Queue<Tile> cornersOfStandardized = new LinkedList<>();
 
@@ -326,21 +330,53 @@ public class CombinedGuard extends FrontierBasedExploration {
         } else {
             // situation 3.3: Guard is patrolling along the border of standardized area by using QL
             if (patrolling && !invaderSeen) {
-                System.out.println("3.3: QL patrolling");
-                List<Integer> invalidMoves = new ArrayList<>();
-                if(map.getTile(agent.getX_position()-1, agent.getY_position()).hasAgent())
-                    if(map.getTile(agent.getX_position()-1, agent.getY_position()).getAgent().equals("Guard"))
-                        invalidMoves.add(0);
-                if(map.getTile(agent.getX_position(), agent.getY_position()+1).hasAgent())
-                    if(map.getTile(agent.getX_position(), agent.getY_position()+1).getAgent().equals("Guard"))
-                        invalidMoves.add(1);
-                if(map.getTile(agent.getX_position()+1, agent.getY_position()).hasAgent())
-                    if(map.getTile(agent.getX_position()+1, agent.getY_position()).getAgent().equals("Guard"))
-                        invalidMoves.add(2);
-                if(map.getTile(agent.getX_position(), agent.getY_position()-1).hasAgent())
-                    if(map.getTile(agent.getX_position(), agent.getY_position()-1).getAgent().equals("Guard"))
-                        invalidMoves.add(3);
-                return qlGuard.makeMove(agent, invalidMoves);
+                if(freeGuard)
+                    return qlGuard.makeMove(agent);
+                if(hasPlacedTAMarker) {
+                    System.out.println("3.3.1: QL patrolling");
+                    //if sees second marker, turn into north guard
+                    if(!qlGuardHasHalve && qlGuard.checkSecondMarker(agent.getVisibleTiles())){
+                        System.out.println("Saw second marker and made north table");
+                        qlGuardHasHalve = true;
+                        qlGuard.makeNorthQTable();
+                    }
+                    return qlGuard.makeMove(agent);
+                } else {
+                    System.out.println("3.3.2: QL patrolling: Placing marker");
+
+                    if(!needToPlaceSecondMarker) {
+                        // move to center
+                        DirectionEnum dir = qlGuard.makeMoveToCenter(agent);
+                        if (dir != null) return dir;
+                        //if dir == null then we are at center
+                        // check 1st marker
+                        if (!qlGuard.checkCurrentTileForMarker(agent)) {
+                            //place marker
+                            agent.addMarkers(1,map);
+                            hasPlacedTAMarker = true;
+                            return qlGuard.makeMove(agent);
+                        } else {
+                            needToPlaceSecondMarker = true;
+                            return qlGuard.actionToDirection(2);
+                        }
+                    } else{
+                        //check if 2nd marker exists
+                        if(qlGuard.checkCurrentTileForMarker(agent)){
+                            freeGuard = true;
+                        }
+                        //place second marker
+                        agent.addMarkers(1,map);
+                        hasPlacedTAMarker = true;
+                        needToPlaceSecondMarker = false;
+                        //turn into south guard
+                        qlGuard.makeSouthQTable();
+                        qlGuardHasHalve = true;
+                        return qlGuard.makeMove(agent);
+                    }
+
+                    // place 1st or 2nd marker
+
+                }
             }
         }
 

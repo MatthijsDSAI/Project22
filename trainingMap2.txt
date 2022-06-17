@@ -1,7 +1,7 @@
 height = 18
 width = 18
 gameMode = 0
-numGuards = 1
+numGuards = 2
 numIntruders = 0
 baseSpeedGuard = 5
 baseSpeedIntruder = 5
@@ -11,6 +11,7 @@ numberMarkers = 5
 smellingDistance = 5
 targetArea = 7 7 11 11
 spawnAreaGuards = 9 9 9 9
+spawnAreaGuards = 12 12 12 12
 wall = 0 0 17 0
 wall = 18 0 18 17
 wall = 0 0 0 17
