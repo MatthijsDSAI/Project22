@@ -5,7 +5,6 @@ import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import utils.DirectionEnum;
 
-import java.awt.print.Book;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -53,7 +52,7 @@ public class QLGuard extends FrontierBasedExploration{
 
     public DirectionEnum makeMove(Agent agent, int distToW, int distToE, int distToN, int distToS) {
         Tile curTile = agent.getAgentPosition();
-        int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
+        int currentState = getStateFromCoord(curTile.getX(), curTile.getY());
 
         visibleTiles = agent.getVisibleTiles();
 
@@ -62,7 +61,16 @@ public class QLGuard extends FrontierBasedExploration{
         double[][] qTable = getQTable();
 
         if (currentState < 0 || currentState > 224) {
-            System.out.println("jeez");
+            return getValidMove(agent, distToW, distToE, distToN, distToS);
+        }
+
+        int action = decideAction(qTable, currentState);
+        DirectionEnum dir = actionToDirection(action);
+        return dir;
+
+    }
+
+    private DirectionEnum getValidMove(Agent agent, int distToW, int distToE, int distToN, int distToS){
             ArrayList<DirectionEnum> possibleMoves = new ArrayList<>();
 
             if (abs(distToW) < 7 && abs(distToN) < 7) {
@@ -110,12 +118,6 @@ public class QLGuard extends FrontierBasedExploration{
                 }
             }
             return possibleMoves.get(r.nextInt(possibleMoves.size()));
-        }
-
-        int action = decideAction(qTable, currentState);
-
-        DirectionEnum dir = actionToDirection(action);
-        return dir;
     }
 
     public boolean checkIfWalkable(Tile agentTile, DirectionEnum dir) {
