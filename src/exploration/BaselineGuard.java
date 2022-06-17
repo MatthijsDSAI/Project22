@@ -97,7 +97,8 @@ public class BaselineGuard extends FrontierBasedExploration{
             }
             else if(f.getIsPheromone()==true)
             {
-                System.out.println("Agent entered a teleportal.");
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1))
+                System.out.println("Agent already entered a teleportal.");
             }
         }
     }
