@@ -65,6 +65,17 @@ public class BaseLineIntruder extends FrontierBasedExploration {
                 }
             }
         }
+        if(intruder.findMarker()!=null) {
+            Tile z = MarkerInterpretation(intruder);
+            if (!z.equals(intruder.getAgentPosition())) {
+                double angleFromStart = Utils.findAngleFromStartingPosition(intruder, z);
+                double differenceToOptimalAngle = Utils.differenceBetweenAngles(angleFromStart, intruder.angleOfTarget);
+                if (differenceToOptimalAngle < optimalFrontier) {
+                    bestFrontier = z;
+                    optimalFrontier = differenceToOptimalAngle;
+                }
+            }
+        }
         return bestFrontier;
     }
 
