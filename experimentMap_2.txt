@@ -9,7 +9,7 @@ sprintSpeedIntruder = 1
 distanceViewing = 10
 numberMarkers = 5
 smellingDistance = 5
-targetArea = 75 2 80 7
+targetArea = 69 8 74 13
 spawnAreaGuards = 2 2 7 7
 spawnAreaIntruders = 75 75 80 80
 wall = 0 0 1 82
@@ -20,13 +20,14 @@ wall = 81 0 82 82
 wall = 47 15 49 1
 wall = 9 17 49 15
 
+wall = 17 27 31 28
+wall = 30 33 31 28
+wall = 17 35 31 34
+
+
 wall = 67 33 81 35
 wall = 67 73 65 33
 
-wall = 17 26 31 26
-wall = 30 33 31 25
-wall = 17 33 31 32
-
-wall = 38 52 39 41
-wall = 38 52 46 51
-wall = 44 51 46 40
+wall = 49 64 54 65
+wall = 47 51 48 65
+wall = 54 51 55 65
