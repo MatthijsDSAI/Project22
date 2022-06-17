@@ -9,7 +9,7 @@ import utils.Path;
 
 public class BaselineGuard extends FrontierBasedExploration{
 
-    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER};
+    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, null};
     int ok=0, halfway=0, part =0;
 
     public BaselineGuard(Agent agent, Map map) {
@@ -21,7 +21,6 @@ public class BaselineGuard extends FrontierBasedExploration{
 
     @Override
     public DirectionEnum makeMove(Agent agent) {
-        //agent.addMarkers(1,map);
         Tile curTile = agent.getAgentPosition();
         visibleTiles = agent.getVisibleTiles();
         boolean updated = updateKnowledge(agent, visibleTiles);
@@ -64,6 +63,7 @@ public class BaselineGuard extends FrontierBasedExploration{
                 goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()-1);
             else halfway=1;
         }
+       // if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null)
         if(goalTile != null) {
             Path path = findPath(agent, goalTile);
             if(path == null) {
@@ -85,7 +85,7 @@ public class BaselineGuard extends FrontierBasedExploration{
         {
             Color c = agent.ownMap.getTile(f.getX(),f.getY()).getColor();
             if(c==Color.RED){
-                    if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null &&agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).isWalkable())
+                    if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).isWalkable())
                         return agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position());
                     else if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).isWalkable())
                         return agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position());
@@ -95,10 +95,38 @@ public class BaselineGuard extends FrontierBasedExploration{
             }
             else if(f.getIsPheromone()==true)
             {
-//               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null)
-//               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null)
-//               if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null)
-//               if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null)
+               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null)
+               {
+                   Tile t = agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).getType();
+                   if(t.toString().equals("TelePortal"))
+                       if(agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position()).isWalkable())
+                           return agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position());
+                       else if(agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position()).isWalkable())
+                           return agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position());
+               }
+               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null) {
+                   Tile t = agent.ownMap.getTile(agent.getX_position(), agent.getY_position() + 1).getType();
+                   if (t.toString().equals("TelePortal"))
+                       if(agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position()).isWalkable())
+                            return agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position());
+                       else if(agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position()).isWalkable())
+                            return agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position());
+               }
+               if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null)
+               {
+                   Tile t = agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).getType();
+                   if(t.toString().equals("TelePortal"))
+                       if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2).isWalkable())
+                           return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2);
+                       else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2).isWalkable())
+                           return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2);
+               }
+               if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null)
+               {
+                   Tile t = agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).getType();
+                   if(t.toString().equals("TelePortal"))
+                       return agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position());
+               }
                 System.out.println("Agent already entered a teleportal.");
             }
             return f;
