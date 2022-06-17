@@ -45,7 +45,7 @@ public class CombinedGuard extends FrontierBasedExploration {
     private final Tile southEastCorner;
     private DirectionEnum lastDirIntruderHasBeenSeen;
 
-    boolean DEBUG1 = false;
+    boolean DEBUG1 = true;
     boolean DEBUG2 = false;
 
     // assuming we know the boundaries of standardized area

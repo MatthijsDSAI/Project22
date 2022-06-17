@@ -62,27 +62,52 @@ public class QLGuard extends FrontierBasedExploration{
         double[][] qTable = getQTable();
 
         if (currentState < 0 || currentState > 224) {
+            System.out.println("jeez");
             ArrayList<DirectionEnum> possibleMoves = new ArrayList<>();
 
             if (abs(distToW) < 7 && abs(distToN) < 7) {
-                possibleMoves.add(DirectionEnum.EAST);
-                possibleMoves.add(DirectionEnum.SOUTH);
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.EAST)) {
+                    possibleMoves.add(DirectionEnum.EAST);
+                }
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.SOUTH)) {
+                    possibleMoves.add(DirectionEnum.SOUTH);
+                }
             } else if (abs(distToE) < 7 && abs(distToN) < 7) {
-                possibleMoves.add(DirectionEnum.WEST);
-                possibleMoves.add(DirectionEnum.SOUTH);
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.WEST)) {
+                    possibleMoves.add(DirectionEnum.WEST);
+                }
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.SOUTH)) {
+                    possibleMoves.add(DirectionEnum.SOUTH);
+                }
             } else if (abs(distToE) < 7 && abs(distToS) < 7) {
-                possibleMoves.add(DirectionEnum.WEST);
-                possibleMoves.add(DirectionEnum.NORTH);
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.WEST)) {
+                    possibleMoves.add(DirectionEnum.WEST);
+                }
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.NORTH)) {
+                    possibleMoves.add(DirectionEnum.NORTH);
+                }
             } else if (abs(distToW) < 7 && abs(distToS) < 7) {
-                possibleMoves.add(DirectionEnum.EAST);
-                possibleMoves.add(DirectionEnum.NORTH);
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.EAST)) {
+                    possibleMoves.add(DirectionEnum.EAST);
+                }
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.NORTH)) {
+                    possibleMoves.add(DirectionEnum.NORTH);
+                }
             }
             errorCount++;
             if (possibleMoves.size() == 0) {
-                possibleMoves.add(DirectionEnum.EAST);
-                possibleMoves.add(DirectionEnum.SOUTH);
-                possibleMoves.add(DirectionEnum.WEST);
-                possibleMoves.add(DirectionEnum.NORTH);
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.EAST)) {
+                    possibleMoves.add(DirectionEnum.EAST);
+                }
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.SOUTH)) {
+                    possibleMoves.add(DirectionEnum.SOUTH);
+                }
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.WEST)) {
+                    possibleMoves.add(DirectionEnum.WEST);
+                }
+                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.NORTH)) {
+                    possibleMoves.add(DirectionEnum.NORTH);
+                }
             }
             return possibleMoves.get(r.nextInt(possibleMoves.size()));
         }
@@ -91,6 +116,22 @@ public class QLGuard extends FrontierBasedExploration{
 
         DirectionEnum dir = actionToDirection(action);
         return dir;
+    }
+
+    public boolean checkIfWalkable(Tile agentTile, DirectionEnum dir) {
+        int x = agentTile.getX();
+        int y = agentTile.getY();
+
+        if (dir == DirectionEnum.EAST) {
+            return (map.getTile(x + 1, y).isWalkable());
+        } else if (dir == DirectionEnum.WEST) {
+            return (map.getTile(x - 1, y).isWalkable());
+        } else if (dir == DirectionEnum.SOUTH) {
+            return (map.getTile(x, y + 1).isWalkable());
+        } else if (dir == DirectionEnum.NORTH) {
+            return (map.getTile(x, y - 1).isWalkable());
+        }
+        return false;
     }
 
     public DirectionEnum makeMove(Agent agent, List<Integer> invalidMoves) {

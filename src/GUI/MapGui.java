@@ -40,8 +40,8 @@ public class MapGui extends Application {
         map = graphicsConnector.getMapOfColors();
         row = map.length;
         col = map[0].length;
-        height = row*5;
-        width = col*5;
+        height = row*10;
+        width = col*10;
         this.mainMenu = new StartScreen(this);
         Scene startMenu = new Scene(mainMenu, width, height);
         stage.setTitle("MAP");
