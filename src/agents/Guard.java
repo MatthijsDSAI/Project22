@@ -21,8 +21,8 @@ public class Guard extends Agent{
     }
 
     @Override
-    public void addMarkers(int i, Color c, Map map) {
-        super.addMarkers(i, c, map);
+    public void addMarkers(int i, Map map) {
+        super.addMarkers(i, map);
     }
 
     public void MarkerInterpretation(){
