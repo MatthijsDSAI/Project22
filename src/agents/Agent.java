@@ -157,7 +157,7 @@ public abstract class Agent{
         {
             marker[i] = new Marker(c[i], number_markers);
             if(c==null)
-                marker[i].setDistance(distance);
+                marker[i].setDistance(distance); // distance the pheromone can be felt at
             //System.out.println("Marker created: " + marker[i].toString());
         }
     }
@@ -173,37 +173,41 @@ public abstract class Agent{
     public Tile findMarker(){
         //this.computeVisibleTiles(ownMap);
         ArrayList<Tile> visibleTiles = this.getVisibleTiles();
-        for(Tile t : visibleTiles){ // return a list of markers
+        for(Tile t : visibleTiles)
+        { // return a list of markers
             //if(t.getY() == tile.getY() && t.getX()== tile.getX())
             if(t.getHasMarker()==true) {
                 System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
                 return t;
             }
         }
+        //pheromone
         System.out.println("Didn't see a marker yet");
         return null;
     }
 
-    public void addMarkers(int i, Color c, Map map){
-        // marker[i].addMarker(this, c, map);
-        System.out.println("Marker " + c.toString() +" placed at " + this.getX_position() + " "+ this.getY_position());
-        if(marker[i].getNumber_markers()>0) {
-            marker[i].setNumber_markers(marker[i].getNumber_markers() - 1);
-            if (c != null) {
-                ownMap.getTile(this.getX_position(), this.getY_position()).setColor(c);
-                map.getTile(this.getX_position(), this.getY_position()).setColor(c);
-            }
-            else{
-                ownMap.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
-                map.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
-            }
-            ownMap.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
-            map.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
-        }
-        else
-            System.out.println("Markers are finished");
-    }
+//    public void addMarkers(int i, Color c, Map map){
+//        // marker[i].addMarker(this, c, map);
+//        System.out.println("Marker " + c.toString() +" placed at " + this.getX_position() + " "+ this.getY_position());
+//        if(marker[i].getNumber_markers()>0) {
+//            marker[i].setNumber_markers(marker[i].getNumber_markers() - 1);
+//            if (c != null) {
+//                ownMap.getTile(this.getX_position(), this.getY_position()).setColor(c);
+//                map.getTile(this.getX_position(), this.getY_position()).setColor(c);
+//            }
+//            else{
+//                ownMap.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
+//                map.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
+//            }
+//            ownMap.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
+//            map.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
+//        }
+//        else
+//            System.out.println("Markers are finished");
+//    }
 
+    //i -> number of marker you want to place
+    //map -> actual map
     public void addMarkers(int i, Map map){
         if(marker[i].getNumber_markers()>0) {
             marker[i].setNumber_markers(marker[i].getNumber_markers() - 1);
