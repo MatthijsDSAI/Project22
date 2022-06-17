@@ -3,11 +3,17 @@ package controller;
 import GUI.MapGui;
 import agents.Guard;
 import agents.Intruder;
+import com.opencsv.CSVWriter;
 import controller.Map.Map;
 import controller.Map.MapUpdater;
+import utils.CSVData;
 import utils.Config;
+import utils.GameData;
 import utils.Utils;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.ArrayList;
 
@@ -18,6 +24,8 @@ import java.util.ArrayList;
 public class GameRunner {
 
     private final Config config = Scenario.config;
+    private final boolean SAVE_CSV = true;
+    private String csvString = "";
     private MapGui gui;
     private Scenario scenario;
     private int gameMode;
@@ -78,10 +86,11 @@ public class GameRunner {
             init(guardExploration, intruderExploration);
         }
         Thread t = new Thread(() -> {
+            CSVData csvData = new CSVData("guardType", "intruderType",map.getGuards().size(),map.getIntruders().size(),"mapNAme",null);
             while(gamesPlayed<numberOfGames) {
                 reinitialise();
                 Utils.sleep(20);
-                loop(gameMode);
+                GameData game = loop(gameMode);
                 if(config.isTRAINING()){
                     //perform learning
                 }
@@ -89,29 +98,77 @@ public class GameRunner {
                     printData();
                 }
                 gamesPlayed++;
+                if(SAVE_CSV) csvData.addGame(game);
             }
+            if(SAVE_CSV) saveCsv(csvData, "csvData.csv");
+
         });
         t.start();
     }
 
 
-    public void loop(int gameMode){
+    public GameData loop(int gameMode){
         if(gameMode==0)
             loopExploration();
         else if(gameMode==1)
-            loopGuardIntruderGame();
+            return loopGuardIntruderGame();
+        return null;
     }
 
-    public void loopGuardIntruderGame(){
+    public GameData loopGuardIntruderGame(){
         boolean areaReached = false;
         boolean noIntrudersLeft = false;
         while ((!areaReached && !noIntrudersLeft)) {
             step();
-            areaReached = Map.checkTargetArea(map, this.t);
+            Map.checkTargetAreaGuards(map);
+            areaReached = Map.checkTargetAreaIntruders(map, this.t);
             noIntrudersLeft = Map.noIntrudersLeft(map);
             this.t++;
         }
         incrementWins(areaReached, noIntrudersLeft);
+        int victor = noIntrudersLeft ? 0 : 1;
+        GameData gd = new GameData(victor, map.getDiscoveredTAFirst(),this.t, Map.explored(map),0.0); //need to add "intruder explored"
+        return gd;
+    }
+
+
+    private String intToAgent(int agent){
+        if(agent==0) return "Guard";
+        else if(agent==1) return "Intruder";
+        else return null;
+    }
+    private void saveCsv(CSVData csvData, String filepath) {
+        // first create file object for file placed at location
+        // specified by filepath
+        File file = new File(filepath);
+        try {
+            // create FileWriter object with file as parameter
+            FileWriter outputfile = new FileWriter(file);
+
+            // create CSVWriter object filewriter object as parameter
+            CSVWriter writer = new CSVWriter(outputfile);
+
+            // adding base info to csv
+            String[] baseInfo = {"Guard Type", csvData.getGuardType(), "Intruder Type", csvData.getIntruderType(),"Number of Guards", String.valueOf(csvData.getNumGuards()), "Number of Intruders", String.valueOf(csvData.getNumIntruders()), "Map Name", csvData.getMapName(), "Number of games played", String.valueOf(csvData.getGames().size())};
+            writer.writeNext(baseInfo);
+
+            // adding header to csv
+            String[] header = { "Game Number", "Victor", "Reached TA First", "Turns Taken", "% Map explored Guards", "% Map explored intruders" };
+            writer.writeNext(header);
+
+            // add data to csv
+
+            for (int i = 0; i < csvData.getGames().size(); i++) {
+                GameData game = csvData.getGames().get(i);
+                String[] data = {String.valueOf(i+1),intToAgent(game.getVictor()),intToAgent(game.getReachedTAFirst()), String.valueOf(game.getTurnsTaken()), String.valueOf(game.getMapExploredGuards()), String.valueOf(game.getMapExploredIntruders())};
+                writer.writeNext(data);
+            }
+
+            // closing writer connection
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void loopExploration(){
