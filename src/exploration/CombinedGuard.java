@@ -477,7 +477,6 @@ public class CombinedGuard extends FrontierBasedExploration {
                     dirs.add(DirectionEnum.WEST);
                 }
             }
-
             if (guardsY < intruderY) {
                 System.out.println("South");
                 if (map.getTile(agent.getX_position(), agent.getY_position() + 1).isWalkable()) {
@@ -489,7 +488,6 @@ public class CombinedGuard extends FrontierBasedExploration {
                     dirs.add(DirectionEnum.NORTH);
                 }
             }
-
         } else { // meaning we lost vision of intruder, try to go in the way where last intruder was
             if (checkIfWalkable(agent.getAgentPosition(), lastDirIntruderHasBeenSeen)) {
                 dirs.add(lastDirIntruderHasBeenSeen);

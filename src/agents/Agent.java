@@ -175,8 +175,6 @@ public abstract class Agent{
         for(Tile t : visibleTiles){ // return a list of markers
             //if(t.getY() == tile.getY() && t.getX()== tile.getX())
             if(t.getHasMarker()==true) {
-               // mx_pos=t.getX();
-                //my_pos=t.getY();
                 System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
                 return t;
             }

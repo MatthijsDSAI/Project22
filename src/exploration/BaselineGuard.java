@@ -95,7 +95,7 @@ public class BaselineGuard extends FrontierBasedExploration{
             else if(c==Color.WHITE){
                 System.out.println("An intruder was caught");
             }
-           else if(f.getIsPheromone()==true)
+            else if(f.getIsPheromone()==true)
             {
                 System.out.println("Agent entered a teleportal.");
             }

@@ -5,6 +5,7 @@ import agents.Guard;
 import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
+import javafx.scene.paint.Color;
 import utils.AdjacencyList;
 import utils.DirectionEnum;
 import utils.Path;
@@ -14,9 +15,13 @@ import utils.Utils;
 import java.util.*;
 
 public class BaseLineIntruder extends FrontierBasedExploration {
+    Color[] c = {Color.LAVENDER, Color.BROWN, Color.YELLOW, Color.PINK, null};
+    Map map;
 
     public BaseLineIntruder(Agent agent, Map map) {
         super(agent, map);
+        this.map=map;
+        agent.createMarkers(5, 7, c);
     }
     public DirectionEnum prevDir;
 
@@ -25,6 +30,7 @@ public class BaseLineIntruder extends FrontierBasedExploration {
         Intruder intruder = (Intruder) agent;
         Tile tile = null;
         if(intruder.getAgentPosition().toString().equals("TargetArea")){
+            agent.addMarkers(4,map);
             return prevDir;
         }
         Tile curTile = intruder.getAgentPosition();
@@ -60,5 +66,34 @@ public class BaseLineIntruder extends FrontierBasedExploration {
             }
         }
         return bestFrontier;
+    }
+
+    public Tile MarkerInterpretation(Agent agent){
+        Tile f = agent.findMarker();
+        if(f!=null)
+        {
+            Color c = agent.ownMap.getTile(f.getX(),f.getY()).getColor();
+            if(c==Color.LAVENDER){ // turn south
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1);
+            }
+            else if(c==Color.BROWN){ //turn east
+                if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position());
+            }
+            else if(c==Color.YELLOW){ //turn north
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1);
+            }
+            else if(c==Color.PINK){ //turn west
+                if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position());
+            }
+            else if(f.getIsPheromone()==true)
+            {
+                return f;
+            }
+        }
+        return null;
     }
 }

@@ -16,6 +16,7 @@ import java.util.Random;
 
 public class CombinedIntruder extends FrontierBasedExploration{
 
+    Color[] c = {Color.BLUEVIOLET, Color.GREENYELLOW, Color.CORAL, Color.DARKORANGE, null};
     public Map map;
     public Agent agent;
     public BaseLineIntruder baseLineIntruder;
@@ -29,6 +30,7 @@ public class CombinedIntruder extends FrontierBasedExploration{
         this.agent = agent;
         this.baseLineIntruder = new BaseLineIntruder(agent, map);
         this.frontierExploration = new FrontierBasedExploration(agent, map);
+        agent.createMarkers(5, 5, c);
     }
     /**
      * This class handles 4 situations: (new situations can be added further)
