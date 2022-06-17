@@ -95,8 +95,10 @@ public abstract class Tile {
     public javafx.scene.shape.Rectangle createRec(int x, int y){return new Rectangle(x, y,10,10);}
 
     public Color getColor() {
-        if (hasAgent()) {
-            return getAgent().getColor();
+        if (hasAgent()&& this.hasMarker==false) {
+           // if (hasMarker == false || isP == true) {
+                return getAgent().getColor();
+            //} else return this.c;
         }
         else if ((0.5 < getSound()) && (getSound() <= 1)) {
             return c.darker().darker();

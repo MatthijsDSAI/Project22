@@ -5,9 +5,6 @@ import controller.Map.tiles.Tile;
 import controller.Scenario;
 import exploration.*;
 import javafx.scene.paint.Color;
-import utils.Config;
-import utils.DirectionEnum;
-import utils.Utils;
 
 public class Guard extends Agent{
 

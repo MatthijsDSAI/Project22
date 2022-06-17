@@ -11,6 +11,7 @@ public class BaselineGuard extends FrontierBasedExploration{
 
     Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, null};
     int ok=0, halfway=0, part =0;
+    int i=0;
 
     public BaselineGuard(Agent agent, Map map) {
         super(agent, map);
@@ -30,7 +31,7 @@ public class BaselineGuard extends FrontierBasedExploration{
             if(agentFound != null && agentFound.getType().equals("Intruder")) {
                 goalTile = agentFound.getAgentPosition();
                 Path path = findPath(agent, goalTile);
-                agent.addMarkers(3,map);
+                //agent.addMarkers(3,map);
                 return findNextMoveDirection(agent, path.get(1));
             }
             if(tile.toString().equals("TargetArea")) {
@@ -41,14 +42,18 @@ public class BaselineGuard extends FrontierBasedExploration{
             if(tile.getHasMarker()==true)
                 MarkerInterpretation(agent);
         }
-        if(part ==0)
+        if(part == 0)
         {
             if(halfway == 1)
             {
-                if(agent.getNumberMarekr(0)>0)
-                    agent.addMarkers(0,map);
+                if(agent.getNumberMarekr(0)>0) {
+                    System.out.println("Add marker: "+ i + " at x:" +agent.getX_position() + " y: " + agent.getY_position());
+                    agent.addMarkers(0, map);
+                    i++;
+                    System.out.println("Marker added");
+                }
                 else part=1;
-                if(agent.getX_position()+agent.getSpeed()<agent.ownMap.getHorizontalSize())
+                if(agent.getX_position()+agent.getSpeed()<agent.ownMap.getHorizontalSize() && agent.ownMap.getTile(agent.getX_position()+agent.getSpeed(), agent.getY_position()).isWalkable())
                 {
                     goalTile = agent.ownMap.getTile(agent.getX_position()+agent.getSpeed(), agent.getY_position());
                 }
@@ -56,14 +61,41 @@ public class BaselineGuard extends FrontierBasedExploration{
                 {
                     goalTile = agent.ownMap.getTile(agent.getX_position()-agent.getSpeed(), agent.getY_position());
                 }
+                else
+                    part=1;
             }
-            else if(agent.getY_position()<agent.ownMap.getVerticalSize()/2)
-                goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()+1);
-            else if(agent.getY_position()>agent.ownMap.getVerticalSize()/2)
-                goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()-1);
+            else if(agent.getY_position()+agent.getSpeed()<agent.ownMap.getVerticalSize()/2)
+                goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()+agent.getSpeed());
+            else if(agent.getY_position()-agent.getSpeed()>agent.ownMap.getVerticalSize()/2)
+                goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()-agent.getSpeed());
             else halfway=1;
         }
-       // if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null)
+//        if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).getType()!=null)
+//        {
+//            Tile t = agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).getType();
+//            if(t.toString().equals("TelePortal"))
+//            {
+//                agent.addMarkers(4,map);
+//                goalTile= t;
+//            }
+//        }
+//        if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).getType()!=null) {
+//            Tile t = agent.ownMap.getTile(agent.getX_position(), agent.getY_position() + 1).getType();
+//            if (t.toString().equals("TelePortal"))
+//                agent.addMarkers(4,map);
+//        }
+//        if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).getType()!=null)
+//        {
+//            Tile t = agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).getType();
+//            if (t.toString().equals("TelePortal"))
+//                agent.addMarkers(4,map);
+//        }
+//        if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).getType()!=null)
+//        {
+//            Tile t = agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).getType();
+//            if (t.toString().equals("TelePortal"))
+//                agent.addMarkers(4,map);
+//        }
         if(goalTile != null) {
             Path path = findPath(agent, goalTile);
             if(path == null) {

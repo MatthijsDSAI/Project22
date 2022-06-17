@@ -63,9 +63,9 @@ public class MapUpdater {
             Noise.removeNoises(map, map.getTile(fromTile.getX(),fromTile.getY()));
             Noise.addNoises(map, map.getTile(toTile.getX(),toTile.getY()));
 
-            map.getTile(fromTile.getX(),fromTile.getY()).setColor(Color.BLUEVIOLET);
+            if (!map.getTile(fromTile.getX(),fromTile.getY()).getHasMarker()) map.getTile(fromTile.getX(),fromTile.getY()).setColor(Color.BLUEVIOLET);
 
-            if (agent.getType().equals("Intruder")) {
+            if (agent.getType().equals("Intruder") && (!map.getTile(fromTile.getX(),fromTile.getY()).getHasMarker())) {
                 map.getTile(fromTile.getX(),fromTile.getY()).setColor(Color.CHARTREUSE);
             }
 
