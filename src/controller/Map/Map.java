@@ -3,11 +3,7 @@ package controller.Map;
 import agents.Agent;
 import agents.Guard;
 import agents.Intruder;
-import controller.Area;
-import controller.GraphicsConnector;
 import controller.Map.tiles.*;
-import controller.Scenario;
-import controller.TelePortal;
 import utils.DirectionEnum;
 
 import java.util.ArrayList;
@@ -27,6 +23,7 @@ public class Map {
     private int horizontalSize;
     private int verticalSize;
     private boolean isExplored = false;
+    private int discoveredTAFirst = -1; // 0 = guard, 1 = intruder, -1 = undiscovered
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
         this.agent = agent;
@@ -101,9 +98,11 @@ public class Map {
         return explored/(notExplored+explored);
     }
 
-    public static boolean checkTargetArea(Map map, int t) {
+    public static boolean checkTargetAreaIntruders(Map map, int t) {
         for(Intruder intruder : map.getIntruders()){
             if(intruder.getAgentPosition().toString().equals("TargetArea")){
+                if(map.discoveredTAFirst == -1)
+                    map.discoveredTAFirst = 1;
                 intruder.incrementTargetEntries(t);
                 if(intruder.completedObjective()){
                     return true;
@@ -114,6 +113,19 @@ public class Map {
             }
         }
         return false;
+    }
+
+    public static void checkTargetAreaGuards(Map map){
+        for(Guard guard : map.getGuards()){
+            if(guard.getAgentPosition().toString().equals("TargetArea")){
+                if(map.discoveredTAFirst == -1)
+                    map.discoveredTAFirst = 0;
+            }
+        }
+    }
+
+    public int getDiscoveredTAFirst() {
+        return discoveredTAFirst;
     }
 
     public static boolean noIntrudersLeft(Map map) {
