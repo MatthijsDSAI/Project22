@@ -37,6 +37,7 @@ public abstract class Agent{
     public Tile targetArea;
     public int intermediateAngle;
     public boolean hasRotatedOnPastIteration = false;
+    public boolean movement = true;
     /*
      * The agent class
      * An agent tracks it's own position relative to its starting position.
@@ -123,13 +124,17 @@ public abstract class Agent{
 
     public void computeVisibleTiles(Map map){
         this.visibleTiles = Visibility.computeVisibleTiles(map, this);
+        int num = visibleTiles.size();
         if(hasRotatedOnPastIteration){
             this.visibleTiles.addAll(Visibility.computeVisibleTilesIntermediateAngle(map, this));
         }
+        int count = 0;
         for(Tile tile : visibleTiles){
             tile.setExplored(true);
             ownMap.setTile(tile.clone());
-            tile.setCurrentlyViewed(true);
+            if(count<num)
+                tile.setCurrentlyViewed(true);
+            count++;
         }
         this.hasRotatedOnPastIteration = false;
     }
@@ -237,5 +242,9 @@ public abstract class Agent{
 
     public int getIntermediateAngle() {
         return intermediateAngle;
+    }
+
+    public  void setMovement(boolean b){
+        movement = b;
     }
 }

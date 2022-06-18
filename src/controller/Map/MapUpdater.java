@@ -19,7 +19,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MapUpdater {
-
     public static void moveAgent(Map map, Agent agent, DirectionEnum direction){
         if(Scenario.config.DEBUG){
             System.out.println("Agent movement initialized");
@@ -44,14 +43,17 @@ public class MapUpdater {
             changeTiles(map, agent, fromTile, toTile);
         }
         assert toTile != null;
-        if (toTile.toString().equals("TelePortal")) {
+        if(!map.hasTeleported){
+            if (toTile.toString().equals("TelePortal")) {
 
-            changeTiles(map, agent, fromTile, toTile);
-            TeleportalTile teleportalTile = (TeleportalTile) map.getTile(toTile.getX(), toTile.getY());
-            fromTile = toTile;
-            toTile = map.getTile(teleportalTile.getTargetX(), teleportalTile.getTargetY());
-            changeTiles(map, agent, fromTile, toTile);
-            agent.setAngle((int) teleportalTile.getAngle());
+                changeTiles(map, agent, fromTile, toTile);
+                TeleportalTile teleportalTile = (TeleportalTile) map.getTile(toTile.getX(), toTile.getY());
+                fromTile = toTile;
+                toTile = map.getTile(teleportalTile.getTargetX(), teleportalTile.getTargetY());
+                changeTiles(map, agent, fromTile, toTile);
+                agent.setAngle((int) teleportalTile.getAngle());
+                map.hasTeleported = true;
+            }
         }
     }
 
@@ -108,10 +110,12 @@ public class MapUpdater {
         for(int i = intruders.size()-1; i>=0; i--){
             Intruder intruder = intruders.get(i);
             if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
-                Utils.sleep(1000);
+                Utils.sleep(20);
                 Exploration explorer = intruder.getExploration();
                 DirectionEnum dir = explorer.makeMove(intruder);
-                MapUpdater.moveAgent(map, intruder, dir);
+                if(!(dir==null)) {
+                    MapUpdater.moveAgent(map, intruder, dir);
+                }
                 MapUpdater.refreshCurrentlyViewed(map, intruder.getVisibleTiles());
                 intruder.computeVisibleTiles(map);
                 MapUpdater.checkIntruderCapture(intruder, map);

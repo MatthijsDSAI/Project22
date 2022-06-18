@@ -30,14 +30,16 @@ public class GameRunner {
     private Scenario scenario;
     private int gameMode;
     private GraphicsConnector gc;
-    private String guardExploration = "RandomExploration";
-    private String intruderExploration = "RandomExploration";
+    private String guardExploration = "BaseLineIntruder";
+    private String intruderExploration = "BaseLineGuard";
     private Map map;
     private int t;
     private int guardWins = 0;
     private int intruderWins = 0;
     private int gamesPlayed = 0;
+    private ArrayList<Integer> explorationValues;
     public GameRunner(Scenario scenario) {
+        this.explorationValues = new ArrayList<>();
         this.scenario = scenario;
         gameMode = scenario.getGameMode();
         initMap();
@@ -175,11 +177,15 @@ public class GameRunner {
         boolean explored = false;
         while ((!explored)) {
             step();
-            if (config.DEBUG) {
+            if(config.DEBUG) {
                 System.out.println("Timestep: " + this.t + " at: " + Calendar.getInstance().getTime());
                 System.out.println(100 * Map.explored(map) + "% of map has been explored");
             }
+            Map.explored(map);
             explored = Map.isExplored(map);
+            if(explored){
+                explorationValues.add(t);
+            }
             this.t++;
         }
     }
@@ -224,7 +230,18 @@ public class GameRunner {
         }
     }
     private void printData() {
-        System.out.println(guardExploration + " wins: " + guardWins + ", " + intruderExploration + " wins: " + intruderWins);
-        System.out.println("Turns until win: " + t);
+        if(gameMode==1) {
+            System.out.println(guardExploration + " wins: " + guardWins + ", " + intruderExploration + " wins: " + intruderWins);
+            System.out.println("Turns until win: " + t);
+        }
+        if(gameMode==0){
+            System.out.println("Timesteps until full exploration: " + (t-1));
+            int sum = 0;
+            for(Integer val : explorationValues){
+                sum+=val;
+            }
+            System.out.println("Average timesteps until full exploration: " + (double)sum/explorationValues.size());
+            System.out.println("Games played: " + gamesPlayed);
+        }
     }
 }

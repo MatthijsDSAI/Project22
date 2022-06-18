@@ -14,6 +14,7 @@ import java.util.Arrays;
  * Messy right now, will require cleaning up in phase 2.
  */
 public class Map {
+    public boolean hasTeleported;
     private Tile[][] tiles;
     private Agent agent;
     private ArrayList<Guard> guards = new ArrayList<>();
@@ -30,13 +31,13 @@ public class Map {
         this.horizontalSize = horizontalSize;
         this.verticalSize = verticalSize;
         tiles = new Tile[horizontalSize][verticalSize];
-        System.out.println(tiles);
     }
 
     public Map(int row, int col){
         this.horizontalSize = col;
         this.verticalSize = row;
         tiles = new Tile[row][col];
+        this.hasTeleported = false;
     }
 
     public static Map createEmptyMap(Map map) {

@@ -24,7 +24,7 @@ public class Config {
     private int gameMode;
     private int numOfGuards;
     private int[] standardizedAreaBoundaries;
-    private int numberOfGames = 10;
+    private int numberOfGames = 100;
     //store an instance of this in our main gamerunner class eventually
     //Then we can access that instance as a field from other classes and have all these constants in one place
     public Config(){

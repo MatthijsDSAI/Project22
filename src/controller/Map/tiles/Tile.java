@@ -116,9 +116,6 @@ public abstract class Tile {
                 if(currentlyViewed && this.toString().equals("Floor")){
                     return Color.TAN.darker();
                 }
-                else if (explored && this.toString().equals("Floor")) {
-                    return Color.TAN;
-                }
             }
 
             return c;

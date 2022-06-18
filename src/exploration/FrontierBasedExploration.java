@@ -158,6 +158,7 @@ public class FrontierBasedExploration extends Exploration{
                 }
             }
         }
+        agent.setMovement(false);
         return null;
     }
 
