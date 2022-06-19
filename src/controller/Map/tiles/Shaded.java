@@ -8,6 +8,7 @@ public class Shaded extends Tile {
         this.setWalkable(true);
         this.setSeeThrough(false);
         this.setExploredByDefault(false);
+        this.setExploredByDefaultForIntruders(false);
         this.setColor(Color.GRAY);
         this.setX(x);
         this.setY(y);

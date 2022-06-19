@@ -7,6 +7,7 @@ public class SpawnAreaGuards extends Tile {
         this.setWalkable(true);
         this.setSeeThrough(true);
         this.setExploredByDefault(false);
+        this.setExploredByDefaultForIntruders(false);
         this.setColor(Color.MIDNIGHTBLUE);
         this.setX(x);
         this.setY(y);

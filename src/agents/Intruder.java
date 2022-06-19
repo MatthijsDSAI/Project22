@@ -3,6 +3,7 @@ package agents;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
+import controller.Visibility.Visibility;
 import exploration.*;
 import javafx.scene.paint.Color;
 
@@ -104,5 +105,23 @@ public class Intruder extends Agent{
     @Override
     public Color getColor(){
         return Color.ORANGE;
+    }
+
+    @Override
+    public void computeVisibleTiles(Map map){
+        this.visibleTiles = Visibility.computeVisibleTiles(map, this);
+        int num = visibleTiles.size();
+        if(hasRotatedOnPastIteration){
+            this.visibleTiles.addAll(Visibility.computeVisibleTilesIntermediateAngle(map, this));
+        }
+        int count = 0;
+        for(Tile tile : visibleTiles){
+            tile.setExploredForIntruders(true);
+            ownMap.setTile(tile.clone());
+            if(count<num)
+                tile.setCurrentlyViewed(true);
+            count++;
+        }
+        this.hasRotatedOnPastIteration = false;
     }
 }

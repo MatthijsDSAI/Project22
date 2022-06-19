@@ -26,7 +26,7 @@ public abstract class Agent{
     double soundproduced;
     boolean isSprinting;
     public Map ownMap;
-    private ArrayList<Tile> visibleTiles = new ArrayList<>();
+    protected ArrayList<Tile> visibleTiles = new ArrayList<>();
     private Marker[] marker = new Marker[5]; // 5 types of markers
     private Tile agentPosition;
     public Exploration exploration;
@@ -122,22 +122,7 @@ public abstract class Agent{
         this.ownMap = Map.createEmptyMap(map);
     }
 
-    public void computeVisibleTiles(Map map){
-        this.visibleTiles = Visibility.computeVisibleTiles(map, this);
-        int num = visibleTiles.size();
-        if(hasRotatedOnPastIteration){
-            this.visibleTiles.addAll(Visibility.computeVisibleTilesIntermediateAngle(map, this));
-        }
-        int count = 0;
-        for(Tile tile : visibleTiles){
-            tile.setExplored(true);
-            ownMap.setTile(tile.clone());
-            if(count<num)
-                tile.setCurrentlyViewed(true);
-            count++;
-        }
-        this.hasRotatedOnPastIteration = false;
-    }
+    public abstract void computeVisibleTiles(Map map);
 
     public boolean updateTargetArea() {
         return true;

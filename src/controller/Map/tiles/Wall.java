@@ -7,6 +7,7 @@ public class Wall extends Tile {
         this.setWalkable(false);
         this.setSeeThrough(false);
         this.setExploredByDefault(true);
+        this.setExploredByDefaultForIntruders(true);
         this.setColor(Color.BLACK);
         this.setX(x);
         this.setY(y);

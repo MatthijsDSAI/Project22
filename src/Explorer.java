@@ -9,5 +9,4 @@ public class Explorer {
         GameRunner gr = new GameRunner(scenario);
     }
 
-
 }

@@ -8,6 +8,7 @@ public class SpawnAreaIntruders extends Tile {
         this.setWalkable(true);
         this.setSeeThrough(true);
         this.setExploredByDefault(false);
+        this.setExploredByDefaultForIntruders(false);
         this.setColor(Color.RED);
         this.setX(x);
         this.setY(y);

@@ -24,6 +24,7 @@ public class Map {
     private int horizontalSize;
     private int verticalSize;
     private boolean isExplored = false;
+    private boolean isExploredForIntruders = false;
     private int discoveredTAFirst = -1; // 0 = guard, 1 = intruder, -1 = undiscovered
 
     public Map(int horizontalSize, int verticalSize, Agent agent){
@@ -95,6 +96,31 @@ public class Map {
         }
         if(explored/(notExplored+explored) == 1 ){
             map.isExplored = true;
+        }
+        return explored/(notExplored+explored);
+    }
+
+    public static double exploredForIntruders(Map map){
+        double notExplored = 0;
+        double explored = 0;
+        for(Tile[] tiles : map.tiles){
+            for(Tile tile : tiles){
+                if(!tile.isExploredByDefaultForIntruders()) {
+                    if(tile.isExploredForIntruders()){
+                        explored++;
+                    }
+                    else{
+                        notExplored++;
+                    }
+                }
+                else{
+                    explored++;
+                }
+
+            }
+        }
+        if(explored/(notExplored+explored) == 1){
+            map.isExploredForIntruders = true;
         }
         return explored/(notExplored+explored);
     }

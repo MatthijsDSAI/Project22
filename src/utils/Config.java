@@ -15,7 +15,7 @@ public class Config {
     private double BASESPEEDGUARD;
     private double SPRINTSTEEDINTRUDER;
     private Color agentColor = Color.CYAN;
-    public boolean GUI = true;
+    public boolean GUI = false;
     public boolean DEBUG = false;
     public long sleep = 100;
     private int[] centerOfTargetArea;

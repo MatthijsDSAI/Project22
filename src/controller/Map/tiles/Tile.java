@@ -15,9 +15,11 @@ import java.awt.*;
 public abstract class Tile {
 
     private boolean exploredByDefault;
+    private boolean exploredByDefaultForIntruders;
     private boolean walkable;
     private boolean seeThrough;
     private boolean explored;
+    private boolean exploredForIntruders;
     private boolean hasMarker;
     private Color c;
     private Tile type;
@@ -34,6 +36,8 @@ public abstract class Tile {
     public Tile(boolean exploredByDefault, boolean walkable, boolean seeThrough, Color c, Tile type, Agent agent) {
         this.exploredByDefault = exploredByDefault;
         this.explored = exploredByDefault;
+        this.exploredByDefaultForIntruders = exploredByDefault;
+        this.exploredForIntruders = exploredByDefault;
         this.walkable = walkable;
         this.seeThrough = seeThrough;
         this.c = c;
@@ -48,6 +52,14 @@ public abstract class Tile {
     public void setExploredByDefault(boolean exploredByDefault) {this.exploredByDefault = exploredByDefault;}
     public boolean isExploredByDefault() {
         return exploredByDefault;
+    }
+
+    public boolean isExploredByDefaultForIntruders() {
+        return exploredByDefaultForIntruders;
+    }
+
+    public void setExploredByDefaultForIntruders(boolean exploredByDefaultForIntruders) {
+        this.exploredByDefaultForIntruders = exploredByDefaultForIntruders;
     }
 
     public void setWalkable(boolean walkable) {this.walkable = walkable;}
@@ -94,7 +106,8 @@ public abstract class Tile {
     public javafx.scene.shape.Rectangle createRec(int x, int y){return new Rectangle(x, y,10,10);}
 
     public Color getColor() {
-        if (hasAgent()) {
+
+        if (hasAgent() && !this.hasMarker) {
             return getAgent().getColor();
         }
         else if ((0.5 < getSound()) && (getSound() <= 1)) {
@@ -147,6 +160,14 @@ public abstract class Tile {
 
     public boolean getExplored() {
         return explored;
+    }
+
+    public boolean isExploredForIntruders() {
+        return exploredForIntruders;
+    }
+
+    public void setExploredForIntruders(boolean exploredForIntruders) {
+        this.exploredForIntruders = exploredForIntruders;
     }
 
     public boolean hasSound(){

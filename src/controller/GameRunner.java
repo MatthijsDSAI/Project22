@@ -30,8 +30,8 @@ public class GameRunner {
     private Scenario scenario;
     private int gameMode;
     private GraphicsConnector gc;
-    private String guardExploration = "BaseLineIntruder";
-    private String intruderExploration = "BaseLineGuard";
+    private String guardExploration = "RandomExploration";
+    private String intruderExploration = "RandomExploration";
     private Map map;
     private int t;
     private int guardWins = 0;
@@ -129,7 +129,7 @@ public class GameRunner {
         }
         incrementWins(areaReached, noIntrudersLeft);
         int victor = noIntrudersLeft ? 0 : 1;
-        GameData gd = new GameData(victor, map.getDiscoveredTAFirst(),this.t, Map.explored(map),0.0); //need to add "intruder explored"
+        GameData gd = new GameData(victor, map.getDiscoveredTAFirst(), this.t, Map.explored(map),Map.exploredForIntruders(map)); //need to add "intruder explored"
         return gd;
     }
 
