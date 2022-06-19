@@ -310,7 +310,6 @@ public class CombinedGuard extends FrontierBasedExploration {
                         return qlGuard.makeMove(agent);
                     }
                     // place 1st or 2nd marker
-
                 }
             }
         }
