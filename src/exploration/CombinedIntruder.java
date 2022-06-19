@@ -57,16 +57,20 @@ public class CombinedIntruder extends FrontierBasedExploration{
         boolean hasMarker = checkMarker(visibleTiles);
         boolean hasGuards = checkGuards(visibleTiles);
 
-        if(hasMarker){
-//            MarkerInterpretation(agent);
-        }
 
         // Situation 1: Intruder didn't see the guards, TA and marker, so it will keep exploration
-        if(!hasGuards && !foundTarget && !hasMarker){
+        if(!hasGuards && !foundTarget){
+            if(hasMarker){
+                MarkerInterpretation(agent);
+            }
             System.out.println("case 1: didn't see the guards, TA and marker");
 //            return baseLineIntruder.makeMove(agent);
             Tile tile = null;
             if(agent.getAgentPosition().toString().equals("TargetArea")){
+                if(!hasMarker) {
+                    System.out.println("Marker added on TA");
+                    agent.addMarkers(4, map); // add pheromone marker
+                }
                 return prevDir;
             }
             Tile curTile = agent.getAgentPosition();
@@ -90,6 +94,8 @@ public class CombinedIntruder extends FrontierBasedExploration{
         //Situation 2: Intruder see the TA without seeing the TA and marker, it will go straight to the TA
         if(!hasGuards && foundTarget && !hasMarker){
             System.out.println("case 2: see the TA without seeing the TA and marker");
+            agent.addMarkers(0,map);
+            System.out.println("Added marker: ");
             return move(agent, getTargetArea(visibleTiles));
         }
 
@@ -279,6 +285,35 @@ public class CombinedIntruder extends FrontierBasedExploration{
         for (Tile tile : vision) {
             if (tile.getHasMarker()) {
                 return tile;
+            }
+        }
+        return null;
+    }
+
+    public Tile MarkerInterpretation(Agent agent){
+        Tile f = agent.findMarker();
+        if(f!=null)
+        {
+            Color c = agent.ownMap.getTile(f.getX(),f.getY()).getColor();
+            if(c==Color.BLUEVIOLET){ // turn south
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1);
+            }
+            else if(c==Color.GREENYELLOW){ //turn east
+                if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position());
+            }
+            else if(c==Color.CORAL){ //turn north
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1);
+            }
+            else if(c==Color.DARKORANGE){ //turn west
+                if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position());
+            }
+            else if(f.getIsPheromone()==true)
+            {
+                return f;
             }
         }
         return null;

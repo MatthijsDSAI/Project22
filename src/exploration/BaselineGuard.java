@@ -16,7 +16,7 @@ public class BaselineGuard extends FrontierBasedExploration{
     public BaselineGuard(Agent agent, Map map) {
         super(agent, map);
         //System.out.println("Creating markers...");
-        agent.createMarkers(5, c);
+        agent.createMarkers(5,6, c);
         //System.out.println("Markers created");
     }
 
@@ -44,58 +44,49 @@ public class BaselineGuard extends FrontierBasedExploration{
         }
         if(part == 0)
         {
-            if(halfway == 1)
+            if(agent.getY_position()+agent.getSpeed()<agent.ownMap.getVerticalSize()/2)
             {
-                if(agent.getNumberMarekr(0)>0) {
+                if(agent.getNumberMarekr(0)>0 && i>3) {
                     System.out.println("Add marker: "+ i + " at x:" +agent.getX_position() + " y: " + agent.getY_position());
                     agent.addMarkers(0, map);
-                    i++;
                     System.out.println("Marker added");
+                   // goalTile = agent.ownMap.getTile(agent.getX_position()+3, agent.getY_position());
                 }
                 else part=1;
-                if(agent.getX_position()+agent.getSpeed()<agent.ownMap.getHorizontalSize() && agent.ownMap.getTile(agent.getX_position()+agent.getSpeed(), agent.getY_position()).isWalkable())
+                if(agent.getX_position()+agent.getSpeed()<agent.ownMap.getHorizontalSize() && agent.ownMap.getTile(agent.getX_position()+agent.getSpeed(), agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()+agent.getSpeed(), agent.getY_position()).isWalkable())
                 {
                     goalTile = agent.ownMap.getTile(agent.getX_position()+agent.getSpeed(), agent.getY_position());
+                    i++;
                 }
-                else if(agent.getX_position()-agent.getSpeed()>0 && agent.ownMap.getTile(agent.getX_position()-agent.getSpeed(), agent.getY_position()).isWalkable()==true)
+                else if(agent.getX_position()-agent.getSpeed()>0 && agent.ownMap.getTile(agent.getX_position()-agent.getSpeed(), agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-agent.getSpeed(), agent.getY_position()).isWalkable()==true)
                 {
                     goalTile = agent.ownMap.getTile(agent.getX_position()-agent.getSpeed(), agent.getY_position());
+                    i++;
                 }
-                else
-                    part=1;
+//                else
+//                    part=1;
             }
-            else if(agent.getY_position()+agent.getSpeed()<agent.ownMap.getVerticalSize()/2)
-                goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()+agent.getSpeed());
-            else if(agent.getY_position()-agent.getSpeed()>agent.ownMap.getVerticalSize()/2)
-                goalTile = agent.ownMap.getTile(agent.getX_position(), agent.getY_position()-agent.getSpeed());
-            else halfway=1;
         }
-//        if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).getType()!=null)
-//        {
-//            Tile t = agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).getType();
-//            if(t.toString().equals("TelePortal"))
-//            {
-//                agent.addMarkers(4,map);
-//                goalTile= t;
-//            }
-//        }
-//        if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).getType()!=null) {
-//            Tile t = agent.ownMap.getTile(agent.getX_position(), agent.getY_position() + 1).getType();
-//            if (t.toString().equals("TelePortal"))
-//                agent.addMarkers(4,map);
-//        }
-//        if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).getType()!=null)
-//        {
-//            Tile t = agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).getType();
-//            if (t.toString().equals("TelePortal"))
-//                agent.addMarkers(4,map);
-//        }
-//        if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).getType()!=null)
-//        {
-//            Tile t = agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).getType();
-//            if (t.toString().equals("TelePortal"))
-//                agent.addMarkers(4,map);
-//        }
+        if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null)
+            if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).toString().equals("TelePortal"))
+        {
+                agent.addMarkers(4,map);
+        }
+        if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null)
+            if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).toString().equals("TelePortal"))
+            {
+                agent.addMarkers(4,map);
+            }
+        if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null)
+            if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).toString().equals("TelePortal"))
+            {
+                agent.addMarkers(4,map);
+            }
+         if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null)
+            if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).toString().equals("TelePortal"))
+        {
+                agent.addMarkers(4,map);
+        }
         if(goalTile != null) {
             Path path = findPath(agent, goalTile);
             if(path == null) {
@@ -122,42 +113,36 @@ public class BaselineGuard extends FrontierBasedExploration{
                     else if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).isWalkable())
                         return agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position());
             }
-            else if(c==Color.WHITE){
-                System.out.println("An intruder was caught");
-            }
+//            else if(c==Color.WHITE){
+//                System.out.println("An intruder was caught");
+//            }
             else if(f.getIsPheromone()==true)
             {
-               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null)
-               {
-                   Tile t = agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).getType();
-                   if(t.toString().equals("TelePortal"))
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).toString().equals("TelePortal")){
                        if(agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position()).isWalkable())
                            return agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position());
                        else if(agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position()).isWalkable())
                            return agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position());
                }
-               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null) {
-                   Tile t = agent.ownMap.getTile(agent.getX_position(), agent.getY_position() + 1).getType();
-                   if (t.toString().equals("TelePortal"))
+               if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).toString().equals("TelePortal")) {
                        if(agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position()).isWalkable())
                             return agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position());
                        else if(agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position()).isWalkable())
                             return agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position());
                }
-               if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null)
+               if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).toString().equals("TelePortal"))
                {
-                   Tile t = agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).getType();
-                   if(t.toString().equals("TelePortal"))
                        if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2).isWalkable())
                            return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2);
                        else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2).isWalkable())
                            return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2);
                }
-               if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null)
+                if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).toString().equals("TelePortal"))
                {
-                   Tile t = agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).getType();
-                   if(t.toString().equals("TelePortal"))
-                       return agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position());
+                   if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2).isWalkable())
+                       return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2);
+                   else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2).isWalkable())
+                       return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2);
                }
                 System.out.println("Agent already entered a teleportal.");
             }
