@@ -30,8 +30,8 @@ public class GameRunner {
     private Scenario scenario;
     private int gameMode;
     private GraphicsConnector gc;
-    private String guardExploration = "RandomExploration";
-    private String intruderExploration = "RandomExploration";
+    private String guardExploration = "BaseLineGuard";
+    private String intruderExploration = "BaseLineIntruder";
     private Map map;
     private int t;
     private int guardWins = 0;
@@ -101,6 +101,7 @@ public class GameRunner {
                 }
                 gamesPlayed++;
                 if(SAVE_CSV) csvData.addGame(game);
+                if(SAVE_CSV) saveCsv(csvData, "csvData.csv");
             }
             if(SAVE_CSV) saveCsv(csvData, "csvData.csv");
 

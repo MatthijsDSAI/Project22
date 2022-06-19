@@ -97,7 +97,9 @@ public class MapUpdater {
                 Utils.sleep(0);
                 Exploration explorer = guard.getExploration();
                 DirectionEnum dir = explorer.makeMove(guard);
-                MapUpdater.moveAgent(map, guard, dir);
+                if(!(dir==null)) {
+                    MapUpdater.moveAgent(map, guard, dir);
+                }
                 MapUpdater.refreshCurrentlyViewed(map, guard.getVisibleTiles());
                 guard.computeVisibleTiles(map);
                 MapUpdater.checkIntruderCapture(guard, map);
