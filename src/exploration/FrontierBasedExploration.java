@@ -50,7 +50,8 @@ public class FrontierBasedExploration extends Exploration{
     }
 
     public Tile updateGoal(Agent agent, boolean updated) {
-        if (updated || this.curPath == null || this.curPath.size() <= 1 || !isFrontier(this.curPath.getLast())) {
+        if(this.curPath == null) return null;
+        if (updated || this.curPath.size() <= 1 || !isFrontier(this.curPath.getLast())) {
             this.curPath = findPath(agent, frontierQueue, true);
         }
         Tile goalTile = null;
