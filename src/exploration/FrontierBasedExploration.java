@@ -50,10 +50,13 @@ public class FrontierBasedExploration extends Exploration{
     }
 
     public Tile updateGoal(Agent agent, boolean updated) {
-        if (updated || this.curPath.size() <= 1 || !isFrontier(this.curPath.getLast())) {
+        if (updated || this.curPath == null || this.curPath.size() <= 1 || !isFrontier(this.curPath.getLast())) {
             this.curPath = findPath(agent, frontierQueue, true);
         }
-        Tile goalTile = this.curPath.remove(1);
+        Tile goalTile = null;
+        if(this.curPath != null) {
+            goalTile = this.curPath.remove(1);
+        }
         return goalTile;
     }
 
@@ -307,6 +310,7 @@ public class FrontierBasedExploration extends Exploration{
      * @return the DirectionEnum for the agent to move towards the nextTile tile
      */
     public DirectionEnum findNextMoveDirection(Agent agent, Tile nextTile) {
+        if(nextTile == null) return null;
         Tile curTile = agent.getAgentPosition();
         int curX = curTile.getX();
         int curY = curTile.getY();
