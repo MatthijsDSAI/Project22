@@ -27,7 +27,6 @@ public class FrontierBasedExploration extends Exploration{
         frontierQueue = new LinkedList<>();
         BFSQueue = new LinkedList<>();
         exploredTiles = new LinkedList<>();
-        this.curPath = new Path();
     }
 
     @Override
@@ -44,7 +43,6 @@ public class FrontierBasedExploration extends Exploration{
         if(frontierQueue.isEmpty()) {
             return null;
         }
-
         Tile goalTile = updateGoal(agent, updated); // update the goal tile for the agent
         DirectionEnum dir = findNextMoveDirection(agent, goalTile);
         //Utils.sleep(100);
@@ -158,7 +156,6 @@ public class FrontierBasedExploration extends Exploration{
                 }
             }
         }
-        agent.setMovement(false);
         return null;
     }
 
@@ -240,31 +237,18 @@ public class FrontierBasedExploration extends Exploration{
             path = queue.remove(findShortestPath(queue, goal));
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
-            if (goal.contains(lastTile)) {
-                if(lastTile.isWalkable()) {
-                    return path;
-                }
-                else if (lastTile.hasAgent()) {
-                    path.remove(path.getLast());
-                    return path;
-                }
+            if (lastTile.isWalkable() && goal.contains(lastTile)) {
+                return path;
             }
             LinkedList<Tile> curAdjacencyList = adjacencyList.get(lastTile);
             for (Tile tile : curAdjacencyList) {
                 if(path.contains(tile) || tilesSeen.contains(tile)) {
                     continue;
                 }
-                if (!path.contains(tile)) {
-                    if(tile.hasAgent()) {
-                        Path newPath = new Path(path);
-                        newPath.add(tile);
-                        queue.offer(newPath);
-                    }
-                    else if (tile.isWalkable()) {
-                        Path newPath = new Path(path);
-                        newPath.add(tile);
-                        queue.offer(newPath);
-                    }
+                if (!path.contains(tile) && tile.isWalkable()) {
+                    Path newPath = new Path(path);
+                    newPath.add(tile);
+                    queue.offer(newPath);
                 }
             }
         }
@@ -344,7 +328,7 @@ public class FrontierBasedExploration extends Exploration{
             dirs.add(DirectionEnum.EAST);
         }
         else if(curX > goalX) {
-            if(DEBUG)    
+            if(DEBUG)
                 System.out.println("West");
             dirs.add(DirectionEnum.WEST);
         }
