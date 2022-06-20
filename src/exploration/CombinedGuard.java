@@ -429,7 +429,7 @@ public class CombinedGuard extends FrontierBasedExploration {
                 else if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).isWalkable())
                     return agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position());
             }
-            if(c==this.c[1]){
+            if(c==this.c[2]){
                 if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).isWalkable())
                     return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1);
                 else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).isWalkable())
