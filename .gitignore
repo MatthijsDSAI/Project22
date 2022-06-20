@@ -19,6 +19,9 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+*.~lock*
+*.~xml*
+*.~bin*
 
 # External tool builders
 .externalToolBuilders/
