@@ -24,7 +24,10 @@ public class BaselineGuard extends FrontierBasedExploration{
             if(agentFound != null && agentFound.getType().equals("Intruder")) {
                 goalTile = agentFound.getAgentPosition();
                 Path path = findPath(agent, goalTile);
-                return findNextMoveDirection(agent, path.get(1));
+                if(path.size() > 1) {
+                    goalTile = path.get(1);
+                }
+                return findNextMoveDirection(agent, goalTile);
             }
             if(tile.toString().equals("TargetArea")) {
             }

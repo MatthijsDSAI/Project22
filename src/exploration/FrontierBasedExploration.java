@@ -254,17 +254,15 @@ public class FrontierBasedExploration extends Exploration{
                 if(path.contains(tile) || tilesSeen.contains(tile)) {
                     continue;
                 }
-                if (!path.contains(tile)) {
-                    if(tile.hasAgent()) {
-                        Path newPath = new Path(path);
-                        newPath.add(tile);
-                        queue.offer(newPath);
-                    }
-                    else if (tile.isWalkable()) {
-                        Path newPath = new Path(path);
-                        newPath.add(tile);
-                        queue.offer(newPath);
-                    }
+                if(tile.hasAgent()) {
+                    Path newPath = new Path(path);
+                    newPath.add(tile);
+                    queue.offer(newPath);
+                }
+                else if (tile.isWalkable()) {
+                    Path newPath = new Path(path);
+                    newPath.add(tile);
+                    queue.offer(newPath);
                 }
             }
         }
