@@ -36,6 +36,7 @@ public class BaseLineIntruder extends FrontierBasedExploration {
         }
         tile = findBestFrontier(frontierQueue, intruder);
         Path path = findPath(intruder, tile);
+        if(path == null) return null;
         if(path.size()==1){
             return findNextMoveDirection(intruder, path.get(0));
         }

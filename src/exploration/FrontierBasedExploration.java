@@ -236,7 +236,12 @@ public class FrontierBasedExploration extends Exploration{
         path.add(curTile);
         queue.add(path);
         LinkedList<Tile> tilesSeen = new LinkedList<>();
+        int i = 0;
         while(!queue.isEmpty()) {
+            i += 1;
+            if(i > 200) {
+                break;
+            }
             path = queue.remove(findShortestPath(queue, goal));
             Tile lastTile = path.getLast();
             tilesSeen.add(lastTile);
