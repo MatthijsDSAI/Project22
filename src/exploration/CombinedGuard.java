@@ -142,6 +142,9 @@ public class CombinedGuard extends FrontierBasedExploration {
         // situation 1: guard has not seen TA or Invader yet, so keep exploring
         if (!targetHasBeenReached && !invaderSeen && !isChasing) {
             System.out.println("1");
+            if(agent.findMarker()!=null){
+                MarkerInterpretation(agent);
+            }
             if (DEBUG) {
                 System.out.println(frontierExploration.makeMove(this.agent).getDirection());
             }
