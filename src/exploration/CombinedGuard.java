@@ -58,7 +58,7 @@ public class CombinedGuard extends FrontierBasedExploration {
     // assuming we know the boundaries of standardized area
     public CombinedGuard(Agent agent, Map map, int northBoundaryOfStandardized, int southBoundaryOfStandardized, int westBoundaryOfStandardized, int eastBoundaryOfStandardized) {
         super(agent, map);
-        agent.createMarkers(5,6,c);
+        agent.createMarkers(3,6,c);
         this.map = map;
         this.agent = agent;
 

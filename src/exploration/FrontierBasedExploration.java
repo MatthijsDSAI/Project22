@@ -45,7 +45,7 @@ public class FrontierBasedExploration extends Exploration{
             return null;
         }
         Tile goalTile = updateGoal(agent, updated); // update the goal tile for the agent
-        //if(agent.checkmarkerplacement()) {
+        if(agent.checkmarkerplacement()) {
             if (goalTile.getY() == agent.ownMap.getVerticalSize() / 2 && goalTile.toString().equals("TargetArea") == false) {
                 if (agent.getNumberMarekr(0) > 0 && goalTile.getHasMarker() == false) {
                     agent.addMarkers(0, map);
@@ -72,18 +72,18 @@ public class FrontierBasedExploration extends Exploration{
                 if (goalTile.toString().equals("TelePortal")) {
                     agent.addMarkers(4, map);
                 }
-        //}
+        }
         DirectionEnum dir = findNextMoveDirection(agent, goalTile);
         //Utils.sleep(100);
         return dir;
     }
 
     public Tile updateGoal(Agent agent, boolean updated) {
+        if(agent.findMarker()!=null && agent.findMarker()!=agent.getAgentPosition())
+            this.curPath = findPath(agent, MarkerInterpretation(agent));
         if (updated || this.curPath.size() <= 1 || !isFrontier(this.curPath.getLast())) {
             this.curPath = findPath(agent, frontierQueue, true);
         }
-        if(agent.findMarker()!=null && agent.findMarker()!=agent.getAgentPosition())
-            this.curPath = findPath(agent, MarkerInterpretation(agent));
         Tile goalTile = this.curPath.remove(1);
         return goalTile;
     }

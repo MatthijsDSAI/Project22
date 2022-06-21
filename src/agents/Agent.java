@@ -39,6 +39,7 @@ public abstract class Agent{
     public int intermediateAngle;
     public boolean hasRotatedOnPastIteration = false;
     private int dist =-1;
+    private int number_markers =2;
     /*
      * The agent class
      * An agent tracks it's own position relative to its starting position.
@@ -324,8 +325,8 @@ public abstract class Agent{
 
     public boolean checkmarkerplacement() {
         Tile r=null;
-        for(int i =0; i<=6;i++) {
-            if(getY_position() + i < ownMap.getHorizontalSize())
+        for(int i =0; i<=4;i++) {
+            if(getX_position() + i < ownMap.getHorizontalSize())
                 if(this.ownMap.getTile(getX_position() + i, getY_position())!=null && this.ownMap.getTile(getX_position() + i, getY_position()).isWalkable() ){
                     r = this.ownMap.getTile(getX_position() + i, getY_position());
                     if (r.getHasMarker()) {
