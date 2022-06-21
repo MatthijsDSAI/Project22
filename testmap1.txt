@@ -1,7 +1,7 @@
 height = 80
 width = 80
 gameMode = 0
-numGuards = 2
+numGuards = 4
 numIntruders = 0
 baseSpeedGuard = 5
 baseSpeedIntruder = 5
@@ -9,7 +9,6 @@ sprintSpeedIntruder = 1
 distanceViewing = 15
 numberMarkers = 5
 smellingDistance = 5
-targetArea = 3 20 8 25
 spawnAreaGuards = 2 2 8 8
 spawnAreaIntruders = 74 74 76 76
 wall = 0 0 80 1

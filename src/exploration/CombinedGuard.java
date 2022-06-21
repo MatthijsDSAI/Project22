@@ -29,7 +29,7 @@ public class CombinedGuard extends FrontierBasedExploration {
 
     private final Queue<Tile> cornersOfStandardized = new LinkedList<>();
 
-    private boolean useQL = true;
+    private boolean useQL = false;
     private boolean isChasing = false;
     private int timePassedAfterSeeingInvader = 0;
     private int situationStageOf3 = 1;

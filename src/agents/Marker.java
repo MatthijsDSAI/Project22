@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class Marker{
 
+
     private int s=0;
     private Color color;
     private int number_markers, distance = -1;

@@ -96,7 +96,7 @@ public class MapUpdater {
         for(int i = guards.size()-1; i>=0; i--){
             Guard guard = guards.get(i);
             if (j == 0 || j % (Scenario.config.getTimeStepSize() / guard.getSpeed()) == 0) {
-                Utils.sleep(0);
+                //Utils.sleep(30);
                 Exploration explorer = guard.getExploration();
                 DirectionEnum dir = explorer.makeMove(guard);
                 if(!(dir==null)) {
@@ -115,7 +115,7 @@ public class MapUpdater {
         for(int i = intruders.size()-1; i>=0; i--){
             Intruder intruder = intruders.get(i);
             if (j == 0 || j%(Scenario.config.getTimeStepSize()/intruder.getSpeed()) == 0) {
-                Utils.sleep(0);
+                //Utils.sleep(30);
                 Exploration explorer = intruder.getExploration();
                 DirectionEnum dir = explorer.makeMove(intruder);
                 if(!(dir==null)) {

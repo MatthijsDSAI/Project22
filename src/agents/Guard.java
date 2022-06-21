@@ -14,7 +14,7 @@ public class Guard extends Agent{
     public Guard(Tile tile){
         super(tile);
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
-        this.createMarkers(5, c);
+        this.createMarkers(1, c);
     }
 
     @Override

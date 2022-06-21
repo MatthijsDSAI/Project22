@@ -185,7 +185,7 @@ public abstract class Agent{
         for(Tile t : visibleTiles)
         { // Possible improvement return a list of markers
             if(t.getHasMarker()==true) {
-                System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
+//                System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
                 return t;
             }
         }
@@ -216,7 +216,7 @@ public abstract class Agent{
                         return r;
                 }
         }
-        System.out.println("Didn't see a marker yet");
+        //pheromone
         return null;
     }
 
