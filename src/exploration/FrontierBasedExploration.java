@@ -404,14 +404,14 @@ public class FrontierBasedExploration extends Exploration{
             if(c==Color.RED){
                 if(agent.ownMap.getTile(agent.getX_position()+6,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()+6,agent.getY_position()).isWalkable())
                     return agent.ownMap.getTile(agent.getX_position()+6,agent.getY_position());
-//                else if(agent.ownMap.getTile(agent.getX_position()-6,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-6,agent.getY_position()).isWalkable())
-//                    return agent.ownMap.getTile(agent.getX_position()-6,agent.getY_position());
+                else if(agent.ownMap.getTile(agent.getX_position()-6,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-6,agent.getY_position()).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position()-6,agent.getY_position());
             }
             if(c==Color.GREEN){
                 if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+6)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+6).isWalkable())
                     return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+6);
-//                else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-6)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-6).isWalkable())
-//                    return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-6);
+                else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-6)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-6).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-6);
             }
             else if(c==Color.WHITE){
                 System.out.println("An intruder was caught");
