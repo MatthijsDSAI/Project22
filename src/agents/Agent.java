@@ -38,6 +38,7 @@ public abstract class Agent{
     public Tile targetArea;
     public int intermediateAngle;
     public boolean hasRotatedOnPastIteration = false;
+    private int dist =-1;
     /*
      * The agent class
      * An agent tracks it's own position relative to its starting position.
@@ -157,7 +158,10 @@ public abstract class Agent{
         {
             marker[i] = new Marker(c[i], number_markers);
             if(c==null)
+            {
+                this.dist = distance;
                 marker[i].setDistance(distance); // distance the pheromone can be felt at
+            }
             //System.out.println("Marker created: " + marker[i].toString());
         }
     }
@@ -170,41 +174,51 @@ public abstract class Agent{
         }
     }
 
+
+
     public Tile findMarker(){
-        //this.computeVisibleTiles(ownMap);
+        this.computeVisibleTiles(ownMap);
+        int distance=0;
         ArrayList<Tile> visibleTiles = this.getVisibleTiles();
         for(Tile t : visibleTiles)
-        { // return a list of markers
-            //if(t.getY() == tile.getY() && t.getX()== tile.getX())
+        { // Possible improvement return a list of markers
             if(t.getHasMarker()==true) {
-                System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
+                //System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
                 return t;
             }
+        }
+        if(dist>-1)
+            for(int i =1; i<=distance;i++) {
+                Tile r = this.ownMap.getTile(getX_position() + i, getY_position());
+                if (r != null && r.getHasMarker() && r.getIsPheromone()) {
+                    distance = agentPosition.manhattanDist(r);
+                    if (distance <= dist)
+                        return r;
+                }
+                r = this.ownMap.getTile(getX_position() - i, getY_position());
+                if (r != null && r.getHasMarker() && r.getIsPheromone()) {
+                    distance = agentPosition.manhattanDist(r);
+                    if (distance <= dist)
+                        return r;
+                }
+                r = this.ownMap.getTile(getX_position(), getY_position() + i);
+                if (r != null && r.getHasMarker() && r.getIsPheromone()) {
+                    distance = agentPosition.manhattanDist(r);
+                    if (distance <= dist)
+                        return r;
+                }
+                r = this.ownMap.getTile(getX_position(), getY_position() - i);
+                if (r != null && r.getHasMarker() && r.getIsPheromone()) {
+                    distance = agentPosition.manhattanDist(r);
+                    if (distance <= dist)
+                        return r;
+                }
         }
         //pheromone
         System.out.println("Didn't see a marker yet");
         return null;
     }
 
-//    public void addMarkers(int i, Color c, Map map){
-//        // marker[i].addMarker(this, c, map);
-//        System.out.println("Marker " + c.toString() +" placed at " + this.getX_position() + " "+ this.getY_position());
-//        if(marker[i].getNumber_markers()>0) {
-//            marker[i].setNumber_markers(marker[i].getNumber_markers() - 1);
-//            if (c != null) {
-//                ownMap.getTile(this.getX_position(), this.getY_position()).setColor(c);
-//                map.getTile(this.getX_position(), this.getY_position()).setColor(c);
-//            }
-//            else{
-//                ownMap.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
-//                map.getTile(this.getX_position(), this.getY_position()).setIsPheromone(true);
-//            }
-//            ownMap.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
-//            map.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
-//        }
-//        else
-//            System.out.println("Markers are finished");
-//    }
 
     //i -> number of marker you want to place
     //map -> actual map
@@ -306,5 +320,40 @@ public abstract class Agent{
 
     public int getIntermediateAngle() {
         return intermediateAngle;
+    }
+
+    public boolean checkmarkerplacement() {
+        Tile r=null;
+        for(int i =0; i<=6;i++) {
+            if(getY_position() + i < ownMap.getHorizontalSize())
+                if(this.ownMap.getTile(getX_position() + i, getY_position())!=null && this.ownMap.getTile(getX_position() + i, getY_position()).isWalkable() ){
+                    r = this.ownMap.getTile(getX_position() + i, getY_position());
+                    if (r.getHasMarker()) {
+                    return false;
+                }
+            }
+            if(getX_position() - i > 0)
+                if(this.ownMap.getTile(getX_position() - i, getY_position())!=null && this.ownMap.getTile(getX_position() - i, getY_position()).isWalkable())
+                {
+                    r = this.ownMap.getTile(getX_position() - i, getY_position());
+                    if (r.getHasMarker()) {
+                        return false;
+                    }
+                }
+            if(getY_position() + i < ownMap.getVerticalSize() && this.ownMap.getTile(getX_position(), getY_position() + i)!=null) {
+                r = this.ownMap.getTile(getX_position(), getY_position() + i);
+                if (r.getHasMarker()) {
+                    return false;
+                }
+            }
+            if(getY_position()-i > 0 && this.ownMap.getTile(getX_position(), getY_position() - i)!=null) {
+                r = this.ownMap.getTile(getX_position(), getY_position() - i);
+                if (r.getHasMarker()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+
     }
 }
