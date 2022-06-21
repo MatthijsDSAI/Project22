@@ -222,8 +222,8 @@ public abstract class Agent{
             ownMap.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
             map.getTile(this.getX_position(), this.getY_position()).setHasMarker(true);
         }
-        else
-            System.out.println("Markers are finished");
+//        else
+//            System.out.println("Markers are finished");
     }
 
     public Tile getAgentPosition(){
