@@ -61,7 +61,6 @@ public class CombinedIntruder extends FrontierBasedExploration{
 
         // Situation 1: Intruder didn't see the guards, TA and marker, so it will keep exploration
         if(!hasGuards && !foundTarget && !hasMarker){
-            System.out.println("case 1: didn't see the guards, TA and marker");
 //            return baseLineIntruder.makeMove(agent);
             Tile tile = null;
             if(agent.getAgentPosition().toString().equals("TargetArea")){
@@ -87,7 +86,6 @@ public class CombinedIntruder extends FrontierBasedExploration{
 
         //Situation 2: Intruder see the TA without seeing the TA and marker, it will go straight to the TA
         if(!hasGuards && foundTarget && !hasMarker){
-            System.out.println("case 2: see the TA without seeing the TA and marker");
             return move(agent, getTargetArea(visibleTiles));
         }
 
@@ -105,7 +103,6 @@ public class CombinedIntruder extends FrontierBasedExploration{
                     bestTile = tile;
                 }
             }
-            System.out.println("case 3: see the guards");
             return move(agent, bestTile);
         }
 
@@ -126,10 +123,8 @@ public class CombinedIntruder extends FrontierBasedExploration{
                         bestTile = tile;
                     }
                 }
-                System.out.println("case 4.1: escape");
                 return move(agent, bestTile);
             }else {
-                System.out.println("case 4.2: move to target");
                 return move(agent, getTargetArea(visibleTiles));
             }
         }
@@ -189,33 +184,28 @@ public class CombinedIntruder extends FrontierBasedExploration{
         ArrayList<DirectionEnum> dirs = new ArrayList<>();
 
         if(guardsX < goalX) {
-            System.out.println("East");
             if(map.getTile(agent.getX_position()+1, agent.getY_position()).isWalkable()) {
                 dirs.add(DirectionEnum.EAST);
             }
         }
         else if(guardsX > goalX) {
-            System.out.println("West");
             if(map.getTile(agent.getX_position()-1, agent.getY_position()).isWalkable()) {
                 dirs.add(DirectionEnum.WEST);
             }
         }
 
         if (guardsY < goalY) {
-            System.out.println("South");
             if(map.getTile(agent.getX_position(), agent.getY_position()+1).isWalkable()) {
                 dirs.add(DirectionEnum.SOUTH);
             }
         }
         else if (guardsY > goalY) {
-            System.out.println("North");
             if(map.getTile(agent.getX_position(), agent.getY_position()-1).isWalkable()) {
                 dirs.add(DirectionEnum.NORTH);
             }
         }
 
         if(!dirs.isEmpty()) {
-            System.out.println(dirs.size());
             return dirs.get(r.nextInt(dirs.size()));
         }
         else {
