@@ -38,6 +38,7 @@ public abstract class Agent{
     public Tile targetArea;
     public int intermediateAngle;
     public boolean hasRotatedOnPastIteration = false;
+    int dist;
     /*
      * The agent class
      * An agent tracks it's own position relative to its starting position.
@@ -157,7 +158,10 @@ public abstract class Agent{
         {
             marker[i] = new Marker(c[i], number_markers);
             if(c==null)
+            {
+                this.dist = distance;
                 marker[i].setDistance(distance); // distance the pheromone can be felt at
+            }
             //System.out.println("Marker created: " + marker[i].toString());
         }
     }
@@ -172,6 +176,7 @@ public abstract class Agent{
 
     public Tile findMarker(){
         //this.computeVisibleTiles(ownMap);
+        int distance=0;
         ArrayList<Tile> visibleTiles = this.getVisibleTiles();
         for(Tile t : visibleTiles)
         { // return a list of markers
@@ -179,6 +184,32 @@ public abstract class Agent{
             if(t.getHasMarker()==true) {
                 System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
                 return t;
+            }
+            }
+        for(int i =1; i<=distance;i++) {
+            Tile r = this.ownMap.getTile(getX_position() + i, getY_position());
+            if (r != null && r.getHasMarker() && r.getIsPheromone()) {
+                distance = agentPosition.manhattanDist(r);
+                if (distance <= dist)
+                    return r;
+            }
+            r = this.ownMap.getTile(getX_position() - i, getY_position());
+            if (r != null && r.getHasMarker() && r.getIsPheromone()) {
+                distance = agentPosition.manhattanDist(r);
+                if (distance <= dist)
+                    return r;
+            }
+            r = this.ownMap.getTile(getX_position(), getY_position() + i);
+            if (r != null && r.getHasMarker() && r.getIsPheromone()) {
+                distance = agentPosition.manhattanDist(r);
+                if (distance <= dist)
+                    return r;
+            }
+            r = this.ownMap.getTile(getX_position(), getY_position() - i);
+            if (r != null && r.getHasMarker() && r.getIsPheromone()) {
+                distance = agentPosition.manhattanDist(r);
+                if (distance <= dist)
+                    return r;
             }
         }
         //pheromone
