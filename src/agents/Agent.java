@@ -177,13 +177,14 @@ public abstract class Agent{
 
 
     public Tile findMarker(){
-        this.computeVisibleTiles(ownMap);
+       // this.computeVisibleTiles(ownMap);
         int distance=0;
         ArrayList<Tile> visibleTiles = this.getVisibleTiles();
+//        System.out.println("");
         for(Tile t : visibleTiles)
         { // Possible improvement return a list of markers
             if(t.getHasMarker()==true) {
-                //System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
+                System.out.println("Found Marker at position: " + t.getX() +" "+ t.getY());
                 return t;
             }
         }
@@ -214,7 +215,6 @@ public abstract class Agent{
                         return r;
                 }
         }
-        //pheromone
         System.out.println("Didn't see a marker yet");
         return null;
     }
