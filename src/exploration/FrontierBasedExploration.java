@@ -326,6 +326,7 @@ public class FrontierBasedExploration extends Exploration{
      * @return the DirectionEnum for the agent to move towards the nextTile tile
      */
     public DirectionEnum findNextMoveDirection(Agent agent, Tile nextTile) {
+        if(nextTile == null) return null;
         Tile curTile = agent.getAgentPosition();
         int curX = curTile.getX();
         int curY = curTile.getY();
