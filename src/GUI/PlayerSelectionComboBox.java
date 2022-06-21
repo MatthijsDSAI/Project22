@@ -19,7 +19,6 @@ public class PlayerSelectionComboBox extends HBox {
         guard.getItems().add("BaseLineGuard");
         guard.getItems().add("CombinedGuard");
 
-        guard.getItems().add("QLGuard");
         this.intruder = new PlayerChoiceBox(this, "intruder");
         intruder.getItems().add("RandomExploration");
         intruder.getItems().add("BaseLineIntruder");
