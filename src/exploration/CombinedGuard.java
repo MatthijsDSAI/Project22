@@ -4,16 +4,17 @@ import agents.Agent;
 import agents.Intruder;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
+import controller.Scenario;
+import javafx.scene.paint.Color;
 import utils.DirectionEnum;
 
 import java.util.*;
-import java.util.List;
-
 import static java.lang.Math.abs;
 
 public class CombinedGuard extends FrontierBasedExploration {
 
     public Map map;
+    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, null};
 
     public Agent agent;
     public FrontierBasedExploration frontierExploration;
@@ -21,6 +22,10 @@ public class CombinedGuard extends FrontierBasedExploration {
     private boolean targetHasBeenReached = false;
     private boolean invaderSeen = false;
     private boolean patrolling = false;
+    private boolean hasPlacedTAMarker = false;
+    private boolean needToPlaceSecondMarker = false;
+    private boolean qlGuardHasHalve = false;
+    private boolean freeGuard = false;
 
     private final Queue<Tile> cornersOfStandardized = new LinkedList<>();
 
@@ -40,14 +45,24 @@ public class CombinedGuard extends FrontierBasedExploration {
     private final Tile northWestCorner;
     private final Tile southWestCorner;
     private final Tile southEastCorner;
+
+    private int previousDistToW = 0;
+    private int previousDistToN = 0;
+    private int previousDistToE = 0;
+    private int previousDistToS = 0;
     private DirectionEnum lastDirIntruderHasBeenSeen;
+
+    private int distanceToOtherGuards = 0;
+
 
     // assuming we know the boundaries of standardized area
     public CombinedGuard(Agent agent, Map map, int northBoundaryOfStandardized, int southBoundaryOfStandardized, int westBoundaryOfStandardized, int eastBoundaryOfStandardized) {
         super(agent, map);
-
+        agent.createMarkers(3,6,c);
         this.map = map;
         this.agent = agent;
+
+        this.distanceToOtherGuards = Math.floorDiv(((eastBoundaryOfStandardized - westBoundaryOfStandardized) * 2 + (southBoundaryOfStandardized - northBoundaryOfStandardized) * 2), Scenario.config.getNumOfGuards());
 
         this.northBoundaryOfStandardized = northBoundaryOfStandardized;
         this.southBoundaryOfStandardized = southBoundaryOfStandardized;
@@ -64,43 +79,53 @@ public class CombinedGuard extends FrontierBasedExploration {
         cornersOfStandardized.add(southWestCorner);
         cornersOfStandardized.add(southEastCorner);
 
+
         this.frontierExploration = new FrontierBasedExploration(agent, map);
         this.qlGuard = new QLGuard(agent, map);
     }
 
     /**
-     * This class handles 3 situations:
+     * This class handles 4 situations: (new situations can be added further)
      * <p>
      * Situation 1: Guard has not seen TA or Invader yet, so keep exploring. Return frontierExploration move
-     * - Situation 1.1: Guard has seen invader whilst not seeing TA, start to chase. Return chasing method
      * <p>
-     * Situation 2: Guard has seen target area but not the intruder, start patrolling (either with baseline patrolling or QL)
+     * Situation 2: Guard has seen invader whilst not seeing TA, start to chase
+     * - Situation 2.1: Guard is chasing invader without the knowledge of TA, return chasing method
+     * <p>
+     * Situation 3: Guard has seen target area but not the intruder, start patrolling (either with baseline patrolling or QL)
      * The situations mentioned below is for baseline patrolling, if QL is to be used then these situations can be skipped
-     * - Situation 2.2: Make guard go to the closest border by using "findPath" method found at Frontier Exploration Class
-     * - Situation 2.3: Make guard patrol along the border of standardized area
+     * - Situation 3.1: Turn guard towards to the closest border
+     * - Situation 3.2: Make guard reach the corner of a boundary by going in a straight line
+     * - Situation 3.3: Make guard go to the corner of standardized area in a straight line
+     * - Situation 3.4: Make guard patrol along the border of standardized area
      * <p>
-     * Situation 3: Guard sees invader while patrolling
-     * - Situation 3.1: Chase intruder, if distance to the closest corner becomes over 10 then give up and return to TA
+     * Situation 4: Guard sees invader while patrolling
+     * - Situation 4.1: Chase intruder, if distance to the closest corner becomes over 10 then give up and return to TA
+     * (?further situations could be added here?)
+     * (shout (check if there exists another guard) and pursue invader)
+     * (disregard)
+     * ...
      */
     @Override
     public DirectionEnum makeMove(Agent agent) {
+        boolean DEBUG = false;
         int x = agent.getX_position();
         int y = agent.getY_position();
 
         ArrayList<Tile> visibleTiles = agent.getVisibleTiles();
         updateKnowledge(agent, visibleTiles);
 
+        if (DEBUG) {
+            System.out.println();
+            System.out.println("Location of guard: at x:" + x + ", y:" + y);
+        }
+
         // if guard sees TA set "targetHasBeenReached" true and never change back to false
         if (!targetHasBeenReached) {
             targetHasBeenReached = checkTargetArea(visibleTiles);
-            if (targetHasBeenReached && isChasing) { // this means guard saw TA while chasing, go to TA instead
-                isChasing = false;
-            } else if (targetHasBeenReached && checkInvader(visibleTiles)) { // guard saw TA and intruder at the same time
-                isChasing = true;
-                situationStageOf4 = 2;
-            }
             if(targetHasBeenReached) {
                 agent.updateTargetArea();
+                isChasing = false;
             }
         }
 
@@ -114,25 +139,34 @@ public class CombinedGuard extends FrontierBasedExploration {
             lastDirIntruderHasBeenSeen = DirectionEnum.getDirection(agent.getAngle());
         }
 
-        // if sees intruder at situation 3.1 or situation 3.2, making it go to situation 4.1
-        if (targetHasBeenReached && invaderSeen && !patrolling && !isChasing && ((situationStageOf3==1) || (situationStageOf3==2))) {
-            patrolling = true;
-        }
-
         // situation 1: guard has not seen TA or Invader yet, so keep exploring
-        if (!targetHasBeenReached && !invaderSeen && !isChasing && !patrolling) {
+        if (!targetHasBeenReached && !invaderSeen && !isChasing) {
+            System.out.println("1");
+            if(agent.findMarker()!=null){
+                MarkerInterpretation(agent);
+            }
+            if (DEBUG) {
+                System.out.println(frontierExploration.makeMove(this.agent).getDirection());
+            }
             return frontierExploration.makeMove(this.agent);
         }
 
-        // situation 1.1: guard has seen invader whilst never seen TA, start to chase
-        if (!targetHasBeenReached && invaderSeen && !isChasing && !patrolling) {
+        // situation 2: guard has seen invader whilst not seeing TA, start to chase
+        if (!targetHasBeenReached && invaderSeen && !isChasing) {
+            System.out.println("2");
             isChasing = true;
+            if (DEBUG) {
+                System.out.println(chasing(agent, visibleTiles, checkInvader(visibleTiles)).getDirection());
+            }
             return chasing(agent, visibleTiles, checkInvader(visibleTiles));
         }
 
-        // situation 1.1: guard is chasing invader without the knowledge of TA
-        if (!targetHasBeenReached && isChasing && !patrolling) {
-
+        // situation 2.1: guard is chasing invader without the knowledge of TA
+        if (!targetHasBeenReached && isChasing) {
+            System.out.println("2.1");
+            if (DEBUG) {
+                // System.out.println(chasing(guard, getInvader(visibleTiles).getAgentPosition()).getDirection());
+            }
             if (checkInvader(visibleTiles)) { // meaning again saw the intruder, set counter to 0
                 timePassedAfterSeeingInvader = 0;
             } else {
@@ -148,26 +182,41 @@ public class CombinedGuard extends FrontierBasedExploration {
             }
         }
 
-        // situation 2:
-        // situation 2.1: Guard sees the target area first time
-        if (!invaderSeen && !isChasing && targetHasBeenReached && !patrolling && (situationStageOf3 == 1)) {
+        // situation 3:
+
+        // situation 3.1: Guard sees the target area first time
+        if (!isChasing && targetHasBeenReached && (situationStageOf3 == 1)) {
+            System.out.println("3.1");
 
             this.curPath = findPathTargetArea(agent, cornersOfStandardized, false);
-            if (this.curPath.size() == 2) { // setting to situation 3.2 (because we are 1 move away from goal)
+            if (this.curPath.size() == 2) { // setting to 1 so that guard is turned to right direction in situation 3.2 (so 1 move away from goal)
                 situationStageOf3 = 2;
+                previousDistToW = (x - westBoundaryOfStandardized);
+                previousDistToE = (x - eastBoundaryOfStandardized);
+                previousDistToN = (y - northBoundaryOfStandardized);
+                previousDistToS = (y - southBoundaryOfStandardized);
                 if (useQL) patrolling = true;
             }
+            if (DEBUG) System.out.println(findNextMoveDirection(agent, this.curPath.get(1)));
             return findNextMoveDirection(agent, this.curPath.get(1));
         }
 
-        // situation 2.2: Guard is going to the corner of standardized area
-        if (!useQL) { // this part is baseline patrolling
-            if (targetHasBeenReached && !invaderSeen && !isChasing && !patrolling && (situationStageOf3 == 2)) {
+        // situation 3.2: Guard is going to the corner of standardized area
+        if (!useQL) { // TODO, handle multiple guards
+            if (targetHasBeenReached && (situationStageOf3 == 2)) {
+                System.out.println("3.2");
 
                 int distToW = (x - westBoundaryOfStandardized);
                 int distToE = (x - eastBoundaryOfStandardized);
                 int distToN = (y - northBoundaryOfStandardized);
                 int distToS = (y - southBoundaryOfStandardized);
+
+                if (DEBUG) {
+                    System.out.println("Distance to east boundary: " + (x - eastBoundaryOfStandardized));
+                    System.out.println("Distance to west boundary: " + (x - westBoundaryOfStandardized));
+                    System.out.println("Distance to north boundary: " + (y - northBoundaryOfStandardized));
+                    System.out.println("Distance to south boundary: " + (y - southBoundaryOfStandardized));
+                }
 
                 // if on both corners
                 if (distToW == 0 && distToN == 0) {
@@ -190,11 +239,17 @@ public class CombinedGuard extends FrontierBasedExploration {
                 } else if (distToW == 0) {
                     return DirectionEnum.NORTH;
                 }
+
+                if (DEBUG) System.out.println(DirectionEnum.getDirection(agent.getAngle()).getDirection());
+                // return DirectionEnum.getDirection(agent.getAngle());
+                System.out.println("problem at 3.2");
                 return null;
             }
             // do baseline patrolling
-            // situation 2.3: Guard is patrolling along the border of standardized area
-            if (patrolling && !invaderSeen && targetHasBeenReached && !isChasing) {
+            // situation 3.3: Guard is patrolling along the border of standardized area
+            if (patrolling && !invaderSeen) {
+
+                System.out.println("3.3: Baseline Patrolling");
 
                 int distToW = (x - westBoundaryOfStandardized);
                 int distToE = (x - eastBoundaryOfStandardized);
@@ -203,28 +258,72 @@ public class CombinedGuard extends FrontierBasedExploration {
 
                 // if reaches corner then turn right
                 if ((distToW == 0 && distToN == 0) || (distToN == 0 && distToE == 0) || (distToE == 0 && distToS == 0) || (distToS == 0 && distToW == 0)) {
+                    if (DEBUG) System.out.println(DirectionEnum.getDirection(agent.getAngle() - 90));
                     return DirectionEnum.getDirection(agent.getAngle() - 90); // turning right
                 }
+                if (DEBUG) System.out.println(DirectionEnum.getDirection(agent.getAngle()));
                 return DirectionEnum.getDirection(agent.getAngle());
             }
 
         } else {
-            // situation 2.3: Guard is patrolling along the border of standardized area by using QL
-            if (patrolling && !invaderSeen && targetHasBeenReached && !isChasing) {
+            // situation 3.3: Guard is patrolling along the border of standardized area by using QL
+            if (patrolling && !invaderSeen) {
+                if(freeGuard)
+                    return qlGuard.makeMove(agent);
+                if(hasPlacedTAMarker) {
+                    System.out.println("3.3.1: QL patrolling");
+                    //if sees second marker, turn into north guard
+                    if(!qlGuardHasHalve && qlGuard.checkSecondMarker(agent.getVisibleTiles())){
+                        System.out.println("Saw second marker and made north table");
+                        qlGuardHasHalve = true;
+                        qlGuard.makeNorthQTable();
+                    }
+                    return qlGuard.makeMove(agent);
+                } else {
+                    System.out.println("3.3.2: QL patrolling: Placing marker");
 
-                int distToW = (x - westBoundaryOfStandardized);
-                int distToE = (x - eastBoundaryOfStandardized);
-                int distToN = (y - northBoundaryOfStandardized);
-                int distToS = (y - southBoundaryOfStandardized);
-
-                return qlGuard.makeMove(agent, distToW, distToE, distToN, distToS);
+                    if(!needToPlaceSecondMarker) {
+                        // move to center
+                        DirectionEnum dir = qlGuard.makeMoveToCenter(agent);
+                        if (dir != null) return dir;
+                        //if dir == null then we are at center
+                        // check 1st marker
+                        if (!qlGuard.checkCurrentTileForMarker(agent)) {
+                            //place marker
+                            agent.addMarkers(1,map);
+                            hasPlacedTAMarker = true;
+                            return qlGuard.makeMove(agent);
+                        } else {
+                            needToPlaceSecondMarker = true;
+                            return qlGuard.actionToDirection(2);
+                        }
+                    } else{
+                        //check if 2nd marker exists
+                        if(qlGuard.checkCurrentTileForMarker(agent)){
+                            freeGuard = true;
+                        }
+                        agent.addMarkers(2,map);
+                        //place second marker
+                        agent.addMarkers(1,map);
+                        hasPlacedTAMarker = true;
+                        needToPlaceSecondMarker = false;
+                        //turn into south guard
+                        qlGuard.makeSouthQTable();
+                        qlGuardHasHalve = true;
+                        return qlGuard.makeMove(agent);
+                    }
+                    // place 1st or 2nd marker
+                }
             }
         }
 
 
-        // situation 3: Guard sees invader while patrolling
-        // situation 3.1: Shout then follow the intruder
-        if (patrolling && invaderSeen && (situationStageOf4 == 1) && targetHasBeenReached && !isChasing) {
+        // situation 4: Guard sees invader while patrolling
+
+        // situation 4.1: Shout then follow the intruder
+        if (patrolling && invaderSeen && (situationStageOf4 == 1)) {
+            System.out.println("4.1");
+            // TODO guard.shout()
             patrolling = false;
             isChasing = true;
             situationStageOf4 = 2;
@@ -232,10 +331,12 @@ public class CombinedGuard extends FrontierBasedExploration {
             return chasing(agent, visibleTiles, checkInvader(visibleTiles));
         }
 
-        // situation 3.2: Guard chasing invader while knowing where TA is
+        // situation 4.2: Guard chasing invader while knowing where TA is
         if (!patrolling && targetHasBeenReached && isChasing && (situationStageOf4 == 2)) {
+            System.out.println("4.2");
 
             int temp = getDistanceToClosestCorner(map.getTile(x, y));
+            System.out.println("distance from closest corner: " + temp);
             if (temp > 15) { // if guard goes too far from TA return
                 // reseting params
                 invaderSeen = false;
@@ -250,6 +351,8 @@ public class CombinedGuard extends FrontierBasedExploration {
             }
         }
 
+        System.out.println("reached the end");
+        System.out.println(this);
         return null;
     }
 
@@ -280,6 +383,14 @@ public class CombinedGuard extends FrontierBasedExploration {
         return validMoves.get(r.nextInt(validMoves.size()));
     }
 
+    private Queue<Tile> getSTACornersInTheVision(ArrayList<Tile> vision) {
+        Queue<Tile> list = new LinkedList<>();
+        for (Tile oneTile: vision) {
+            if (oneTile.isStandardizedTA()) list.add(oneTile);
+        }
+        return list;
+    }
+
     private int getDistanceToClosestCorner(Tile agentTile) {
         int smallestVal = agentTile.manhattanDist(northEastCorner);
 
@@ -307,6 +418,61 @@ public class CombinedGuard extends FrontierBasedExploration {
         return false;
     }
 
+    public Tile MarkerInterpretation(Agent agent){
+        Tile f = agent.findMarker();
+        if(f!=null)
+        {
+            Color c = agent.ownMap.getTile(f.getX(),f.getY()).getColor();
+            if(c==Color.RED){
+                if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position());
+                else if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position())!=null && agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position());
+            }
+            if(c==this.c[2]){
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1);
+                else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1)!=null && agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).isWalkable())
+                    return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1);
+            }
+            else if(c==Color.WHITE){
+                System.out.println("An intruder was caught");
+            }
+            else if(f.getIsPheromone()==true)
+            {
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-1).toString().equals("TelePortal")){
+                    if(agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position()).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position());
+                    else if(agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position()).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position());
+                }
+                if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+1).toString().equals("TelePortal")) {
+                    if(agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position()).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position()+2,agent.getY_position());
+                    else if(agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position()).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position()-2,agent.getY_position());
+                }
+                if(agent.ownMap.getTile(agent.getX_position()-1,agent.getY_position()).toString().equals("TelePortal"))
+                {
+                    if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2);
+                    else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2);
+                }
+                if(agent.ownMap.getTile(agent.getX_position()+1,agent.getY_position()).toString().equals("TelePortal"))
+                {
+                    if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()+2);
+                    else if(agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2).isWalkable())
+                        return agent.ownMap.getTile(agent.getX_position(),agent.getY_position()-2);
+                }
+                System.out.println("Agent already entered a teleportal.");
+            }
+            return f;
+        }
+        return null;
+    }
+
     private Intruder getInvader(ArrayList<Tile> vision) {
         for (Tile tile : vision) {
             Agent foundAgent = tile.getAgent();
@@ -329,25 +495,27 @@ public class CombinedGuard extends FrontierBasedExploration {
             int intruderY = intruderTile.getY();
 
             if (guardsX < intruderX) {
+                System.out.println("East");
                 if (map.getTile(agent.getX_position() + 1, agent.getY_position()).isWalkable()) {
                     dirs.add(DirectionEnum.EAST);
                 }
             } else if (guardsX > intruderX) {
+                System.out.println("West");
                 if (map.getTile(agent.getX_position() - 1, agent.getY_position()).isWalkable()) {
                     dirs.add(DirectionEnum.WEST);
                 }
             }
-
             if (guardsY < intruderY) {
+                System.out.println("South");
                 if (map.getTile(agent.getX_position(), agent.getY_position() + 1).isWalkable()) {
                     dirs.add(DirectionEnum.SOUTH);
                 }
             } else if (guardsY > intruderY) {
+                System.out.println("North");
                 if (map.getTile(agent.getX_position(), agent.getY_position() - 1).isWalkable()) {
                     dirs.add(DirectionEnum.NORTH);
                 }
             }
-
         } else { // meaning we lost vision of intruder, try to go in the way where last intruder was
             if (checkIfWalkable(agent.getAgentPosition(), lastDirIntruderHasBeenSeen)) {
                 dirs.add(lastDirIntruderHasBeenSeen);
@@ -363,7 +531,7 @@ public class CombinedGuard extends FrontierBasedExploration {
         if (!dirs.isEmpty()) {
             return dirs.get(r.nextInt(dirs.size()));
         } else {
-            return randomMove(agent.getAgentPosition());
+            return null;
         }
     }
 

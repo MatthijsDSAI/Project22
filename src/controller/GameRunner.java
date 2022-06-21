@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class GameRunner {
 
     private final Config config = Scenario.config;
-    private final boolean SAVE_CSV = true;
+    private final boolean SAVE_CSV = false;
     private String csvString = "";
     private MapGui gui;
     private Scenario scenario;
@@ -236,13 +236,14 @@ public class GameRunner {
             System.out.println("Turns until win: " + t);
         }
         if(gameMode==0){
-            System.out.println("Timesteps until full exploration: " + (t-1));
+            //System.out.println("Timesteps until full exploration: " + (t-1));
             int sum = 0;
             for(Integer val : explorationValues){
                 sum+=val;
             }
-            System.out.println("Average timesteps until full exploration: " + (double)sum/explorationValues.size());
-            System.out.println("Games played: " + gamesPlayed);
+            //System.out.println("Average timesteps until full exploration: " + (double)sum/explorationValues.size());
+            //System.out.println("Games played: " + gamesPlayed);
+            System.out.println((t-1));
         }
     }
 }

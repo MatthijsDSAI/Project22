@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Math.abs;
-
 public class QLGuard extends FrontierBasedExploration{
 
     private int taLength = 5;
@@ -25,134 +23,62 @@ public class QLGuard extends FrontierBasedExploration{
     private int areaLength = taLength + 2*beltLength;
     private int totalStates = areaLength * areaLength;
 
-    private int errorCount = 0;
+    private double[][] qTable;
+    private boolean placedMiddleMarker = false;
 
-    private Random r = new Random();
+    private int areaAllocated = 0; //0 = whole area, 1 = south, 2 = north
 
     public QLGuard(Agent agent, Map map) {
         super(agent, map);
+        //get qtable from file
+        //int[] movesQTable = getMovesQTable();
+        qTable = getQTableFromFile();
     }
 
     @Override
     public DirectionEnum makeMove(Agent agent) {
         Tile curTile = agent.getAgentPosition();
         int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
-
         visibleTiles = agent.getVisibleTiles();
 
-        //get qtable from file
-        int[] movesQTable = getMovesQTable();
-        double[][] qTable = getQTable();
-
-        int action = decideAction(qTable, currentState);
+        int action = decideAction(currentState);
 
         DirectionEnum dir = actionToDirection(action);
         return dir;
     }
 
-    public DirectionEnum makeMove(Agent agent, int distToW, int distToE, int distToN, int distToS) {
+    public DirectionEnum makeMoveToCenter(Agent agent){
         Tile curTile = agent.getAgentPosition();
-        int currentState = getStateFromCoord(curTile.getX(), curTile.getY());
-
-        visibleTiles = agent.getVisibleTiles();
-
-        //get qtable from file
-        int[] movesQTable = getMovesQTable();
-        double[][] qTable = getQTable();
-
-        if (currentState < 0 || currentState > 224) {
-            return getValidMove(agent, distToW, distToE, distToN, distToS);
-        }
-
-        int action = decideAction(qTable, currentState);
-        DirectionEnum dir = actionToDirection(action);
-        return dir;
-
+        int centerTile = totalStates/2;
+        centerTile += totalStates%2;
+        return getCalculatePathFromState(getStateFromCoord(curTile.getX(),curTile.getY()),centerTile);
     }
 
-    private DirectionEnum getValidMove(Agent agent, int distToW, int distToE, int distToN, int distToS){
-            ArrayList<DirectionEnum> possibleMoves = new ArrayList<>();
-
-            if (abs(distToW) < 7 && abs(distToN) < 7) {
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.EAST)) {
-                    possibleMoves.add(DirectionEnum.EAST);
-                }
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.SOUTH)) {
-                    possibleMoves.add(DirectionEnum.SOUTH);
-                }
-            } else if (abs(distToE) < 7 && abs(distToN) < 7) {
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.WEST)) {
-                    possibleMoves.add(DirectionEnum.WEST);
-                }
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.SOUTH)) {
-                    possibleMoves.add(DirectionEnum.SOUTH);
-                }
-            } else if (abs(distToE) < 7 && abs(distToS) < 7) {
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.WEST)) {
-                    possibleMoves.add(DirectionEnum.WEST);
-                }
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.NORTH)) {
-                    possibleMoves.add(DirectionEnum.NORTH);
-                }
-            } else if (abs(distToW) < 7 && abs(distToS) < 7) {
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.EAST)) {
-                    possibleMoves.add(DirectionEnum.EAST);
-                }
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.NORTH)) {
-                    possibleMoves.add(DirectionEnum.NORTH);
-                }
-            }
-            errorCount++;
-            if (possibleMoves.size() == 0) {
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.EAST)) {
-                    possibleMoves.add(DirectionEnum.EAST);
-                }
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.SOUTH)) {
-                    possibleMoves.add(DirectionEnum.SOUTH);
-                }
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.WEST)) {
-                    possibleMoves.add(DirectionEnum.WEST);
-                }
-                if (checkIfWalkable(agent.getAgentPosition(), DirectionEnum.NORTH)) {
-                    possibleMoves.add(DirectionEnum.NORTH);
-                }
-            }
-            return possibleMoves.get(r.nextInt(possibleMoves.size()));
+    public boolean checkCurrentTileForMarker(Agent agent) {
+        //if(agent.getAgentPosition().getColor().toString().equals("ORANGE"))
+        if(agent.getAgentPosition().getHasMarker())
+            return true;
+        return false;
     }
 
-    public boolean checkIfWalkable(Tile agentTile, DirectionEnum dir) {
-        int x = agentTile.getX();
-        int y = agentTile.getY();
-
-        if (dir == DirectionEnum.EAST) {
-            return (map.getTile(x + 1, y).isWalkable());
-        } else if (dir == DirectionEnum.WEST) {
-            return (map.getTile(x - 1, y).isWalkable());
-        } else if (dir == DirectionEnum.SOUTH) {
-            return (map.getTile(x, y + 1).isWalkable());
-        } else if (dir == DirectionEnum.NORTH) {
-            return (map.getTile(x, y - 1).isWalkable());
+    public boolean checkSecondMarker(ArrayList<Tile> visibleTiles) {
+        int centerTile = totalStates/2;
+        centerTile += totalStates%2;
+        int secondTile = centerTile +1;
+        for (Tile t:visibleTiles) {
+            if(getStateFromCoord(t.getX(),t.getY())==secondTile){
+                //if(t.getColor().toString().equals("ORANGE")){
+                if(t.getHasMarker()){
+                    return true;
+                }
+                return false;
+            }
         }
         return false;
     }
 
-    public DirectionEnum makeMove(Agent agent, List<Integer> invalidMoves) {
-        Tile curTile = agent.getAgentPosition();
-        int currentState = getStateFromCoord(curTile.getX(),curTile.getY());
 
-        visibleTiles = agent.getVisibleTiles();
-
-        //get qtable from file
-        int[] movesQTable = getMovesQTable();
-        double[][] qTable = getQTable();
-
-        int action = decideSingleAction(getActions(qTable, currentState),invalidMoves);
-
-        DirectionEnum dir = actionToDirection(action);
-        return dir;
-    }
-
-    public double[] getActions(double[][] qTable, int currentState){
+    public double[] getActions(int currentState){
         return qTable[currentState];
     }
 
@@ -176,7 +102,7 @@ public class QLGuard extends FrontierBasedExploration{
         return -1;
     }
 
-    private int decideAction(double[][] qTable, int currentState) {
+    private int decideAction(int currentState) {
         Random rand = new Random();
         double total = 0.0;
         for (int i = 0; i < numberOfActions; i++) {
@@ -191,11 +117,10 @@ public class QLGuard extends FrontierBasedExploration{
         return 0;
     }
 
-    private double[][] getQTable() {
+    private double[][] getQTableFromFile() {
         double[][] qTable = new double[totalStates][numberOfActions];
         String[][] values = new String[totalStates][numberOfActions];
         Path pathToFile = Paths.get("qTable.csv");
-
 
         try (BufferedReader br = Files.newBufferedReader(pathToFile,
                 StandardCharsets.US_ASCII)) {
@@ -241,7 +166,19 @@ public class QLGuard extends FrontierBasedExploration{
         return movesQTable;
     }
 
-    private DirectionEnum actionToDirection(int action) {
+    public void makeSouthQTable(){
+        for (int i = 0; i < qTable.length/2 + 1; i++) {
+            qTable[i][3] = 0.0; //remove possibility to go up -> agent will walk downwards
+        }
+    }
+
+    public void makeNorthQTable(){
+        for (int i = qTable.length/2; i < qTable.length; i++) {
+            qTable[i][1] = 0.0; //remove possibility to go down -> agent will walk upwards
+        }
+    }
+
+    public DirectionEnum actionToDirection(int action) {
         if(action == 0) return DirectionEnum.WEST;
         else if(action == 1) return DirectionEnum.SOUTH;
         else if(action == 2) return DirectionEnum.EAST;
@@ -253,8 +190,18 @@ public class QLGuard extends FrontierBasedExploration{
         difference /= 2;
         x -= difference;
         y -= difference;
-        if(x < 0 || x>areaLength-1 || y < 0 || y > areaLength-1) return -1; //if coordinate is not in standardized area
-        int state = y * areaLength + x;
-        return state;
+        return y * areaLength + x;
+    }
+
+    public DirectionEnum getCalculatePathFromState(int currentState, int goalState){
+        int currentY = currentState/areaLength;
+        int goalY = goalState/areaLength;
+        if(goalY<currentY) return actionToDirection(3);
+        else if(goalY>currentY) return actionToDirection(1);
+        int currentX = currentState%areaLength;
+        int goalX = goalState%areaLength;
+        if(goalX<currentX) return actionToDirection(0);
+        else if(goalX>currentX) return actionToDirection(2);
+        return null;
     }
 }
