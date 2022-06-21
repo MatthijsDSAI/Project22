@@ -38,6 +38,7 @@ public class BaseLineIntruder extends FrontierBasedExploration {
         Path path = findPath(intruder, tile);
         if(path == null) return null;
         if(path.size()==1){
+            agent.addMarkers(1,map);
             return findNextMoveDirection(intruder, path.get(0));
         }
         DirectionEnum dir = findNextMoveDirection(intruder, path.get(1));

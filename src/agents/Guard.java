@@ -3,26 +3,38 @@ package agents;
 import controller.Map.Map;
 import controller.Map.tiles.Tile;
 import controller.Scenario;
-import controller.Visibility.Visibility;
 import exploration.*;
 import javafx.scene.paint.Color;
-import utils.Config;
-import utils.DirectionEnum;
-import utils.Utils;
 
 public class Guard extends Agent{
 
-    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, null};
+    Color[] c = {Color.RED, Color.ORANGE, Color.GREEN, Color.WHITE, Color.LAVENDER};
     int i = 0;
 
     public Guard(Tile tile){
         super(tile);
         this.baseSpeed = Scenario.config.getBASESPEEDGUARD();
+        this.createMarkers(1, c);
     }
 
     @Override
-    public void addMarkers(int i, Color c, Map map) {
-        super.addMarkers(i, c, map);
+    public void addMarkers(int i, Map map) {
+        super.addMarkers(i, map);
+    }
+
+    public void MarkerInterpretation(){
+        Tile f = findMarker();
+        if(f!=null)
+        {
+            Color c = ownMap.getTile(f.getX(),f.getY()).getColor();
+            if(c==Color.RED){
+                //  if (ownMap.getVerticalSize()/2 == ((m * this.getX_position()) + d))
+                System.out.println("Reached the half of the map.");
+            }
+            else if(c==Color.WHITE){
+                System.out.println("An intruder was caught");
+            }
+        }
     }
 
     @Override
@@ -44,7 +56,7 @@ public class Guard extends Agent{
                 break;
             case "CombinedGuard": // 10 12 14 16; x: 9 - 15, y: 11 - 17
                 int[] temp = Scenario.config.getStandardizedAreaBoundaries();
-                int size = 5; // this defines the area difference between the standardized area and TA
+                int size = 3; // this defines the area difference between the standardized area and TA
 
                 int northBoundaryOfStandardized = temp[1] - size;
                 int southBoundaryOfStandardized = temp[3] + size;
@@ -72,30 +84,11 @@ public class Guard extends Agent{
                 break;
             default:
                 throw new RuntimeException("Invalid Algorithm passed");
-
         }
     }
 
     @Override
     public Color getColor(){
         return Color.CYAN;
-    }
-
-    @Override
-    public void computeVisibleTiles(Map map){
-        this.visibleTiles = Visibility.computeVisibleTiles(map, this);
-        int num = visibleTiles.size();
-        if(hasRotatedOnPastIteration){
-            this.visibleTiles.addAll(Visibility.computeVisibleTilesIntermediateAngle(map, this));
-        }
-        int count = 0;
-        for(Tile tile : visibleTiles){
-            tile.setExplored(true);
-            ownMap.setTile(tile.clone());
-            if(count<num)
-                tile.setCurrentlyViewed(true);
-            count++;
-        }
-        this.hasRotatedOnPastIteration = false;
     }
 }
